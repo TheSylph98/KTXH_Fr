@@ -8,7 +8,24 @@
       color="rgb(159, 211, 224)"
       fixed
       app
-    ></v-navigation-drawer>
+    >
+    <v-list>
+        <v-list-item
+          v-for="(item, i) in items"
+          :key="i"
+          :to="item.to"
+          router
+          exact
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app height="100" color="rgb(159, 211, 224)">
       <!-- <v-toolbar :extended="extended"> -->
       <v-row>
@@ -26,7 +43,7 @@
             <v-col cols="7" class="header-title">
               <b>HỆ THỐNG THÔNG TIN KINH TẾ XÃ HỘI</b>
             </v-col>
-          </v-row>
+          </v-row>23
         </v-col>
         <v-col cols="6" class="header-right">
           <v-row>
@@ -74,10 +91,35 @@ export default {
           to: "/"
         },
         {
-          icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire"
-        }
+          icon: "mdi-apps",
+          title: "Nhom Chi Tieu",
+          to: "/nhomchitieu/nhomchitieuKTXH"
+        },
+        {
+          icon: "mdi-apps",
+          title: "User",
+          to: "/user/User"
+        },
+        {
+          icon: "mdi-apps",
+          title: "Huyen",
+          to: "/huyen/huyen"
+        },
+        {
+          icon: "mdi-apps",
+          title: "",
+          to: ""
+        },
+        {
+          icon: "mdi-apps",
+          title: "",
+          to: ""
+        },
+        {
+          icon: "mdi-apps",
+          title: "",
+          to: ""
+        },
       ],
       extended: true,
       miniVariant: false,
