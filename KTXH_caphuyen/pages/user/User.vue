@@ -50,7 +50,7 @@
                     <v-text-field v-model="editedItem.ghiChu" label="Ghi Chú" ></v-text-field>
                   </v-col>
                   <v-switch
-                    v-model="hieuLuc"
+                    v-model="editedItem.hieuLuc"
                     class="ma-1"
                     label="Hiệu lực"
                   ></v-switch>
@@ -72,11 +72,11 @@
         small
         class="mr-2"
         @click="editItem(item)"
-      >edit</v-icon>
+      >{{ icons.mdiPencil }}</v-icon>
       <v-icon
         small
         @click="deleteItem(item)"
-      >delete</v-icon>
+      >{{ icons.mdiDelete }}</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -86,16 +86,21 @@
 </template>
 
 <script>
+  import {
+    mdiAccount,
+    mdiPencil,
+    mdiDelete,
+  } from '@mdi/js'
+  
   export default {
     data: () => ({
       search:'',
       select: null,
       solo: false,
-      hieuLuc: true,
-      lazy: true,
-      cachieuLuc: [
-        1,0
-      ],
+      icons: {
+        mdiPencil,
+        mdiDelete
+      },
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
@@ -128,7 +133,7 @@
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Sửa'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết tác nhân'
       },
     },
     watch: {

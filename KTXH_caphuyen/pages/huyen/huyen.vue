@@ -53,6 +53,9 @@
                     <v-text-field v-model="editedItem.xa" label="Xã"></v-text-field>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.ghiChu" label="Ghi Chú"></v-text-field>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" md="8">
                     <v-select
                     :items="donViHanhChinh"
                     v-model="editItem.dvhch"
@@ -68,7 +71,7 @@
                     outlined
                     ></v-select>
                   </v-col>
-                  <v-col class="d-flex" cols="12" sm="6" md="8">
+                  <!-- <v-col class="d-flex" cols="12" sm="6" md="8">
                   <v-radio-group v-model="editItem.vung" :mandatory="false">
                     <v-radio label="Thành Thị" value="thanhthi"></v-radio>
                     <v-radio label="Nông thôn" value="nongthon"></v-radio>
@@ -76,19 +79,45 @@
                     <v-radio label="Hải Đảo" value="haidao"></v-radio>
                     <v-radio label="Vùng đặc biệt khó khăn" value="dbkk"></v-radio>
                   </v-radio-group>
+                  </v-col> -->
+                  <v-col class="d-flex" cols="12" sm="6" md="8">
+                  <v-switch
+                    v-model="editedItem.nongthon"
+                    class="ma-1"
+                    label="Thành Thị - Nông thôn"
+                  ></v-switch>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi Chú"></v-text-field>
-                  </v-col>
                   <v-switch
-                    v-model="hieuLuc"
+                    v-model="editedItem.biengioi"
                     class="ma-1"
-                    label="Hieu luc"
+                    label="Biên giới"
                   ></v-switch>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" md="8">
+                  <v-switch
+                    v-model="editedItem.haidao"
+                    class="ma-1"
+                    label="Hải đảo"
+                  ></v-switch>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" md="8">
+                  <v-switch
+                    v-model="editedItem.dbkk"
+                    class="ma-1"
+                    label="Vùng đặc biệt khó khăn"
+                  ></v-switch>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" md="8">
+                  <v-switch
+                    v-model="editedItem.hieuLuc"
+                    class="ma-1"
+                    label="Hiệu lực"
+                  ></v-switch>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
-
             <v-card-actions>
               <div class="flex-grow-1"></div>
               <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
@@ -99,15 +128,15 @@
       </v-toolbar>
     </template>
     <template v-slot:item.action="{ item }">
-      <v-icon
+     <v-icon
         small
         class="mr-2"
         @click="editItem(item)"
-      >edit</v-icon>
+      >{{ icons.mdiPencil }}</v-icon>
       <v-icon
         small
         @click="deleteItem(item)"
-      >delete</v-icon>
+      >{{ icons.mdiDelete }}</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -117,6 +146,12 @@
 </template>
 
 <script>
+import {
+    mdiAccount,
+    mdiPencil,
+    mdiDelete,
+  } from '@mdi/js'
+
   export default {
     data: () => ({
       donViHanhChinh: [
@@ -130,14 +165,11 @@
           'Loại II',
           'Loại III'
       ],
+      icons: {
+        mdiPencil,
+        mdiDelete
+      },
       search:'',
-      vung:'',
-      select: null,
-      solo: false,
-      hieuLuc: true,
-      cachieuLuc: [
-        1,0
-      ],
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
@@ -159,9 +191,12 @@
         xa: '',
         dvhc: '',
         loaidvhc: '',
-        vung:'',
+        nongthon: false,
+        haidao: false,
+        biengioi: false,
+        dbkk:false,
         ghiChu: '',
-        hieuLuc: 1,
+        hieuLuc: true,
       },
       defaultItem: {
         id: 0,
@@ -200,7 +235,7 @@
             loaidvhc:'Loại I',
             vung: 'nongthon',
             ghiChu: 'no',
-            hieuLuc: false
+            hieuLuc: 1
           },
           {
             id: 2,
@@ -241,7 +276,7 @@
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

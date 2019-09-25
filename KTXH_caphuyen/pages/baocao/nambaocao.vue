@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Khai Báo Nhóm Chỉ Tiêu Kinh Tế Xã Hội</v-toolbar-title>
+        <v-toolbar-title>Năm Báo Cáo</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -35,18 +35,27 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
+                    <v-text-field v-model="editedItem.nam" label="Năm"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên"></v-text-field>
+                    <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Kỳ báo cáo"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú"></v-text-field>
+                    <v-text-field v-model="editedItem.noiDung" label="Nội dung"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.ngayMo" label="Ngày mở"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.ngayDong" label="Ngày đóng"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.trangThai" label="Trạng thái"></v-text-field>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
                     class="ma-1"
-                    label="Hieu luc"
+                    label="Hiệu lực"
                   ></v-switch>
                 </v-row>
               </v-container>
@@ -98,27 +107,35 @@
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
-                { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
-                { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
+                { text: 'Năm', align: 'left', sorttable: true, value:'nam'},
+                { text: 'Kỳ báo cáo', align: 'left', value:'kyBaoCao'},
+                { text: 'Nội dung', align: 'left', sorttable: false, value:'noiDung'},
+                { text: 'Ngày mở', align: 'left', sorttable: false, value:'ngayMo'},
+                { text: 'Ngày đóng', align: 'left', sorttable: false, value:'ngayDong'},
+                { text: 'Trạng Thái', align: 'left', value:'trangThai'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
       items: [],
       editedIndex: -1,
       editedItem: {
         id: 0,
-        ma: '',
-        ten: '',
-        ghiChu: '',
-        hieuLuc: 1,
+        nam: 2019,
+        kyBaoCao: '',
+        noiDung: '',
+        ngayMo: '',
+        ngayDong: '',
+        trangThai: '',
+        hieuLuc: 0,
       },
       defaultItem: {
         id: 0,
-        ma: '',
-        ten: '',
-        ghiChu: '',
-        hieuLuc: 1,
+        nam: 2019,
+        kyBaoCao: '',
+        noiDung: '',
+        ngayMo: '',
+        ngayDong: '',
+        trangThai: '',
+        hieuLuc: 0,
       },
     }),
     computed: {
@@ -139,31 +156,63 @@
         this.items = [
           {
             id: 1,
-            ma: '01',
-            ten: 'chỉ tiêu tổng quát 1',
-            ghiChu: 'no',
-            hieuLuc: 1
+            nam: 2019,
+            kyBaoCao: 'Thang',
+            noiDung: '',
+            ngayMo: '',
+            ngayDong: '',
+            trangThai: 'kk',
+            hieuLuc: 1,
           },
           {
             id: 2,
-            ma: 'fff',
-            ten: 'chỉ tiêu tổng quát 2',
-            ghiChu: '123',
-            hieuLuc: 1
+            nam: 2019,
+            kyBaoCao: 'Thang',
+            loaiBaoCao: '',
+            ngayMo: '',
+            ngayDong: '',
+            trangThai: 'gd',
+            hieuLuc: 1,
           },
           {
             id: 3,
-            ma: '0dd1',
-            ten: 'chỉ tiêu tổng quát 3',
-            ghiChu: '321',
-            hieuLuc: 1
+            nam: 2019,
+            kyBaoCao: 'Quy',
+            noiDung: '',
+            ngayMo: '',
+            ngayDong: '',
+            trangThai: 'ff',
+            hieuLuc: 1,
           },
           {
             id: 4,
-            ma: '0fa1',
-            ten: 'chỉ tiêu tổng quát 4',
-            ghiChu: '123',
-            hieuLuc: 1
+            nam: 2019,
+            kyBaoCao: 'Quy',
+            noiDung: '',
+            ngayMo: '',
+            ngayDong: '',
+            trangThai: 'gfd',
+            hieuLuc: 1,
+          },
+          {
+            id: 5,
+            nam: 2019,
+            kyBaoCao: 'Thang',
+            noiDung: '',
+            ngayMo: '',
+            ngayDong: '',
+            trangThai: 'kk',
+            hieuLuc: 1,
+          },
+          {
+            id: 6,
+            nam: 2018,
+            kyBaoCao: 'Thang',
+            noiDung: '',
+            ngayMo: '',
+            ngayDong: '',
+            trangThai: 'kk',
+            hieuLuc: 1,
           }
         ]
       },
@@ -174,7 +223,7 @@
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa báo cáo?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

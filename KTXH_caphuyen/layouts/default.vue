@@ -43,7 +43,7 @@
             <v-col cols="7" class="header-title">
               <b>HỆ THỐNG THÔNG TIN KINH TẾ XÃ HỘI</b>
             </v-col>
-          </v-row>23
+          </v-row>
         </v-col>
         <v-col cols="6" class="header-right">
           <v-row>
@@ -87,12 +87,12 @@ export default {
       items: [
         {
           icon: "mdi-apps",
-          title: "Welcome",
+          title: "Trang Chủ",
           to: "/"
         },
         {
           icon: "mdi-apps",
-          title: "Nhom Chi Tieu",
+          title: "Nhóm Chi Tiêu",
           to: "/nhomchitieu/nhomchitieuKTXH"
         },
         {
@@ -102,30 +102,39 @@ export default {
         },
         {
           icon: "mdi-apps",
-          title: "Huyen",
+          title: "Huyện",
           to: "/huyen/huyen"
         },
         {
           icon: "mdi-apps",
-          title: "",
-          to: ""
+          title: "Tác Nhân",
+          to: "/tacnhan/tacnhan"
         },
         {
           icon: "mdi-apps",
-          title: "",
-          to: ""
+          title: "Chức năng phần mềm",
+          to: "/tacnhan/tacnhan_chucnangphanmem"
         },
         {
           icon: "mdi-apps",
-          title: "",
-          to: ""
+          title: "Đơn vị",
+          to: "/donvi/donvi"
+        },
+        {
+          icon: "mdi-apps",
+          title: "Năm báo cáo",
+          to: "/baocao/nambaocao"
+        },
+        {
+          icon: "mdi-apps",
+          title: "Kỳ báo cáo",
+          to: "/baocao/kybaocao"
         },
       ],
       extended: true,
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Vuetify.js"
     };
   }
 };

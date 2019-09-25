@@ -8,9 +8,9 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Khai Báo Nhóm Chỉ Tiêu Kinh Tế Xã Hội</v-toolbar-title>
+        <v-toolbar-title>Khai Báo Đơn vị Tham gia hệ thống</v-toolbar-title>
         <v-divider
-          class="mx-4"
+          class="mx-3"
           inset
           vertical
         ></v-divider>
@@ -22,7 +22,7 @@
             
           ></v-text-field>
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="600px">
+        <v-dialog v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
           </template>
@@ -35,18 +35,27 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
+                    <v-text-field v-model="editedItem.ten" label="Tên đơn vị*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên"></v-text-field>
+                    <v-text-field v-model="editedItem.ma" label="Mã đơn vị*" required></v-text-field>
+                  </v-col>
+                  <v-switch
+                    v-model="editedItem.laDonVi"
+                    class="ma-1"
+                    label="Là đơn vị"
+                  ></v-switch>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.sdt" label="Số điện thoại"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú"></v-text-field>
+                    <v-text-field v-model="editedItem.nhomdv" label="Nhóm đơn vị"></v-text-field>
                   </v-col>
+
                   <v-switch
                     v-model="editedItem.hieuLuc"
                     class="ma-1"
-                    label="Hieu luc"
+                    label="Hiệu lực"
                   ></v-switch>
                 </v-row>
               </v-container>
@@ -80,7 +89,7 @@
 </template>
 
 <script>
-  import {
+import {
     mdiAccount,
     mdiPencil,
     mdiDelete,
@@ -98,9 +107,10 @@
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
-                { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
+                { text: 'Mã đơn vị', align: 'left', sorttable: true, value:'ma'},
+                { text: 'Tên đơn vị', align: 'left', sorttable: false, value:'ten'},
+                { text: 'Số điện thoại', align: 'left', sorttable: false, value:'sdt'},
+                { text: 'Nhóm đơn vị', align: 'left', sorttable: false, value:'nhomdv'},
                 { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
@@ -110,20 +120,24 @@
         id: 0,
         ma: '',
         ten: '',
-        ghiChu: '',
-        hieuLuc: 1,
+        sdt: '',
+        laDonVi: '',
+        nhomdv: '',
+        hieuLuc: 1
       },
       defaultItem: {
-        id: 0,
+         id: 0,
         ma: '',
         ten: '',
-        ghiChu: '',
-        hieuLuc: 1,
+        sdt: '',
+        laDonVi: '',
+        nhomdv: '',
+        hieuLuc: 1
       },
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Sửa'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết đơn vị'
       },
     },
     watch: {
@@ -138,32 +152,40 @@
       initialize () {
         this.items = [
           {
+            id: 0,
+            ma: '01',
+            ten: 'UBNH HUYỆN CAM LỘ',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1
+          },
+          {
             id: 1,
             ma: '01',
-            ten: 'chỉ tiêu tổng quát 1',
-            ghiChu: 'no',
-            hieuLuc: 1
+            ten: 'UBNH HUYỆN CAM LỘ 2',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1,
           },
           {
             id: 2,
-            ma: 'fff',
-            ten: 'chỉ tiêu tổng quát 2',
-            ghiChu: '123',
-            hieuLuc: 1
+            ma: '01',
+            ten: 'UBNH HUYỆN CAM LỘ 3',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1,
           },
           {
             id: 3,
-            ma: '0dd1',
-            ten: 'chỉ tiêu tổng quát 3',
-            ghiChu: '321',
-            hieuLuc: 1
-          },
-          {
-            id: 4,
-            ma: '0fa1',
-            ten: 'chỉ tiêu tổng quát 4',
-            ghiChu: '123',
-            hieuLuc: 1
+             ma: '01',
+            ten: 'UBNH HUYỆN CAM LỘ 4',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1,
           }
         ]
       },
@@ -192,5 +214,6 @@
         this.close()
       },
     },
+    
   }
 </script>

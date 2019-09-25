@@ -22,7 +22,7 @@
             
           ></v-text-field>
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="800px">
+        <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
           </template>
@@ -38,15 +38,15 @@
                     <v-text-field v-model="editedItem.ten" label="Tên tác nhân"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Cấp hành chính"></v-text-field>
+                    <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Cấp hành chính"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
                     <v-text-field v-model="editedItem.ghiChu" label="Chức năng, nhiệm vụ"></v-text-field>
                   </v-col>
                   <v-switch
-                    v-model="hieuLuc"
+                    v-model="editedItem.hieuLuc"
                     class="ma-1"
-                    label="Hieu luc"
+                    label="Hiệu lực"
                   ></v-switch>
                 </v-row>
               </v-container>
@@ -66,11 +66,11 @@
         small
         class="mr-2"
         @click="editItem(item)"
-      >edit</v-icon>
+      >{{ icons.mdiPencil }}</v-icon>
       <v-icon
         small
         @click="deleteItem(item)"
-      >delete</v-icon>
+      >{{ icons.mdiDelete }}</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -80,22 +80,27 @@
 </template>
 
 <script>
+  import {
+    mdiAccount,
+    mdiPencil,
+    mdiDelete,
+  } from '@mdi/js'
+
   export default {
     data: () => ({
       search:'',
       select: null,
       solo: false,
-      hieuLuc: true,
-      lazy: true,
-      cachieuLuc: [
-        1,0
-      ],
+      icons: {
+        mdiPencil,
+        mdiDelete
+      },
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
-                { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
+                { text: 'Tên tác nhân', align: 'left', sorttable: false, value:'ten'},
+                 { text: 'Cấp hành chính', align: 'left', sorttable: false, value:'sysCapHanhChinhId'},
+                { text: 'Chức năng, nhiệm vụ', align: 'left', sorttable: false, value:'ghiChu'},
                 { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
@@ -103,22 +108,22 @@
       editedIndex: -1,
       editedItem: {
         id: 0,
-        ma: '',
         ten: '',
+        sysCapHanhChinhId:1,
         ghiChu: '',
-        hieuLuc: 1,
+        hieuLuc: 0,
       },
       defaultItem: {
         id: 0,
-        ma: '',
         ten: '',
+        sysCapHanhChinhId: 2,
         ghiChu: '',
         hieuLuc: 1,
       },
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Sửa'
       },
     },
     watch: {
@@ -135,28 +140,32 @@
           {
             id: 1,
             ma: '01',
-            ten: 'chỉ tiêu tổng quát 1',
+            ten: 'Cán bộ phòng Tài chính kế hoạch',
+            sysCapHanhChinhId:'2',
             ghiChu: 'no',
             hieuLuc: 1
           },
           {
             id: 2,
             ma: 'fff',
-            ten: 'chỉ tiêu tổng quát 2',
+            ten: 'Cán bộ phòng ban chuyên môn của huyện',
+            sysCapHanhChinhId:'2',
             ghiChu: '123',
             hieuLuc: 1
           },
           {
             id: 3,
             ma: '0dd1',
-            ten: 'chỉ tiêu tổng quát 3',
+            ten: 'Cán bộ lãnh đạo xã',
+            sysCapHanhChinhId:'1',
             ghiChu: '321',
             hieuLuc: 1
           },
           {
             id: 4,
             ma: '0fa1',
-            ten: 'chỉ tiêu tổng quát 4',
+            ten: 'Cán bộ Văn phòng - Thống kê Xã',
+            sysCapHanhChinhId:'1',
             ghiChu: '123',
             hieuLuc: 1
           }
@@ -169,7 +178,7 @@
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa tác nhân?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false
