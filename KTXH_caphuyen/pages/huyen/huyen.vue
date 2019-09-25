@@ -71,15 +71,6 @@
                     outlined
                     ></v-select>
                   </v-col>
-                  <!-- <v-col class="d-flex" cols="12" sm="6" md="8">
-                  <v-radio-group v-model="editItem.vung" :mandatory="false">
-                    <v-radio label="Thành Thị" value="thanhthi"></v-radio>
-                    <v-radio label="Nông thôn" value="nongthon"></v-radio>
-                    <v-radio label="Biên giới" value="biengioi"></v-radio>
-                    <v-radio label="Hải Đảo" value="haidao"></v-radio>
-                    <v-radio label="Vùng đặc biệt khó khăn" value="dbkk"></v-radio>
-                  </v-radio-group>
-                  </v-col> -->
                   <v-col class="d-flex" cols="12" sm="6" md="8">
                   <v-switch
                     v-model="editedItem.nongthon"

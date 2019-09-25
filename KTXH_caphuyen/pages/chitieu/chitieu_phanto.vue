@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Khai Báo Biểu Nhập Liệu</v-toolbar-title>
+        <v-toolbar-title>Tên nhóm phân tổ</v-toolbar-title>
         <v-divider
           class="mx-3"
           inset
@@ -36,13 +36,13 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Kí hiệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.ma" label="Mã*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.noiDung" label="Nội dung*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú" required></v-text-field>
+                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú" ></v-text-field>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
@@ -74,7 +74,7 @@
       >{{ icons.mdiDelete }}</v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      <v-btn color="primary" @click="initialize">Cập nhật lại</v-btn>
     </template>
   </v-data-table>
   
@@ -97,8 +97,8 @@ import {
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Kí hiệu', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên biểu', align: 'left', sorttable: false, value:'ten'},
+                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
+                { text: 'Nội Dung', align: 'left', sorttable: false, value:'noiDung'},
                 { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
                 { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
@@ -108,14 +108,14 @@ import {
       editedItem: {
         id: 0,
         ma: '',
-        ten: '',
+        noiDung: '',
         ghiChu:'',
         hieuLuc: 1
       },
       defaultItem: {
         id: 0,
         ma: '',
-        ten: '',
+        noiDung: '',
         ghiChu:'',
         hieuLuc: 1
       },
@@ -139,7 +139,7 @@ import {
           {
             id: 1,
             ma: '01',
-            ten: 'HCL-báo cáo tổng quát',
+            noiDung: 'HCL-báo cáo tổng quát',
             ghiChu: 'halo',
             hieuLuc: 1
           }
@@ -152,7 +152,7 @@ import {
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

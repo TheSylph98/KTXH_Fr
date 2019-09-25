@@ -8,22 +8,21 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Khai Báo Biểu Nhập Liệu</v-toolbar-title>
+        <v-toolbar-title>Khai Báo Đơn vị Tham gia hệ thống</v-toolbar-title>
         <v-divider
           class="mx-3"
           inset
           vertical
         ></v-divider>
-
          <v-text-field
             v-model="search"
             label="Search"
             single-line
-            hide-details 
+            hide-details
+            
           ></v-text-field>
-
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="700px">
+        <v-dialog v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
           </template>
@@ -36,14 +35,23 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Kí hiệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.ten" label="Tên đơn vị*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.ma" label="Mã đơn vị*" required></v-text-field>
+                  </v-col>
+                  <v-switch
+                    v-model="editedItem.laDonVi"
+                    class="ma-1"
+                    label="Là đơn vị"
+                  ></v-switch>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.sdt" label="Số điện thoại"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú" required></v-text-field>
+                    <v-text-field v-model="editedItem.nhomdv" label="Nhóm đơn vị"></v-text-field>
                   </v-col>
+
                   <v-switch
                     v-model="editedItem.hieuLuc"
                     class="ma-1"
@@ -55,8 +63,8 @@
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -90,6 +98,8 @@ import {
   export default {
     data: () => ({
       search:'',
+      select: null,
+      solo: false,
       icons: {
         mdiPencil,
         mdiDelete
@@ -97,9 +107,10 @@ import {
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Kí hiệu', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên biểu', align: 'left', sorttable: false, value:'ten'},
-                { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
+                { text: 'Mã đơn vị', align: 'left', sorttable: true, value:'ma'},
+                { text: 'Tên đơn vị', align: 'left', sorttable: false, value:'ten'},
+                { text: 'Số điện thoại', align: 'left', sorttable: false, value:'sdt'},
+                { text: 'Nhóm đơn vị', align: 'left', sorttable: false, value:'nhomdv'},
                 { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
@@ -109,14 +120,18 @@ import {
         id: 0,
         ma: '',
         ten: '',
-        ghiChu:'',
+        sdt: '',
+        laDonVi: '',
+        nhomdv: '',
         hieuLuc: 1
       },
       defaultItem: {
-        id: 0,
+         id: 0,
         ma: '',
         ten: '',
-        ghiChu:'',
+        sdt: '',
+        laDonVi: '',
+        nhomdv: '',
         hieuLuc: 1
       },
     }),
@@ -137,11 +152,40 @@ import {
       initialize () {
         this.items = [
           {
+            id: 0,
+            ma: '01',
+            ten: 'UBNH HUYỆN CAM LỘ',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1
+          },
+          {
             id: 1,
             ma: '01',
-            ten: 'HCL-báo cáo tổng quát',
-            ghiChu: 'halo',
-            hieuLuc: 1
+            ten: 'UBNH HUYỆN CAM LỘ 2',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1,
+          },
+          {
+            id: 2,
+            ma: '01',
+            ten: 'UBNH HUYỆN CAM LỘ 3',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1,
+          },
+          {
+            id: 3,
+             ma: '01',
+            ten: 'UBNH HUYỆN CAM LỘ 4',
+            sdt: '19000000',
+            laDonVi: true,
+            nhomdv: '',
+            hieuLuc: 1,
           }
         ]
       },

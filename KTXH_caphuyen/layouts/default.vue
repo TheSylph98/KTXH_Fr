@@ -130,6 +130,16 @@ export default {
           title: "Kỳ báo cáo",
           to: "/baocao/kybaocao"
         },
+        {
+          icon: "mdi-apps",
+          title: "Chỉ tiêu nhóm",
+          to: "/chitieu/chitieu_phanto"
+        }, 
+         {
+          icon: "mdi-apps",
+          title: "Chỉ tiêu ",
+          to: "/chitieu/chitieu"
+        }, 
       ],
       extended: true,
       miniVariant: false,
