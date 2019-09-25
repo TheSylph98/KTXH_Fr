@@ -82,7 +82,7 @@
                     ></v-select>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.congThuc" label="Công thức tính" ></v-text-field>
+                    <v-textarea v-model="editedItem.congThuc" label="Công thức tính" ></v-textarea>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"

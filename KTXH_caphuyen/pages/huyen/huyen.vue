@@ -53,9 +53,6 @@
                     <v-text-field v-model="editedItem.xa" label="Xã"></v-text-field>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi Chú"></v-text-field>
-                  </v-col>
-                  <v-col class="d-flex" cols="12" sm="6" md="8">
                     <v-select
                     :items="donViHanhChinh"
                     v-model="editItem.dvhch"
@@ -98,6 +95,9 @@
                     class="ma-1"
                     label="Vùng đặc biệt khó khăn"
                   ></v-switch>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" md="12">
+                    <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="6" md="8">
                   <v-switch

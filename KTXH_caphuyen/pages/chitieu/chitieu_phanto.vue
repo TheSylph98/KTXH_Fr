@@ -42,7 +42,7 @@
                     <v-text-field v-model="editedItem.noiDung" label="Nội dung*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú" ></v-text-field>
+                     <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"

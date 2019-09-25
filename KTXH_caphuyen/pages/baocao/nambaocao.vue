@@ -40,8 +40,8 @@
                   <v-col cols="12" sm="6" md="8">
                     <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Kỳ báo cáo"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.noiDung" label="Nội dung"></v-text-field>
+                  <v-col class="d-flex" cols="12" sm="6" md="8">
+                    <v-textarea v-model="editedItem.noiDung" label="Nội Dung"></v-textarea>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
                     <v-text-field v-model="editedItem.ngayMo" label="Ngày mở"></v-text-field>

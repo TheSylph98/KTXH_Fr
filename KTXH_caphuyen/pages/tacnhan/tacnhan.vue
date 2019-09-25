@@ -41,7 +41,7 @@
                     <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Cấp hành chính"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Chức năng, nhiệm vụ"></v-text-field>
+                    <v-textarea v-model="editedItem.ghiChu" label="Chức năng, Nhiệm vụ"></v-textarea>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
