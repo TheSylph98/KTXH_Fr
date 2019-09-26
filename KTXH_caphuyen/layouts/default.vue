@@ -132,8 +132,28 @@ export default {
         }, 
         {
           icon: "mdi-apps",
-          title: "Biểu Nhập Liệu",
-          to: "/bieunhaplieu/bieunhaplieu"
+          title: "Khai Báo Phân Tổ",
+          to: "/phanto/phanto"
+        }, 
+        {
+          icon: "mdi-apps",
+          title: "Phân Tổ Chi Tiết",
+          to: "/phanto/phantochitiet"
+        }, 
+        {
+          icon: "mdi-apps",
+          title: "Biểu Nhập Liệu Chi Tiêu",
+          to: "/bieunhaplieu/bieunhaplieu_chitieu"
+        }, 
+        {
+          icon: "mdi-apps",
+          title: "Biểu Nhập Liệu Kỳ Báo Cáo",
+          to: "/bieunhaplieu/bieunhaplieu_kybaocao"
+        }, 
+        {
+          icon: "mdi-apps",
+          title: "Biểu Nhập Liệu Trường Dữ Liệu",
+          to: "/bieunhaplieu/bieunhaplieu_truongdulieu"
         }
       ],
       extended: true,

@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Khai Báo Biểu Nhập Liệu</v-toolbar-title>
+        <v-toolbar-title>Phân Tổ</v-toolbar-title>
         <v-divider
           class="mx-3"
           inset
@@ -36,10 +36,10 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Kí hiệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.ma" label="Mã*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.ten" label="Tên nhóm phân tổ*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
                     <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
@@ -97,10 +97,10 @@ import {
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Kí hiệu', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên biểu', align: 'left', sorttable: false, value:'ten'},
+                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
+                { text: 'Tên nhóm phân tổ', align: 'left', sorttable: false, value:'ten'},
                 { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
-                { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
+                { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
       items: [],
@@ -122,7 +122,7 @@ import {
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết đơn vị'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết'
       },
     },
     watch: {
@@ -139,7 +139,7 @@ import {
           {
             id: 1,
             ma: '01',
-            ten: 'HCL-báo cáo tổng quát',
+            ten: 'HCL',
             ghiChu: 'halo',
             hieuLuc: 1
           }

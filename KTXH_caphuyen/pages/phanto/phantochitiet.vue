@@ -5,41 +5,62 @@
     :items-per-page="5"
     class="elevation-1"
     :search="search"
-    :single-select="singleSelect"
-    show-select
   >
-    <template v-slot:top>   
+    <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Chọn chức năng phần mềm cho tác nhân: {{ title }}</v-toolbar-title>
-       
+        <v-toolbar-title>Phân Tổ Chi Tiết</v-toolbar-title>
+        <v-divider
+          class="mx-3"
+          inset
+          vertical
+        ></v-divider>
+
+         <v-text-field
+            v-model="search"
+            label="Search"
+            single-line
+            hide-details 
+          ></v-text-field>
+
         <div class="flex-grow-1"></div>
-        <v-btn color="primary" class="mb-2 save">Lưu</v-btn>
-        <v-dialog v-model="dialog" max-width="600px">
+        <v-dialog v-model="dialog" max-width="700px">
           <template v-slot:activator="{ on }">
-            <!-- <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn> -->
+            <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
           </template>
           <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
+
             <v-card-text>
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Chức năng phần mềm"></v-text-field>
+                    <v-text-field v-model="editedItem.ma" label="Mã*" required></v-text-field>
                   </v-col>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.ten" label="Nội dung*" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
+                  </v-col>
+                  <v-switch
+                    v-model="editedItem.hieuLuc"
+                    class="ma-1"
+                    label="Hiệu lực"
+                  ></v-switch>
                 </v-row>
               </v-container>
             </v-card-text>
+
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
-      <v-switch v-model="singleSelect" label="Đơn chọn" class="pa-2"></v-switch>
     </template>
     <template v-slot:item.action="{ item }">
       <v-icon
@@ -56,10 +77,11 @@
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
   </v-data-table>
+  
 </template>
 
 <script>
-  import {
+import {
     mdiAccount,
     mdiPencil,
     mdiDelete,
@@ -68,31 +90,34 @@
   export default {
     data: () => ({
       search:'',
-      singleSelect: false,
-      selected: [],
-      solo: false,
       icons: {
         mdiPencil,
         mdiDelete
       },
-      title: 'Cán bộ văn phòng - Thống kê xã',
       dialog: false,
-      headers: [
-                { text: 'STT', align: 'left', sorttable: true, value:'id'}, 
-                { text: 'Chức năng phần mềm', align: 'left', value:'ten'},
+       headers: [
+                { text: 'STT', align: 'left', sorttable: true, value:'id'},
+                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
+                { text: 'Nội dung', align: 'left', sorttable: false, value:'ten'},
+                { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
+                { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
       items: [],
       editedIndex: -1,
       editedItem: {
         id: 0,
+        ma: '',
         ten: '',
-        hieuLuc: 1,
+        ghiChu:'',
+        hieuLuc: 1
       },
       defaultItem: {
         id: 0,
+        ma: '',
         ten: '',
-        hieuLuc: 1,
+        ghiChu:'',
+        hieuLuc: 1
       },
     }),
     computed: {
@@ -114,25 +139,8 @@
           {
             id: 1,
             ma: '01',
-            ten: 'chỉ tiêu tổng quát 1',
-            hieuLuc: 1
-          },
-          {
-            id: 2,
-            ma: 'fff',
-            ten: 'chỉ tiêu tổng quát 2',
-            hieuLuc: 1
-          },
-          {
-            id: 3,
-            ma: '0dd1',
-            ten: 'chỉ tiêu tổng quát 3',
-            hieuLuc: 1
-          },
-          {
-            id: 4,
-            ma: '0fa1',
-            ten: 'chỉ tiêu tổng quát 4',
+            ten: 'HCL-2',
+            ghiChu: 'halo',
             hieuLuc: 1
           }
         ]
@@ -162,5 +170,6 @@
         this.close()
       },
     },
+    
   }
 </script>

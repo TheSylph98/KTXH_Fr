@@ -133,7 +133,7 @@
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết tác nhân'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết'
       },
     },
     watch: {

@@ -123,7 +123,7 @@
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Sửa'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết'
       },
     },
     watch: {
