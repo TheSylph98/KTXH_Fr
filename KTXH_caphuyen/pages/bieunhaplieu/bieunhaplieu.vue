@@ -159,33 +159,6 @@ import {
             laDonVi: true,
             nhomdv: '',
             hieuLuc: 1
-          },
-          {
-            id: 1,
-            ma: '01',
-            ten: 'UBNH HUYỆN CAM LỘ 2',
-            sdt: '19000000',
-            laDonVi: true,
-            nhomdv: '',
-            hieuLuc: 1,
-          },
-          {
-            id: 2,
-            ma: '01',
-            ten: 'UBNH HUYỆN CAM LỘ 3',
-            sdt: '19000000',
-            laDonVi: true,
-            nhomdv: '',
-            hieuLuc: 1,
-          },
-          {
-            id: 3,
-             ma: '01',
-            ten: 'UBNH HUYỆN CAM LỘ 4',
-            sdt: '19000000',
-            laDonVi: true,
-            nhomdv: '',
-            hieuLuc: 1,
           }
         ]
       },
@@ -196,7 +169,7 @@ import {
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

@@ -188,48 +188,6 @@
             ngayBaoCaoTinh: '',
             trangThai:'',
             hieuLuc: 1,
-          },
-          {
-            id: 2,
-            nam: 2013,
-            kyBaoCao: 'Tháng',
-            noiDung: 'báo cáo kkk 2',
-            ngayMo: '',
-            ngayDong: '',
-            ngayBatDau: '9-3-2013',
-            ngayKetThuc: '',
-            ngayBaoCaoHuyen: '',
-            ngayBaoCaoTinh: '',
-            trangThai:'',
-            hieuLuc: 1,
-          },
-          {
-             id: 3,
-            nam: 2017,
-            kyBaoCao: 'Tháng',
-            noiDung: 'báo cáo kggkk',
-            ngayMo: '',
-            ngayDong: '',
-            ngayBatDau: '9-3-2017',
-            ngayKetThuc: '9-9-2019',
-            ngayBaoCaoHuyen: '',
-            ngayBaoCaoTinh: '',
-            trangThai:'',
-            hieuLuc: 1,
-          },
-          {
-            id: 4,
-            nam: 2019,
-            kyBaoCao: 'Tháng',
-            noiDung: 'báo cáo ss 43',
-            ngayMo: '',
-            ngayDong: '',
-            ngayBatDau: '9-3-2019',
-            ngayKetThuc: '',
-            ngayBaoCaoHuyen: '',
-            ngayBaoCaoTinh: '',
-            trangThai:'',
-            hieuLuc: 1,
           }
         ]
       },
@@ -240,7 +198,7 @@
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa báo cáo?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

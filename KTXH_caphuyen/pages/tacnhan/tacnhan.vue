@@ -144,30 +144,6 @@
             sysCapHanhChinhId:'2',
             ghiChu: 'no',
             hieuLuc: 1
-          },
-          {
-            id: 2,
-            ma: 'fff',
-            ten: 'Cán bộ phòng ban chuyên môn của huyện',
-            sysCapHanhChinhId:'2',
-            ghiChu: '123',
-            hieuLuc: 1
-          },
-          {
-            id: 3,
-            ma: '0dd1',
-            ten: 'Cán bộ lãnh đạo xã',
-            sysCapHanhChinhId:'1',
-            ghiChu: '321',
-            hieuLuc: 1
-          },
-          {
-            id: 4,
-            ma: '0fa1',
-            ten: 'Cán bộ Văn phòng - Thống kê Xã',
-            sysCapHanhChinhId:'1',
-            ghiChu: '123',
-            hieuLuc: 1
           }
         ]
       },
@@ -178,7 +154,7 @@
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa tác nhân?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

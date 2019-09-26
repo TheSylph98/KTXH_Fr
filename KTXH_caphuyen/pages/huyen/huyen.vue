@@ -173,21 +173,7 @@ import {
       items: [],
       editedIndex: -1,
       editedItem: {
-        id: 0,
-        ma: '',
-        matinh:'',
-        maxa:'',
-        tinh: '',
-        ten: '',
-        xa: '',
-        dvhc: '',
-        loaidvhc: '',
-        nongthon: false,
-        haidao: false,
-        biengioi: false,
-        dbkk:false,
-        ghiChu: '',
-        hieuLuc: true,
+        
       },
       defaultItem: {
         id: 0,
@@ -226,36 +212,6 @@ import {
             loaidvhc:'Loại I',
             vung: 'nongthon',
             ghiChu: 'no',
-            hieuLuc: 1
-          },
-          {
-            id: 2,
-            ma: 'fff',
-            ten: 'Đống Đa',
-            dhvc: 'Cấp Huyện',
-            loaidvhc:'Loại I',
-            vung: 'nongthon',
-            ghiChu: '123',
-            hieuLuc: 1
-          },
-          {
-            id: 3,
-            ma: '0dd1',
-            ten: 'Hai Bà Trưng',
-            dhvc: 'Cấp Huyện',
-            loaidvhc:'Loại I',
-            vung: 'nongthon',
-            ghiChu: 'ooooooo',
-            hieuLuc: 1
-          },
-          {
-            id: 4,
-            ma: '0fa1',
-            ten: 'Hoàng Mai',
-            dhvc: 'Cấp Huyện',
-            loaidvhc:'Loại I',
-            vung: 'nongthon',
-            ghiChu: 'ha lo ba by',
             hieuLuc: 1
           }
         ]

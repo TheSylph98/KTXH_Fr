@@ -155,30 +155,6 @@
             donvi: '1',
             hieuLuc: 1,
           },
-          {
-            id: 1,
-            ten: 'Ha Van Truong Giang',
-            soDienThoai: '01239855',
-            email: '123456@gmail.com',
-            donvi: '2',
-            hieuLuc: 1,
-          },
-          {
-            id: 2,
-            ten: 'Nam Van Dinh',
-            soDienThoai: '3649184681',
-            email: '123wqe4@gmail.com',
-            donvi: '3',
-            hieuLuc: 1,
-          },
-          {
-            id: 3,
-            ten: 'Thai Van Binh',
-            soDienThoai: '516556164',
-            email: '123ssss434@gmail.com',
-            donvi: '1',
-            hieuLuc: 1,
-          }
         ]
       },
       editItem (item) {
@@ -188,7 +164,7 @@
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

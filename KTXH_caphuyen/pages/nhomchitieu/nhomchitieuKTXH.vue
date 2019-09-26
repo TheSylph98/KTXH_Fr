@@ -41,7 +41,7 @@
                     <v-text-field v-model="editedItem.ten" label="Tên"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú"></v-text-field>
+                    <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
@@ -143,27 +143,6 @@
             ten: 'chỉ tiêu tổng quát 1',
             ghiChu: 'no',
             hieuLuc: 1
-          },
-          {
-            id: 2,
-            ma: 'fff',
-            ten: 'chỉ tiêu tổng quát 2',
-            ghiChu: '123',
-            hieuLuc: 1
-          },
-          {
-            id: 3,
-            ma: '0dd1',
-            ten: 'chỉ tiêu tổng quát 3',
-            ghiChu: '321',
-            hieuLuc: 1
-          },
-          {
-            id: 4,
-            ma: '0fa1',
-            ten: 'chỉ tiêu tổng quát 4',
-            ghiChu: '123',
-            hieuLuc: 1
           }
         ]
       },
@@ -174,7 +153,7 @@
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false

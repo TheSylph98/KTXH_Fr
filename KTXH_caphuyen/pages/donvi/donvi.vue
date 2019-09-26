@@ -42,7 +42,7 @@
                     <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ghiChu" label="Ghi chú" required></v-text-field>
+                    <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
@@ -152,7 +152,7 @@ import {
       },
       deleteItem (item) {
         const index = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
       close () {
         this.dialog = false
