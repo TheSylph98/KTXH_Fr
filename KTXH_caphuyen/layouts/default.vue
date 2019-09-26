@@ -85,10 +85,30 @@ export default {
       drawer: false,
       fixed: false,
       items: [
+         {
+          icon: "mdi-apps",
+          title: "Khai Báo Đơn vị",
+          to: "/donvi/donvi"
+        },
         {
           icon: "mdi-apps",
-          title: "Trang Chủ",
-          to: "/"
+          title: "Chức năng phần mềm",
+          to: "/tacnhan/tacnhan_chucnangphanmem"
+        },
+         {
+          icon: "mdi-apps",
+          title: "Khai Báo Tác Nhân",
+          to: "/tacnhan/tacnhan"
+        },
+        {
+          icon: "mdi-apps",
+          title: "Khai Báo Người dùng",
+          to: "/user/User"
+        },
+        {
+          icon: "mdi-apps",
+          title: "Tỉnh, Huyện, Xã, Đơn Vị Nhóm",
+          to: "/huyen/huyen"
         },
         {
           icon: "mdi-apps",
@@ -97,49 +117,24 @@ export default {
         },
         {
           icon: "mdi-apps",
-          title: "User",
-          to: "/user/User"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Huyện",
-          to: "/huyen/huyen"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Tác Nhân",
-          to: "/tacnhan/tacnhan"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Chức năng phần mềm",
-          to: "/tacnhan/tacnhan_chucnangphanmem"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Đơn vị",
-          to: "/donvi/donvi"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Năm báo cáo",
-          to: "/baocao/nambaocao"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Kỳ báo cáo",
+          title: "Khai Báo Kỳ Báo Cáo",
           to: "/baocao/kybaocao"
         },
         {
           icon: "mdi-apps",
-          title: "Chỉ tiêu nhóm",
-          to: "/chitieu/chitieu_phanto"
-        }, 
-         {
-          icon: "mdi-apps",
-          title: "Chỉ tiêu ",
+          title: "Khai Báo Chỉ tiêu KTXH",
           to: "/chitieu/chitieu"
         }, 
+        {
+          icon: "mdi-apps",
+          title: "Khai Báo Nhóm Chỉ Tiêu KTXH",
+          to: "/chitieu/chitieu_phanto"
+        }, 
+        {
+          icon: "mdi-apps",
+          title: "Biểu Nhập Liệu",
+          to: "/bieunhaplieu/bieunhaplieu"
+        }
       ],
       extended: true,
       miniVariant: false,
