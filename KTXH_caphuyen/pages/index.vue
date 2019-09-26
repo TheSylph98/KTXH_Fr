@@ -1,31 +1,27 @@
 <template>
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
-      <div class="text-center">
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to=""
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
+  <div class="text-center">
+    <v-menu offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn color="primary" dark v-on="on">Dropdown</v-btn>
+      </template>
+      <v-list>
+        <v-list-item v-for="(item, index) in items" :key="index" @click>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+  </div>
 </template>
 
 <script>
-  export default {
-
-  }
+export default {
+  data: () => ({
+    items: [
+      { title: "Click Me" },
+      { title: "Click Me" },
+      { title: "Click Me" },
+      { title: "Click Me 2" }
+    ]
+  })
+};
 </script>
