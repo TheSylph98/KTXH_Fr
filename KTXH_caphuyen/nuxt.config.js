@@ -38,7 +38,19 @@ module.exports = {
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: ['@nuxtjs/axios'],
+
+  axios: {
+    proxy: 'true'
+  },
+
+  proxy: {
+    '/api/': {
+      target: process.env.API_ENDPOINT || 'http://localhost:5000/api',
+      pathRewrite: { '^/api/': '' }
+    }
+  },
+
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -67,6 +79,6 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) { }
   }
 }
