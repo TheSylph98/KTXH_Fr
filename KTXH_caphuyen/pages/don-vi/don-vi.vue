@@ -63,8 +63,8 @@
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

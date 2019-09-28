@@ -8,22 +8,21 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Biểu Nhập Liệu Kỳ Báo Cáo</v-toolbar-title>
+        <v-toolbar-title>Khai Báo Nhóm Chỉ Tiêu Kinh Tế Xã Hội</v-toolbar-title>
         <v-divider
-          class="mx-3"
+          class="mx-4"
           inset
           vertical
         ></v-divider>
-
          <v-text-field
             v-model="search"
             label="Search"
             single-line
-            hide-details 
+            hide-details
+            
           ></v-text-field>
-
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="700px">
+        <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
           </template>
@@ -36,10 +35,10 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Kí hiệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.ten" label="Tên"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
                     <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
@@ -47,7 +46,7 @@
                   <v-switch
                     v-model="editedItem.hieuLuc"
                     class="ma-1"
-                    label="Hiệu lực"
+                    label="Hieu luc"
                   ></v-switch>
                 </v-row>
               </v-container>
@@ -81,7 +80,7 @@
 </template>
 
 <script>
-import {
+  import {
     mdiAccount,
     mdiPencil,
     mdiDelete,
@@ -90,6 +89,8 @@ import {
   export default {
     data: () => ({
       search:'',
+      select: null,
+      solo: false,
       icons: {
         mdiPencil,
         mdiDelete
@@ -97,9 +98,9 @@ import {
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Kí hiệu', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên biểu', align: 'left', sorttable: false, value:'ten'},
-                { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
+                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
+                { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
+                { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
                 { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
@@ -109,15 +110,15 @@ import {
         id: 0,
         ma: '',
         ten: '',
-        ghiChu:'',
-        hieuLuc: 1
+        ghiChu: '',
+        hieuLuc: 1,
       },
       defaultItem: {
         id: 0,
         ma: '',
         ten: '',
-        ghiChu:'',
-        hieuLuc: 1
+        ghiChu: '',
+        hieuLuc: 1,
       },
     }),
     computed: {
@@ -139,8 +140,8 @@ import {
           {
             id: 1,
             ma: '01',
-            ten: 'HCL-báo cáo tổng quát',
-            ghiChu: 'halo',
+            ten: 'chỉ tiêu tổng quát 1',
+            ghiChu: 'no',
             hieuLuc: 1
           }
         ]
@@ -170,6 +171,5 @@ import {
         this.close()
       },
     },
-    
   }
 </script>

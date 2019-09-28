@@ -88,17 +88,17 @@ export default {
          {
           icon: "mdi-apps",
           title: "Khai Báo Đơn vị",
-          to: "/donvi/donvi"
+          to: "/don-vi/don-vi"
         },
         {
           icon: "mdi-apps",
           title: "Chức năng phần mềm",
-          to: "/tacnhan/tacnhan_chucnangphanmem"
+          to: "/tac-nhan/tac-nhan_chuc-nang-phan-mem"
         },
          {
           icon: "mdi-apps",
           title: "Khai Báo Tác Nhân",
-          to: "/tacnhan/tacnhan"
+          to: "/tac-nhan/tac-nhan"
         },
         {
           icon: "mdi-apps",
@@ -113,47 +113,47 @@ export default {
         {
           icon: "mdi-apps",
           title: "Nhóm Chi Tiêu",
-          to: "/nhomchitieu/nhomchitieuKTXH"
+          to: "/nhom-chi-tieu/nhom-chi-tieu-KTXH"
         },
         {
           icon: "mdi-apps",
           title: "Khai Báo Kỳ Báo Cáo",
-          to: "/baocao/kybaocao"
+          to: "/bao-cao/ky-bao-cao"
         },
         {
           icon: "mdi-apps",
           title: "Khai Báo Chỉ tiêu KTXH",
-          to: "/chitieu/chitieu"
+          to: "/chi-tieu/chi-tieu"
         }, 
         {
           icon: "mdi-apps",
           title: "Khai Báo Nhóm Chỉ Tiêu KTXH",
-          to: "/chitieu/chitieu_phanto"
+          to: "/chi-tieu/chi-tieu_phan-to"
         }, 
         {
           icon: "mdi-apps",
           title: "Khai Báo Phân Tổ",
-          to: "/phanto/phanto"
+          to: "/phan-to/phan-to"
         }, 
         {
           icon: "mdi-apps",
           title: "Phân Tổ Chi Tiết",
-          to: "/phanto/phantochitiet"
+          to: "/phan-to/phan-to-chi-tiet"
         }, 
         {
           icon: "mdi-apps",
           title: "Biểu Nhập Liệu Chi Tiêu",
-          to: "/bieunhaplieu/bieunhaplieu_chitieu"
+          to: "/bieu-nhap-lieu/bieu-nhap-lieu"
         }, 
         {
           icon: "mdi-apps",
           title: "Biểu Nhập Liệu Kỳ Báo Cáo",
-          to: "/bieunhaplieu/bieunhaplieu_kybaocao"
+          to: "/bieu-nhap-lieu/bieu-nhap-lieu_ky-bao-cao"
         }, 
         {
           icon: "mdi-apps",
           title: "Biểu Nhập Liệu Trường Dữ Liệu",
-          to: "/bieunhaplieu/bieunhaplieu_truongdulieu"
+          to: "/bieu-nhap-lieu/bieu-nhap-lieu_truong-du-lieu"
         }
       ],
       extended: true,

@@ -8,21 +8,22 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Khai Báo Tác Nhân</v-toolbar-title>
+        <v-toolbar-title>Biểu Nhập Liệu Chi Tiêu</v-toolbar-title>
         <v-divider
-          class="mx-4"
+          class="mx-3"
           inset
           vertical
         ></v-divider>
+
          <v-text-field
             v-model="search"
             label="Search"
             single-line
-            hide-details
-            
+            hide-details 
           ></v-text-field>
+
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="600px">
+        <v-dialog v-model="dialog" max-width="700px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
           </template>
@@ -35,13 +36,13 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên tác nhân"></v-text-field>
+                    <v-text-field v-model="editedItem.ma" label="Kí hiệu*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Cấp hành chính"></v-text-field>
+                    <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-textarea v-model="editedItem.ghiChu" label="Chức năng, Nhiệm vụ"></v-textarea>
+                    <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
@@ -54,8 +55,8 @@
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -80,7 +81,7 @@
 </template>
 
 <script>
-  import {
+import {
     mdiAccount,
     mdiPencil,
     mdiDelete,
@@ -89,18 +90,16 @@
   export default {
     data: () => ({
       search:'',
-      select: null,
-      solo: false,
       icons: {
         mdiPencil,
         mdiDelete
       },
       dialog: false,
-       headers: [
+      headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Tên tác nhân', align: 'left', sorttable: false, value:'ten'},
-                 { text: 'Cấp hành chính', align: 'left', sorttable: false, value:'sysCapHanhChinhId'},
-                { text: 'Chức năng, nhiệm vụ', align: 'left', sorttable: false, value:'ghiChu'},
+                { text: 'Kí hiệu', align: 'left', sorttable: true, value:'ma'},
+                { text: 'Tên biểu', align: 'left', sorttable: false, value:'ten'},
+                { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
                 { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
@@ -108,22 +107,22 @@
       editedIndex: -1,
       editedItem: {
         id: 0,
+        ma: '',
         ten: '',
-        sysCapHanhChinhId:1,
-        ghiChu: '',
-        hieuLuc: 0,
+        ghiChu:'',
+        hieuLuc: 1
       },
       defaultItem: {
         id: 0,
+        ma: '',
         ten: '',
-        sysCapHanhChinhId: 2,
-        ghiChu: '',
-        hieuLuc: 1,
+        ghiChu:'',
+        hieuLuc: 1
       },
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết đơn vị'
       },
     },
     watch: {
@@ -140,9 +139,8 @@
           {
             id: 1,
             ma: '01',
-            ten: 'Cán bộ phòng Tài chính kế hoạch',
-            sysCapHanhChinhId:'2',
-            ghiChu: 'no',
+            ten: 'HCL-báo cáo tổng quát',
+            ghiChu: 'halo',
             hieuLuc: 1
           }
         ]
@@ -172,5 +170,6 @@
         this.close()
       },
     },
+    
   }
 </script>

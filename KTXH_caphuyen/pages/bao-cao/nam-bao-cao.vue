@@ -8,22 +8,21 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Biểu Nhập Liệu Chi Tiêu</v-toolbar-title>
+        <v-toolbar-title>Năm Báo Cáo</v-toolbar-title>
         <v-divider
-          class="mx-3"
+          class="mx-4"
           inset
           vertical
         ></v-divider>
-
          <v-text-field
             v-model="search"
             label="Search"
             single-line
-            hide-details 
+            hide-details
+            
           ></v-text-field>
-
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="700px">
+        <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
           </template>
@@ -36,13 +35,22 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Kí hiệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.nam" label="Năm"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" required></v-text-field>
+                    <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Kỳ báo cáo"></v-text-field>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" md="8">
+                    <v-textarea v-model="editedItem.noiDung" label="Nội Dung"></v-textarea>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
+                    <v-text-field v-model="editedItem.ngayMo" label="Ngày mở"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.ngayDong" label="Ngày đóng"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="8">
+                    <v-text-field v-model="editedItem.trangThai" label="Trạng thái"></v-text-field>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
@@ -81,7 +89,7 @@
 </template>
 
 <script>
-import {
+  import {
     mdiAccount,
     mdiPencil,
     mdiDelete,
@@ -90,6 +98,8 @@ import {
   export default {
     data: () => ({
       search:'',
+      select: null,
+      solo: false,
       icons: {
         mdiPencil,
         mdiDelete
@@ -97,32 +107,40 @@ import {
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Kí hiệu', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên biểu', align: 'left', sorttable: false, value:'ten'},
-                { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
-                { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
+                { text: 'Năm', align: 'left', sorttable: true, value:'nam'},
+                { text: 'Kỳ báo cáo', align: 'left', value:'kyBaoCao'},
+                { text: 'Nội dung', align: 'left', sorttable: false, value:'noiDung'},
+                { text: 'Ngày mở', align: 'left', sorttable: false, value:'ngayMo'},
+                { text: 'Ngày đóng', align: 'left', sorttable: false, value:'ngayDong'},
+                { text: 'Trạng Thái', align: 'left', value:'trangThai'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
       items: [],
       editedIndex: -1,
       editedItem: {
         id: 0,
-        ma: '',
-        ten: '',
-        ghiChu:'',
-        hieuLuc: 1
+        nam: 2019,
+        kyBaoCao: '',
+        noiDung: '',
+        ngayMo: '',
+        ngayDong: '',
+        trangThai: '',
+        hieuLuc: 0,
       },
       defaultItem: {
         id: 0,
-        ma: '',
-        ten: '',
-        ghiChu:'',
-        hieuLuc: 1
+        nam: 2019,
+        kyBaoCao: '',
+        noiDung: '',
+        ngayMo: '',
+        ngayDong: '',
+        trangThai: '',
+        hieuLuc: 0,
       },
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết đơn vị'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết'
       },
     },
     watch: {
@@ -138,10 +156,13 @@ import {
         this.items = [
           {
             id: 1,
-            ma: '01',
-            ten: 'HCL-báo cáo tổng quát',
-            ghiChu: 'halo',
-            hieuLuc: 1
+            nam: 2019,
+            kyBaoCao: 'Thang',
+            noiDung: '',
+            ngayMo: '',
+            ngayDong: '',
+            trangThai: 'kk',
+            hieuLuc: 1,
           }
         ]
       },
@@ -170,6 +191,5 @@ import {
         this.close()
       },
     },
-    
   }
 </script>

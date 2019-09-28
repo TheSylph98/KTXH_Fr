@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Năm Báo Cáo</v-toolbar-title>
+        <v-toolbar-title>Khai Báo Tác Nhân</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -35,22 +35,13 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.nam" label="Năm"></v-text-field>
+                    <v-text-field v-model="editedItem.ten" label="Tên tác nhân"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Kỳ báo cáo"></v-text-field>
-                  </v-col>
-                  <v-col class="d-flex" cols="12" sm="6" md="8">
-                    <v-textarea v-model="editedItem.noiDung" label="Nội Dung"></v-textarea>
+                    <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Cấp hành chính"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ngayMo" label="Ngày mở"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ngayDong" label="Ngày đóng"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.trangThai" label="Trạng thái"></v-text-field>
+                    <v-textarea v-model="editedItem.ghiChu" label="Chức năng, Nhiệm vụ"></v-textarea>
                   </v-col>
                   <v-switch
                     v-model="editedItem.hieuLuc"
@@ -63,8 +54,8 @@
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -107,35 +98,27 @@
       dialog: false,
        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
-                { text: 'Năm', align: 'left', sorttable: true, value:'nam'},
-                { text: 'Kỳ báo cáo', align: 'left', value:'kyBaoCao'},
-                { text: 'Nội dung', align: 'left', sorttable: false, value:'noiDung'},
-                { text: 'Ngày mở', align: 'left', sorttable: false, value:'ngayMo'},
-                { text: 'Ngày đóng', align: 'left', sorttable: false, value:'ngayDong'},
-                { text: 'Trạng Thái', align: 'left', value:'trangThai'},
+                { text: 'Tên tác nhân', align: 'left', sorttable: false, value:'ten'},
+                 { text: 'Cấp hành chính', align: 'left', sorttable: false, value:'sysCapHanhChinhId'},
+                { text: 'Chức năng, nhiệm vụ', align: 'left', sorttable: false, value:'ghiChu'},
+                { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
       items: [],
       editedIndex: -1,
       editedItem: {
         id: 0,
-        nam: 2019,
-        kyBaoCao: '',
-        noiDung: '',
-        ngayMo: '',
-        ngayDong: '',
-        trangThai: '',
+        ten: '',
+        sysCapHanhChinhId:1,
+        ghiChu: '',
         hieuLuc: 0,
       },
       defaultItem: {
         id: 0,
-        nam: 2019,
-        kyBaoCao: '',
-        noiDung: '',
-        ngayMo: '',
-        ngayDong: '',
-        trangThai: '',
-        hieuLuc: 0,
+        ten: '',
+        sysCapHanhChinhId: 2,
+        ghiChu: '',
+        hieuLuc: 1,
       },
     }),
     computed: {
@@ -156,13 +139,11 @@
         this.items = [
           {
             id: 1,
-            nam: 2019,
-            kyBaoCao: 'Thang',
-            noiDung: '',
-            ngayMo: '',
-            ngayDong: '',
-            trangThai: 'kk',
-            hieuLuc: 1,
+            ma: '01',
+            ten: 'Cán bộ phòng Tài chính kế hoạch',
+            sysCapHanhChinhId:'2',
+            ghiChu: 'no',
+            hieuLuc: 1
           }
         ]
       },
