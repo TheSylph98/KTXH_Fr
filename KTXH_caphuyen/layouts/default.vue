@@ -87,52 +87,62 @@ export default {
       items: [
          {
           icon: "mdi-apps",
-          title: "Khai Báo Đơn vị",
+          title: "Đơn vị",
           to: "/don-vi/don-vi"
         },
         {
           icon: "mdi-apps",
-          title: "Chức năng phần mềm",
+          title: "Tác Nhân Chức năng phần mềm",
           to: "/tac-nhan/tac-nhan_chuc-nang-phan-mem"
         },
          {
           icon: "mdi-apps",
-          title: "Khai Báo Tác Nhân",
+          title: "Tác Nhân",
           to: "/tac-nhan/tac-nhan"
         },
         {
           icon: "mdi-apps",
-          title: "Khai Báo Người dùng",
+          title: "Người dùng",
           to: "/user/User"
         },
         {
           icon: "mdi-apps",
-          title: "Tỉnh, Huyện, Xã, Đơn Vị Nhóm",
+          title: "Tỉnh",
+          to: "/huyen/tinh"
+        },
+        {
+          icon: "mdi-apps",
+          title: "Huyện",
           to: "/huyen/huyen"
         },
         {
           icon: "mdi-apps",
-          title: "Nhóm Chi Tiêu",
+          title: "Xã",
+          to: "/huyen/xa"
+        },
+        {
+          icon: "mdi-apps",
+          title: "Nhóm Chi Tiêu KTXH",
           to: "/nhom-chi-tieu/nhom-chi-tieu-KTXH"
         },
         {
           icon: "mdi-apps",
-          title: "Khai Báo Kỳ Báo Cáo",
+          title: "Kỳ Báo Cáo",
           to: "/bao-cao/ky-bao-cao"
         },
-        {
-          icon: "mdi-apps",
-          title: "Khai Báo Chỉ tiêu KTXH",
+        { 
+          icon: "mdi-book",
+          title: "Chỉ tiêu KTXH",
           to: "/chi-tieu/chi-tieu"
         }, 
         {
           icon: "mdi-apps",
-          title: "Khai Báo Nhóm Chỉ Tiêu KTXH",
+          title: "Nhóm Chỉ Tiêu Phân Tổ",
           to: "/chi-tieu/chi-tieu_phan-to"
         }, 
         {
           icon: "mdi-apps",
-          title: "Khai Báo Phân Tổ",
+          title: "Phân Tổ",
           to: "/phan-to/phan-to"
         }, 
         {
@@ -143,7 +153,7 @@ export default {
         {
           icon: "mdi-apps",
           title: "Biểu Nhập Liệu Chi Tiêu",
-          to: "/bieu-nhap-lieu/bieu-nhap-lieu"
+          to: "/bieu-nhap-lieu/bieu-nhap-lieu_chi-tieu"
         }, 
         {
           icon: "mdi-apps",

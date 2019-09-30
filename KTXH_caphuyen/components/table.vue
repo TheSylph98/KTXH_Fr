@@ -1,9 +1,11 @@
 <template>
+<div>
   <v-data-table
     :headers="headers"
     :items="items"
     :items-per-page="5"
     class="elevation-1"
+    show-select
 
   >
     <template v-slot:top>
@@ -16,91 +18,68 @@
         ></v-divider>
 
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="800px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <slot></slot>
-                  <v-switch
-                    v-model="hieuLuc"
-                    class="ma-1"
-                    label="Hiệu lực"
-                  ></v-switch>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn color="blue darken-1" text @click="$close">Đóng</v-btn>
-              <v-btn color="blue darken-1" text @click="$save">Lưu</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+          <v-btn color="primary" dark class="mb-2" @click="addNew()">Thêm mới</v-btn>
+          <slot></slot>
       </v-toolbar>
     </template>
+    
     <template v-slot:item.action="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >mdi-pencil</v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >mdi-delete</v-icon>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-icon
+            small
+            v-on="on"
+            class="mr-2"
+            @click="editItem(item)"
+          >mdi-pencil</v-icon>
+        </template>
+        <span>Chỉnh sửa</span>
+      </v-tooltip> 
+
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-icon
+            small
+            v-on="on"
+            @click="deleteItem(item)"
+          >mdi-delete</v-icon>
+        </template>
+        <span>Xóa</span>
+      </v-tooltip>
+
     </template>
+
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
+     <p>Chưa cập nhập dữ liệu</p>
     </template>
   </v-data-table>
-  
+
+</div>
 </template>
 
 <script>
   export default {
     props: {
-      dialog: {
-          type: Boolean,
-          default: false
-      },
       headers: {
-          type: Object,
+          type: Array,
       },
       items: {
-          type: Object
-      },
-      editedIndex: {
-          type: Number,
-      },
-      editedItem: {
-          type: Object
-      },
-      defaultItem: {
-          type: Object
-      },
-      hieuLuc: {
-          type: Boolean
+          type: Array
       },
       title: {
           type: String
-      },
-      formTitle: {
-          type: Object
       }
     },
-    
     methods: {
-      edit() {
-       this.$emit('edit')
+      addNew() {
+        this.$emit("add")
+      },
+      editItem (item) {
+        this.$emit("edit", item)
+      },
+      deleteItem (item) {
+        this.$emit("delete", item)
       },
     }
     

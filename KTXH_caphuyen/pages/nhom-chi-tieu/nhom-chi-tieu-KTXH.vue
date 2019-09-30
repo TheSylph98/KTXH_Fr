@@ -1,102 +1,73 @@
 <template>
-  <v-data-table
+    <Table 
+    :title="title" 
     :headers="headers"
     :items="items"
-    :items-per-page="5"
-    class="elevation-1"
-    :search="search"
-  >
-    <template v-slot:top>
-      <v-toolbar flat color="white">
-        <v-toolbar-title>Khai Báo Nhóm Chỉ Tiêu Kinh Tế Xã Hội</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-         <v-text-field
-            v-model="search"
-            label="Search"
-            single-line
-            hide-details
-            
-          ></v-text-field>
-        <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="600px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Thêm mới</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="8">
-                    <v-text-field v-model="editedItem.ten" label="Tên"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="8">
-                    <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
-                  </v-col>
-                  <v-switch
-                    v-model="editedItem.hieuLuc"
-                    class="ma-1"
-                    label="Hieu luc"
-                  ></v-switch>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.action="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >{{ icons.mdiPencil }}</v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >{{ icons.mdiDelete }}</v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
-    </template>
-  </v-data-table>
+    @edit="edit($event)"
+    @delete="deleted($event)"
+    @add="add($event)">
   
+    <v-dialog v-model="dialog" max-width="800px">
+      <template v-slot:activator="{ on }">
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ formTitle }}</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.ten" label="Tên"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
+              </v-col>
+              <v-switch
+                v-model="editedItem.hieuLuc"
+                class="ma-1"
+                label="Hieu luc"
+              ></v-switch>
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
+          <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <template slot="item.operator">
+      <div>OKIE</div>
+    </template>
+
+    </Table>
 </template>
 
 <script>
-  import {
-    mdiAccount,
-    mdiPencil,
-    mdiDelete,
-  } from '@mdi/js'
+import Table from '../../components/table.vue';
+import { operators } from "..//..//util//operators";
+import { mapState, mapActions } from "vuex";
 
-  export default {
-    data: () => ({
-      search:'',
-      select: null,
-      solo: false,
-      icons: {
-        mdiPencil,
-        mdiDelete
-      },
-      dialog: false,
-       headers: [
+export default {
+    components: {
+        Table
+    },
+    data() {
+      return {
+        title: 'Biểu Nhập Liệu Chỉ Tiêu',
+        dialog: false,
+        operators: operators,
+        search: {
+        },
+        headers: [
                 { text: 'STT', align: 'left', sorttable: true, value:'id'},
                 { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
                 { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
@@ -104,26 +75,31 @@
                 { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
                 { text: 'Thao Tác', align: 'left',  value:'action'},
             ],
-      items: [],
-      editedIndex: -1,
-      editedItem: {
-        id: 0,
-        ma: '',
-        ten: '',
-        ghiChu: '',
-        hieuLuc: 1,
-      },
-      defaultItem: {
-        id: 0,
-        ma: '',
-        ten: '',
-        ghiChu: '',
-        hieuLuc: 1,
-      },
-    }),
+        items: [],
+        editedIndex: -1,
+        editedItem: {
+          id: 0,
+          ma: '',
+          ten: '',
+          ghiChu: '',
+          hieuLuc: 1,
+        },
+      }
+    },
+    created() {
+       this.items = [
+           {
+            id: 0,
+            ma: '012',
+            ten: 'nhom tieu chi 01',
+            ghiChu: 'ko',
+            hieuLuc: 1
+            }
+        ]
+    },
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật thông tin chi tiết'
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
     watch: {
@@ -131,45 +107,36 @@
         val || this.close()
       },
     },
-    created () {
-      this.initialize()
-    },
     methods: {
-      initialize () {
-        this.items = [
-          {
-            id: 1,
-            ma: '01',
-            ten: 'chỉ tiêu tổng quát 1',
-            ghiChu: 'no',
-            hieuLuc: 1
-          }
-        ]
-      },
-      editItem (item) {
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+      add(){
         this.dialog = true
       },
-      deleteItem (item) {
+      edit(item) {
+        console.log(item);
+        this.dialog = true
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        
+      },
+      deleted(item) {
         const index = this.items.indexOf(item)
         confirm('Xác nhận xóa?') && this.items.splice(index, 1)
       },
-      close () {
+      close(){
         this.dialog = false
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
       },
-      save () {
-        if (this.editedIndex > -1) {
+      save() {
+        if ( this.editedIndex > -1) {
           Object.assign(this.items[this.editedIndex], this.editedItem)
         } else {
           this.items.push(this.editedItem)
         }
         this.close()
-      },
-    },
-  }
+      }
+    }
+}
 </script>

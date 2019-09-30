@@ -25,10 +25,16 @@
                 <v-text-field v-model="editedItem.tinh" label="Tỉnh"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.ma" label="Mã huyện"></v-text-field>
+                <v-text-field v-model="editedItem.mahuyen" label="Mã huyện"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Huyện"></v-text-field>
+                <v-text-field v-model="editedItem.huyen" label="Huyện"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="editedItem.ma" label="Mã xã"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.ten" label="Xã"></v-text-field>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-select
@@ -113,7 +119,7 @@ export default {
     },
     data() {
       return {
-        title: 'Khai Báo Từ Điển: Huyện',
+        title: 'Khai Báo Từ Điển: Xã',
         dialog: false,
         operators: operators,
         search: {
@@ -143,6 +149,8 @@ export default {
             id: 0,
             matinh: '',
             tinh:'',
+            mahuyen:'',
+            huyen:'',
             ma: '',
             ten: '',
             dvhch: '',
@@ -157,6 +165,8 @@ export default {
             id: 0,
             matinh: '',
             tinh:'',
+            mahuyen:'',
+            huyen:'',
             ma: '',
             ten: '',
             dvhch: '',
@@ -175,8 +185,10 @@ export default {
             id: 1,
             matinh: '01',
             tinh:'Thai Beo',
-            ma: '01',
-            ten: 'Dong Hung',
+            mahuyen:'032',
+            huyen:'Dong Hung',
+            ma: '0156',
+            ten: 'Dong Dong',
             dvhch: '',
             nongthon: 0,
             biengioi: 0,

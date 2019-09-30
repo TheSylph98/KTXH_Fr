@@ -19,16 +19,10 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.matinh" label="Mã tỉnh"></v-text-field>
+                <v-text-field v-model="editedItem.ma" label="Mã tỉnh*"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.tinh" label="Tỉnh"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.ma" label="Mã huyện"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Huyện"></v-text-field>
+                <v-text-field v-model="editedItem.ten" label="Tỉnh*"></v-text-field>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-select
@@ -113,7 +107,7 @@ export default {
     },
     data() {
       return {
-        title: 'Khai Báo Từ Điển: Huyện',
+        title: 'Khai Báo Từ Điển: Tỉnh',
         dialog: false,
         operators: operators,
         search: {
@@ -141,8 +135,6 @@ export default {
         items: [],
         editedItem: {
             id: 0,
-            matinh: '',
-            tinh:'',
             ma: '',
             ten: '',
             dvhch: '',
@@ -155,8 +147,6 @@ export default {
         },
         defaultItem: {
             id: 0,
-            matinh: '',
-            tinh:'',
             ma: '',
             ten: '',
             dvhch: '',
@@ -173,8 +163,6 @@ export default {
        this.items = [
            {
             id: 1,
-            matinh: '01',
-            tinh:'Thai Beo',
             ma: '01',
             ten: 'Dong Hung',
             dvhch: '',
