@@ -13,7 +13,7 @@ export const state = () => {
     },
     kyBaoCaoList: [],
     deletedKyBaoCaoList: [],
-    qlKyBaoCao: {},
+    kyBaoCao: {},
     pagination: {
       page: '',
       pageSize: '',
@@ -27,6 +27,8 @@ export const mutations = {
   SET_DELETED_KY_BAO_CAO: set('deletedKyBaoCao'),
   SET_PAGINATION: set('pagination'),
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+
+  SET_KY_BAO_CAO: set('kyBaoCao'),
 
   ADD_KY_BAO_CAO: add('qlKyBaoCao'),
 
@@ -69,15 +71,31 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/delete-list`, {
-        params: {
-          page: payload.page,
-          pageSize: payload.pageSize
-        }
-      })
+        page: payload.page,
+        pageSize: payload.pageSize
+      }
+      )
 
       commit('SET_DELETED_KY_BAO_CAO', data.rows)
     } catch (err) {
       console.log('getKyBaoCaoList', err)
+    }
+  },
+
+  async getKyBaoCao(
+    { state, commit },
+    id
+  ) {
+    const { qlKyBaoCao } = state.api
+
+    try {
+      const data = await this.$axios.$post(`${qlKyBaoCao}/read`, {
+        id: id
+      })
+
+      commit('SET_KY_BAO_CAO', data.rows)
+    } catch (err) {
+      console.log('getKyBaoCao', err)
     }
   },
 
