@@ -18,7 +18,7 @@
       <UserBar />
     </v-app-bar>
 
-    <SlideBar />
+    <SlideBar :miniVariant="miniVariant" />
   </v-app>
 </template>
 
@@ -34,6 +34,7 @@ export default {
 
   data() {
     return {
+      miniVariant: false,
       extended: true,
       right: true
     };

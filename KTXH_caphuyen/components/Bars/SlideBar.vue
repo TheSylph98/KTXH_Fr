@@ -56,11 +56,17 @@
 import slideBar from "./slideBar";
 
 export default {
+  props: {
+    miniVariant: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data() {
     return {
       items: slideBar,
-      drawer: true,
-      miniVariant: false
+      drawer: true
     };
   }
 };
