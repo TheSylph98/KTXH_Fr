@@ -205,7 +205,7 @@ export default {
           congThuc: '',
           hieuLuc: 1,
           xoa: 0
-          }
+          },
       ]
   },
   computed: {

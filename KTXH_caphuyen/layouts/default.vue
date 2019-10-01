@@ -1,70 +1,25 @@
 <template>
-  <v-app class="my-app">
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      :permanent="permanent"
-      color="rgb(159, 211, 224)"
-      fixed
-      app
-    >
-    <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app height="100" color="rgb(159, 211, 224)">
-      <!-- <v-toolbar :extended="extended"> -->
-      <v-row>
-        <v-col cols="6" class="header-left">
-          <v-row>
-            <v-col cols="5">
-              <v-img
-                :src="require('@/assets/images/logo.png')"
-                aspect-ratio="1"
-                class="logo"
-                max-width="240"
-                max-height="90"
-              ></v-img>
-            </v-col>
-            <v-col cols="7" class="header-title">
-              <b>HỆ THỐNG THÔNG TIN KINH TẾ XÃ HỘI</b>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="6" class="header-right">
-          <v-row>
-            <v-col cols="7" class="header-title">
-              <p>
-                <b>UBND HUYỆN CAM LỘC - TỈNH QUẢNG TRỊ</b>
-              </p>
-            </v-col>
-            <v-col cols="5" class="right-title header-title">
-              <p>
-                <b>PHÒNG KẾ HOẠCH - TÀI CHÍNH</b>
-              </p>
-              <P>Quản trị</P>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <!-- </v-toolbar> -->
-      <!-- <v-toolbar-title v-text="title" />
-      <v-spacer />-->
+  <v-app class="ktxh">
+    <v-app-bar app clipped-left color="#B00020" dark>
+      <v-app-bar-nav-icon @click="miniVariant = !miniVariant"></v-app-bar-nav-icon>
+      <span class="title ml-3 mr-5">
+        VNQT&nbsp;
+        <span class="font-weight-light">KTXH</span>
+      </span>
+      <v-text-field solo-inverted flat hide-details label="Tìm kiếm">
+        <v-icon slot="prepend-inner" color="#b9b9b3">mdi-magnify</v-icon>
+      </v-text-field>
+      <div class="flex-grow-1"></div>
+
+      <v-btn icon>
+        <v-icon color="yellow">mdi-bell</v-icon>
+      </v-btn>
+
+      <UserBar />
     </v-app-bar>
+
+    <SlideBar :miniVariant="miniVariant" />
+
     <v-content>
       <v-container>
         <nuxt />
@@ -77,135 +32,49 @@
 </template>
 
 <script>
+import SlideBar from "../components/Bars/SlideBar";
+import UserBar from "../components/Bars/UserBar";
+
 export default {
+  components: {
+    SlideBar: SlideBar,
+    UserBar: UserBar
+  },
+
   data() {
     return {
-      clipped: true,
-      permanent: true,
-      drawer: false,
-      fixed: false,
-      items: [
-         {
-          icon: "mdi-apps",
-          title: "Đơn vị",
-          to: "/don-vi/don-vi"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Tác Nhân Chức năng phần mềm",
-          to: "/tac-nhan/tac-nhan_chuc-nang-phan-mem"
-        },
-         {
-          icon: "mdi-apps",
-          title: "Tác Nhân",
-          to: "/tac-nhan/tac-nhan"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Người dùng",
-          to: "/user/User"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Tỉnh",
-          to: "/huyen/tinh"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Huyện",
-          to: "/huyen/huyen"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Xã",
-          to: "/huyen/xa"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Nhóm Chi Tiêu KTXH",
-          to: "/nhom-chi-tieu/nhom-chi-tieu-KTXH"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Kỳ Báo Cáo",
-          to: "/bao-cao/ky-bao-cao"
-        },
-        { 
-          icon: "mdi-book",
-          title: "Chỉ tiêu KTXH",
-          to: "/chi-tieu/chi-tieu"
-        }, 
-        {
-          icon: "mdi-apps",
-          title: "Nhóm Chỉ Tiêu Phân Tổ",
-          to: "/chi-tieu/chi-tieu_phan-to"
-        }, 
-        {
-          icon: "mdi-apps",
-          title: "Phân Tổ",
-          to: "/phan-to/phan-to"
-        }, 
-        {
-          icon: "mdi-apps",
-          title: "Phân Tổ Chi Tiết",
-          to: "/phan-to/phan-to-chi-tiet"
-        }, 
-        {
-          icon: "mdi-apps",
-          title: "Biểu Nhập Liệu Chi Tiêu",
-          to: "/bieu-nhap-lieu/bieu-nhap-lieu_chi-tieu"
-        }, 
-        {
-          icon: "mdi-apps",
-          title: "Biểu Nhập Liệu Kỳ Báo Cáo",
-          to: "/bieu-nhap-lieu/bieu-nhap-lieu_ky-bao-cao"
-        }, 
-        {
-          icon: "mdi-apps",
-          title: "Biểu Nhập Liệu Trường Dữ Liệu",
-          to: "/bieu-nhap-lieu/bieu-nhap-lieu_truong-du-lieu"
-        }
-      ],
-      extended: true,
       miniVariant: false,
-      right: true,
-      rightDrawer: false,
+      extended: true,
+      right: true
     };
   }
 };
 </script>
 
 <style lang="scss">
-.logo {
-  .v-image__image {
-    margin: 5% 0;
+.ktxh {
+  .v-list {
+    .v-list-item {
+      .v-list-item__action {
+        margin-right: 5%;
+      }
+    }
+
+    .v-list-group {
+      .v-list-item__icon {
+        margin-right: 5%;
+      }
+    }
   }
 }
 
-.header-left {
-  * {
-    margin: 0;
-    padding: 0;
-  }
-
-  .header-title {
-    padding-top: 3%;
-  }
-}
-
-.header-right {
-  *,
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-  .header-title {
-    padding-top: 6%;
-  }
-
-  .right-title {
-    text-align: right;
+.ktxh .v-list--dense.v-list--nav .v-list-group--no-action {
+  .v-list-group__items {
+    div {
+      .v-list-item {
+        padding-left: 15%;
+      }
+    }
   }
 }
 </style>
