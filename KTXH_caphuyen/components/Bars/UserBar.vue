@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import userBar from "./userBar";
+
+import userBar  from "./userBar1";
 
 export default {
   data() {

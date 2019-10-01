@@ -19,12 +19,21 @@
     </v-app-bar>
 
     <SlideBar :miniVariant="miniVariant" />
+
+    <v-content>
+      <v-container>
+        <nuxt />
+      </v-container>
+    </v-content>
+    <v-footer :fixed="fixed" app>
+      <span>&copy; 2019</span>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import SlideBar from "@/components/Bars/SlideBar";
-import UserBar from "@/components/Bars/UserBar";
+import SlideBar from "../components/Bars/SlideBar";
+import UserBar from "../components/Bars/UserBar";
 
 export default {
   components: {

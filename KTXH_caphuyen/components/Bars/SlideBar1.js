@@ -7,7 +7,7 @@ export default [
     {
         icon: "mdi-city",
         title: "Khai Báo Đơn vị",
-        to: "/don-vi"
+        to: "/don-vi/don-vi"
     },
     {
         icon: "mdi-account-group-outline",
@@ -16,54 +16,54 @@ export default [
             {
                 icon: "mdi-account-multiple",
                 title: "Khai Báo Tác Nhân",
-                to: "/tac-nhan/khai-bao-tac-nhan"
+                to: "/tac-nhan/tac-nhan"
             },
             {
                 icon: "mdi-adjust",
                 title: "Chức năng phần mềm",
-                to: "/tac-nhan/chuc-nang-phan-mem"
+                to: "/tac-nhan/tac-nhan_chuc-nang-phan-mem"
             }
         ]
     },
     {
         icon: "mdi-account-box-multiple",
         title: "Khai Báo Người dùng",
-        to: "/user"
+        to: "/user/User"
     },
     {
         icon: "mdi-map-marker",
-        title: "Tỉnh, Huyện, Xã, Đơn Vị Nhóm",
-        to: "/huyen"
+        title: "Huyện",
+        to: "/huyen/huyen"
     },
     {
         icon: "mdi-border-color",
         title: "Nhóm Chi Tiêu",
-        to: "/nhom-chi-tieu"
+        to: "/nhom-chi-tieu/nhom-chi-tieu-KTXH"
     },
     {
         icon: "mdi-timer",
         title: "Khai Báo Kỳ Báo Cáo",
-        to: "/ky-bao-cao"
+        to: "/bao-cao/ky-bao-cao"
     },
     {
         icon: "mdi-format-list-bulleted",
         title: "Khai Báo Chỉ tiêu KTXH",
-        to: "/chi-tieu"
+        to: "/chi-tieu/chi-tieu"
     },
     {
         icon: "mdi-group",
         title: "Khai Báo Nhóm Chỉ Tiêu KTXH",
-        to: "/chi-tieu-phan-to"
+        to: "/chi-tieu/chi-tieu-phan-to"
     },
     {
         icon: "mdi-select-group",
         title: "Khai Báo Phân Tổ",
-        to: "/phan-to"
+        to: "/phan-to/phan-to"
     },
     {
         icon: "mdi-playlist-edit",
         title: "Phân Tổ Chi Tiết",
-        to: "/phan-to-chi-tiet"
+        to: "/phan-to/phan-to-chi-tiet"
     },
     {
         icon: "mdi-file-document-box-multiple-outline",
@@ -72,7 +72,7 @@ export default [
             {
                 icon: "mdi-file-document-box",
                 title: "Biểu Nhập Liệu Chi Tiêu",
-                to: "/bieu-nhap-lieu/bieu-nhap-lieu-chi-tieu"
+                to: "/bieu-nhap-lieu/bieu-nhap-lieu_chi-tieu"
             },
             {
                 icon: "mdi-file-chart",
