@@ -49,14 +49,14 @@
 </template>
 
 <script>
-import { operators } from "../util/operators";
+import { stringperators } from "../util/operators";
 import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
     return {
       kyBaoCao: {},
-      operators: operators,
+      operators: stringOperators,
       search: {
         ma: {
           value: "",
@@ -100,9 +100,9 @@ export default {
     ...mapState("qlKyBaoCao", ["kyBaoCaoList", "pagination"])
   },
 
-  asyncData({ store }) {
-    store.dispatch("qlKyBaoCao/getKyBaoCaoList");
-  },
+  // asyncData({ store }) {
+  //   store.dispatch("qlKyBaoCao/getKyBaoCaoList");
+  // },
 
   created() {
     this.getKyBaoCaoList();

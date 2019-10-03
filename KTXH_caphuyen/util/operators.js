@@ -1,13 +1,13 @@
-export const operators = [
+export const stringOperators = [
   {
     label: 'Bắt đầu bằng',
     value: 'like',
-    opearator: 'begins-with'
+    operator: 'begins-with'
   },
   {
     label: 'Chứa',
     value: 'like',
-    opearator: 'contains'
+    operator: 'contains'
   },
   {
     label: 'Không chứa',
@@ -21,10 +21,12 @@ export const operators = [
   },
   {
     label: 'Bằng',
-    value: '='
+    value: '=',
+    operator: 'equal'
   },
   {
     label: 'Không bằng',
-    value: 'neq'
+    value: 'neq',
+    operator: "doesn't-equal"
   }
 ]

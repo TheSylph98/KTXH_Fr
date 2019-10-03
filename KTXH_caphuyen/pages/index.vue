@@ -10,11 +10,18 @@
         </v-list-item>
       </v-list>
     </v-menu>
+
+    <StringFilter />
   </div>
 </template>
 
 <script>
+import StringFilter from "../components/Filter/StringFilter";
 export default {
+  components: {
+    StringFilter: StringFilter
+  },
+
   data: () => ({
     items: [
       { title: "Click Me" },
