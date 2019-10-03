@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { stringperators } from "../util/operators";
+import { stringperators } from "@/util/operators";
 import { mapState, mapActions } from "vuex";
 
 export default {

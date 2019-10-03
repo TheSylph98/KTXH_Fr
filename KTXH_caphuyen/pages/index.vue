@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import StringFilter from "../components/Filter/StringFilter";
+import StringFilter from "@/components/Filter/StringFilter";
 export default {
   components: {
     StringFilter: StringFilter
