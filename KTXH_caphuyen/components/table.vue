@@ -6,7 +6,6 @@
     :items-per-page="5"
     class="elevation-1"
     show-select
-
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -46,11 +45,13 @@
         </template>
         <span>Xóa</span>
       </v-tooltip>
-
     </template>
 
+      <!-- <template v-slot:item.no="item">
+      {{ index }}  
+      </template> -->
+
     <template v-slot:no-data>
-      <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
      <p>Chưa cập nhập dữ liệu</p>
     </template>
   </v-data-table>
@@ -69,6 +70,11 @@
       },
       title: {
           type: String
+      }
+    },
+    data() {
+      return {
+        index: 1
       }
     },
     methods: {

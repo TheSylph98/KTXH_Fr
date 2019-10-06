@@ -32,13 +32,24 @@ export default [
     },
     {
         icon: "mdi-map-marker",
-        title: "Huyện",
-        to: "/huyen/huyen"
-    },
-    {
-        icon: "mdi-border-color",
-        title: "Nhóm Chi Tiêu",
-        to: "/nhom-chi-tieu/nhom-chi-tieu-KTXH"
+        title: "Quy Chuẩn",
+        children: [
+            {
+                icon: "mdi-map-marker",
+                title: "Tỉnh",
+                to: "/quy-chuan/tinh"
+            },
+            {
+                icon: "mdi-map-marker",
+                title: "Huyện",
+                to: "/quy-chuan/huyen"
+            },
+            {
+                icon: "mdi-map-marker",
+                title: "Xã",
+                to: "/quy-chuan/xa"
+            }
+        ]
     },
     {
         icon: "mdi-timer",
@@ -52,8 +63,13 @@ export default [
     },
     {
         icon: "mdi-group",
-        title: "Khai Báo Nhóm Chỉ Tiêu KTXH",
-        to: "/chi-tieu/chi-tieu-phan-to"
+        title: "Khai Báo Chỉ Tiêu Nhóm",
+        to: "/chi-tieu/chi-tieu-nhom"
+    },
+    {
+        icon: "mdi-group",
+        title: "Khai Báo Chỉ Tiêu Phân Tổ",
+        to: "/chi-tieu/chi-tieu_phan-to"
     },
     {
         icon: "mdi-select-group",

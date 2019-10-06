@@ -24,23 +24,26 @@
               <v-col cols="12" sm="6" md="8">
                 <v-text-field v-model="editedItem.ma" label="Mã đơn vị*" required></v-text-field>
               </v-col>
-              <v-switch
-                v-model="editedItem.laDonVi"
-                class="ma-1"
-                label="Là đơn vị"
-              ></v-switch>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch
+                  v-model="editedItem.laDonVi"
+                  class="ma-1"
+                  label="Là đơn vị"
+                ></v-switch>
+              </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-text-field v-model="editedItem.sdt" label="Số điện thoại"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-text-field v-model="editedItem.nhomdv" label="Nhóm đơn vị"></v-text-field>
               </v-col>
-
-              <v-switch
-                v-model="editedItem.hieuLuc"
-                class="ma-1"
-                label="Hiệu lực"
-              ></v-switch>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch
+                  v-model="editedItem.hieuLuc"
+                  class="ma-1"
+                  label="Hiệu lực"
+                ></v-switch>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -77,13 +80,13 @@ export default {
         search: {
         },
         headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'Mã đơn vị', align: 'left', sorttable: true, value:'ma'},
-            { text: 'Tên đơn vị', align: 'left', sorttable: false, value:'ten'},
-            { text: 'Số điện thoại', align: 'left', sorttable: false, value:'sdt'},
-            { text: 'Nhóm đơn vị', align: 'left', sorttable: false, value:'nhomdv'},
-            { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
-            { text: 'Thao Tác', align: 'left',  value:'action'},
+            { text: 'STT', align: 'left', sorttable: true, divider:true, value:'id'},
+            { text: 'Mã đơn vị', align: 'left', divider:true, value:'ma'},
+            { text: 'Tên đơn vị', align: 'left', value:'ten'},
+            { text: 'Số điện thoại', align: 'left', value:'sdt'},
+            { text: 'Nhóm đơn vị', align: 'left', value:'nhomdv'},
+            { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
+            { text: 'Thao Tác', align: 'left', value:'action'},
               ],
         items: [],
         editedIndex: -1,
@@ -92,7 +95,7 @@ export default {
             ma: '',
             ten: '',
             sdt: '',
-            laDonVi: '',
+            laDonVi: 1,
             nhomdv: '',
             hieuLuc: 1
         },
@@ -101,7 +104,7 @@ export default {
             ma: '',
             ten: '',
             sdt: '',
-            laDonVi: '',
+            laDonVi: 1,
             nhomdv: '',
             hieuLuc: 1
         },
@@ -110,18 +113,22 @@ export default {
     created() {
        this.items = [
           {
-          id: 1,
-          nam: 2019,
-          kyBaoCao: 'thang',
-          noiDung: 'ko co gi',
-          ngayMo: '19-9-2019',
-          ngayDong: '',
-          ngayBatDau: '',
-          ngayKetThuc: '',
-          ngayBaoCaoHuyen: '',
-          ngayBaoCaoTinh: '',
-          trangThai:'da hoan thanh',
-          hieuLuc: 1
+            id: 1,
+            ma: '01',
+            ten: 'don vi 1',
+            sdt: '19009999',
+            laDonVi: 1,
+            nhomdv: '2',
+            hieuLuc: 1
+          },
+          {
+            id: 2,
+            ma: '02',
+            ten: 'don vi 2',
+            sdt: '19009992',
+            laDonVi: 1,
+            nhomdv: '3',
+            hieuLuc: 1
           }
         ]
     },

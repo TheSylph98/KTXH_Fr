@@ -6,7 +6,7 @@
     @edit="edit($event)"
     @delete="deleted($event)"
     @add="add($event)">
-  
+     <v-btn color="primary" dark class="mb-2" @click="addNew()">Lưu</v-btn>
      <v-dialog v-model="dialog" max-width="800px">
         <template v-slot:activator="{ on }">
         </template>

@@ -6,10 +6,11 @@
     @edit="edit($event)"
     @delete="deleted($event)"
     @add="add($event)">
-  
+
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }">
       </template>
+
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -62,13 +63,13 @@ export default {
     },
     data() {
       return {
-        title: 'Biểu Nhập Liệu Chỉ Tiêu',
+        title: 'Khai Báo Nhóm Chỉ Tiêu',
         dialog: false,
         operators: operators,
         search: {
         },
         headers: [
-                { text: 'STT', align: 'left', sorttable: true, value:'id'},
+                { text: 'STT', align: 'left', sorttable: true, value:'index'},
                 { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
                 { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
                 { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
@@ -78,6 +79,13 @@ export default {
         items: [],
         editedIndex: -1,
         editedItem: {
+          id: 0,
+          ma: '',
+          ten: '',
+          ghiChu: '',
+          hieuLuc: 1,
+        },
+        defaultItem: {
           id: 0,
           ma: '',
           ten: '',
@@ -101,6 +109,12 @@ export default {
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
+      items () {
+        return this.items.map((item, index) => ({
+          id: index,
+          ...item
+        }))
+    }
     },
     watch: {
       dialog (val) {
