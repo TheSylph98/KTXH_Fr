@@ -86,76 +86,36 @@ export default {
             { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
         editedIndex: -1,
-        items: [],
-        editedItem: {
-          id: 0,
-          ten: '',
-          soDienThoai: '19900',
-          email: '',
-          donvi: '',
-          hieuLuc: 1,
-        },
-        defaultItem: {
-          id: 0,
-          ten: '',
-          soDienThoai: '',
-          email: '',
-          donvi: '',
-          hieuLuc: 1,
-        },
       }
     },
-    created() {
-       this.items = [
-           {
-            id: 1,
-            ten: 'Hieu',
-            soDienThoai: '1990002156',
-            email: '12345@gmail.com',
-            donvi: '01',
-            hieuLuc: 1,
-            }
-        ]
-    },
     computed: {
+      ...mapState("qtUser", ["userList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+
+    asyncData({ store }) {
+      store.dispatch("qtUser/getQTUserList");
     },
+
+    created() {
+      this.getQTUserList();
+    },
+
     methods: {
-      add(){
-        this.dialog = true
-      },
-      edit(item) {
-        console.log(item);
-        this.dialog = true
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        
-      },
-      deleted(item) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-      },
-      close(){
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-      save() {
-        if ( this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
+      ...mapActions("qtUser", [
+        "getQTUserList",
+        "getQTUser",
+        "addQTUser",
+        "updateQTUser",
+        "deleteQTUser",
+        "restoreQTUser"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
       }
     }
 }

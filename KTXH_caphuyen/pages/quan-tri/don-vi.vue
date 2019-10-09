@@ -75,7 +75,6 @@ export default {
     data() {
       return {
         title: 'Khai Báo Đơn Vị',
-        dialog: false,
         operators: operators,
         search: {
         },
@@ -88,89 +87,37 @@ export default {
             { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
             { text: 'Thao Tác', align: 'left', value:'action'},
               ],
-        items: [],
-        editedIndex: -1,
-        editedItem: {
-            id: 0,
-            ma: '',
-            ten: '',
-            sdt: '',
-            laDonVi: 1,
-            nhomdv: '',
-            hieuLuc: 1
-        },
-        defaultItem: {
-            id: 0,
-            ma: '',
-            ten: '',
-            sdt: '',
-            laDonVi: 1,
-            nhomdv: '',
-            hieuLuc: 1
-        },
+        editedIndex: -1
       }
     },
-    created() {
-       this.items = [
-          {
-            id: 1,
-            ma: '01',
-            ten: 'don vi 1',
-            sdt: '19009999',
-            laDonVi: 1,
-            nhomdv: '2',
-            hieuLuc: 1
-          },
-          {
-            id: 2,
-            ma: '02',
-            ten: 'don vi 2',
-            sdt: '19009992',
-            laDonVi: 1,
-            nhomdv: '3',
-            hieuLuc: 1
-          }
-        ]
-    },
     computed: {
+      ...mapState("qtDonVi", ["donViList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+
+    asyncData({ store }) {
+      store.dispatch("qtDonVi/getQTDonViList");
     },
+
+    created() {
+      this.getQTDonViList();
+    },
+
     methods: {
-      add(){
-        this.dialog = true
-      },
-      edit(item) {
-        console.log(item);
-        this.dialog = true
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        
-      },
-      deleted(item) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-      },
-      close(){
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-      save() {
-        if ( this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
+      ...mapActions("qtDonVi", [
+        "getQTDonViList",
+        "getQTDonVi",
+        "addQTDonVi",
+        "updateQTDonVi",
+        "deleteQTDonVi",
+        "restoreQTDonVi"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
       }
     }
 }

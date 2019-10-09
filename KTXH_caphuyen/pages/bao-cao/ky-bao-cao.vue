@@ -84,9 +84,45 @@ export default {
       return {
         title: 'Khai Báo Kỳ Báo Cáo',
         dialog: false,
-        operators: operators,
         search: {
+          ma: {
+            value: "",
+            operator: ""
+          },
+          nam: {
+            value: "",
+            operator: ""
+          },
+          ngayMo: {
+            value: "",
+            operator: ""
+          },
+          ngayDong: {
+            value: "",
+            operator: ""
+          },
+          ngayBatDau: {
+            value: "",
+            operator: ""
+          },
+           ngayKetThuc: {
+            value: "",
+            operator: ""
+          },
+          ngayBaoCaoHuyen: {
+            value: "",
+            operator: ""
+          },
+          ngayBaoCaoTinh: {
+            value: "",
+            operator: ""
+          },
+          ghiChu: {
+            value: "",
+            operator: ""
+          }
         },
+        operators: operators,
         headers: [
             { text: 'STT', align: 'left', sorttable: true, value:'id'},
             { text: 'Năm', align: 'left', sorttable: true, value:'nam'},
@@ -101,81 +137,37 @@ export default {
             { text: 'Trạng Thái', align: 'left', value:'trangThai'},
             { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
-        editedIndex: -1,
-        items: [],
-        editedItem: {
-            id: 0,
-            nam: 2019,
-            kyBaoCao: '',
-            noiDung: '',
-            ngayMo: '',
-            ngayDong: '',
-            ngayBatDau: '',
-            ngayKetThuc: '',
-            ngayBaoCaoHuyen: '',
-            ngayBaoCaoTinh: '',
-            trangThai:'',
-            hieuLuc: 1
-        }
+        editedIndex: -1
       }
     },
-    created() {
-       this.items = [
-          {
-          id: 1,
-          nam: 2019,
-          kyBaoCao: 'thang',
-          noiDung: 'ko co gi',
-          ngayMo: '19-9-2019',
-          ngayDong: '',
-          ngayBatDau: '',
-          ngayKetThuc: '',
-          ngayBaoCaoHuyen: '',
-          ngayBaoCaoTinh: '',
-          trangThai:'da hoan thanh',
-          hieuLuc: 1
-          }
-        ]
-    },
     computed: {
+      ...mapState("qlKyBaoCao", ["kyBaoCaoList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+
+    asyncData({ store }) {
+      store.dispatch("qlKyBaoCao/getKyBaoCaoList");
     },
+
+    created() {
+      this.getKyBaoCaoList();
+    },
+
     methods: {
-      add(){
-        this.dialog = true
-      },
-      edit(item) {
-        console.log(item);
-        this.dialog = true
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        
-      },
-      deleted(item) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-      },
-      close(){
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-      save() {
-        if ( this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
+      ...mapActions("qlKyBaoCao", [
+        "getKyBaoCaoList",
+        "getKyBaoCao",
+        "addKyBaoCao",
+        "updateKyBaoCao",
+        "deleteKyBaoCao",
+        "restoreKyBaoCao"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
       }
     }
 }

@@ -34,9 +34,7 @@ export const mutations = {
 
     UPDATE_CHI_TIEU: update('chiTieu'),
 
-    DELETE_CHI_TIEU: remove('chiTieu'),
-
-    RESTORE_CHI_TIEU: restore('chiTieu')
+    DELETE_CHI_TIEU: remove('chiTieu')
 }
 
 export const actions = {
@@ -151,7 +149,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${ChiTieu}/restore`, chi_tieu)
 
-      commit('RESTORE_CHI_TIEU', data)
+      commit('ADD_CHI_TIEU', data)
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

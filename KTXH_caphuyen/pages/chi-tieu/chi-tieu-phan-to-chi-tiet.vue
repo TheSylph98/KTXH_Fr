@@ -64,7 +64,7 @@ export default {
     },
     data() {
       return {
-        title: 'Biểu Nhập Liệu Chỉ Tiêu',
+        title: 'Chỉ Tiêu Phân Tổ Chi Tiết',
         dialog: false,
         operators: operators,
         search: {
@@ -77,67 +77,37 @@ export default {
             { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
             { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
-        items: [],
         editedIndex: -1,
-        editedItem: {
-          id: 0,
-          ma: '',
-          ten: '',
-          ghiChu:'',
-          hieuLuc: 1
-        }
       }
     },
-    created() {
-       this.items = [
-           {
-            id: 1,
-            ma: '01',
-            ten: 'Trường data 1212',
-            ghiChu: 'halo',
-            hieuLuc: 1
-            }
-        ]
-    },
     computed: {
+      ...mapState("chiTieuPhanToChiTiet", ["chiTieuPhanToChiTietList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+
+    asyncData({ store }) {
+      store.dispatch("chiTieuPhanToChiTiet/getChiTieuPhanToChiTietList");
     },
+
+    created() {
+      this.getChiTieuPhanToChiTietList();
+    },
+
     methods: {
-      add(){
-        this.dialog = true
-      },
-      edit(item) {
-        console.log(item);
-        this.dialog = true
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        
-      },
-      deleted(item) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-      },
-      close(){
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-      save() {
-        if ( this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
+      ...mapActions("chiTieuPhanToChiTiet", [
+        "getChiTieuPhanToChiTietList",
+        "getChiTieuPhanToChiTiet",
+        "addChiTieuPhanToChiTiet",
+        "updateChiTieuPhanToChiTiet",
+        "deleteChiTieuPhanToChiTiet",
+        "restoreChiTieuPhanToChiTiet"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
       }
     }
 }

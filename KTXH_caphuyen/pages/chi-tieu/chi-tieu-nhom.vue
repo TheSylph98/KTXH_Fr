@@ -69,87 +69,44 @@ export default {
         search: {
         },
         headers: [
-                { text: 'STT', align: 'left', sorttable: true, value:'index'},
-                { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
-                { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
-                { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
-                { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
-                { text: 'Thao Tác', align: 'left',  value:'action'},
-            ],
-        items: [],
-        editedIndex: -1,
-        editedItem: {
-          id: 0,
-          ma: '',
-          ten: '',
-          ghiChu: '',
-          hieuLuc: 1,
-        },
-        defaultItem: {
-          id: 0,
-          ma: '',
-          ten: '',
-          ghiChu: '',
-          hieuLuc: 1,
-        },
+            { text: 'STT', align: 'left', sorttable: true, value:'index'},
+            { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
+            { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
+            { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
+            { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
+            { text: 'Thao Tác', align: 'left',  value:'action'}
+        ],
+        editedIndex: -1
       }
     },
-    created() {
-       this.items = [
-           {
-            id: 0,
-            ma: '012',
-            ten: 'nhom tieu chi 01',
-            ghiChu: 'ko',
-            hieuLuc: 1
-            }
-        ]
-    },
     computed: {
+      ...mapState("chiTieuNhom", ["chiTieuNhomList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
-      items () {
-        return this.items.map((item, index) => ({
-          id: index,
-          ...item
-        }))
-    }
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+
+    asyncData({ store }) {
+      store.dispatch("chiTieuNhom/getChiTieuNhomList");
     },
+
+    created() {
+      this.getChiTieuNhomList();
+    },
+
     methods: {
-      add(){
-        this.dialog = true
-      },
-      edit(item) {
-        console.log(item);
-        this.dialog = true
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        
-      },
-      deleted(item) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-      },
-      close(){
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-      save() {
-        if ( this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
+      ...mapActions("chiTieuNhom", [
+        "getChiTieuNhomList",
+        "getChiTieuNhom",
+        "addChiTieuNhom",
+        "updateChiTieuNhom",
+        "deleteChiTieuNhom",
+        "restoreChiTieuNhom"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
       }
     }
 }

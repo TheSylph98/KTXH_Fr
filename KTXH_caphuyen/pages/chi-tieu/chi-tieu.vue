@@ -132,123 +132,37 @@ export default {
           { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
           { text: 'Thao Tác', align: 'left',  value:'action'},
       ],
-      editedIndex: -1,
-      items_t: [],
-      editedItem: {
-          id: 0,
-          maCT: '01',
-          nhomCT:'',
-          tenCT: '',
-          maCTCha:'',
-          tenCTCha: '',
-          loai:'',
-          dvt: '',
-          phanTo: '',
-          phanToTheo: '',
-          soLieuGoc: '',
-          tonghopSoLieuGoc: '',
-          congThuc: '',
-          hieuLuc: 1,
-          xoa: 0
-      },
-      editedItem: {
-          id: 0,
-          maCT: '01',
-          nhomCT:'',
-          tenCT: '',
-          maCTCha:'',
-          tenCTCha: '',
-          loai:'',
-          dvt: '',
-          phanTo: '',
-          phanToTheo: '',
-          soLieuGoc: '',
-          tonghopSoLieuGoc: '',
-          congThuc: '',
-          hieuLuc: 1,
-          xoa: 0
-      },
-      defaultItem: {
-          id: 0,
-          maCT: '01',
-          nhomCT:'',
-          tenCT: '',
-          maCTCha:'',
-          tenCTCha: '',
-          loai:'',
-          dvt: '',
-          phanTo: '',
-          phanToTheo: '',
-          soLieuGoc: '',
-          tonghopSoLieuGoc: '',
-          congThuc: '',
-          hieuLuc: 1,
-          xoa: 0
-      },
+      editedIndex: -1
     }
   },
-  created() {
-      this.items = [
-          {
-          id: 1,
-          maCT: '01',
-          nhomCT:'jkasnvbn',
-          tenCT: 'aklvnne',
-          maCTCha:'',
-          tenCTCha: '',
-          loai:'3',
-          dvt: '2',
-          phanTo: 'co',
-          phanToTheo: '',
-          soLieuGoc: '',
-          tonghopSoLieuGoc: '',
-          congThuc: '',
-          hieuLuc: 1,
-          xoa: 0
-          },
-      ]
-  },
   computed: {
+    ...mapState("chiTieu", ["chiTieuList", "pagination"]),
     formTitle () {
-      return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-    },
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
+      },
   },
-  watch: {
-    dialog (val) {
-      val || this.close()
-    },
+
+  asyncData({ store }) {
+    store.dispatch("chiTieu/getChiTieuList");
   },
+
+  created() {
+    this.getChiTieuList();
+  },
+
   methods: {
-    add(){
-      this.dialog = true
-    },
-    edit(item) {
-      console.log(item);
-      this.dialog = true
-      this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      
-    },
-    deleted(item) {
-      const index = this.items.indexOf(item)
-      confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-    },
-    close(){
-      this.dialog = false
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      }, 300)
-    },
-    save() {
-      console.log(this.editedItem)
-      if ( this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem)
-      } else {
-        this.items.push(this.editedItem)
-      }
-      console.log(this.editedItem)
-      this.close()
+    ...mapActions("chiTieu", [
+      "getChiTieuList",
+      "getChiTieu",
+      "addChiTieu",
+      "updateChiTieu",
+      "deleteChiTieu",
+      "restoreChiTieu"
+    ]),
+
+    getClass(index) {
+      if (!index) return "text-left";
+      else return "text-start";
     }
   }
 }

@@ -131,89 +131,37 @@ export default {
             { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
             { text: 'Thao Tác', align: 'left',  value:'action'}
         ],
-        editedIndex: -1,
-        items: [],
-        editedItem: {
-            id: 0,
-            ma: '',
-            ten: '',
-            dvhch: '',
-            nongthon: 0,
-            biengioi: 0,
-            haidao: 0,
-            dbkk: 0,
-            ghiChu:'',
-            hieuLuc: 1
-        },
-        defaultItem: {
-            id: 0,
-            ma: '',
-            ten: '',
-            dvhch: '',
-            nongthon: 0,
-            biengioi: 0,
-            haidao: 0,
-            dbkk: 0,
-            ghiChu:'',
-            hieuLuc: 1
-        }
+        editedIndex: -1
       }
     },
-    created() {
-       this.items = [
-           {
-            id: 1,
-            ma: '01',
-            ten: 'Dong Hung',
-            dvhch: '',
-            nongthon: 0,
-            biengioi: 0,
-            haidao: 0,
-            dbkk: 0,
-            ghiChu:'',
-            hieuLuc: 1
-            }
-        ]
-    },
     computed: {
+      ...mapState("qcTinh", ["tinhList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
+
+    asyncData({ store }) {
+      store.dispatch("qcTinh/getQCTinhList");
     },
+
+    created() {
+      this.getQCTinhList();
+    },
+
     methods: {
-      add(){
-        this.dialog = true
-      },
-      edit(item) {
-        console.log(item);
-        this.dialog = true
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        
-      },
-      deleted(item) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-      },
-      close(){
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-      save() {
-        if ( this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
+      ...mapActions("qcTinh", [
+        "getQCTinhList",
+        "getQCTinh",
+        "addQCTinh",
+        "updateQCTinh",
+        "deleteQCTinh",
+        "restoreQCTinh"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
       }
     }
 }

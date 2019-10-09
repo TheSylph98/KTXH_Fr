@@ -34,9 +34,7 @@ export const mutations = {
 
     UPDATE_USER: update('qtUser'),
 
-    DELETE_USER: remove('qtUser'),
-
-    RESTORE_USER: restore('qtUser')
+    DELETE_USER: remove('qtUser')
 }
 
 export const actions = {
@@ -151,7 +149,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtUser}/restore`, user)
 
-      commit('RESTORE_USER', data)
+      commit('ADD_USER', data)
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

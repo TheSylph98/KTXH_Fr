@@ -34,9 +34,7 @@ import {
   
     UPDATE_TINH: update('qcTinh'),
   
-    DELETE_TINH: remove('qcTinh'),
-
-    RESTORE_TINH: restore('qcTinh')
+    DELETE_TINH: remove('qcTinh')
   }
   
   export const actions = {
@@ -151,7 +149,7 @@ import {
       try {
         const data = await this.$axios.$post(`${qcTinh}/restore`, tinh)
   
-        commit('RESTORE_TINH', data)
+        commit('ADD_TINH', data)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total + 1
