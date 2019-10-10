@@ -19,10 +19,16 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Kí hiệu*" ></v-text-field>
+                <v-text-field v-model="editedItem.ma" label="Kí Hiệu*" ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" ></v-text-field>
+                <v-text-field v-model="editedItem.ten" label="Tên Biểu Nhập Liệu*" ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.bieuNhapLieuId" label="Biểu Nhập Liệu ID*" ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.truongNhapLieuId" label="Trường Nhập Liệu ID*" ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
@@ -31,7 +37,14 @@
                 <v-switch
                   v-model="editedItem.hieuLuc"
                   class="ma-1"
-                  label="Hiệu lực"
+                  label="Hiệu Lực"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch
+                  v-model="editedItem.xoa"
+                  class="ma-1"
+                  label="Xóa"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -77,7 +90,25 @@ export default {
             { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
             { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
-        editedIndex: -1
+        editedIndex: -1,
+        editedItem: {
+          ma: '',
+          ten: '',
+          bieuNhapLieuId: 0,
+          truongNhapLieuId: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        },
+        defaultItem: {
+          ma: '',
+          ten: '',
+          bieuNhapLieuId: 0,
+          truongNhapLieuId: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        }
       }
     },
     computed: {
@@ -108,6 +139,35 @@ export default {
       getClass(index) {
         if (!index) return "text-left";
         else return "text-start";
+      },
+      add() {
+        this.dialog = true
+      },
+      edit(item) {
+        this.addBieuNhapLieuTruongDuLieu(this.editedIndex)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      delete(tiem) {
+        const index = this.items.indexOf(item)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
+        this.deleteBieuNhapLieuTruongDuLieu(this.editedItem)
+      },
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem)
+        } else {
+          this.items.push(this.editedItem)
+        }
+        this.close()
+      },
+      close() {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
       }
     }
 };

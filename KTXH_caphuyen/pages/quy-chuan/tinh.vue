@@ -27,7 +27,7 @@
               <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-select
                 :items="donViHanhChinh"
-                v-model="editedItem.dvhch"
+                v-model="editedItem.sysCapDonViHanhChinhId"
                 label="Cấp đơn vị hành chính"
                 outlined
                 ></v-select>
@@ -35,35 +35,35 @@
               <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-select
                 :items="loaidonViHanhChinh"
-                v-model="editedItem.loaidvhch"
+                v-model="editedItem.loaiDonViHanhChinh"
                 label="Loại đơn vị hành chính"
                 outlined
                 ></v-select>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
               <v-switch
-                v-model="editedItem.nongthon"
+                v-model="editedItem.nongThon"
                 class="ma-1"
                 label="Thành Thị - Nông thôn"
               ></v-switch>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
               <v-switch
-                v-model="editedItem.biengioi"
+                v-model="editedItem.bienGioi"
                 class="ma-1"
                 label="Biên giới"
               ></v-switch>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
               <v-switch
-                v-model="editedItem.haidao"
+                v-model="editedItem.haiDao"
                 class="ma-1"
                 label="Hải đảo"
               ></v-switch>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
               <v-switch
-                v-model="editedItem.dbkk"
+                v-model="editedItem.vungDBKhoKhan"
                 class="ma-1"
                 label="Vùng đặc biệt khó khăn"
               ></v-switch>
@@ -72,11 +72,18 @@
                 <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-switch
-                v-model="editedItem.hieuLuc"
-                class="ma-1"
-                label="Hiệu lực"
-              ></v-switch>
+                <v-switch
+                  v-model="editedItem.hieuLuc"
+                  class="ma-1"
+                  label="Hiệu lực"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch
+                  v-model="editedItem.xoa"
+                  class="ma-1"
+                  label="Xóa"
+                ></v-switch>
               </v-col>
             </v-row>
           </v-container>
@@ -131,7 +138,33 @@ export default {
             { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
             { text: 'Thao Tác', align: 'left',  value:'action'}
         ],
-        editedIndex: -1
+        editedIndex: -1,
+        editedItem: {
+          ma: '',
+          ten: '',
+          sysCapDonViHanhChinhId: 0,
+          loaiDonViHanhChinh: '',
+          nongThon: 1,
+          bienGioi: 0,
+          haiDao: 0,
+          vungDBKhoKhan: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        },
+        defaultItem: {
+          ma: '',
+          ten: '',
+          sysCapDonViHanhChinhId: 0,
+          loaiDonViHanhChinh: '',
+          nongThon: 1,
+          bienGioi: 0,
+          haiDao: 0,
+          vungDBKhoKhan: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        }
       }
     },
     computed: {
@@ -162,6 +195,35 @@ export default {
       getClass(index) {
         if (!index) return "text-left";
         else return "text-start";
+      },
+      add() {
+        this.dialog = true
+      },
+      edit(item) {
+        this.addQCTinh(this.editedIndex)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      delete(tiem) {
+        const index = this.items.indexOf(item)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
+        this.deleteQCTinh(this.editedItem)
+      },
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem)
+        } else {
+          this.items.push(this.editedItem)
+        }
+        this.close()
+      },
+      close() {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
       }
     }
 }

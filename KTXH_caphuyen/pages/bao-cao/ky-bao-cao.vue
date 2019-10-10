@@ -52,6 +52,13 @@
                   label="Hiệu lực"
                 ></v-switch>
               </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch
+                  v-model="editedItem.xoa"
+                  class="ma-1"
+                  label="Xóa"
+                ></v-switch>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -137,7 +144,33 @@ export default {
             { text: 'Trạng Thái', align: 'left', value:'trangThai'},
             { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
-        editedIndex: -1
+        editedIndex: -1,
+        editedItem: {
+          nam: '',
+          sysCapHanhChinhId: 0,
+          ngayMo: '',
+          ngayDong: '',
+          ngayBatDau:'',
+          ngayKetThuc:'',
+          ngayBaoCaoHuyen:'',
+          ngayBaoCaoTinh:'',
+          trangThai:'',
+          hieuLuc: 1,
+          xoa: 0
+        },
+        defaultItem: {
+          nam: '',
+          sysCapHanhChinhId: 0,
+          ngayMo: '',
+          ngayDong: '',
+          ngayBatDau:'',
+          ngayKetThuc:'',
+          ngayBaoCaoHuyen:'',
+          ngayBaoCaoTinh:'',
+          trangThai:'',
+          hieuLuc: 1,
+          xoa: 0
+        }
       }
     },
     computed: {
@@ -168,7 +201,37 @@ export default {
       getClass(index) {
         if (!index) return "text-left";
         else return "text-start";
+      },
+      add() {
+        this.dialog = true
+      },
+      edit(item) {
+        this.addKyBaoCao(this.editedIndex)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      delete(tiem) {
+        const index = this.items.indexOf(item)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
+        this.deleteKyBaoCao(this.editedItem)
+      },
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem)
+        } else {
+          this.items.push(this.editedItem)
+        }
+        this.close()
+      },
+      close() {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
       }
+
     }
 }
 </script>

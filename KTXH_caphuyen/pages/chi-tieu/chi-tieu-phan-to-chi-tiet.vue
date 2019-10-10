@@ -25,6 +25,9 @@
                 <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.chiTieuPhanToId" label="Chỉ Tiêu Phân Tổ*" ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
                 <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
               </v-col>
               <v-col cols="12" sm="6" md="8">
@@ -32,6 +35,13 @@
                   v-model="editedItem.hieuLuc"
                   class="ma-1"
                   label="Hiệu lực"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch
+                  v-model="editedItem.xoa"
+                  class="ma-1"
+                  label="Xóa"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -78,6 +88,22 @@ export default {
             { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
         editedIndex: -1,
+        editedItem: {
+          ma: '',
+          ten: '',
+          chiTieuPhanToId: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        },
+        defaultItem: {
+          ma: '',
+          ten: '',
+          chiTieuPhanToId: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        }
       }
     },
     computed: {
@@ -108,6 +134,35 @@ export default {
       getClass(index) {
         if (!index) return "text-left";
         else return "text-start";
+      },
+      add() {
+        this.dialog = true
+      },
+      edit(item) {
+        this.addChiTieuPhanToChiTiet(this.editedIndex)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      delete(tiem) {
+        const index = this.items.indexOf(item)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
+        this.deleteChiTieuPhanToChiTiet(this.editedItem)
+      },
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem)
+        } else {
+          this.items.push(this.editedItem)
+        }
+        this.close()
+      },
+      close() {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
       }
     }
 }

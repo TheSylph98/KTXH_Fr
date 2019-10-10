@@ -19,29 +19,46 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên đơn vị*" required></v-text-field>
+                <v-text-field v-model="editedItem.ma" label="Mã Đơn Vị*" ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Mã đơn vị*" required></v-text-field>
+                <v-text-field v-model="editedItem.ten" label="Tên Đơn Vị*" ></v-text-field>
+              </v-col>
+              
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.donViChaId" label="Đơn Vị Cha*" ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.diaChi" label="Địa Chỉ"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.sdt" label="Số Điện Thoại"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+              </v-col>
+              <v-col class="d-flex" cols="12" sm="6" md="8">
+                <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú" ></v-textarea>
+              </v-col>
+              <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-switch
                   v-model="editedItem.laDonVi"
                   class="ma-1"
-                  label="Là đơn vị"
+                  label="Là Đơn Vị"
                 ></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.sdt" label="Số điện thoại"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.nhomdv" label="Nhóm đơn vị"></v-text-field>
-              </v-col>
+              </v-col>  
               <v-col cols="12" sm="6" md="8">
                 <v-switch
                   v-model="editedItem.hieuLuc"
                   class="ma-1"
                   label="Hiệu lực"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch
+                  v-model="editedItem.xoa"
+                  class="ma-1"
+                  label="Xóa"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -87,7 +104,31 @@ export default {
             { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
             { text: 'Thao Tác', align: 'left', value:'action'},
               ],
-        editedIndex: -1
+        editedIndex: -1,
+        editedItem: {
+          ma: '',
+          ten: '',
+          donViChaId: 0,
+          diaChi: '',
+          soDienThoai: '',
+          email: '',
+          ghiChu: '',
+          laDonVi: false,
+          hieuLuc: 1,
+          xoa: 0
+        },
+        defaultItem: {
+          ma: '',
+          ten: '',
+          donViChaId: 0,
+          diaChi: '',
+          soDienThoai: '',
+          email: '',
+          ghiChu: '',
+          laDonVi: false,
+          hieuLuc: 1,
+          xoa: 0
+        }
       }
     },
     computed: {
@@ -118,6 +159,35 @@ export default {
       getClass(index) {
         if (!index) return "text-left";
         else return "text-start";
+      },
+      add() {
+        this.dialog = true
+      },
+      edit(item) {
+        this.addQTDonVi(this.editedIndex)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      delete(tiem) {
+        const index = this.items.indexOf(item)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
+        this.deleteQTDonVi(this.editedItem)
+      },
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem)
+        } else {
+          this.items.push(this.editedItem)
+        }
+        this.close()
+      },
+      close() {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
       }
     }
 }

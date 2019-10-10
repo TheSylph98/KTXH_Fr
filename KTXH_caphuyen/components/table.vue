@@ -47,10 +47,6 @@
       </v-tooltip>
     </template>
 
-      <!-- <template v-slot:item.no="item">
-      {{ index }}  
-      </template> -->
-
     <template v-slot:no-data>
      <p>Chưa cập nhập dữ liệu</p>
     </template>
