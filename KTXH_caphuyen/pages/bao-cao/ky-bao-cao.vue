@@ -79,55 +79,89 @@ import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Khai Báo Kỳ Báo Cáo',
-        dialog: false,
-        operators: operators,
-        headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'Năm', align: 'left', sorttable: true, value:'nam'},
-            { text: 'Kỳ báo cáo', align: 'left', sorttable: false, value:'kyBaoCao'},
-            { text: 'Nội Dung', align: 'left', sorttable: false, value:'noiDung'},
-            { text: 'Ngày mở báo cáo', align: 'left', sorttable: true, value:'ngayMo'},
-            { text: 'Ngày đóng báo cáo', align: 'left', sorttable: true, value:'ngayDong'},
-            { text: 'Ngày bắt đầu cập nhập', align: 'left', sorttable: true, value:'ngayBatDau'},
-            { text: 'Ngày kết thúc tổng hợp báo cáo', align: 'left', sorttable: true, value:'ngayKetThuc'},
-            { text: 'Ngày hoàn thành báo cáo cấp huyện', align: 'left', sorttable: true, value:'ngayBaoCaoHuyen'},
-            { text: 'Ngày hoàn thành báo cáo cấp tỉnh', align: 'left', sorttable: true, value:'ngayBaoCaoTinh'},
-            { text: 'Trạng Thái', align: 'left', value:'trangThai'},
-            { text: 'Thao Tác', align: 'left',  value:'action'},
-        ],
-        editedIndex: -1,
-        editedItem: {
-          nam: '',
-          sysCapHanhChinhId: 0,
-          ngayMo: '',
-          ngayDong: '',
-          ngayBatDau:'',
-          ngayKetThuc:'',
-          ngayBaoCaoHuyen:'',
-          ngayBaoCaoTinh:'',
-          trangThai:'',
-          hieuLuc: 1,
-          xoa: 0
+  components: {
+    Table
+  },
+  data() {
+    return {
+      title: "Khai Báo Kỳ Báo Cáo",
+      dialog: false,
+      operators: operators,
+      headers: [
+        { text: "STT", align: "left", sorttable: true, value: "id" },
+        { text: "Năm", align: "left", sorttable: true, value: "nam" },
+        {
+          text: "Kỳ báo cáo",
+          align: "left",
+          sorttable: false,
+          value: "kyBaoCao"
         },
-        defaultItem: {
-          nam: '',
-          sysCapHanhChinhId: 0,
-          ngayMo: '',
-          ngayDong: '',
-          ngayBatDau:'',
-          ngayKetThuc:'',
-          ngayBaoCaoHuyen:'',
-          ngayBaoCaoTinh:'',
-          trangThai:'',
-          hieuLuc: 1,
-          xoa: 0
-        }
+        { text: "Nội Dung", align: "left", sorttable: false, value: "noiDung" },
+        {
+          text: "Ngày mở báo cáo",
+          align: "left",
+          sorttable: true,
+          value: "ngayMo"
+        },
+        {
+          text: "Ngày đóng báo cáo",
+          align: "left",
+          sorttable: true,
+          value: "ngayDong"
+        },
+        {
+          text: "Ngày bắt đầu cập nhập",
+          align: "left",
+          sorttable: true,
+          value: "ngayBatDau"
+        },
+        {
+          text: "Ngày kết thúc tổng hợp báo cáo",
+          align: "left",
+          sorttable: true,
+          value: "ngayKetThuc"
+        },
+        {
+          text: "Ngày hoàn thành báo cáo cấp huyện",
+          align: "left",
+          sorttable: true,
+          value: "ngayBaoCaoHuyen"
+        },
+        {
+          text: "Ngày hoàn thành báo cáo cấp tỉnh",
+          align: "left",
+          sorttable: true,
+          value: "ngayBaoCaoTinh"
+        },
+        { text: "Trạng Thái", align: "left", value: "trangThai" },
+        { text: "Thao Tác", align: "left", value: "action" }
+      ],
+      editedIndex: -1,
+      editedItem: {
+        nam: "",
+        sysCapHanhChinhId: 0,
+        ngayMo: "",
+        ngayDong: "",
+        ngayBatDau: "",
+        ngayKetThuc: "",
+        ngayBaoCaoHuyen: "",
+        ngayBaoCaoTinh: "",
+        trangThai: "",
+        hieuLuc: 1,
+        xoa: 0
+      },
+      defaultItem: {
+        nam: "",
+        sysCapHanhChinhId: 0,
+        ngayMo: "",
+        ngayDong: "",
+        ngayBatDau: "",
+        ngayKetThuc: "",
+        ngayBaoCaoHuyen: "",
+        ngayBaoCaoTinh: "",
+        trangThai: "",
+        hieuLuc: 1,
+        xoa: 0
       }
     };
   },
@@ -165,9 +199,9 @@ export default {
     },
     computed: {
       ...mapState("qlKyBaoCao", ["kyBaoCaoList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
+      formTitle() {
+        return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
+      }
     },
 
     asyncData({ store }) {
@@ -193,35 +227,34 @@ export default {
         else return "text-start";
       },
       add() {
-        this.dialog = true
+        this.dialog = true;
       },
       edit(item) {
-        this.addKyBaoCao(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        this.addKyBaoCao(this.editedIndex);
+        this.editedIndex = this.items.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.dialog = true;
       },
       delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteKyBaoCao(this.editedItem)
+        const index = this.items.indexOf(item);
+        confirm("Xác nhận xóa?") && this.items.splice(index, 1);
+        this.deleteKyBaoCao(this.editedItem);
       },
-      save () {
+      save() {
         if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
+          Object.assign(this.items[this.editedIndex], this.editedItem);
         } else {
-          this.items.push(this.editedItem)
+          this.items.push(this.editedItem);
         }
-        this.close()
+        this.close();
       },
       close() {
-        this.dialog = false
+        this.dialog = false;
         setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
+          this.editedItem = Object.assign({}, this.defaultItem);
+          this.editedIndex = -1;
+        }, 300);
       }
-
     }
   }
 };

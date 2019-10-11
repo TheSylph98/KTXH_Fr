@@ -61,43 +61,40 @@ import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Biểu Nhập Liệu Trường Dữ Liệu',
-        dialog: false,
-        operators: operators,
-        search: {
-        },
-        headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'Kí hiệu', align: 'left', value:'ma'},
-            { text: 'Tên biểu', align: 'left', value:'ten'},
-            { text: 'Ghi chú', align: 'left', value:'ghiChu'},
-            { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
-            { text: 'Thao Tác', align: 'left',  value:'action'},
-        ],
-        editedIndex: -1,
-        editedItem: {
-          ma: '',
-          ten: '',
-          bieuNhapLieuId: 0,
-          truongNhapLieuId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
-        },
-        defaultItem: {
-          ma: '',
-          ten: '',
-          bieuNhapLieuId: 0,
-          truongNhapLieuId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
-        }
+  components: {
+    Table
+  },
+  data() {
+    return {
+      title: "Biểu Nhập Liệu Trường Dữ Liệu",
+      dialog: false,
+      operators: operators,
+      headers: [
+        { text: "STT", align: "left", sorttable: true, value: "id" },
+        { text: "Kí hiệu", align: "left", value: "ma" },
+        { text: "Tên biểu", align: "left", value: "ten" },
+        { text: "Ghi chú", align: "left", value: "ghiChu" },
+        { text: "Hiệu lực", align: "left", value: "hieuLuc" },
+        { text: "Thao Tác", align: "left", value: "action" }
+      ],
+      editedIndex: -1,
+      editedItem: {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        truongNhapLieuId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      },
+      defaultItem: {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        truongNhapLieuId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
       }
     };
   },
@@ -127,14 +124,19 @@ export default {
       this.dialog = true;
     },
     computed: {
-      ...mapState("bieuNhapLieuTruongDuLieu", ["bnlTruongDuLieuList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
+      ...mapState("bieuNhapLieuTruongDuLieu", [
+        "bnlTruongDuLieuList",
+        "pagination"
+      ]),
+      formTitle() {
+        return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
+      }
     },
 
     asyncData({ store }) {
-      store.dispatch("bieuNhapLieuTruongDuLieu/getBieuNhapLieuTruongDuLieuList");
+      store.dispatch(
+        "bieuNhapLieuTruongDuLieu/getBieuNhapLieuTruongDuLieuList"
+      );
     },
 
     created() {
@@ -156,35 +158,36 @@ export default {
         else return "text-start";
       },
       add() {
-        this.dialog = true
+        this.dialog = true;
       },
       edit(item) {
-        this.addBieuNhapLieuTruongDuLieu(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        this.addBieuNhapLieuTruongDuLieu(this.editedIndex);
+        this.editedIndex = this.items.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.dialog = true;
       },
       delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteBieuNhapLieuTruongDuLieu(this.editedItem)
+        const index = this.items.indexOf(item);
+        confirm("Xác nhận xóa?") && this.items.splice(index, 1);
+        this.deleteBieuNhapLieuTruongDuLieu(this.editedItem);
       },
-      save () {
+      save() {
         if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
+          Object.assign(this.items[this.editedIndex], this.editedItem);
         } else {
-          this.items.push(this.editedItem)
+          this.items.push(this.editedItem);
         }
-        this.close()
+        this.close();
       },
       close() {
-        this.dialog = false
+        this.dialog = false;
         setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
+          this.editedItem = Object.assign({}, this.defaultItem);
+          this.editedIndex = -1;
+        }, 300);
+        this.close();
       }
-      this.close();
     }
+  }
 };
 </script>
