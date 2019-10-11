@@ -9,7 +9,7 @@ import {
 export const state = () => {
   return {
     api: {
-      qlKyBaoCao: '/api/qlkybaocao'
+      qlKyBaoCao: '/api/v2/crud/qlkybaocao'
     },
     kyBaoCaoList: [],
     deletedKyBaoCaoList: [],

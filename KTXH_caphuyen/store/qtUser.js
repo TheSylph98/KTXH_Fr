@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        qtUser: '/api/QTUsers'
-      },
-      userList: [],
-      deletedUserList: [],
-      user: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      qtUser: '/api/v2/crud/qtusers'
+    },
+    userList: [],
+    deletedUserList: [],
+    user: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_USER_LIST: set('userList'),
-    SET_DELETED_USER: set('deletedUserList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_USER_LIST: set('userList'),
+  SET_DELETED_USER: set('deletedUserList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_USER: set('user'),
+  SET_USER: set('user'),
 
-    ADD_USER: add('qtUser'),
+  ADD_USER: add('qtUser'),
 
-    UPDATE_USER: update('qtUser'),
+  UPDATE_USER: update('qtUser'),
 
-    DELETE_USER: remove('qtUser')
+  DELETE_USER: remove('qtUser')
 }
 
 export const actions = {

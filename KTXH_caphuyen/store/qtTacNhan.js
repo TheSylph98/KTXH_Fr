@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        qtTacNhan: '/api/QTTacNhans'
-      },
-      tacNhanList: [],
-      deletedTacNhanList: [],
-      tacNhan: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      qtTacNhan: '/api/v2/crud/qttacnhan'
+    },
+    tacNhanList: [],
+    deletedTacNhanList: [],
+    tacNhan: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_TAC_NHAN_LIST: set('tacNhanList'),
-    SET_DELETED_TAC_NHAN: set('deletedTacNhanList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_TAC_NHAN_LIST: set('tacNhanList'),
+  SET_DELETED_TAC_NHAN: set('deletedTacNhanList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_TAC_NHAN: set('tacNhan'),
+  SET_TAC_NHAN: set('tacNhan'),
 
-    ADD_TAC_NHAN: add('qtTacNhan'),
+  ADD_TAC_NHAN: add('qtTacNhan'),
 
-    UPDATE_TAC_NHAN: update('qtTacNhan'),
+  UPDATE_TAC_NHAN: update('qtTacNhan'),
 
-    DELETE_TAC_NHAN: remove('qtTacNhan')
+  DELETE_TAC_NHAN: remove('qtTacNhan')
 }
 
 export const actions = {

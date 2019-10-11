@@ -1,15 +1,14 @@
 <template>
-  <Table 
-  :title="title" 
-  :headers="headers"
-  :items="items"
-  @edit="edit($event)"
-  @delete="deleted($event)"
-  @add="add($event)">
-
+  <Table
+    :title="title"
+    :headers="headers"
+    :items="items"
+    @edit="edit($event)"
+    @delete="deleted($event)"
+    @add="add($event)"
+  >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }">
-      </template>
+      <template v-slot:activator="{ on }"></template>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -37,21 +36,13 @@
                 <v-text-field v-model="editedItem.qtDonViId" label="Đơn vị"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ghiChu" label="Ghi Chú" ></v-text-field>
+                <v-text-field v-model="editedItem.ghiChu" label="Ghi Chú"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.hieuLuc"
-                  class="ma-1"
-                  label="Hiệu lực"
-                ></v-switch>
+                <v-switch v-model="editedItem.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.xoa"
-                  class="ma-1"
-                  label="Xóa"
-                ></v-switch>
+                <v-switch v-model="editedItem.xoa" class="ma-1" label="Xóa"></v-switch>
               </v-col>
             </v-row>
           </v-container>
@@ -66,119 +57,140 @@
     </v-dialog>
 
     <template slot="item.operator">
-    <div>OKIE</div>
+      <div>OKIE</div>
     </template>
-
   </Table>
 </template>
 
 <script>
-import Table from '../../components/table.vue';
-import { operators } from "..//..//util//operators";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Khai Báo Người Dùng',
-        dialog: false,
-        operators: operators,
-        search: {
+  components: {
+    Table
+  },
+  data() {
+    return {
+      title: "Khai Báo Người Dùng",
+      dialog: false,
+      headers: [
+        {
+          text: "Họ và Tên",
+          align: "center",
+          sorttable: false,
+          value: "ten",
+          type: "string"
         },
-        headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'ID', align: 'left', sorttable: true, value:'id'},
-            { text: 'Họ và Tên', align: 'left', sorttable: false, value:'ten'},
-            { text: 'Số điện thoại', align: 'left', sorttable: false, value:'soDienThoai'},
-            { text: 'Email', align: 'left', sorttable: false, value:'email'},
-            { text: 'Đơn Vị', align: 'left', sorttable: false, value:'donvi'},
-            { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
-            { text: 'Thao Tác', align: 'left',  value:'action'},
-        ],
-        editedIndex: -1,
-        editedItem: {
-          ma: '',
-          ten: '',
-          matKhau: '',
-          soDienThoai: '',
-          email: '',
-          qtDonViId: 0,
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Số điện thoại",
+          align: "center",
+          sorttable: false,
+          value: "soDienThoai",
+          type: "string"
         },
-        defaultItem: {
-          ma: '',
-          ten: '',
-          matKhau: '',
-          soDienThoai: '',
-          email: '',
-          qtDonViId: 0,
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Email",
+          align: "center",
+          sorttable: false,
+          value: "email",
+          type: "string"
+        },
+        {
+          text: "Đơn Vị",
+          align: "center",
+          sorttable: false,
+          value: "donvi",
+          type: "string"
+        },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc",
+          type: ""
         }
+      ],
+      editedIndex: -1,
+      editedItem: {
+        ma: "",
+        ten: "",
+        matKhau: "",
+        soDienThoai: "",
+        email: "",
+        qtDonViId: 0,
+        hieuLuc: 1,
+        xoa: 0
+      },
+      defaultItem: {
+        ma: "",
+        ten: "",
+        matKhau: "",
+        soDienThoai: "",
+        email: "",
+        qtDonViId: 0,
+        hieuLuc: 1,
+        xoa: 0
       }
-    },
-    computed: {
-      ...mapState("qtUser", ["userList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
-    },
-
-    asyncData({ store }) {
-      store.dispatch("qtUser/getQTUserList");
-    },
-
-    created() {
-      this.getQTUserList();
-    },
-
-    methods: {
-      ...mapActions("qtUser", [
-        "getQTUserList",
-        "getQTUser",
-        "addQTUser",
-        "updateQTUser",
-        "deleteQTUser",
-        "restoreQTUser"
-      ]),
-
-      getClass(index) {
-        if (!index) return "text-left";
-        else return "text-start";
-      },
-      add() {
-        this.dialog = true
-      },
-      edit(item) {
-        this.addQTUser(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteQTUser(this.editedItem)
-      },
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
-      },
-      close() {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      }
+    };
+  },
+  computed: {
+    ...mapState("qtUser", ["userList", "pagination"]),
+    formTitle() {
+      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
     }
-}
+  },
+
+  asyncData({ store }) {
+    store.dispatch("qtUser/getQTUserList");
+  },
+
+  created() {
+    this.getQTUserList();
+  },
+
+  methods: {
+    ...mapActions("qtUser", [
+      "getQTUserList",
+      "getQTUser",
+      "addQTUser",
+      "updateQTUser",
+      "deleteQTUser",
+      "restoreQTUser"
+    ]),
+    getClass(index) {
+      if (!index) return "text-left";
+      else return "text-start";
+    },
+    add() {
+      this.dialog = true;
+    },
+    edit(item) {
+      this.addQTUser(this.editedIndex);
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    delete(tiem) {
+      const index = this.items.indexOf(item);
+      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
+      this.deleteQTUser(this.editedItem);
+    },
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.items[this.editedIndex], this.editedItem);
+      } else {
+        this.items.push(this.editedItem);
+      }
+      this.close();
+    },
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    }
+  }
+};
 </script>

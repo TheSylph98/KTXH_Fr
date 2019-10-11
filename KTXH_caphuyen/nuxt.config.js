@@ -1,4 +1,5 @@
 const colors = require('vuetify/es5/util/colors').default
+require('dotenv').config()
 
 module.exports = {
   mode: 'universal',
@@ -38,7 +39,7 @@ module.exports = {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/axios','@nuxtjs/vuetify'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/vuetify', '@nuxtjs/dotenv'],
 
   axios: {
     proxy: 'true'
@@ -46,7 +47,7 @@ module.exports = {
 
   proxy: {
     '/api/': {
-      target: process.env.API_ENDPOINT || 'http://localhost:5000/api',
+      target: process.env.API_ENDPOINT,
       pathRewrite: { '^/api/': '' }
     }
   },
@@ -72,6 +73,11 @@ module.exports = {
       }
     }
   },
+
+  dotenv: {
+    /* module options */
+  },
+
   /*
    ** Build configuration
    */

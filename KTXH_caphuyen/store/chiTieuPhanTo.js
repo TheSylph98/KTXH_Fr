@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        chiTieuPhanTo: '/api/ChiTieuPhanTos'
-      },
-      chiTieuPhanToList: [],
-      deletedChiTieuPhanToList: [],
-      chi_tieu_phan_to: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      chiTieuPhanTo: '/api/v2/crud/chitieuphanto'
+    },
+    chiTieuPhanToList: [],
+    deletedChiTieuPhanToList: [],
+    chi_tieu_phan_to: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_CHI_TIEU_PHAN_TO_LIST: set('chiTieuPhanToList'),
-    SET_DELETED_CHI_TIEU_PHAN_TO: set('deletedChiTieuPhanToList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_CHI_TIEU_PHAN_TO_LIST: set('chiTieuPhanToList'),
+  SET_DELETED_CHI_TIEU_PHAN_TO: set('deletedChiTieuPhanToList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_CHI_TIEU_PHAN_TO: set('chi_tieu_phan_to'),
+  SET_CHI_TIEU_PHAN_TO: set('chi_tieu_phan_to'),
 
-    ADD_CHI_TIEU_PHAN_TO: add('chiTieuPhanTo'),
+  ADD_CHI_TIEU_PHAN_TO: add('chiTieuPhanTo'),
 
-    UPDATE_CHI_TIEU_PHAN_TO: update('chiTieuPhanTo'),
+  UPDATE_CHI_TIEU_PHAN_TO: update('chiTieuPhanTo'),
 
-    DELETE_CHI_TIEU_PHAN_TO: remove('chiTieuPhanTo')
+  DELETE_CHI_TIEU_PHAN_TO: remove('chiTieuPhanTo')
 }
 
 export const actions = {

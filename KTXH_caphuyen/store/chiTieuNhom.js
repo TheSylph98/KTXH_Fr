@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        chiTieuNhom: '/api/ChiTieuNhoms'
-      },
-      chiTieuNhomList: [],
-      deletedChiTieuNhomList: [],
-      chi_tieu_nhom: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      chiTieuNhom: '/api/v2/crud/chitieunhom'
+    },
+    chiTieuNhomList: [],
+    deletedChiTieuNhomList: [],
+    chi_tieu_nhom: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_CHI_TIEU_NHOM_LIST: set('chiTieuNhomList'),
-    SET_DELETED_CHI_TIEU_NHOM: set('deletedChiTieuNhomList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_CHI_TIEU_NHOM_LIST: set('chiTieuNhomList'),
+  SET_DELETED_CHI_TIEU_NHOM: set('deletedChiTieuNhomList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_CHI_TIEU_NHOM: set('chi_tieu_nhom'),
+  SET_CHI_TIEU_NHOM: set('chi_tieu_nhom'),
 
-    ADD_CHI_TIEU_NHOM: add('chiTieuNhom'),
+  ADD_CHI_TIEU_NHOM: add('chiTieuNhom'),
 
-    UPDATE_CHI_TIEU_NHOM: update('chiTieuNhom'),
+  UPDATE_CHI_TIEU_NHOM: update('chiTieuNhom'),
 
-    DELETE_CHI_TIEU_NHOM: remove('chiTieuNhom')
+  DELETE_CHI_TIEU_NHOM: remove('chiTieuNhom')
 }
 
 export const actions = {

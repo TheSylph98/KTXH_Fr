@@ -1,15 +1,14 @@
 <template>
-    <Table 
-    :title="title" 
+  <Table
+    :title="title"
     :headers="headers"
-    :items="items"
+    :items="kyBaoCaoList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)">
-  
+    @add="add($event)"
+  >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }">
-      </template>
+      <template v-slot:activator="{ on }"></template>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -22,7 +21,10 @@
                 <v-text-field v-model="editedItem.nam" label="Năm"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Kỳ báo cáo"></v-text-field>
+                <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.ten" label="Kỳ báo cáo"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-text-field v-model="editedItem.ngayMo" label="Ngày mở"></v-text-field>
@@ -37,27 +39,25 @@
                 <v-text-field v-model="editedItem.ngayKetThuc" label="Ngày kết thúc tổng hợp"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ngayBaoCaoHuyen" label="Ngày hoàn thành báo cáo cấp Huyện"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.ngayBaoCaoHuyen"
+                  label="Ngày hoàn thành báo cáo cấp Huyện"
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ngayBaoCaoTinh" label="Ngày hoàn thành báo cáo cấp Tỉnh"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.ngayBaoCaoTinh"
+                  label="Ngày hoàn thành báo cáo cấp Tỉnh"
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-text-field v-model="editedItem.trangThai" label="Trạng thái"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.hieuLuc"
-                  class="ma-1"
-                  label="Hiệu lực"
-                ></v-switch>
+                <v-switch v-model="editedItem.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.xoa"
-                  class="ma-1"
-                  label="Xóa"
-                ></v-switch>
+                <v-switch v-model="editedItem.xoa" class="ma-1" label="Xóa"></v-switch>
               </v-col>
             </v-row>
           </v-container>
@@ -70,155 +70,163 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
-
-    </Table>
+  </Table>
 </template>
 
 <script>
-import Table from '../../components/table.vue';
-import { operators } from "..//..//util//operators";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Khai Báo Kỳ Báo Cáo',
-        dialog: false,
-        search: {
-          ma: {
-            value: "",
-            operator: ""
-          },
-          nam: {
-            value: "",
-            operator: ""
-          },
-          ngayMo: {
-            value: "",
-            operator: ""
-          },
-          ngayDong: {
-            value: "",
-            operator: ""
-          },
-          ngayBatDau: {
-            value: "",
-            operator: ""
-          },
-           ngayKetThuc: {
-            value: "",
-            operator: ""
-          },
-          ngayBaoCaoHuyen: {
-            value: "",
-            operator: ""
-          },
-          ngayBaoCaoTinh: {
-            value: "",
-            operator: ""
-          },
-          ghiChu: {
-            value: "",
-            operator: ""
-          }
+  components: {
+    Table
+  },
+  data() {
+    return {
+      title: "Khai Báo Kỳ Báo Cáo",
+      dialog: false,
+      headers: [
+        {
+          text: "Năm",
+          align: "center",
+          sorttable: true,
+          value: "nam",
+          type: "number"
         },
-        operators: operators,
-        headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'Năm', align: 'left', sorttable: true, value:'nam'},
-            { text: 'Kỳ báo cáo', align: 'left', sorttable: false, value:'kyBaoCao'},
-            { text: 'Nội Dung', align: 'left', sorttable: false, value:'noiDung'},
-            { text: 'Ngày mở báo cáo', align: 'left', sorttable: true, value:'ngayMo'},
-            { text: 'Ngày đóng báo cáo', align: 'left', sorttable: true, value:'ngayDong'},
-            { text: 'Ngày bắt đầu cập nhập', align: 'left', sorttable: true, value:'ngayBatDau'},
-            { text: 'Ngày kết thúc tổng hợp báo cáo', align: 'left', sorttable: true, value:'ngayKetThuc'},
-            { text: 'Ngày hoàn thành báo cáo cấp huyện', align: 'left', sorttable: true, value:'ngayBaoCaoHuyen'},
-            { text: 'Ngày hoàn thành báo cáo cấp tỉnh', align: 'left', sorttable: true, value:'ngayBaoCaoTinh'},
-            { text: 'Trạng Thái', align: 'left', value:'trangThai'},
-            { text: 'Thao Tác', align: 'left',  value:'action'},
-        ],
-        editedIndex: -1,
-        editedItem: {
-          nam: '',
-          sysCapHanhChinhId: 0,
-          ngayMo: '',
-          ngayDong: '',
-          ngayBatDau:'',
-          ngayKetThuc:'',
-          ngayBaoCaoHuyen:'',
-          ngayBaoCaoTinh:'',
-          trangThai:'',
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Mã",
+          align: "center",
+          sorttable: true,
+          value: "ma",
+          type: "string"
+        },
+        {
+          text: "Kỳ báo cáo",
+          align: "center",
+          sorttable: false,
+          value: "ten",
+          type: "string"
+        },
+        {
+          text: "Ngày mở báo cáo",
+          align: "center",
+          sorttable: true,
+          value: "ngayMo",
+          type: "date"
+        },
+        {
+          text: "Ngày đóng báo cáo",
+          align: "center",
+          sorttable: true,
+          value: "ngayDong",
+          type: "date"
+        },
+        {
+          text: "Ngày bắt đầu cập nhập",
+          align: "center",
+          sorttable: true,
+          value: "ngayBatDau",
+          type: "date"
+        },
+        {
+          text: "Ngày kết thúc tổng hợp báo cáo",
+          align: "center",
+          sorttable: true,
+          value: "ngayKetThuc",
+          type: "date"
+        },
+        {
+          text: "Ngày hoàn thành báo cáo cấp huyện",
+          align: "center",
+          sorttable: true,
+          value: "ngayBaoCaoHuyen",
+          type: "date"
+        },
+        {
+          text: "Ngày hoàn thành báo cáo cấp tỉnh",
+          align: "center",
+          sorttable: true,
+          value: "ngayBaoCaoTinh",
+          type: "date"
+        },
+        {
+          text: "Trạng Thái",
+          align: "center",
+          value: "trangThai",
+          type: "string"
         }
+      ],
+      editedIndex: -1,
+      editedItem: {
+        nam: "",
+        ma: "",
+        ten: "",
+        sysCapHanhChinhId: 0,
+        ngayMo: "",
+        ngayDong: "",
+        ngayBatDau: "",
+        ngayKetThuc: "",
+        ngayBaoCaoHuyen: "",
+        ngayBaoCaoTinh: "",
+        trangThai: "",
+        hieuLuc: 1,
+        xoa: 0
       }
-    },
-    computed: {
-      ...mapState("qlKyBaoCao", ["kyBaoCaoList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
-    },
-
-    asyncData({ store }) {
-      store.dispatch("qlKyBaoCao/getKyBaoCaoList");
-    },
-
-    created() {
-      this.getKyBaoCaoList();
-    },
-
-    methods: {
-      ...mapActions("qlKyBaoCao", [
-        "getKyBaoCaoList",
-        "getKyBaoCao",
-        "addKyBaoCao",
-        "updateKyBaoCao",
-        "deleteKyBaoCao",
-        "restoreKyBaoCao"
-      ]),
-
-      getClass(index) {
-        if (!index) return "text-left";
-        else return "text-start";
-      },
-      add() {
-        this.dialog = true
-      },
-      edit(item) {
-        this.addKyBaoCao(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteKyBaoCao(this.editedItem)
-      },
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
-      },
-      close() {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      }
-
+    };
+  },
+  computed: {
+    ...mapState("qlKyBaoCao", ["kyBaoCaoList", "pagination"]),
+    formTitle() {
+      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
     }
-}
+  },
+
+  asyncData({ store }) {
+    store.dispatch("qlKyBaoCao/getKyBaoCaoList");
+  },
+
+  created() {
+    this.getKyBaoCaoList();
+  },
+
+  methods: {
+    ...mapActions("qlKyBaoCao", [
+      "getKyBaoCaoList",
+      "getKyBaoCao",
+      "addKyBaoCao",
+      "updateKyBaoCao",
+      "deleteKyBaoCao",
+      "restoreKyBaoCao"
+    ]),
+    add() {
+      this.dialog = true;
+    },
+    edit(item) {
+      this.addKyBaoCao(this.editedIndex);
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    delete(tiem) {
+      const index = this.items.indexOf(item);
+      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
+      this.deleteKyBaoCao(this.editedItem);
+    },
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.items[this.editedIndex], this.editedItem);
+      } else {
+        this.items.push(this.editedItem);
+      }
+      this.close();
+    },
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    }
+  }
+};
 </script>

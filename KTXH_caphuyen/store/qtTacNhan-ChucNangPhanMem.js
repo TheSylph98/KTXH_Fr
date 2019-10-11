@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        qtTacNhanChucNangPhanMem: '/api/QTTacNhanChucNangPhanMems'
-      },
-      tacNhanChucNangPhanMemList: [],
-      deletedTacNhanChucNangPhanMemList: [],
-      tacNhanChucNangPhanMem: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      qtTacNhanChucNangPhanMem: '/api/v2/crud/qttacnhanchucnangphanmem'
+    },
+    tacNhanChucNangPhanMemList: [],
+    deletedTacNhanChucNangPhanMemList: [],
+    tacNhanChucNangPhanMem: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_TAC_NHAN_CHUC_NANG_PHAN_MEM_LIST: set('tacNhanChucNangPhanMemList'),
-    SET_DELETED_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('deletedTacNhanChucNangPhanMemList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_TAC_NHAN_CHUC_NANG_PHAN_MEM_LIST: set('tacNhanChucNangPhanMemList'),
+  SET_DELETED_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('deletedTacNhanChucNangPhanMemList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('tacNhanChucNangPhanMem'),
+  SET_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('tacNhanChucNangPhanMem'),
 
-    ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM: add('qtTacNhanChucNangPhanMem'),
+  ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM: add('qtTacNhanChucNangPhanMem'),
 
-    UPDATE_TAC_NHAN_CHUC_NANG_PHAN_MEM: update('qtTacNhanChucNangPhanMem'),
+  UPDATE_TAC_NHAN_CHUC_NANG_PHAN_MEM: update('qtTacNhanChucNangPhanMem'),
 
-    DELETE_TAC_NHAN_CHUC_NANG_PHAN_MEM: remove('qtTacNhanChucNangPhanMem')
+  DELETE_TAC_NHAN_CHUC_NANG_PHAN_MEM: remove('qtTacNhanChucNangPhanMem')
 }
 
 export const actions = {

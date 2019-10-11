@@ -86,7 +86,7 @@ export default [
         icon: "mdi-timer",
         title: "Khai Báo Kỳ Báo Cáo",
         to: "/bao-cao/ky-bao-cao"
-    }, 
+    },
     {
         icon: "mdi-file-document-box-multiple-outline",
         title: "Biểu Nhập Liệu",

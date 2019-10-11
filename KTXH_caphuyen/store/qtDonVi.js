@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        qtDonVi: '/api/QTDonVis'
-      },
-      donViList: [],
-      deletedDonViList: [],
-      donVi: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      qtDonVi: '/api/v2/crud/qtdonvi'
+    },
+    donViList: [],
+    deletedDonViList: [],
+    donVi: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_DON_VI_LIST: set('donViList'),
-    SET_DELETED_DON_VI: set('deletedDonViList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_DON_VI_LIST: set('donViList'),
+  SET_DELETED_DON_VI: set('deletedDonViList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_DON_VI: set('donVi'),
+  SET_DON_VI: set('donVi'),
 
-    ADD_DON_VI: add('qtDonVi'),
+  ADD_DON_VI: add('qtDonVi'),
 
-    UPDATE_DON_VI: update('qtDonVi'),
+  UPDATE_DON_VI: update('qtDonVi'),
 
-    DELETE_DON_VI: remove('qtDonVi'),
+  DELETE_DON_VI: remove('qtDonVi'),
 }
 
 export const actions = {

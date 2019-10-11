@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        bieuNhapLieuChiTieu: '/api/v2/crud/bieunhaplieu-chitieu'
-      },
-      bnlChiTieuList: [],
-      deletedbnlChiTieuList: [],
-      bnlChiTieu: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      bieuNhapLieuChiTieu: '/api/v2/crud/bieunhaplieu-chitieu'
+    },
+    bnlChiTieuList: [],
+    deletedbnlChiTieuList: [],
+    bnlChiTieu: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_BIEU_NHAP_LIEU_CHI_TIEU_LIST: set('bnlChiTieuList'),
-    SET_DELETED_BIEU_NHAP_LIEU_CHI_TIEU: set('deletedbnlChiTieuList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_BIEU_NHAP_LIEU_CHI_TIEU_LIST: set('bnlChiTieuList'),
+  SET_DELETED_BIEU_NHAP_LIEU_CHI_TIEU: set('deletedbnlChiTieuList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_BIEU_NHAP_LIEU_CHI_TIEU: set('bnlChiTieu'),
+  SET_BIEU_NHAP_LIEU_CHI_TIEU: set('bnlChiTieu'),
 
-    ADD_BIEU_NHAP_LIEU_CHI_TIEU: add('bieuNhapLieuChiTieu'),
+  ADD_BIEU_NHAP_LIEU_CHI_TIEU: add('bieuNhapLieuChiTieu'),
 
-    UPDATE_BIEU_NHAP_LIEU_CHI_TIEU: update('bieuNhapLieuChiTieu'),
+  UPDATE_BIEU_NHAP_LIEU_CHI_TIEU: update('bieuNhapLieuChiTieu'),
 
-    DELETE_BIEU_NHAP_LIEU_CHI_TIEU: remove('bieuNhapLieuChiTieu'),
+  DELETE_BIEU_NHAP_LIEU_CHI_TIEU: remove('bieuNhapLieuChiTieu'),
 }
 
 export const actions = {

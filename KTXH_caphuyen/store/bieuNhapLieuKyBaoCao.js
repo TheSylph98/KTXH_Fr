@@ -1,40 +1,40 @@
 import {
-    set,
-    setPropertyNestedObject,
-    add,
-    update,
-    remove
-  } from '../util/actions'
+  set,
+  setPropertyNestedObject,
+  add,
+  update,
+  remove
+} from '../util/actions'
 
-  export const state = () => {
-    return {
-      api: {
-        bieuNhapLieuKyBaoCao: '/api/BieuNhapLieu_KyBaoCaos'
-      },
-      bnlKyBaoCaoList: [],
-      deletedbnlKyBaoCaoList: [],
-      bnlKyBaoCao: {},
-      pagination: {
-        page: '',
-        pageSize: '',
-        total: ''
-      }
+export const state = () => {
+  return {
+    api: {
+      bieuNhapLieuKyBaoCao: '/api/v2/crud/bieunhaplieu-kybaocao'
+    },
+    bnlKyBaoCaoList: [],
+    deletedbnlKyBaoCaoList: [],
+    bnlKyBaoCao: {},
+    pagination: {
+      page: '',
+      pageSize: '',
+      total: ''
     }
   }
+}
 
 export const mutations = {
-    SET_BIEU_NHAP_LIEU_KY_BAO_CAO_LIST: set('bnlKyBaoCaoList'),
-    SET_DELETED_BIEU_NHAP_LIEU_CHI_TIEU: set('deletedbnlKyBaoCaoList'),
-    SET_PAGINATION: set('pagination'),
-    SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
+  SET_BIEU_NHAP_LIEU_KY_BAO_CAO_LIST: set('bnlKyBaoCaoList'),
+  SET_DELETED_BIEU_NHAP_LIEU_CHI_TIEU: set('deletedbnlKyBaoCaoList'),
+  SET_PAGINATION: set('pagination'),
+  SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-    SET_BIEU_NHAP_LIEU_KY_BAO_CAO: set('bnlKyBaoCao'),
+  SET_BIEU_NHAP_LIEU_KY_BAO_CAO: set('bnlKyBaoCao'),
 
-    ADD_BIEU_NHAP_LIEU_KY_BAO_CAO: add('bieuNhapLieuKyBaoCao'),
+  ADD_BIEU_NHAP_LIEU_KY_BAO_CAO: add('bieuNhapLieuKyBaoCao'),
 
-    UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO: update('bieuNhapLieuKyBaoCao'),
+  UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO: update('bieuNhapLieuKyBaoCao'),
 
-    DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: remove('bieuNhapLieuKyBaoCao'),
+  DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: remove('bieuNhapLieuKyBaoCao'),
 }
 
 export const actions = {

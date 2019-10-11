@@ -9,7 +9,7 @@ import {
   export const state = () => {
     return {
       api: {
-        qcXa: '/api/QCXas'
+        qcXa: '/api/v2/crud/qcxa'
       },
       xaList: [],
       deletedXaList: [],
