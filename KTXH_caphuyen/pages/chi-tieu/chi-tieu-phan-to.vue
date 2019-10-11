@@ -29,6 +29,9 @@
               <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="editedItem.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
               </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch v-model="editedItem.xoa" class="ma-1" label="Xóa"></v-switch>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -68,12 +71,28 @@ export default {
           sorttable: false,
           value: "noiDung"
         },
-        { text: "Ghi chú", align: "center", sorttable: false, value: "ghiChu" },
-        {
-          text: "Hiệu lực",
-          align: "center",
-          sorttable: true,
-          value: "hieuLuc"
+        headers: [
+            { text: 'STT', align: 'left', sorttable: true, value:'id'},
+            { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
+            { text: 'Nội Dung', align: 'left', sorttable: false, value:'noiDung'},
+            { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
+            { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
+            { text: 'Thao Tác', align: 'left',  value:'action'},
+        ],
+        editedIndex: -1,
+        editedItem: {
+          ma: '',
+          ten: '',
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        },
+        defaultItem: {
+          ma: '',
+          ten: '',
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
         }
       ],
       editedIndex: -1,
@@ -112,28 +131,64 @@ export default {
     add() {
       this.dialog = true;
     },
-    edit(item) {
-      console.log(item);
-      this.dialog = true;
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+    
+    computed: {
+      ...mapState("chiTieuPhanTo", ["chiTieuPhanToList", "pagination"]),
+      formTitle () {
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
+      },
     },
-    deleted(item) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
+
+    asyncData({ store }) {
+      store.dispatch("chiTieuPhanTo/getChiTieuPhanToList");
     },
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+
+    created() {
+      this.getChiTieuPhanToList();
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
+
+    methods: {
+      ...mapActions("chiTieuPhanTo", [
+        "getChiTieuPhanToList",
+        "getChiTieuPhanTo",
+        "addChiTieuPhanTo",
+        "updateChiTieuPhanTo",
+        "deleteChiTieuPhanTo",
+        "restoreChiTieuPhanTo"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
+      },
+      add() {
+        this.dialog = true
+      },
+      edit(item) {
+        this.addKyBaoCao(this.editedIndex)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      delete(tiem) {
+        const index = this.items.indexOf(item)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
+        this.deleteKyBaoCao(this.editedItem)
+      },
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem)
+        } else {
+          this.items.push(this.editedItem)
+        }
+        this.close()
+      },
+      close() {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
       }
       this.close();
     }

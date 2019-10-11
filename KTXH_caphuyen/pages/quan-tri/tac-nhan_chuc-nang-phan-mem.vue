@@ -7,41 +7,22 @@
     @delete="deleted($event)"
     @add="add($event)"
   >
+    <v-btn color="primary" dark class="mb-2" @click="addNew()">Lưu</v-btn>
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
         </v-card-title>
-
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Kí hiệu*"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.bieuNhapLieuId" label="Biểu Nhập Liệu ID*"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.qlKyBaoCaoId" label="Kỳ Báo Cáo ID*"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="editedItem.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="editedItem.xoa" class="ma-1" label="Xóa"></v-switch>
+                <v-text-field v-model="editedItem.ten" label="Chức năng phần mềm"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
-
         <v-card-actions>
           <div class="flex-grow-1"></div>
           <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
@@ -66,37 +47,18 @@ export default {
     },
     data() {
       return {
-        title: 'Biểu Nhập Liệu Kỳ Báo Cáo',
-        dialog: false,
+        title: 'Khai Báo Tác Nhân Chức Năng Phần Mềm',
         operators: operators,
         search: {
         },
         headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'Kí hiệu', align: 'left', value:'ma'},
-            { text: 'Tên biểu', align: 'left', value:'ten'},
-            { text: 'Ghi chú', align: 'left', value:'ghiChu'},
-            { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
-            { text: 'Thao Tác', align: 'left',  value:'action'},
+          { text: 'STT', align: 'left', sorttable: true, value:'id'}, 
+          { text: 'Chức năng phần mềm', align: 'left', value:'ten'},
+          { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
         editedIndex: -1,
         editedItem: {
-          ma: '',
-          ten: '',
-          bieuNhapLieuId: 0,
-          qlKyBaoCaoId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
-        },
-        defaultItem: {
-          ma: '',
-          ten: '',
-          bieuNhapLieuId: 0,
-          qlKyBaoCaoId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
+          ten: ''
         }
       }
     };
@@ -105,9 +67,12 @@ export default {
     this.items = [
       {
         id: 1,
-        ma: "01",
-        ten: "HCL-báo cáo tổng quát",
-        ghiChu: "halo",
+        ten: "tac nhan 1",
+        hieuLuc: 1
+      },
+      {
+        id: 2,
+        ten: "tac nhan 2",
         hieuLuc: 1
       }
     ];
@@ -127,28 +92,28 @@ export default {
       this.dialog = true;
     },
     computed: {
-      ...mapState("bieuNhapLieuKyBaoCao", ["bnlKyBaoCaoList", "pagination"]),
+      ...mapState("qtTacNhanChucNangPhanMem", ["tacNhanChucNangPhanMemList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
 
     asyncData({ store }) {
-      store.dispatch("bieuNhapLieuKyBaoCao/getBieuNhapLieuKyBaoCaoList");
+      store.dispatch("qtTacNhanChucNangPhanMem/getQTTacNhanChucNangPhanMemList");
     },
 
     created() {
-      this.getBieuNhapLieuKyBaoCaoList();
+      this.getQTTacNhanChucNangPhanMemList();
     },
 
     methods: {
-      ...mapActions("bieuNhapLieuKyBaoCao", [
-        "getBieuNhapLieuKyBaoCaoList",
-        "getBieuNhapLieuKyBaoCao",
-        "addBieuNhapLieuKyBaoCao",
-        "updateBieuNhapLieuKyBaoCao",
-        "deleteBieuNhapLieuKyBaoCao",
-        "restoreBieuNhapLieuKyBaoCao"
+      ...mapActions("qtTacNhanChucNangPhanMem", [
+        "getQTTacNhanChucNangPhanMemList",
+        "getQTTacNhanChucNangPhanMem",
+        "addQTTacNhanChucNangPhanMem",
+        "updateQTTacNhanChucNangPhanMem",
+        "deleteQTTacNhanChucNangPhanMem",
+        "restoreQTTacNhanChucNangPhanMem"
       ]),
 
       getClass(index) {
@@ -159,7 +124,7 @@ export default {
         this.dialog = true
       },
       edit(item) {
-        this.addBieuNhapLieuKyBaoCao(this.editedIndex)
+        this.addQTTacNhanChucNangPhanMem(this.editedIndex)
         this.editedIndex = this.items.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
@@ -167,7 +132,7 @@ export default {
       delete(tiem) {
         const index = this.items.indexOf(item)
         confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteBieuNhapLieuKyBaoCao(this.editedItem)
+        this.deleteQTTacNhanChucNangPhanMem(this.editedItem)
       },
       save () {
         if (this.editedIndex > -1) {
@@ -186,9 +151,6 @@ export default {
       }
       this.close();
     }
-<<<<<<< HEAD
   }
-=======
->>>>>>> 4bed7dfada7c1e7748c80bcb5ee43bc38b538452
 };
 </script>

@@ -24,10 +24,19 @@
                 <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.bieuNhapLieuId" label="Biểu Nhập Liệu ID*"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.chiTieuId" label="Chi Tiêu ID*"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
                 <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="editedItem.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-switch v-model="editedItem.xoa" class="ma-1" label="Xóa"></v-switch>
               </v-col>
             </v-row>
           </v-container>
@@ -52,39 +61,43 @@ import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
-  components: {
-    Table
-  },
-  data() {
-    return {
-      title: "Biểu Nhập Liệu Chỉ Tiêu",
-      dialog: false,
-      search: {},
-      headers: [
-        { text: "Kí hiệu", align: "center", value: "ma" },
-        { text: "Tên biểu", align: "center", value: "ten" },
-        { text: "Ghi chú", align: "center", value: "ghiChu" },
-        { text: "Hiệu lực", align: "center", value: "hieuLuc" }
-      ],
-      editedIndex: -1,
-      items: [],
-      editedItem: {
-        id: 0,
-        ma: "",
-        ten: "",
-        ghiChu: "",
-        hieuLuc: 1
-      }
-    };
-  },
-  created() {
-    this.items = [
-      {
-        id: 1,
-        ma: "01",
-        ten: "Trường data 1",
-        ghiChu: "halo",
-        hieuLuc: 1
+    components: {
+        Table
+    },
+    data() {
+      return {
+        title: 'Biểu Nhập Liệu Chỉ Tiêu',
+        dialog: false,
+        operators: operators,
+        search: {
+        },
+        headers: [
+            { text: 'STT', align: 'left', sorttable: true, value:'id'},
+            { text: 'Kí hiệu', align: 'left', value:'ma'},
+            { text: 'Tên biểu', align: 'left', value:'ten'},
+            { text: 'Ghi chú', align: 'left', value:'ghiChu'},
+            { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
+            { text: 'Thao Tác', align: 'left',  value:'action'},
+        ],
+        editedIndex: -1,
+        editedItem: {
+          ma: '',
+          ten: '',
+          bieuNhapLieuId: 0,
+          chiTieuId: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        },
+        defaultItem: {
+          ma: '',
+          ten: '',
+          bieuNhapLieuId: 0,
+          chiTieuId: 0,
+          ghiChu: '',
+          hieuLuc: 1,
+          xoa: 0
+        }
       }
     ];
   },
@@ -102,30 +115,64 @@ export default {
     add() {
       this.dialog = true;
     },
-    edit(item) {
-      console.log(item);
-      this.dialog = true;
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+    computed: {
+      ...mapState("bieuNhapLieuChiTieu", ["bnlChiTieuList", "pagination"]),
+      formTitle () {
+        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
+      },
     },
-    deleted(item) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
+
+    asyncData({ store }) {
+      store.dispatch("bieuNhapLieuChiTieu/getBieuNhapLieuChiTieuList");
     },
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+
+    created() {
+      this.getBieuNhapLieuChiTieuList();
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
+
+    methods: {
+      ...mapActions("bieuNhapLieuChiTieu", [
+        "getBieuNhapLieuChiTieuList",
+        "getBieuNhapLieuChiTieu",
+        "addBieuNhapLieuChiTieu",
+        "updateBieuNhapLieuChiTieu",
+        "deleteBieuNhapLieuChiTieu",
+        "restoreBieuNhapLieuChiTieu"
+      ]),
+
+      getClass(index) {
+        if (!index) return "text-left";
+        else return "text-start";
+      },
+      add() {
+        this.dialog = true
+      },
+      edit(item) {
+        this.addBieuNhapLieuChiTieu(this.editedIndex)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      delete(tiem) {
+        const index = this.items.indexOf(item)
+        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
+        this.deleteBieuNhapLieuChiTieu(this.editedItem)
+      },
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem)
+        } else {
+          this.items.push(this.editedItem)
+        }
+        this.close()
+      },
+      close() {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
+      },
     }
   }
 };

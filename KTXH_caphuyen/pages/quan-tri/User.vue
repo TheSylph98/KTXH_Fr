@@ -18,19 +18,25 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Kí hiệu*"></v-text-field>
+                <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*"></v-text-field>
+                <v-text-field v-model="editedItem.ten" label="Họ Và Tên*"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.bieuNhapLieuId" label="Biểu Nhập Liệu ID*"></v-text-field>
+                <v-text-field v-model="editedItem.matKhau" label="Mat Khau*"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.qlKyBaoCaoId" label="Kỳ Báo Cáo ID*"></v-text-field>
+                <v-text-field v-model="editedItem.soDienThoai" label="Số điện thoại"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
+                <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.qtDonViId" label="Đơn vị"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="8">
+                <v-text-field v-model="editedItem.ghiChu" label="Ghi Chú"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="editedItem.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
@@ -66,35 +72,39 @@ export default {
     },
     data() {
       return {
-        title: 'Biểu Nhập Liệu Kỳ Báo Cáo',
+        title: 'Khai Báo Người Dùng',
         dialog: false,
         operators: operators,
         search: {
         },
         headers: [
             { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'Kí hiệu', align: 'left', value:'ma'},
-            { text: 'Tên biểu', align: 'left', value:'ten'},
-            { text: 'Ghi chú', align: 'left', value:'ghiChu'},
-            { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
+            { text: 'ID', align: 'left', sorttable: true, value:'id'},
+            { text: 'Họ và Tên', align: 'left', sorttable: false, value:'ten'},
+            { text: 'Số điện thoại', align: 'left', sorttable: false, value:'soDienThoai'},
+            { text: 'Email', align: 'left', sorttable: false, value:'email'},
+            { text: 'Đơn Vị', align: 'left', sorttable: false, value:'donvi'},
+            { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
             { text: 'Thao Tác', align: 'left',  value:'action'},
         ],
         editedIndex: -1,
         editedItem: {
           ma: '',
           ten: '',
-          bieuNhapLieuId: 0,
-          qlKyBaoCaoId: 0,
-          ghiChu: '',
+          matKhau: '',
+          soDienThoai: '',
+          email: '',
+          qtDonViId: 0,
           hieuLuc: 1,
           xoa: 0
         },
         defaultItem: {
           ma: '',
           ten: '',
-          bieuNhapLieuId: 0,
-          qlKyBaoCaoId: 0,
-          ghiChu: '',
+          matKhau: '',
+          soDienThoai: '',
+          email: '',
+          qtDonViId: 0,
           hieuLuc: 1,
           xoa: 0
         }
@@ -105,9 +115,10 @@ export default {
     this.items = [
       {
         id: 1,
-        ma: "01",
-        ten: "HCL-báo cáo tổng quát",
-        ghiChu: "halo",
+        ten: "Hieu",
+        soDienThoai: "1990002156",
+        email: "12345@gmail.com",
+        donvi: "01",
         hieuLuc: 1
       }
     ];
@@ -127,28 +138,28 @@ export default {
       this.dialog = true;
     },
     computed: {
-      ...mapState("bieuNhapLieuKyBaoCao", ["bnlKyBaoCaoList", "pagination"]),
+      ...mapState("qtUser", ["userList", "pagination"]),
       formTitle () {
         return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
       },
     },
 
     asyncData({ store }) {
-      store.dispatch("bieuNhapLieuKyBaoCao/getBieuNhapLieuKyBaoCaoList");
+      store.dispatch("qtUser/getQTUserList");
     },
 
     created() {
-      this.getBieuNhapLieuKyBaoCaoList();
+      this.getQTUserList();
     },
 
     methods: {
-      ...mapActions("bieuNhapLieuKyBaoCao", [
-        "getBieuNhapLieuKyBaoCaoList",
-        "getBieuNhapLieuKyBaoCao",
-        "addBieuNhapLieuKyBaoCao",
-        "updateBieuNhapLieuKyBaoCao",
-        "deleteBieuNhapLieuKyBaoCao",
-        "restoreBieuNhapLieuKyBaoCao"
+      ...mapActions("qtUser", [
+        "getQTUserList",
+        "getQTUser",
+        "addQTUser",
+        "updateQTUser",
+        "deleteQTUser",
+        "restoreQTUser"
       ]),
 
       getClass(index) {
@@ -159,7 +170,7 @@ export default {
         this.dialog = true
       },
       edit(item) {
-        this.addBieuNhapLieuKyBaoCao(this.editedIndex)
+        this.addQTUser(this.editedIndex)
         this.editedIndex = this.items.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
@@ -167,7 +178,7 @@ export default {
       delete(tiem) {
         const index = this.items.indexOf(item)
         confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteBieuNhapLieuKyBaoCao(this.editedItem)
+        this.deleteQTUser(this.editedItem)
       },
       save () {
         if (this.editedIndex > -1) {
@@ -186,9 +197,6 @@ export default {
       }
       this.close();
     }
-<<<<<<< HEAD
   }
-=======
->>>>>>> 4bed7dfada7c1e7748c80bcb5ee43bc38b538452
 };
 </script>
