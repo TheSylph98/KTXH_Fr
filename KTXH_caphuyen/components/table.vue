@@ -14,7 +14,7 @@
           <v-divider class="mx-3" inset vertical></v-divider>
 
           <div class="flex-grow-1"></div>
-          <v-btn color="primary" dark class="mb-2" @click="addNew()">Thêm mới</v-btn>
+          <v-btn color="primary" dark class="mb-2" @click="$emit('clickAdd')">Thêm mới</v-btn>
           <slot></slot>
         </v-toolbar>
       </template>
@@ -129,9 +129,6 @@ export default {
   },
 
   methods: {
-    addNew() {
-      this.$emit("add");
-    },
     editItem(item) {
       this.$emit("edit", item);
     },

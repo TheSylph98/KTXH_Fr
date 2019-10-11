@@ -2,7 +2,7 @@
   <Table
     :title="title"
     :headers="headers"
-    :items="items"
+    :items="tacNhanChucNangPhanMemList"
     @edit="edit($event)"
     @delete="deleted($event)"
     @add="add($event)"

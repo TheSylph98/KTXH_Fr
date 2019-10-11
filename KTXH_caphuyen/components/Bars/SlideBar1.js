@@ -52,18 +52,13 @@ export default [
         ]
     },
     {
-        icon: "mdi-map-marker",
+        icon: "mdi-group",
         title: "Chỉ Tiêu",
         children: [
             {
-                icon: "mdi-format-list-bulleted",
+                icon: "mdi-group",
                 title: "Chỉ tiêu KTXH",
                 to: "/chi-tieu/chi-tieu"
-            },
-            {
-                icon: "mdi-group",
-                title: "Chỉ Tiêu Phân Tổ",
-                to: "/chi-tieu/chi-tieu_phan-to"
             },
             {
                 icon: "mdi-group",
@@ -71,12 +66,12 @@ export default [
                 to: "/chi-tieu/chi-tieu-nhom"
             },
             {
-                icon: "mdi-select-group",
+                icon: "mdi-group",
                 title: "Chỉ Tiêu Phân Tổ",
                 to: "/chi-tieu/chi-tieu-phan-to"
             },
             {
-                icon: "mdi-playlist-edit",
+                icon: "mdi-group",
                 title: "Chỉ Tiêu Phân Tổ Chi Tiết",
                 to: "/chi-tieu/chi-tieu-phan-to-chi-tiet"
             },

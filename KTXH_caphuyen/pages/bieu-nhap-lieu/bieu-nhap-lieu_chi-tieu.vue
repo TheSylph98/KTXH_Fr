@@ -2,14 +2,13 @@
   <Table
     :title="title"
     :headers="headers"
-    :items="items"
+    :items="bnlChiTieuList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <BieuNhapLieuChiTieu />
+      <BieuNhapLieuChiTieu :chiTieu="chiTieu" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
   </Table>
 </template>
@@ -28,6 +27,7 @@ export default {
     return {
       title: "Biểu Nhập Liệu Chỉ Tiêu",
       dialog: false,
+      isUpdate: false,
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
         { text: "Tên biểu", align: "center", value: "ten", type: "string" },
@@ -35,15 +35,8 @@ export default {
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
       editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        chiTieuId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
+      chiTieu: {},
+    
       defaultItem: {
         ma: "",
         ten: "",
@@ -80,24 +73,45 @@ export default {
       "restoreBieuNhapLieuChiTieu"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
+    clickAddNew() {
+      this.dialog = true
+      this.chiTieu = {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        chiTieuId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      }
     },
-    add() {
-      this.dialog = true;
+
+    closeDialog() {
+      this.dialog = false
+      this.chiTieu = {}
     },
+
+    saveChiTieuDialog() {
+      if (this.isUpdate) {
+        this.updateBieuNhapLieuChiTieu(this.chiTieu)
+      } else {
+        this.addBieuNhapLieuChiTieu(this.chiTieu)
+      }
+    },
+  
     edit(item) {
       this.addBieuNhapLieuChiTieu(this.editedIndex);
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
+
     delete(tiem) {
       const index = this.items.indexOf(item);
       confirm("Xác nhận xóa?") && this.items.splice(index, 1);
       this.deleteBieuNhapLieuChiTieu(this.editedItem);
     },
+
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem);
@@ -106,6 +120,7 @@ export default {
       }
       this.close();
     },
+
     close() {
       this.dialog = false;
       setTimeout(() => {
