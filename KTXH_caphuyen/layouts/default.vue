@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import SlideBar from "@/components/Bars/SlideBar";
-import UserBar from "@/components/Bars/UserBar";
+import SlideBar from "../components/Bars/SlideBar";
+import UserBar from "../components/Bars/UserBar";
 
 export default {
   components: {
