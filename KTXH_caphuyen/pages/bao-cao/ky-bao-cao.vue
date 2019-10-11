@@ -157,19 +157,6 @@ export default {
           trangThai:'',
           hieuLuc: 1,
           xoa: 0
-        },
-        defaultItem: {
-          nam: '',
-          sysCapHanhChinhId: 0,
-          ngayMo: '',
-          ngayDong: '',
-          ngayBatDau:'',
-          ngayKetThuc:'',
-          ngayBaoCaoHuyen:'',
-          ngayBaoCaoTinh:'',
-          trangThai:'',
-          hieuLuc: 1,
-          xoa: 0
         }
       }
     },

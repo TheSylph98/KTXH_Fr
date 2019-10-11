@@ -9,7 +9,7 @@ import {
   export const state = () => {
     return {
       api: {
-        bieuNhapLieuChiTieu: '/api/BieuNhapLieu_ChiTieus'
+        bieuNhapLieuChiTieu: '/api/v2/crud/bieunhaplieu-chitieu'
       },
       bnlChiTieuList: [],
       deletedbnlChiTieuList: [],
