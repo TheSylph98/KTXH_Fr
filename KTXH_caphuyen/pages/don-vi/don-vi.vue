@@ -64,23 +64,26 @@ export default {
       dialog: false,
       search: {},
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Mã đơn vị", align: "left", sorttable: true, value: "ma" },
-        { text: "Tên đơn vị", align: "left", sorttable: false, value: "ten" },
+        { text: "Mã đơn vị", align: "center", sorttable: true, value: "ma" },
+        { text: "Tên đơn vị", align: "center", sorttable: false, value: "ten" },
         {
           text: "Số điện thoại",
-          align: "left",
+          align: "center",
           sorttable: false,
           value: "sdt"
         },
         {
           text: "Nhóm đơn vị",
-          align: "left",
+          align: "center",
           sorttable: false,
           value: "nhomdv"
         },
-        { text: "Hiệu lực", align: "left", sorttable: true, value: "hieuLuc" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc"
+        }
       ],
       items: [],
       editedIndex: -1,

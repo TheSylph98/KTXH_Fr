@@ -49,11 +49,7 @@ export default {
       title: "Khai Báo Tác Nhân Chức Năng Phần Mềm",
       dialog: false,
       search: {},
-      headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Chức năng phần mềm", align: "left", value: "ten" },
-        { text: "Thao Tác", align: "left", value: "action" }
-      ],
+      headers: [{ text: "Chức năng phần mềm", align: "center", value: "ten" }],
       editedIndex: -1,
       items: [],
       editedItem: {

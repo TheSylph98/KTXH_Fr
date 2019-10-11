@@ -6,7 +6,7 @@
           <template v-slot:activator="{ on }">
             <v-icon size="16" dense v-on="on">mdi-filter</v-icon>
           </template>
-          <v-list width="10em" dense>
+          <v-list width="12em" dense>
             <v-list-item
               v-for="(item, index) in operators"
               :key="index"
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { stringOperators } from "@/util/operators";
+import { numberOperators } from "@/util/operators";
 
 export default {
   props: {
@@ -43,16 +43,14 @@ export default {
 
   data() {
     return {
-      operators: stringOperators,
-      choosenOperator: stringOperators[0],
+      operators: numberOperators,
+      choosenOperator: numberOperators[0],
       text: ""
     };
   },
 
   methods: {
     filterFunction(event) {
-      console.log("event", event);
-
       const evtValue = this.choosenOperator.filter(event);
 
       this.$emit("change", evtValue);

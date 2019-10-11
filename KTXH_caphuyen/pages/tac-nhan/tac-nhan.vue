@@ -59,22 +59,34 @@ export default {
       dialog: false,
       search: {},
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Tên tác nhân", align: "left", sorttable: false, value: "ten" },
+        {
+          text: "Tên tác nhân",
+          align: "center",
+          sorttable: false,
+          value: "ten",
+          type: "string"
+        },
         {
           text: "Cấp hành chính",
-          align: "left",
+          align: "center",
           sorttable: false,
-          value: "sysCapHanhChinhId"
+          value: "sysCapHanhChinhId",
+          type: "string"
         },
         {
           text: "Chức năng, nhiệm vụ",
-          align: "left",
+          align: "center",
           sorttable: false,
-          value: "ghiChu"
+          value: "ghiChu",
+          type: "number"
         },
-        { text: "Hiệu lực", align: "left", sorttable: true, value: "hieuLuc" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc",
+          type: "date"
+        }
       ],
       editedIndex: -1,
       items: [],

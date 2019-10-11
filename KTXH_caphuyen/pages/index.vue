@@ -11,15 +11,31 @@
       </v-list>
     </v-menu>
 
-    <StringFilter />
+    <p>
+      String:
+      <StringFilter />
+    </p>
+    <p>
+      Number:
+      <NumberFilter />
+    </p>
+    <p>
+      Date:
+      <DateFilter />
+    </p>
   </div>
 </template>
 
 <script>
 import StringFilter from "@/components/Filter/StringFilter";
+import NumberFilter from "@/components/Filter/NumberFilter";
+import DateFilter from "@/components/Filter/DateFilter";
+
 export default {
   components: {
-    StringFilter: StringFilter
+    StringFilter: StringFilter,
+    NumberFilter: NumberFilter,
+    DateFilter: DateFilter
   },
 
   data: () => ({

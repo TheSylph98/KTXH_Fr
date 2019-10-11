@@ -61,12 +61,10 @@ export default {
       dialog: false,
       search: {},
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Mã", align: "left", sorttable: true, value: "ma" },
-        { text: "Nội dung", align: "left", sorttable: false, value: "ten" },
-        { text: "Ghi chú", align: "left", sorttable: false, value: "ghiChu" },
-        { text: "Hiệu lực", align: "left", value: "hieuLuc" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        { text: "Mã", align: "center", sorttable: true, value: "ma" },
+        { text: "Nội dung", align: "center", sorttable: false, value: "ten" },
+        { text: "Ghi chú", align: "center", sorttable: false, value: "ghiChu" },
+        { text: "Hiệu lực", align: "center", value: "hieuLuc" }
       ],
       items: [],
       editedIndex: -1,

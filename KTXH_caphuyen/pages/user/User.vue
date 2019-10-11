@@ -67,19 +67,21 @@ export default {
       dialog: false,
       search: {},
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "ID", align: "left", sorttable: true, value: "id" },
-        { text: "Họ và Tên", align: "left", sorttable: false, value: "ten" },
+        { text: "Họ và Tên", align: "center", sorttable: false, value: "ten" },
         {
           text: "Số điện thoại",
-          align: "left",
+          align: "center",
           sorttable: false,
           value: "soDienThoai"
         },
-        { text: "Email", align: "left", sorttable: false, value: "email" },
-        { text: "Đơn Vị", align: "left", sorttable: false, value: "donvi" },
-        { text: "Hiệu lực", align: "left", sorttable: true, value: "hieuLuc" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        { text: "Email", align: "center", sorttable: false, value: "email" },
+        { text: "Đơn Vị", align: "center", sorttable: false, value: "donvi" },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc"
+        }
       ],
       editedIndex: -1,
       items: [],

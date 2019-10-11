@@ -105,20 +105,23 @@ export default {
       search: {},
       caccap: ["cấp tỉnh", "cấp huyện", "cấp xã"],
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Nhóm CT", align: "left", sorttable: false, value: "nhomCT" },
-        { text: "Mã", align: "left", sorttable: true, value: "maCT" },
+        { text: "Nhóm CT", align: "center", sorttable: false, value: "nhomCT" },
+        { text: "Mã", align: "center", sorttable: true, value: "maCT" },
         {
           text: "Tên chỉ tiêu",
-          align: "left",
+          align: "center",
           sorttable: false,
           value: "tenCT"
         },
-        { text: "Đơn vị tính", align: "left", sorttable: false, value: "dvt" },
-        { text: "Phân tổ", align: "left", sorttable: false, value: "phanTo" },
-        { text: "Loại", align: "left", value: "loai" },
-        { text: "Hiệu lực", align: "left", value: "hieuLuc" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        {
+          text: "Đơn vị tính",
+          align: "center",
+          sorttable: false,
+          value: "dvt"
+        },
+        { text: "Phân tổ", align: "center", sorttable: false, value: "phanTo" },
+        { text: "Loại", align: "center", value: "loai" },
+        { text: "Hiệu lực", align: "center", value: "hieuLuc" }
       ],
       editedIndex: -1,
       items_t: [],

@@ -85,53 +85,56 @@ export default {
       dialog: false,
       search: {},
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Năm", align: "left", sorttable: true, value: "nam" },
+        { text: "Năm", align: "center", sorttable: true, value: "nam" },
         {
           text: "Kỳ báo cáo",
-          align: "left",
+          align: "center",
           sorttable: false,
           value: "kyBaoCao"
         },
-        { text: "Nội Dung", align: "left", sorttable: false, value: "noiDung" },
+        {
+          text: "Nội Dung",
+          align: "center",
+          sorttable: false,
+          value: "noiDung"
+        },
         {
           text: "Ngày mở báo cáo",
-          align: "left",
+          align: "center",
           sorttable: true,
           value: "ngayMo"
         },
         {
           text: "Ngày đóng báo cáo",
-          align: "left",
+          align: "center",
           sorttable: true,
           value: "ngayDong"
         },
         {
           text: "Ngày bắt đầu cập nhập",
-          align: "left",
+          align: "center",
           sorttable: true,
           value: "ngayBatDau"
         },
         {
           text: "Ngày kết thúc tổng hợp báo cáo",
-          align: "left",
+          align: "center",
           sorttable: true,
           value: "ngayKetThuc"
         },
         {
           text: "Ngày hoàn thành báo cáo cấp huyện",
-          align: "left",
+          align: "center",
           sorttable: true,
           value: "ngayBaoCaoHuyen"
         },
         {
           text: "Ngày hoàn thành báo cáo cấp tỉnh",
-          align: "left",
+          align: "center",
           sorttable: true,
           value: "ngayBaoCaoTinh"
         },
-        { text: "Trạng Thái", align: "left", value: "trangThai" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        { text: "Trạng Thái", align: "center", value: "trangThai" }
       ],
       editedIndex: -1,
       items: [],

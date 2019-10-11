@@ -102,12 +102,15 @@ export default {
       donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Mã định danh", align: "left", sorttable: true, value: "ma" },
-        { text: "Tên", align: "left", sorttable: false, value: "ten" },
-        { text: "Ghi Chú", align: "left", sorttable: false, value: "ghiChu" },
-        { text: "Hiệu lực", align: "left", sorttable: true, value: "hieuLuc" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        { text: "Mã định danh", align: "center", sorttable: true, value: "ma" },
+        { text: "Tên", align: "center", sorttable: false, value: "ten" },
+        { text: "Ghi Chú", align: "center", sorttable: false, value: "ghiChu" },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc"
+        }
       ],
       editedIndex: -1,
       items: [],

@@ -59,17 +59,20 @@ export default {
       dialog: false,
       search: {},
       headers: [
-        { text: "STT", align: "left", sorttable: true, value: "id" },
-        { text: "Mã", align: "left", sorttable: true, value: "ma" },
+        { text: "Mã", align: "center", sorttable: true, value: "ma" },
         {
           text: "Tên nhóm chỉ tiêu KTXH",
-          align: "left",
+          align: "centet",
           sorttable: false,
           value: "ten"
         },
-        { text: "Ghi Chú", align: "left", sorttable: false, value: "ghiChu" },
-        { text: "Hiệu lực", align: "left", sorttable: true, value: "hieuLuc" },
-        { text: "Thao Tác", align: "left", value: "action" }
+        { text: "Ghi Chú", align: "center", sorttable: false, value: "ghiChu" },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc"
+        }
       ],
       items: [],
       editedIndex: -1,
