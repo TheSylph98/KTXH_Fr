@@ -5,11 +5,15 @@
     :items="donViList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <DonVi :donVi="donVi" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
+      <DonVi
+        :donVi="donVi"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
   </Table>
 </template>
@@ -17,7 +21,8 @@
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import DonVi from "@/components/Dialog/DonVi"
+import DonVi from "../../components/Dialog/Quantri/DonVi";
+
 export default {
   components: {
     Table,
@@ -29,7 +34,7 @@ export default {
       dialog: false,
       isUpdate: false,
       donVi: {},
-      titleDialog: '',
+      titleDialog: "",
       headers: [
         {
           text: "Mã đơn vị",
@@ -47,19 +52,16 @@ export default {
         },
         { text: "Đơn vị cha", align: "center", value: "donViChaId", type: "" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
-      ],
-      
-    }
+      ]
+    };
   },
+
   computed: {
-    ...mapState("qtDonVi", ["donViList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ...mapState("quantri/qtDonVi", ["donViList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("qtDonVi/getQTDonViList");
+    store.dispatch("quantri/qtDonVi/getQTDonViList");
   },
 
   created() {
@@ -67,7 +69,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qtDonVi", [
+    ...mapActions("quantri/qtDonVi", [
       "getQTDonViList",
       "getQTDonVi",
       "addQTDonVi",
@@ -75,22 +77,23 @@ export default {
       "deleteQTDonVi",
       "restoreQTDonVi"
     ]),
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
+
     clickAddNew() {
       this.dialog = true;
-      this.truongNhapLieu = {
+      this.isUpdate = false;
+      this.titleDialog = "Thêm đơn vị mới";
+      this.donVi = {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
+        donViChaId: 0,
+        diaChi: "",
+        soDienThoai: "",
+        email: "",
         ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+        laDonVi: false
+      };
     },
+
     edit(item) {
       this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
       this.dialog = true;
@@ -108,12 +111,12 @@ export default {
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
       }
       this.closeDialog();
-    },
+    }
   }
 };
 </script>

@@ -5,7 +5,7 @@
     :items="tacNhanChucNangPhanMemList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-btn color="primary" dark class="mb-2" @click="addNew()">Lưu</v-btn>
     <v-dialog v-model="dialog" max-width="800px">
@@ -18,7 +18,7 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Chức năng phần mềm"></v-text-field>
+                <v-text-field v-model="chucNang.ten" label="Chức năng phần mềm"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -52,24 +52,23 @@ export default {
           type: "string"
         }
       ],
-      editedIndex: -1,
-      editedItem: {
+      formTitle: "",
+      chucNang: {
         ten: ""
       }
     };
   },
   computed: {
-    ...mapState("qtTacNhanChucNangPhanMem", [
+    ...mapState("quantri/qtTacNhan-ChucNangPhanMem", [
       "tacNhanChucNangPhanMemList",
       "pagination"
-    ]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ])
   },
 
   asyncData({ store }) {
-    store.dispatch("qtTacNhanChucNangPhanMem/getQTTacNhanChucNangPhanMemList");
+    store.dispatch(
+      "quantri/qtTacNhan-ChucNangPhanMem/getQTTacNhanChucNangPhanMemList"
+    );
   },
 
   created() {
@@ -77,7 +76,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qtTacNhanChucNangPhanMem", [
+    ...mapActions("quantri/qtTacNhan-ChucNangPhanMem", [
       "getQTTacNhanChucNangPhanMemList",
       "getQTTacNhanChucNangPhanMem",
       "addQTTacNhanChucNangPhanMem",
@@ -85,36 +84,39 @@ export default {
       "deleteQTTacNhanChucNangPhanMem",
       "restoreQTTacNhanChucNangPhanMem"
     ]),
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
-    add() {
+
+    clickAddNew() {
       this.dialog = true;
+      this.isUpdate = false;
+      this.formTitle = "Thêm chức năng phần mềm mới";
+      this.chucNang = {
+        ten: ""
+      };
     },
+
     edit(item) {
       this.addQTTacNhanChucNangPhanMem(this.editedIndex);
       this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.chucNang = Object.assign({}, item);
       this.dialog = true;
     },
     delete(tiem) {
       const index = this.items.indexOf(item);
       confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteQTTacNhanChucNangPhanMem(this.editedItem);
+      this.deleteQTTacNhanChucNangPhanMem(this.chucNang);
     },
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
+        Object.assign(this.items[this.editedIndex], this.chucNang);
       } else {
-        this.items.push(this.editedItem);
+        this.items.push(this.chucNang);
       }
       this.close();
     },
     close() {
       this.dialog = false;
       setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.chucNang = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
     }

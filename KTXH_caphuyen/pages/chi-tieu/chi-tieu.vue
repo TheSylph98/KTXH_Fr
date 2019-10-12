@@ -8,7 +8,12 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="1000px">
-      <ChiTieu :chiTieu="chiTieu" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
+      <ChiTieu
+        :chiTieu="chiTieu"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
   </Table>
 </template>
@@ -16,7 +21,7 @@
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import ChiTieu from "@/components/Dialog/ChiTieu"
+import ChiTieu from "@/components/Dialog/ChiTieu/ChiTieu";
 
 export default {
   components: {
@@ -68,12 +73,11 @@ export default {
           type: ""
         },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
-      ],
-      
-    }
+      ]
+    };
   },
   computed: {
-    ...mapState("chiTieu", ["chiTieuList", "pagination"]),
+    ...mapState("chitieu/chiTieu", ["chiTieuList", "pagination"])
   },
 
   asyncData({ store }) {
@@ -85,7 +89,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("chiTieu", [
+    ...mapActions("chitieu/chiTieu", [
       "getChiTieuList",
       "getChiTieu",
       "addChiTieu",
@@ -96,7 +100,7 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
-      this.formTitle = "Thêm chỉ tiêu mới"
+      this.formTitle = "Thêm chỉ tiêu mới";
       this.chiTieu = {
         ma: "",
         ten: "",
@@ -112,8 +116,8 @@ export default {
         donViTinh: "",
         tuSo: "",
         mauSo: "",
-        ghiChu: "",
-      }
+        ghiChu: ""
+      };
     },
 
     edit(item) {
@@ -136,12 +140,12 @@ export default {
 
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
       }
       this.closeDialog();
-    },
+    }
   }
 };
 </script>

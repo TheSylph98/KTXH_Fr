@@ -5,23 +5,18 @@
     :items="tinhList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <Tinh/>
+      <Tinh :tinh="tinh" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
 <script>
 import Table from "../../components/table.vue";
 import { mapState, mapActions } from "vuex";
-import Tinh from "@/components/Dialog/Tinh"
+import Tinh from "@/components/Dialog/QuyChuan/Tinh";
 export default {
   components: {
     Table,
@@ -32,7 +27,7 @@ export default {
       title: "Khai Báo Từ Điển: Tỉnh",
       dialog: false,
       isUpdate: false,
-      titleDialog: '',
+      titleDialog: "",
       tinh: {},
       donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
@@ -65,19 +60,15 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ],
-      
-    }
+      ]
+    };
   },
   computed: {
-    ...mapState("qcTinh", ["tinhList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ...mapState("quychuan/qcTinh", ["tinhList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("qcTinh/getQCTinhList");
+    store.dispatch("quychuan/qcTinh/getQCTinhList");
   },
 
   created() {
@@ -85,7 +76,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qcTinh", [
+    ...mapActions("quychuan/qcTinh", [
       "getQCTinhList",
       "getQCTinh",
       "addQCTinh",
@@ -94,45 +85,46 @@ export default {
       "restoreQCTinh"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
     clickAddNew() {
       this.dialog = true;
-      this.truongNhapLieu = {
+      this.isUpdate = false;
+      this.titleDialog = "Thêm tỉnh mới";
+      this.tinh = {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+        sysCapDonViHanhChinhId: 0,
+        loaiDonViHanhChinh: "",
+        nongThon: 1,
+        bienGioi: 0,
+        haiDao: 0,
+        vungDBKhoKhan: 0,
+        ghiChu: ""
+      };
     },
+
     edit(item) {
-      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
+      this.tinh = this.tinhList.indexOf(item);
       this.dialog = true;
       this.isUpdate = true;
     },
     deleted(item) {
-      const index = this.bnlTruongDuLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+      const index = this.tinhList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.tinhList.splice(index, 1);
+      this.deleteQCTinh(this.tinh);
     },
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.truongNhapLieu = {};
+      this.tinh = {};
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.updateQCTinh(this.tinh);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.addQCTinh(this.tinh);
       }
       this.closeDialog();
-    },
+    }
   }
 };
 </script>

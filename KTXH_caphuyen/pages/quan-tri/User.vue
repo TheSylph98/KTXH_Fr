@@ -5,23 +5,18 @@
     :items="userList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <User/>
+      <User :user="user" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import User from "@/components/Dialog/User"
+import User from "@/components/Dialog/Quantri/User";
 
 export default {
   components: {
@@ -33,7 +28,7 @@ export default {
       title: "Khai Báo Người Dùng",
       dialog: false,
       isUpdate: false,
-      titleDialog: '',
+      titleDialog: "",
       user: {},
       headers: [
         {
@@ -71,16 +66,15 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ],
-      
-    }
+      ]
+    };
   },
   computed: {
-    ...mapState("qtUser", ["userList", "pagination"])
+    ...mapState("quantri/qtUser", ["userList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("qtUser/getQTUserList");
+    store.dispatch("quantri/qtUser/getQTUserList");
   },
 
   created() {
@@ -88,7 +82,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qtUser", [
+    ...mapActions("quantri/qtUser", [
       "getQTUserList",
       "getQTUser",
       "addQTUser",
@@ -96,45 +90,43 @@ export default {
       "deleteQTUser",
       "restoreQTUser"
     ]),
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
+
     clickAddNew() {
       this.dialog = true;
-      this.truongNhapLieu = {
+      this.isUpdate = false;
+      this.titleDialog = "Thêm user mới";
+      this.user = {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+        matKhau: "",
+        soDienThoai: "",
+        email: "",
+        qtDonViId: 0
+      };
     },
     edit(item) {
-      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
+      this.user = this.userList.indexOf(item);
       this.dialog = true;
       this.isUpdate = true;
     },
     deleted(item) {
-      const index = this.bnlTruongDuLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+      const index = this.userList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.userList.splice(index, 1);
+      this.deleteBieuNhapLieuTruongDuLieu(this.user);
     },
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.truongNhapLieu = {};
+      this.user = {};
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.updateBieuNhapLieuTruongDuLieu(this.user);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.addBieuNhapLieuTruongDuLieu(this.user);
       }
       this.closeDialog();
-    },
+    }
   }
 };
 </script>

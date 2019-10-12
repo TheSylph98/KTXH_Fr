@@ -9,14 +9,19 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-     <KyBaoCao :kyBaoCao="kyBaoCao" :formTitle="titleDialog" @close="closeDialog" @save="saveKyBaoCaoDialog" />
+      <KyBaoCao
+        :kyBaoCao="kyBaoCao"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveKyBaoCaoDialog"
+      />
     </v-dialog>
   </Table>
 </template>
 
 <script>
 import Table from "@/components/table.vue";
-import KyBaoCao from "@/components/Dialog/KyBaoCao"
+import KyBaoCao from "@/components/Dialog/BaoCao/KyBaoCao";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -66,54 +71,50 @@ export default {
           value: "ngayDong",
           type: "date"
         },
-        {
-          text: "Ngày bắt đầu cập nhập",
-          align: "center",
-          sorttable: true,
-          value: "ngayBatDau",
-          type: "date"
-        },
-        {
-          text: "Ngày kết thúc tổng hợp báo cáo",
-          align: "center",
-          sorttable: true,
-          value: "ngayKetThuc",
-          type: "date"
-        },
-        {
-          text: "Ngày hoàn thành báo cáo cấp huyện",
-          align: "center",
-          sorttable: true,
-          value: "ngayBaoCaoHuyen",
-          type: "date"
-        },
-        {
-          text: "Ngày hoàn thành báo cáo cấp tỉnh",
-          align: "center",
-          sorttable: true,
-          value: "ngayBaoCaoTinh",
-          type: "date"
-        },
+        // {
+        //   text: "Ngày bắt đầu cập nhập",
+        //   align: "center",
+        //   sorttable: true,
+        //   value: "ngayBatDau",
+        //   type: "date"
+        // },
+        // {
+        //   text: "Ngày kết thúc tổng hợp báo cáo",
+        //   align: "center",
+        //   sorttable: true,
+        //   value: "ngayKetThuc",
+        //   type: "date"
+        // },
+        // {
+        //   text: "Ngày hoàn thành báo cáo cấp huyện",
+        //   align: "center",
+        //   sorttable: true,
+        //   value: "ngayBaoCaoHuyen",
+        //   type: "date"
+        // },
+        // {
+        //   text: "Ngày hoàn thành báo cáo cấp tỉnh",
+        //   align: "center",
+        //   sorttable: true,
+        //   value: "ngayBaoCaoTinh",
+        //   type: "date"
+        // },
         {
           text: "Trạng Thái",
           align: "center",
           value: "trangThai",
           type: "string"
         }
-      ],
-      editedIndex: -1,
+      ]
     };
   },
 
   computed: {
-    ...mapState("qlKyBaoCao", ["kyBaoCaoList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("qlKyBaoCao/getKyBaoCaoList");
+    store.dispatch("quanly/qlKyBaoCao/getKyBaoCaoList");
   },
 
   created() {
@@ -121,7 +122,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qlKyBaoCao", [
+    ...mapActions("quanly/qlKyBaoCao", [
       "getKyBaoCaoList",
       "getKyBaoCao",
       "addKyBaoCao",
@@ -129,10 +130,11 @@ export default {
       "deleteKyBaoCao",
       "restoreKyBaoCao"
     ]),
+
     clickAddNew() {
-      this.dialog = true
-      this.isUpdate = false
-      this.titleDialog = "Thêm kỳ báo cáo mới"
+      this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm kỳ báo cáo mới";
       this.kyBaoCao = {
         nam: "",
         ma: "",
@@ -147,30 +149,29 @@ export default {
         trangThai: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
 
     clickUpdateKyBaoCao() {
-      this.dialog = true
-      this.isUpdate = true
-      this.titleDialog = "Chỉnh sửa kỳ báo cáo"
+      this.dialog = true;
+      this.isUpdate = true;
+      this.titleDialog = "Chỉnh sửa kỳ báo cáo";
     },
 
     closeDialog() {
-      this.dialog = false
-      this.kyBaoCao = {}
+      this.dialog = false;
+      this.kyBaoCao = {};
     },
 
     async saveKyBaoCaoDialog() {
       if (this.isUpdate) {
-        await this.updateKyBaoCao(this.kyBaoCao)
+        await this.updateKyBaoCao(this.kyBaoCao);
       } else {
-        await this.addKyBaocao(this.kyBaoCao)
+        await this.addKyBaocao(this.kyBaoCao);
       }
 
-      this.dialog = false
+      this.dialog = false;
     },
-
 
     edit(item) {
       this.addKyBaoCao(this.editedIndex);

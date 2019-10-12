@@ -8,8 +8,12 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <ChiTieuNhom :chiTieuNhom="chiTieuNhom" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
+      <ChiTieuNhom
+        :chiTieuNhom="chiTieuNhom"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
   </Table>
 </template>
@@ -17,7 +21,7 @@
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import ChiTieuNhom from "@/components/Dialog/ChiTieuNhom"
+import ChiTieuNhom from "@/components/Dialog/ChiTieu/ChiTieuNhom";
 
 export default {
   components: {
@@ -29,7 +33,7 @@ export default {
       title: "Khai Báo Nhóm Chỉ Tiêu",
       dialog: false,
       isUpdate: false,
-      titleDialog: '',
+      titleDialog: "",
       headers: [
         {
           text: "Mã",
@@ -64,11 +68,11 @@ export default {
     };
   },
   computed: {
-    ...mapState("chiTieuNhom", ["chiTieuNhomList", "pagination"])
+    ...mapState("chitieu/chiTieuNhom", ["chiTieuNhomList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("chiTieuNhom/getChiTieuNhomList");
+    store.dispatch("chitieu/chiTieuNhom/getChiTieuNhomList");
   },
 
   created() {
@@ -76,7 +80,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("chiTieuNhom", [
+    ...mapActions("chitieu/chiTieuNhom", [
       "getChiTieuNhomList",
       "getChiTieuNhom",
       "addChiTieuNhom",
@@ -87,7 +91,7 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
-      this.titleDialog = "Thêm chỉ tiêu nhóm mới"
+      this.titleDialog = "Thêm chỉ tiêu nhóm mới";
       this.chiTieuNhom = {
         ma: "",
         ten: "",
@@ -96,7 +100,7 @@ export default {
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
     edit(item) {
       this.chiTieuNhom = this.chiTieuNhomList.indexOf(item);
@@ -118,9 +122,9 @@ export default {
 
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateChiTieuNhom(this.chiTieuNhom)
+        this.updateChiTieuNhom(this.chiTieuNhom);
       } else {
-        this.addChiTieuNhom(this.chiTieuNhom)
+        this.addChiTieuNhom(this.chiTieuNhom);
       }
       this.closeDialog();
     }

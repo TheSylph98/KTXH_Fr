@@ -5,23 +5,18 @@
     :items="xaList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <Xa/>
+      <Xa :xa="xa" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
 <script>
 import Table from "../../components/table.vue";
 import { mapState, mapActions } from "vuex";
-import Xa from "@/components/Dialog/Xa"
+import Xa from "@/components/Dialog/QuyChuan/Xa";
 
 export default {
   components: {
@@ -33,7 +28,7 @@ export default {
       title: "Khai Báo Từ Điển: Xã",
       dialog: false,
       isUpdate: false,
-      titleDialog: '',
+      titleDialog: "",
       xa: {},
       donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
@@ -67,14 +62,14 @@ export default {
           type: ""
         }
       ]
-    }
+    };
   },
   computed: {
-    ...mapState("qcXa", ["xaList", "pagination"])
+    ...mapState("quychuan/qcXa", ["xaList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("qcXa/getQCXaList");
+    store.dispatch("quychuan/qcXa/getQCXaList");
   },
 
   created() {
@@ -82,7 +77,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qcXa", [
+    ...mapActions("quychuan/qcXa", [
       "getQCXaList",
       "getQCXa",
       "addQCXa",
@@ -91,42 +86,46 @@ export default {
       "restoreQCXa"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
     clickAddNew() {
       this.dialog = true;
-      this.truongNhapLieu = {
+      this.isUpdate = false;
+      this.titleDialog = "Thêm xã mới";
+      this.xa = {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
+        qcHuyenId: "",
+        sysCapDonViHanhChinhId: 0,
+        loaiDonViHanhChinh: "",
+        nongThon: 1,
+        bienGioi: 0,
+        haiDao: 0,
+        vungDBKhoKhan: 0,
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
+
     edit(item) {
-      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
+      this.xa = this.xaList.indexOf(item);
       this.dialog = true;
       this.isUpdate = true;
     },
     deleted(item) {
-      const index = this.bnlTruongDuLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+      const index = this.xaList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.xaList.splice(index, 1);
+      this.deleteQCXa(this.xa);
     },
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.truongNhapLieu = {};
+      this.xa = {};
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.updateQCXa(this.xa);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.addQCXa(this.xa);
       }
       this.closeDialog();
     }

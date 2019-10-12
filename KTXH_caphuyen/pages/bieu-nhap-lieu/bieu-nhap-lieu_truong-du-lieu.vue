@@ -8,8 +8,12 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      
-      <BNLTruongNhapLieu :truongNhapLieu="bnlTruongNhapLieu" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
+      <BNLTruongNhapLieu
+        :truongNhapLieu="bnlTruongNhapLieu"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
   </Table>
 </template>
@@ -17,7 +21,7 @@
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import BNLTruongNhapLieu from "@/components/Dialog/BieuNhapLieuTruongNhapLieu"
+import BNLTruongNhapLieu from "@/components/Dialog/BieuNhapLieu/BieuNhapLieuTruongNhapLieu";
 
 export default {
   components: {
@@ -29,26 +33,27 @@ export default {
       title: "Biểu Nhập Liệu Trường Nhập Liệu",
       dialog: false,
       isUpdate: false,
-      titleDialog: '',
+      titleDialog: "",
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
         { text: "Tên biểu", align: "center", value: "ten", type: "string" },
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      bnlTruongNhapLieu: {},
-    }
+      bnlTruongNhapLieu: {}
+    };
   },
   computed: {
-    ...mapState("bieuNhapLieuTruongNhapLieu", [
+    ...mapState("bieunhaplieu/bieuNhapLieuTruongNhapLieu", [
       "bnlTruongNhapLieuList",
       "pagination"
-    ]),
-    
+    ])
   },
 
   asyncData({ store }) {
-    store.dispatch("bieuNhapLieuTruongNhapLieu/getBieuNhapLieuTruongNhapLieuList");
+    store.dispatch(
+      "bieunhaplieu/bieuNhapLieuTruongNhapLieu/getBieuNhapLieuTruongNhapLieuList"
+    );
   },
 
   created() {
@@ -56,7 +61,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("bieuNhapLieuTruongNhapLieu", [
+    ...mapActions("bieunhaplieu/bieuNhapLieuTruongNhapLieu", [
       "getBieuNhapLieuTruongNhapLieuList",
       "getBieuNhapLieuTruongNhapLieu",
       "addBieuNhapLieuTruongNhapLieu",
@@ -65,20 +70,16 @@ export default {
       "restoreBieuNhapLieuTruongNhapLieu"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
     clickAddNew() {
       this.dialog = true;
-      this.titleDialog = "Thêm mới biểu nhập liệu trường dữ liệu"
+      this.titleDialog = "Thêm mới biểu nhập liệu trường dữ liệu";
       this.bnlTruongNhapLieu = {
         ma: "",
         ten: "",
         bieuNhapLieuId: 0,
         truongNhapLieuId: 0,
         ghiChu: ""
-      }
+      };
     },
     edit(item) {
       this.dialog = true;
@@ -86,8 +87,8 @@ export default {
       this.bnlTruongNhapLieu = this.bnlTruongNhapLieuList.indexOf(item);
     },
     async deleted(item) {
-      //const index = this.bnlTruongNhapLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && await this.deleteBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu);
+      confirm("Xác nhận xóa?") &&
+        (await this.deleteBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu));
     },
     closeDialog() {
       this.dialog = false;
@@ -96,13 +97,12 @@ export default {
     },
     async saveChiTieuDialog() {
       if (this.isUpdate) {
-        await this.updateBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu)
+        await this.updateBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu);
       } else {
-        await this.addBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu)
+        await this.addBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu);
       }
       this.closeDialog();
-    },
-    
+    }
   }
 };
 </script>

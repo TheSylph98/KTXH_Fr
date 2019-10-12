@@ -5,23 +5,23 @@
     :items="chiTieuPhanToList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <ChiTieuPhanTo :chiTieuPhanTo="chiTieuPhanTo" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
+      <ChiTieuPhanTo
+        :chiTieuPhanTo="chiTieuPhanTo"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import ChiTieuPhanTo from "@/components/Dialog/ChiTieuPhanTo"
+import ChiTieuPhanTo from "@/components/Dialog/ChiTieu/ChiTieuPhanTo";
 
 export default {
   components: {
@@ -64,16 +64,16 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ],
-    }
+      ]
+    };
   },
 
   computed: {
-    ...mapState("chiTieuPhanTo", ["chiTieuPhanToList", "pagination"])
+    ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("chiTieuPhanTo/getChiTieuPhanToList");
+    store.dispatch("chitieu/chiTieuPhanTo/getChiTieuPhanToList");
   },
 
   created() {
@@ -81,7 +81,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("chiTieuPhanTo", [
+    ...mapActions("chitieu/chiTieuPhanTo", [
       "getChiTieuPhanToList",
       "getChiTieuPhanTo",
       "addChiTieuPhanTo",
@@ -90,21 +90,17 @@ export default {
       "restoreChiTieuPhanTo"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
     clickAddNew() {
       this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm chỉ tiêu phân tổ mới";
       this.chiTieuPhanTo = {
         ma: "",
         ten: "",
-        chiTieuPhanToId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+        ghiChu: ""
+      };
     },
+
     edit(item) {
       this.chiTieuPhanTo = this.chiTieuPhanToListList.indexOf(item);
       this.dialog = true;
@@ -122,9 +118,9 @@ export default {
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateChiTieuPhanTo(this.chiTieuPhanTo)
+        this.updateChiTieuPhanTo(this.chiTieuPhanTo);
       } else {
-        this.addChiTieuPhanTo(this.chiTieuPhanTo)
+        this.addChiTieuPhanTo(this.chiTieuPhanTo);
       }
       this.closeDialog();
     }

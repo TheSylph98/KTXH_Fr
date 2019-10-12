@@ -8,7 +8,12 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <BNLKyBaoCao :kyBaoCao="kyBaoCao" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
+      <BNLKyBaoCao
+        :kyBaoCao="kyBaoCao"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
   </Table>
 </template>
@@ -16,7 +21,7 @@
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import BNLKyBaoCao from "@/components/Dialog/BieuNhapLieuKyBaoCao"
+import BNLKyBaoCao from "@/components/Dialog/BieuNhapLieu/BieuNhapLieuKyBaoCao";
 
 export default {
   components: {
@@ -35,34 +40,28 @@ export default {
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      kyBaoCao: {},
-      // defaultItem: {
-      //   ma: "",
-      //   ten: "",
-      //   bieuNhapLieuId: 0,
-      //   qlKyBaoCaoId: 0,
-      //   ghiChu: "",
-      //   hieuLuc: 1,
-      //   xoa: 0
-      // }
+      kyBaoCao: {}
     };
   },
   computed: {
-    ...mapState("bieuNhapLieuKyBaoCao", ["bnlKyBaoCaoList", "pagination"]),
+    ...mapState("bieunhaplieu/bieuNhapLieuKyBaoCao", [
+      "bnlKyBaoCaoList",
+      "pagination"
+    ])
   },
 
   asyncData({ store }) {
-    store.dispatch("bieuNhapLieuKyBaoCao/getBieuNhapLieuKyBaoCaoList");
+    store.dispatch(
+      "bieunhaplieu/bieuNhapLieuKyBaoCao/getBieuNhapLieuKyBaoCaoList"
+    );
   },
 
   created() {
     this.getBieuNhapLieuKyBaoCaoList();
-    //console.log(this.getBieuNhapLieuKyBaoCaoList())
-
   },
 
   methods: {
-    ...mapActions("bieuNhapLieuKyBaoCao", [
+    ...mapActions("bieunhaplieu/bieuNhapLieuKyBaoCao", [
       "getBieuNhapLieuKyBaoCaoList",
       "getBieuNhapLieuKyBaoCao",
       "addBieuNhapLieuKyBaoCao",
@@ -71,12 +70,7 @@ export default {
       "restoreBieuNhapLieuKyBaoCao"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
     clickAddNew() {
-      //console.log(bnlKyBaoCaoList);
       this.dialog = true;
       this.isUpdate = false;
       this.titleDialog = "Thêm Mới Biểu Nhập Liệu Kỳ Báo Cáo";
@@ -88,8 +82,9 @@ export default {
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
+
     edit(item) {
       this.dialog = true;
       this.isUpdate = true;
@@ -108,13 +103,12 @@ export default {
     },
     async saveChiTieuDialog() {
       if (this.isUpdate) {
-        await this.updateBieuNhapLieuKyBaoCao(this.kyBaoCao)
+        await this.updateBieuNhapLieuKyBaoCao(this.kyBaoCao);
       } else {
-        await this.addBieuNhapLieuKyBaoCao(this.kyBaoCao)
+        await this.addBieuNhapLieuKyBaoCao(this.kyBaoCao);
       }
       this.closeDialog();
-    },
-
+    }
   }
 };
 </script>

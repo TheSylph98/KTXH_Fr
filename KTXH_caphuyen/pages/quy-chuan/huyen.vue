@@ -5,23 +5,24 @@
     :items="huyenList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <Huyen/>
+      <Huyen
+        :huyen="huyen"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
 <script>
 import Table from "../../components/table.vue";
 import { mapState, mapActions } from "vuex";
-import Huyen from "@/components/Dialog/Huyen"
+import Huyen from "@/components/Dialog/QuyChuan/Huyen";
+
 export default {
   components: {
     Table,
@@ -32,7 +33,7 @@ export default {
       title: "Khai Báo Quy Chuẩn: Huyện",
       dialog: false,
       isUpdate: false,
-      titleDialog: '',
+      titleDialog: "",
       huyen: {},
       donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
@@ -65,47 +66,15 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        qcTinhId: "",
-        sysCapDonViHanhChinhId: 0,
-        loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        qcTinhId: "",
-        sysCapDonViHanhChinhId: 0,
-        loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      ]
     };
   },
   computed: {
-    ...mapState("qcHuyen", ["huyenList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ...mapState("quychuan/qcHuyen", ["huyenList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("qcHuyen/getQCHuyenList");
+    store.dispatch("quychuan/qcHuyen/getQCHuyenList");
   },
 
   created() {
@@ -113,7 +82,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qcHuyen", [
+    ...mapActions("quychuan/qcHuyen", [
       "getQCHuyenList",
       "getQCHuyen",
       "addQCHuyen",
@@ -122,45 +91,49 @@ export default {
       "restoreQCHuyen"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
     clickAddNew() {
       this.dialog = true;
-      this.truongNhapLieu = {
+      this.isUpdate = false;
+      this.titleDialog = "Thêm huyện mới";
+      this.huyen = {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
+        qcTinhId: "",
+        sysCapDonViHanhChinhId: 0,
+        loaiDonViHanhChinh: "",
+        nongThon: 1,
+        bienGioi: 0,
+        haiDao: 0,
+        vungDBKhoKhan: 0,
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
+
     edit(item) {
-      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
+      this.huyen = this.huyenList.indexOf(item);
       this.dialog = true;
       this.isUpdate = true;
     },
     deleted(item) {
-      const index = this.bnlTruongDuLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+      const index = this.huyenList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.huyenList.splice(index, 1);
+      this.deleteQCHuyen(this.huyen);
     },
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.truongNhapLieu = {};
+      this.huyen = {};
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.updateQCHuyen(this.huyen);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.addQCHuyen(this.huyen);
       }
       this.closeDialog();
-    },
+    }
   }
 };
 </script>

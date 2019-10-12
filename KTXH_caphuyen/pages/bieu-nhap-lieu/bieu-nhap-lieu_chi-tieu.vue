@@ -8,14 +8,19 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <BieuNhapLieuChiTieu :chiTieu="chiTieu" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
+      <BieuNhapLieuChiTieu
+        :chiTieu="chiTieu"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
   </Table>
 </template>
 
 <script>
 import Table from "@/components/table.vue";
-import BieuNhapLieuChiTieu from "@/components/Dialog/BieuNhapLieuChiTieu";
+import BieuNhapLieuChiTieu from "@/components/Dialog/BieuNhapLieu/BieuNhapLieuChiTieu";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -35,18 +40,20 @@ export default {
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      chiTieu: {},
+      chiTieu: {}
     };
   },
   computed: {
-    ...mapState("bieuNhapLieuChiTieu", ["bnlChiTieuList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ...mapState("bieunhaplieu/bieuNhapLieuChiTieu", [
+      "bnlChiTieuList",
+      "pagination"
+    ])
   },
 
   asyncData({ store }) {
-    store.dispatch("bieuNhapLieuChiTieu/getBieuNhapLieuChiTieuList");
+    store.dispatch(
+      "bieunhaplieu/bieuNhapLieuChiTieu/getBieuNhapLieuChiTieuList"
+    );
   },
 
   created() {
@@ -54,7 +61,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("bieuNhapLieuChiTieu", [
+    ...mapActions("bieunhaplieu/bieuNhapLieuChiTieu", [
       "getBieuNhapLieuChiTieuList",
       "getBieuNhapLieuChiTieu",
       "addBieuNhapLieuChiTieu",
@@ -64,9 +71,9 @@ export default {
     ]),
 
     clickAddNew() {
-      this.dialog = true
-      this.isUpdate = false
-      this.titleDialog = "Thêm chỉ tiêu mới"
+      this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm chỉ tiêu mới";
       this.chiTieu = {
         ma: "",
         ten: "",
@@ -75,36 +82,36 @@ export default {
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
 
     clickUpdateDialog() {
-      this.dialog = true
-      this.isUpdate = true
-      this.titleDialog = "Cập nhật chỉ tiêu"
+      this.dialog = true;
+      this.isUpdate = true;
+      this.titleDialog = "Cập nhật chỉ tiêu";
     },
 
     closeDialog() {
-      this.dialog = false
-      this.isUpdate =false
-      this.chiTieu = {}
+      this.dialog = false;
+      this.isUpdate = false;
+      this.chiTieu = {};
     },
 
     async saveChiTieuDialog() {
       if (this.isUpdate) {
-        await this.updateBieuNhapLieuChiTieu(this.chiTieu)
+        await this.updateBieuNhapLieuChiTieu(this.chiTieu);
       } else {
-        await this.addBieuNhapLieuChiTieu(this.chiTieu)
+        await this.addBieuNhapLieuChiTieu(this.chiTieu);
       }
 
-      this.closeDialog()
+      this.closeDialog();
     },
 
     async deleted(item) {
       const index = this.bnlChiTieuList.indexOf(item);
       confirm("Xác nhận xóa?") && this.bnlChiTieuList.splice(index, 1);
       await this.deleteBieuNhapLieuChiTieu(this.chiTieu);
-    },
+    }
     // edit(item) {
     //   this.dialog = true;
     //   this.isUpdate = true;

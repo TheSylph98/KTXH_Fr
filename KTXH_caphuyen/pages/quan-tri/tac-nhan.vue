@@ -9,7 +9,12 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
-      <TacNhan :tacNhan="tacNhan" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
+      <TacNhan
+        :tacNhan="tacNhan"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
   </Table>
 </template>
@@ -17,7 +22,7 @@
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import TacNhan from "@/components/Dialog/TacNhan"
+import TacNhan from "@/components/Dialog/Quantri/TacNhan";
 
 export default {
   components: {
@@ -29,7 +34,7 @@ export default {
       title: "Biểu Nhập Liệu Chỉ Tiêu",
       dialog: false,
       isUpdate: false,
-      titleDialog: '',
+      titleDialog: "",
       tacNhan: {},
       headers: [
         {
@@ -60,19 +65,15 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ],
-      
-    }
+      ]
+    };
   },
   computed: {
-    ...mapState("qtTacNhan", ["tacNhanList", "pagination"]),
-    // formTitle() {
-    //   return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    // }
+    ...mapState("quantri/qtTacNhan", ["tacNhanList", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("qtTacNhan/getQTTacNhanList");
+    store.dispatch("quantri/qtTacNhan/getQTTacNhanList");
   },
 
   created() {
@@ -80,7 +81,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("qtTacNhan", [
+    ...mapActions("quantri/qtTacNhan", [
       "getQTTacNhanList",
       "getQTTacNhan",
       "addQTTacNhan",
@@ -88,45 +89,42 @@ export default {
       "deleteQTTacNhan",
       "restoreQTTacNhan"
     ]),
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
+
     clickAddNew() {
       this.dialog = true;
-      this.truongNhapLieu = {
+      this.tacNhan = {
         ma: "",
         ten: "",
         bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
+        tacNhanId: 0,
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
     edit(item) {
-      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
+      this.tacNhan = this.tacNhanList.indexOf(item);
       this.dialog = true;
       this.isUpdate = true;
     },
     deleted(item) {
-      const index = this.bnlTruongDuLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+      const index = this.tacNhanList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.tacNhanList.splice(index, 1);
+      this.deleteQTTacNhan(this.tacNhan);
     },
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.truongNhapLieu = {};
+      this.tacNhan = {};
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.updateQTTacNhan(this.tacNhan);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+        this.addQTTacNhan(this.tacNhan);
       }
       this.closeDialog();
-    },
+    }
   }
 };
 </script>

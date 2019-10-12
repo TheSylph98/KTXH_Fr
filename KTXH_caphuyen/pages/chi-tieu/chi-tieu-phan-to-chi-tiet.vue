@@ -8,20 +8,20 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <ChiTieuPhanToChiTiet :chiTieuPhanToChiTiet="chiTieuPhanToChiTiet" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
+      <ChiTieuPhanToChiTiet
+        :chiTieuPhanToChiTiet="chiTieuPhanToChiTiet"
+        :formTitle="titleDialog"
+        @close="closeDialog"
+        @save="saveChiTieuDialog"
+      />
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
 <script>
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
-import ChiTieuPhanToChiTiet from "@/components/Dialog/ChiTieuPhanToChiTiet" 
+import ChiTieuPhanToChiTiet from "@/components/Dialog/ChiTieu/ChiTieuPhanToChiTiet";
 
 export default {
   components: {
@@ -59,18 +59,18 @@ export default {
           type: "string"
         },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
-      ],
+      ]
     };
   },
   computed: {
-    ...mapState("chiTieuPhanToChiTiet", [
+    ...mapState("chitieu/chiTieuPhanToChiTiet", [
       "chiTieuPhanToChiTietList",
       "pagination"
     ])
   },
 
   asyncData({ store }) {
-    store.dispatch("chiTieuPhanToChiTiet/getChiTieuPhanToChiTietList");
+    store.dispatch("chitieu/chiTieuPhanToChiTiet/getChiTieuPhanToChiTietList");
   },
 
   created() {
@@ -78,7 +78,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("chiTieuPhanToChiTiet", [
+    ...mapActions("chitieu/chiTieuPhanToChiTiet", [
       "getChiTieuPhanToChiTietList",
       "getChiTieuPhanToChiTiet",
       "addChiTieuPhanToChiTiet",
@@ -90,7 +90,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
-      this.titleDialog = "Thêm mới chỉ tiêu phân tổ chi tiết"
+      this.titleDialog = "Thêm mới chỉ tiêu phân tổ chi tiết";
       this.chiTieuPhanToChiTiet = {
         ma: "",
         ten: "",
@@ -98,16 +98,19 @@ export default {
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
-      }
+      };
     },
     edit(item) {
-      this.chiTieuPhanToChiTiet = this.chiTieuPhanToChiTietListList.indexOf(item);
+      this.chiTieuPhanToChiTiet = this.chiTieuPhanToChiTietListList.indexOf(
+        item
+      );
       this.dialog = true;
       this.isUpdate = true;
     },
     deleted(item) {
       const index = this.chiTieuPhanToChiTietListList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.chiTieuPhanToChiTietListList.splice(index, 1);
+      confirm("Xác nhận xóa?") &&
+        this.chiTieuPhanToChiTietListList.splice(index, 1);
       this.deleteChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
     },
     closeDialog() {
@@ -117,12 +120,12 @@ export default {
     },
     saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet)
+        this.updateChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
       } else {
-        this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet)
+        this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
       }
       this.closeDialog();
-    },
+    }
   }
 };
 </script>
