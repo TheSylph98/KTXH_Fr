@@ -5,11 +5,11 @@
     :items="chiTieuPhanToChiTietList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
-      
+      <ChiTieuPhanToChiTiet :chiTieuPhanToChiTiet="chiTieuPhanToChiTiet" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
     </v-dialog>
 
     <template slot="item.operator">
@@ -32,6 +32,10 @@ export default {
     return {
       title: "Chỉ Tiêu Phân Tổ Chi Tiết",
       dialog: false,
+      isUpdate: false,
+      titleDialog: "",
+      chiTieuPhanToChiTiet: {},
+      titleDialog: "",
       headers: [
         {
           text: "Mã",
@@ -56,33 +60,13 @@ export default {
         },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        chiTieuPhanToId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        chiTieuPhanToId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
     };
   },
   computed: {
     ...mapState("chiTieuPhanToChiTiet", [
       "chiTieuPhanToChiTietList",
       "pagination"
-    ]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ])
   },
 
   asyncData({ store }) {
@@ -103,39 +87,42 @@ export default {
       "restoreChiTieuPhanToChiTiet"
     ]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
-    },
-    add() {
+    clickAddNew() {
       this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm mới chỉ tiêu phân tổ chi tiết"
+      this.chiTieuPhanToChiTiet = {
+        ma: "",
+        ten: "",
+        chiTieuPhanToId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      }
     },
     edit(item) {
-      this.addChiTieuPhanToChiTiet(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.chiTieuPhanToChiTiet = this.chiTieuPhanToChiTietListList.indexOf(item);
       this.dialog = true;
+      this.isUpdate = true;
     },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteChiTieuPhanToChiTiet(this.editedItem);
+    deleted(item) {
+      const index = this.chiTieuPhanToChiTietListList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.chiTieuPhanToChiTietListList.splice(index, 1);
+      this.deleteChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    }
+      this.isUpdate = false;
+      this.chiTieuPhanToChiTiet = {};
+    },
+    saveChiTieuDialog() {
+      if (this.isUpdate) {
+        this.updateChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet)
+      } else {
+        this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet)
+      }
+      this.closeDialog();
+    },
   }
 };
 </script>

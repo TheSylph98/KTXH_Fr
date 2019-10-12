@@ -9,7 +9,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
-      <ChiTieuPhanTo/>
+      <ChiTieuPhanTo :chiTieuPhanTo="chiTieuPhanTo" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
 
     <template slot="item.operator">
@@ -32,6 +32,9 @@ export default {
     return {
       title: "Nhóm Chỉ Tiêu Phân Tổ",
       dialog: false,
+      isUpdate: false,
+      titleDialog: "",
+      chiTieuPhanTo: {},
       headers: [
         {
           text: "Mã",
@@ -62,29 +65,11 @@ export default {
           type: ""
         }
       ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
-    };
+    }
   },
 
   computed: {
-    ...mapState("chiTieuPhanTo", ["chiTieuPhanToList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ...mapState("chiTieuPhanTo", ["chiTieuPhanToList", "pagination"])
   },
 
   asyncData({ store }) {
@@ -109,34 +94,39 @@ export default {
       if (!index) return "text-left";
       else return "text-start";
     },
-    add() {
+    clickAddNew() {
       this.dialog = true;
+      this.chiTieuPhanTo = {
+        ma: "",
+        ten: "",
+        chiTieuPhanToId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      }
     },
     edit(item) {
-      this.addKyBaoCao(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.chiTieuPhanTo = this.chiTieuPhanToListList.indexOf(item);
       this.dialog = true;
+      this.isUpdate = true;
     },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteKyBaoCao(this.editedItem);
+    deleted(item) {
+      const index = this.chiTieuPhanToListList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.chiTieuPhanToListList.splice(index, 1);
+      this.deleteChiTieuPhanTo(this.chiTieuPhanTo);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+      this.isUpdate = false;
+      this.chiTieuPhanTo = {};
+    },
+    saveChiTieuDialog() {
+      if (this.isUpdate) {
+        this.updateChiTieuPhanTo(this.chiTieuPhanTo)
+      } else {
+        this.addChiTieuPhanTo(this.chiTieuPhanTo)
+      }
+      this.closeDialog();
     }
   }
 };

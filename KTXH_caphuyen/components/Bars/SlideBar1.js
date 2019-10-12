@@ -98,7 +98,7 @@ export default [
             },
             {
                 icon: "mdi-clipboard-list-outline",
-                title: "Trường Dữ Liệu",
+                title: "Trường Nhập Liệu",
                 to: "/bieu-nhap-lieu/bieu-nhap-lieu_truong-du-lieu"
             }
         ]

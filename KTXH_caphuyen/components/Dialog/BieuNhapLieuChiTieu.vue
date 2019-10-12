@@ -1,17 +1,17 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">Thêm mới chỉ tiêu</span>
+      <span class="headline">{{ formTitle }}</span>
     </v-card-title>
 
     <v-card-text>
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="chiTieu.ma" label="Kí hiệu*"></v-text-field>
+            <v-text-field v-model="chiTieu.ma" label="Kí Hiệu*"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="chiTieu.ten" label="Tên biểu nhập liệu*"></v-text-field>
+            <v-text-field v-model="chiTieu.ten" label="Tên Biểu Nhập Liệu*"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -24,7 +24,7 @@
         </v-row>
         <!-- <v-row>
           <v-col cols="6">
-            <v-switch v-model="chiTieu.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch v-model="chiTieu.hieuLuc" class="ma-1" label="Hiệu Lực"></v-switch>
           </v-col>
            <v-col cols="6">
             <v-switch v-model="chiTieu.xoa" class="ma-1" label="Xóa"></v-switch>
@@ -60,6 +60,11 @@ export default {
           hieuLuc: 1,
           xoa: 0
       }
+    },
+
+    formTitle: {
+      type: String,
+      default: "Thêm Mới"
     }
   }
 }

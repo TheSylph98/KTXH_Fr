@@ -3,12 +3,12 @@
     :title="title"
     :headers="headers"
     :items="bnlChiTieuList"
-    @edit="edit($event)"
+    @edit="clickUpdateDialog($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <BieuNhapLieuChiTieu :chiTieu="chiTieu" @close="closeDialog" @save="saveChiTieuDialog" />
+      <BieuNhapLieuChiTieu :chiTieu="chiTieu" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
   </Table>
 </template>
@@ -28,24 +28,14 @@ export default {
       title: "Biểu Nhập Liệu Chỉ Tiêu",
       dialog: false,
       isUpdate: false,
+      titleDialog: "",
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
         { text: "Tên biểu", align: "center", value: "ten", type: "string" },
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      editedIndex: -1,
       chiTieu: {},
-    
-      defaultItem: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        chiTieuId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
     };
   },
   computed: {
@@ -75,6 +65,8 @@ export default {
 
     clickAddNew() {
       this.dialog = true
+      this.isUpdate = false
+      this.titleDialog = "Thêm chỉ tiêu mới"
       this.chiTieu = {
         ma: "",
         ten: "",
@@ -86,48 +78,62 @@ export default {
       }
     },
 
+    clickUpdateDialog() {
+      this.dialog = true
+      this.isUpdate = true
+      this.titleDialog = "Cập nhật chỉ tiêu"
+    },
+
     closeDialog() {
       this.dialog = false
+      this.isUpdate =false
       this.chiTieu = {}
     },
 
-    saveChiTieuDialog() {
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuChiTieu(this.chiTieu)
+        await this.updateBieuNhapLieuChiTieu(this.chiTieu)
       } else {
-        this.addBieuNhapLieuChiTieu(this.chiTieu)
+        await this.addBieuNhapLieuChiTieu(this.chiTieu)
       }
-    },
-  
-    edit(item) {
-      this.addBieuNhapLieuChiTieu(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+
+      this.closeDialog()
     },
 
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteBieuNhapLieuChiTieu(this.editedItem);
+    async deleted(item) {
+      const index = this.bnlChiTieuList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.bnlChiTieuList.splice(index, 1);
+      await this.deleteBieuNhapLieuChiTieu(this.chiTieu);
     },
+    // edit(item) {
+    //   this.dialog = true;
+    //   this.isUpdate = true;
+    //   this.titleDialog = "Chỉnh Sửa Biểu Nhập Liệu Kỳ Báo Cáo";
+    //   this.kyBaoCao = this.bnlKyBaoCaoList.indexOf(item);
+    // },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
+    // delete(tiem) {
+    //   const index = this.items.indexOf(item);
+    //   confirm("Xác nhận xóa?") && this.items.splice(index, 1);
+    //   this.deleteBieuNhapLieuChiTieu(this.editedItem);
+    // },
 
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    }
+    // save() {
+    //   if (this.editedIndex > -1) {
+    //     Object.assign(this.items[this.editedIndex], this.editedItem);
+    //   } else {
+    //     this.items.push(this.editedItem);
+    //   }
+    //   this.close();
+    // },
+
+    // close() {
+    //   this.dialog = false;
+    //   setTimeout(() => {
+    //     this.editedItem = Object.assign({}, this.defaultItem);
+    //     this.editedIndex = -1;
+    //   }, 300);
+    // }
   }
 };
 </script>

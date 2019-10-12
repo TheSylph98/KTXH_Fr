@@ -1,32 +1,32 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">Thêm Mới Biểu Nhập Liệu Kỳ Báo Cáo</span>
+      <span class="headline">{{ formTitle }}</span>
     </v-card-title>
 
     <v-card-text>
       <v-container>
         <v-row>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="editedItem.ma" label="Kí hiệu"></v-text-field>
+            <v-text-field v-model="kyBaoCao.ma" label="Kí hiệu"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu"></v-text-field>
+            <v-text-field v-model="kyBaoCao.ten" label="Tên biểu nhập liệu"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="editedItem.bieuNhapLieuId" label="Biểu Nhập Liệu ID"></v-text-field>
+            <v-text-field v-model="kyBaoCao.bieuNhapLieuId" label="Biểu Nhập Liệu ID"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="editedItem.qlKyBaoCaoId" label="Kỳ Báo Cáo ID"></v-text-field>
+            <v-text-field v-model="kyBaoCao.qlKyBaoCaoId" label="Kỳ Báo Cáo ID"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
+            <v-textarea v-model="kyBaoCao.ghiChu" label="Ghi Chú"></v-textarea>
           </v-col>
           <!-- <v-col cols="12" sm="6" md="8">
-            <v-switch v-model="editedItem.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-switch v-model="editedItem.xoa" class="ma-1" label="Xóa"></v-switch>
+            <v-switch v-model="kyBaoCao.xoa" class="ma-1" label="Xóa"></v-switch>
           </v-col> -->
         </v-row>
       </v-container>
@@ -34,16 +34,29 @@
 
     <v-card-actions>
       <div class="flex-grow-1"></div>
-      <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-      <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
+      <v-btn color="blue darken-1" text @click="$emit('close')">Đóng</v-btn>
+      <v-btn color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
 export default {
-    data () {
-      return {
-      
+    props: {
+      kyBaoCao: {
+        type: Object,
+        default: {
+          ma: "",
+          ten: "",
+          bieuNhapLieuId: 0,
+          qlKyBaoCaoId: 0,
+          ghiChu: "",
+          hieuLuc: 1,
+          xoa: 0
+        }
+      },
+      formTitle: {
+        type: String,
+        default: "Thêm Mới"
       }
     }
 }

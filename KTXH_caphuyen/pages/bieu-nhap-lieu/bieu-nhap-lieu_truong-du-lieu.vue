@@ -2,19 +2,15 @@
   <Table
     :title="title"
     :headers="headers"
-    :items="bnlTruongDuLieuList"
+    :items="bnlTruongNhapLieuList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <BNLTruongNhapLieu/>
+      
+      <BNLTruongNhapLieu :truongNhapLieu="bnlTruongNhapLieu" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
@@ -32,94 +28,81 @@ export default {
     return {
       title: "Biểu Nhập Liệu Trường Nhập Liệu",
       dialog: false,
+      isUpdate: false,
+      titleDialog: '',
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
         { text: "Tên biểu", align: "center", value: "ten", type: "string" },
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
-    };
+      bnlTruongNhapLieu: {},
+    }
   },
   computed: {
-    ...mapState("bieuNhapLieuTruongDuLieu", [
-      "bnlTruongDuLieuList",
+    ...mapState("bieuNhapLieuTruongNhapLieu", [
+      "bnlTruongNhapLieuList",
       "pagination"
     ]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    
   },
 
   asyncData({ store }) {
-    store.dispatch("bieuNhapLieuTruongDuLieu/getBieuNhapLieuTruongDuLieuList");
+    store.dispatch("bieuNhapLieuTruongNhapLieu/getBieuNhapLieuTruongNhapLieuList");
   },
 
   created() {
-    this.getBieuNhapLieuTruongDuLieuList();
+    this.getBieuNhapLieuTruongNhapLieuList();
   },
 
   methods: {
-    ...mapActions("bieuNhapLieuTruongDuLieu", [
-      "getBieuNhapLieuTruongDuLieuList",
-      "getBieuNhapLieuTruongDuLieu",
-      "addBieuNhapLieuTruongDuLieu",
-      "updateBieuNhapLieuTruongDuLieu",
-      "deleteBieuNhapLieuTruongDuLieu",
-      "restoreBieuNhapLieuTruongDuLieu"
+    ...mapActions("bieuNhapLieuTruongNhapLieu", [
+      "getBieuNhapLieuTruongNhapLieuList",
+      "getBieuNhapLieuTruongNhapLieu",
+      "addBieuNhapLieuTruongNhapLieu",
+      "updateBieuNhapLieuTruongNhapLieu",
+      "deleteBieuNhapLieuTruongNhapLieu",
+      "restoreBieuNhapLieuTruongNhapLieu"
     ]),
 
     getClass(index) {
       if (!index) return "text-left";
       else return "text-start";
     },
-    add() {
+    clickAddNew() {
       this.dialog = true;
+      this.titleDialog = "Thêm mới biểu nhập liệu trường dữ liệu"
+      this.bnlTruongNhapLieu = {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        truongNhapLieuId: 0,
+        ghiChu: ""
+      }
     },
     edit(item) {
-      this.addBieuNhapLieuTruongDuLieu(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.isUpdate = true;
+      this.bnlTruongNhapLieu = this.bnlTruongNhapLieuList.indexOf(item);
     },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.editedItem);
+    async deleted(item) {
+      //const index = this.bnlTruongNhapLieuList.indexOf(item);
+      confirm("Xác nhận xóa?") && await this.deleteBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    }
+      this.isUpdate = false;
+      this.bnlTruongNhapLieu = {};
+    },
+    async saveChiTieuDialog() {
+      if (this.isUpdate) {
+        await this.updateBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu)
+      } else {
+        await this.addBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu)
+      }
+      this.closeDialog();
+    },
+    
   }
 };
 </script>

@@ -32,6 +32,9 @@ export default {
     return {
       title: "Khai Báo Từ Điển: Xã",
       dialog: false,
+      isUpdate: false,
+      titleDialog: '',
+      xa: {},
       donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
       headers: [
@@ -63,43 +66,11 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        qcHuyenId: "",
-        sysCapDonViHanhChinhId: 0,
-        loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        qcHuyenId: "",
-        sysCapDonViHanhChinhId: 0,
-        loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
-    };
+      ]
+    }
   },
   computed: {
-    ...mapState("qcXa", ["xaList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
+    ...mapState("qcXa", ["xaList", "pagination"])
   },
 
   asyncData({ store }) {
@@ -124,34 +95,40 @@ export default {
       if (!index) return "text-left";
       else return "text-start";
     },
-    add() {
+    clickAddNew() {
       this.dialog = true;
+      this.truongNhapLieu = {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        truongNhapLieuId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      }
     },
     edit(item) {
-      this.addQCXa(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
       this.dialog = true;
+      this.isUpdate = true;
     },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteQCXa(this.editedItem);
+    deleted(item) {
+      const index = this.bnlTruongDuLieuList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
+      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+      this.isUpdate = false;
+      this.truongNhapLieu = {};
+    },
+    saveChiTieuDialog() {
+      if (this.isUpdate) {
+        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      } else {
+        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      }
+      this.closeDialog();
     }
   }
 };

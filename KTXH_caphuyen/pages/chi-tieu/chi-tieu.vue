@@ -5,11 +5,10 @@
     :items="chiTieuList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="1000px">
-      <template v-slot:activator="{ on }"></template>
-      <ChiTieu/>
+      <ChiTieu :chiTieu="chiTieu" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
     </v-dialog>
   </Table>
 </template>
@@ -28,10 +27,13 @@ export default {
     return {
       title: "Chỉ Tiêu Kinh Tế Xã Hội",
       dialog: false,
+      isUpdate: false,
+      titleDialog: "",
+      chiTieu: {},
       caccap: ["cấp tỉnh", "cấp huyện", "cấp xã"],
       headers: [
         {
-          text: "Nhóm CT",
+          text: "Nhóm Chỉ Tiêu",
           align: "center",
           sorttable: false,
           value: "chiTieuNhomId",
@@ -67,52 +69,11 @@ export default {
         },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        capNhapLieuId: 0,
-        capTongHopId: 0,
-        chiTieuNhomId: 0,
-        chiTieuPhanToId: 0,
-        chiTieuChaId: 0,
-        congDonTuDuoiLen: true,
-        congTheoMa: 0,
-        congThucCong: "",
-        coPhanToKhong: 1,
-        donViTinh: "",
-        tuSo: "",
-        mauSo: "",
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        capNhapLieuId: 0,
-        capTongHopId: 0,
-        chiTieuNhomId: 0,
-        chiTieuPhanToId: 0,
-        chiTieuChaId: 0,
-        congDonTuDuoiLen: true,
-        congTheoMa: 0,
-        congThucCong: "",
-        coPhanToKhong: 1,
-        donViTinh: "",
-        tuSo: "",
-        mauSo: "",
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
-    };
+      
+    }
   },
   computed: {
     ...mapState("chiTieu", ["chiTieuList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
   },
 
   asyncData({ store }) {
@@ -132,35 +93,55 @@ export default {
       "deleteChiTieu",
       "restoreChiTieu"
     ]),
-    add() {
+
+    clickAddNew() {
       this.dialog = true;
-    },
-    edit(item) {
-      this.addChiTieu(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteChiTieu(this.editedItem);
-    },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
+      this.formTitle = "Thêm chỉ tiêu mới"
+      this.chiTieu = {
+        ma: "",
+        ten: "",
+        capNhapLieuId: 0,
+        capTongHopId: 0,
+        chiTieuNhomId: 0,
+        chiTieuPhanToId: 0,
+        chiTieuChaId: 0,
+        congDonTuDuoiLen: true,
+        congTheoMa: 0,
+        congThucCong: "",
+        coPhanToKhong: 1,
+        donViTinh: "",
+        tuSo: "",
+        mauSo: "",
+        ghiChu: "",
       }
-      this.close();
     },
-    close() {
+
+    edit(item) {
+      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
+      this.dialog = true;
+      this.isUpdate = true;
+    },
+
+    deleted(item) {
+      const index = this.bnlTruongDuLieuList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
+      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+    },
+
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    }
+      this.isUpdate = false;
+      this.truongNhapLieu = {};
+    },
+
+    saveChiTieuDialog() {
+      if (this.isUpdate) {
+        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      } else {
+        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      }
+      this.closeDialog();
+    },
   }
 };
 </script>

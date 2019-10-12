@@ -2,19 +2,14 @@
   <Table
     :title="title"
     :headers="headers"
-    :items="items"
+    :items="bnlKyBaoCaoList"
     @edit="edit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <BNLKyBaoCao/>
+      <BNLKyBaoCao :kyBaoCao="kyBaoCao" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
     </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
   </Table>
 </template>
 
@@ -32,38 +27,28 @@ export default {
     return {
       title: "Biểu Nhập Liệu Kỳ Báo Cáo",
       dialog: false,
+      isUpdate: false,
+      titleDialog: "",
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
         { text: "Tên biểu", align: "center", value: "ten", type: "string" },
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        qlKyBaoCaoId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        qlKyBaoCaoId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      kyBaoCao: {},
+      // defaultItem: {
+      //   ma: "",
+      //   ten: "",
+      //   bieuNhapLieuId: 0,
+      //   qlKyBaoCaoId: 0,
+      //   ghiChu: "",
+      //   hieuLuc: 1,
+      //   xoa: 0
+      // }
     };
   },
   computed: {
     ...mapState("bieuNhapLieuKyBaoCao", ["bnlKyBaoCaoList", "pagination"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "Thêm mới" : "Cập nhật chi tiết";
-    }
   },
 
   asyncData({ store }) {
@@ -72,6 +57,8 @@ export default {
 
   created() {
     this.getBieuNhapLieuKyBaoCaoList();
+    //console.log(this.getBieuNhapLieuKyBaoCaoList())
+
   },
 
   methods: {
@@ -88,35 +75,46 @@ export default {
       if (!index) return "text-left";
       else return "text-start";
     },
-    add() {
+    clickAddNew() {
+      //console.log(bnlKyBaoCaoList);
       this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm Mới Biểu Nhập Liệu Kỳ Báo Cáo";
+      this.kyBaoCao = {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        qlKyBaoCaoId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      }
     },
     edit(item) {
-      this.addBieuNhapLieuKyBaoCao(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.isUpdate = true;
+      this.titleDialog = "Chỉnh Sửa Biểu Nhập Liệu Kỳ Báo Cáo";
+      this.kyBaoCao = this.bnlKyBaoCaoList.indexOf(item);
     },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteBieuNhapLieuKyBaoCao(this.editedItem);
+    async deleted(item) {
+      const index = this.bnlKyBaoCaoList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.bnlKyBaoCaoList.splice(index, 1);
+      await this.deleteBieuNhapLieuKyBaoCao(this.kyBaoCao);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    }
+      this.isUpdate = false;
+      this.kyBaoCao = {};
+    },
+    async saveChiTieuDialog() {
+      if (this.isUpdate) {
+        await this.updateBieuNhapLieuKyBaoCao(this.kyBaoCao)
+      } else {
+        await this.addBieuNhapLieuKyBaoCao(this.kyBaoCao)
+      }
+      this.closeDialog();
+    },
+
   }
 };
 </script>

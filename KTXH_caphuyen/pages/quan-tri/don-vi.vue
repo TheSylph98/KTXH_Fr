@@ -9,7 +9,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
-      <DonVi/>
+      <DonVi :donVi="donVi" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog"/>
     </v-dialog>
   </Table>
 </template>
@@ -26,6 +26,10 @@ export default {
   data() {
     return {
       title: "Khai Báo Đơn Vị",
+      dialog: false,
+      isUpdate: false,
+      donVi: {},
+      titleDialog: '',
       headers: [
         {
           text: "Mã đơn vị",
@@ -44,32 +48,8 @@ export default {
         { text: "Đơn vị cha", align: "center", value: "donViChaId", type: "" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      editedIndex: -1,
-      editedItem: {
-        ma: "",
-        ten: "",
-        donViChaId: 0,
-        diaChi: "",
-        soDienThoai: "",
-        email: "",
-        ghiChu: "",
-        laDonVi: false,
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: "",
-        ten: "",
-        donViChaId: 0,
-        diaChi: "",
-        soDienThoai: "",
-        email: "",
-        ghiChu: "",
-        laDonVi: false,
-        hieuLuc: 1,
-        xoa: 0
-      }
-    };
+      
+    }
   },
   computed: {
     ...mapState("qtDonVi", ["donViList", "pagination"]),
@@ -99,33 +79,41 @@ export default {
       if (!index) return "text-left";
       else return "text-start";
     },
-    add() {
+    clickAddNew() {
       this.dialog = true;
+      this.truongNhapLieu = {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        truongNhapLieuId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      }
     },
     edit(item) {
-      this.editedIndex = this.items.indexOf(item);
-      this.addQTDonVi(this.editedIndex);
+      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
       this.dialog = true;
+      this.isUpdate = true;
     },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteQTDonVi(this.editedItem);
+    deleted(item) {
+      const index = this.bnlTruongDuLieuList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
+      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        this.updateQTDonVi(this.editedItem);
-      } else {
-        this.addQTDonVi(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedIndex = -1;
-      }, 300);
-    }
+      this.isUpdate = false;
+      this.truongNhapLieu = {};
+    },
+    saveChiTieuDialog() {
+      if (this.isUpdate) {
+        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      } else {
+        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      }
+      this.closeDialog();
+    },
   }
 };
 </script>

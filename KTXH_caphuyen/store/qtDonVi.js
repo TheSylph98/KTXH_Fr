@@ -38,7 +38,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async getDonViList(
+  async getQTDonViList(
     { state, commit },
     payload = { page: 0, pageSize: 20 }
   ) {

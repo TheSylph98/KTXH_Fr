@@ -31,6 +31,9 @@ export default {
     return {
       title: "Khai Báo Quy Chuẩn: Huyện",
       dialog: false,
+      isUpdate: false,
+      titleDialog: '',
+      huyen: {},
       donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
       headers: [
@@ -123,35 +126,41 @@ export default {
       if (!index) return "text-left";
       else return "text-start";
     },
-    add() {
+    clickAddNew() {
       this.dialog = true;
+      this.truongNhapLieu = {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        truongNhapLieuId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      }
     },
     edit(item) {
-      this.addQCHuyen(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
       this.dialog = true;
+      this.isUpdate = true;
     },
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteQCHuyen(this.editedItem);
+    deleted(item) {
+      const index = this.bnlTruongDuLieuList.indexOf(item);
+      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
+      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    }
+      this.isUpdate = false;
+      this.truongNhapLieu = {};
+    },
+    saveChiTieuDialog() {
+      if (this.isUpdate) {
+        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      } else {
+        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu)
+      }
+      this.closeDialog();
+    },
   }
 };
 </script>
