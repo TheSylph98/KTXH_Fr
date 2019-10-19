@@ -6,6 +6,7 @@
     @edit="clickUpdateDialog($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getBieuNhapLieuChiTieuList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BieuNhapLieuChiTieu

@@ -1,19 +1,5 @@
 <template>
-  <v-card
-    color="red lighten-2"
-    dark
-  >
-    <v-card-title class="headline red lighten-3">
-      Search for Public APIs
-    </v-card-title>
-    <v-card-text>
-      Explore hundreds of free API's ready for consumption! For more information visit
-      <a
-        class="grey--text text--lighten-3"
-        href="https://github.com/toddmotto/public-apis"
-        target="_blank"
-      >the Github repository</a>.
-    </v-card-text>
+  <v-card color="red lighten-2" dark>
     <v-card-text>
       <v-autocomplete
         v-model="model"
@@ -34,10 +20,7 @@
     <v-divider></v-divider>
     <v-expand-transition>
       <v-list v-if="model" class="red lighten-3">
-        <v-list-item
-          v-for="(field, i) in fields"
-          :key="i"
-        >
+        <v-list-item v-for="(field, i) in fields" :key="i">
           <v-list-item-content>
             <v-list-item-title v-text="field.value"></v-list-item-title>
             <v-list-item-subtitle v-text="field.key"></v-list-item-subtitle>
@@ -47,73 +30,78 @@
     </v-expand-transition>
     <v-card-actions>
       <div class="flex-grow-1"></div>
-      <v-btn
-        :disabled="!model"
-        color="grey darken-3"
-        @click="model = null"
-      >
+      <v-btn :disabled="!model" color="grey darken-3" @click="model = null">
         Clear
         <v-icon right>mdi-close-circle</v-icon>
       </v-btn>
     </v-card-actions>
+
+    <SelectedWithSearch />
   </v-card>
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      descriptionLimit: 60,
-      entries: [],
-      isLoading: false,
-      model: null,
-      search: null,
-    }),
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
 
-    computed: {
-      fields () {
-        if (!this.model) return []
+export default {
+  components: {
+    SelectedWithSearch
+  },
 
-        return Object.keys(this.model).map(key => {
-          return {
-            key,
-            value: this.model[key] || 'n/a',
-          }
-        })
-      },
-      items () {
-        return this.entries.map(entry => {
-          const Description = entry.Description.length > this.descriptionLimit
-            ? entry.Description.slice(0, this.descriptionLimit) + '...'
-            : entry.Description
+  data: () => ({
+    descriptionLimit: 60,
+    entries: [],
+    isLoading: false,
+    model: null,
+    search: null
+  }),
 
-          return Object.assign({}, entry, { Description })
-        })
-      },
+  computed: {
+    fields() {
+      if (!this.model) return [];
+
+      return Object.keys(this.model).map(key => {
+        return {
+          key,
+          value: this.model[key] || "n/a"
+        };
+      });
     },
+    items() {
+      return this.entries.map(entry => {
+        const Description =
+          entry.Description.length > this.descriptionLimit
+            ? entry.Description.slice(0, this.descriptionLimit) + "..."
+            : entry.Description;
 
-    watch: {
-      search (val) {
-        // Items have already been loaded
-        if (this.items.length > 0) return
+        return Object.assign({}, entry, { Description });
+      });
+    }
+  },
 
-        // Items have already been requested
-        if (this.isLoading) return
+  watch: {
+    search(val) {
+      // Items have already been loaded
+      if (this.items.length > 0) return;
 
-        this.isLoading = true
+      // Items have already been requested
+      if (this.isLoading) return;
 
-        // Lazily load input items
-        fetch('https://api.publicapis.org/entries')
-          .then(res => res.json())
-          .then(res => {
-            const { count, entries } = res
-            this.count = count
-            this.entries = entries
-          })
-          .catch(err => {
-            console.log(err)
-          })
-          .finally(() => (this.isLoading = false))
-      },
-    },
+      this.isLoading = true;
+
+      // Lazily load input items
+      fetch("https://api.publicapis.org/entries")
+        .then(res => res.json())
+        .then(res => {
+          const { count, entries } = res;
+          this.count = count;
+          this.entries = entries;
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => (this.isLoading = false));
+    }
   }
+};
 </script>

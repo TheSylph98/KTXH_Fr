@@ -2,7 +2,7 @@ export const stringOperators = [
   {
     label: 'Bắt đầu bằng',
     filter: (text) => {
-      return { like: `/${text}*/` }
+      return { like: new RegExp(`${text}*`) }
     },
     operator: 'begins-with'
   },

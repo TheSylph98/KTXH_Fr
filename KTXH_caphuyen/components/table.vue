@@ -24,15 +24,23 @@
           <td></td>
           <td v-for="(item, index) in headerTables" :key="index" :class="getClass(index)">
             <div v-if="item.value === 'index'"></div>
-            <div v-else-if="item.value === 'action'">Lọc</div>
-            <StringFilter v-if="item.type === 'string'" @change="filterChange($event, item.value)" />
+            <div v-else-if="item.value === 'action'">
+              <v-btn color="warning" dark rounded small @click="$emit('filter', search)">Lọc</v-btn>
+            </div>
+            <StringFilter
+              v-if="item.type === 'string'"
+              @change="filterChange($event, item.value)"
+              @enter="$emit('filter', search)"
+            />
             <NumberFilter
               v-else-if="item.type === 'number'"
               @change="filterChange($event, item.value)"
+              @enter="$emit('filter', search)"
             />
             <DateFilter
               v-else-if="item.type === 'date'"
               @change="filterChange($event, item.value)"
+              @enter="$emit('filter', search)"
             />
             <div v-else></div>
           </td>
@@ -50,14 +58,14 @@
             <span v-else-if="el.value === 'action'">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                  <v-icon small v-on="on" class="mr-2" @click="$emit('edit', item)">mdi-pencil</v-icon>
                 </template>
                 <span>Chỉnh sửa</span>
               </v-tooltip>
 
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" @click="deleteItem(item)">mdi-delete</v-icon>
+                  <v-icon small v-on="on" @click="$emit('delete', item)">mdi-delete</v-icon>
                 </template>
                 <span>Xóa</span>
               </v-tooltip>
@@ -129,13 +137,6 @@ export default {
   },
 
   methods: {
-    editItem(item) {
-      this.$emit("edit", item);
-    },
-    deleteItem(item) {
-      this.$emit("delete", item);
-    },
-
     getClass(index) {
       if (!index) return "text-left";
       else return "text-start";
@@ -143,8 +144,9 @@ export default {
 
     filterChange(eValue, el) {
       this.search[el] = eValue;
-      console.log("search", this.search);
-    }
+    },
+
+    clickFilter() {}
   }
 };
 </script>
