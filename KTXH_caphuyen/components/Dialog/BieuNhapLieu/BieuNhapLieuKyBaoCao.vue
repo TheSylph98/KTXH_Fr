@@ -27,7 +27,7 @@
           </v-col>
           <v-col cols="12" sm="6" md="8">
             <v-switch v-model="kyBaoCao.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col> -->
+          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>
@@ -39,25 +39,26 @@
     </v-card-actions>
   </v-card>
 </template>
+
 <script>
 export default {
-    props: {
-      kyBaoCao: {
-        type: Object,
-        default: {
-          ma: "",
-          ten: "",
-          bieuNhapLieuId: 0,
-          qlKyBaoCaoId: 0,
-          ghiChu: "",
-          hieuLuc: 1,
-          xoa: 0
-        }
-      },
-      formTitle: {
-        type: String,
-        default: "Thêm Mới"
+  props: {
+    kyBaoCao: {
+      type: Object,
+      default: {
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 0,
+        qlKyBaoCaoId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
       }
+    },
+    formTitle: {
+      type: String,
+      default: "Thêm Mới"
     }
-}
+  }
+};
 </script>

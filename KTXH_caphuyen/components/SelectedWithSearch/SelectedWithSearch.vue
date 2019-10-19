@@ -49,7 +49,7 @@ export default {
 
     icon: {
       type: String,
-      default: "mdi-search"
+      default: "mdi-magnify-outline"
     },
 
     time: {

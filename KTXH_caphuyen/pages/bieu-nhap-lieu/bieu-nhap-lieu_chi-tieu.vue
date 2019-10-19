@@ -57,8 +57,9 @@ export default {
     );
   },
 
-  created() {
+  mounted() {
     this.getBieuNhapLieuChiTieuList();
+    this.getBieuNhapLieuList();
   },
 
   methods: {
@@ -70,6 +71,7 @@ export default {
       "deleteBieuNhapLieuChiTieu",
       "restoreBieuNhapLieuChiTieu"
     ]),
+    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getBieuNhapLieuList"]),
 
     clickAddNew() {
       this.dialog = true;

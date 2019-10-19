@@ -16,7 +16,12 @@
         </v-row>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="chiTieu.bieuNhapLieuId" label="Biểu Nhập Liệu ID*"></v-text-field>
+            <SelectedWithSearch
+              :items="bieuNhapLieuList"
+              label="Biểu nhập liệu"
+              @select="chiTieu.bieuNhapLieuId = $event.id"
+              @search="getSearchBieuNhapLieuList($event)"
+            />
           </v-col>
           <v-col cols="6">
             <v-text-field v-model="chiTieu.chiTieuId" label="Chi Tiêu ID*"></v-text-field>
@@ -29,9 +34,9 @@
            <v-col cols="6">
             <v-switch v-model="chiTieu.xoa" class="ma-1" label="Xóa"></v-switch>
           </v-col>
-        </v-row> -->
+        </v-row>-->
         <v-row>
-            <v-col cols="12">
+          <v-col cols="12">
             <v-textarea v-model="chiTieu.ghiChu" label="Ghi Chú"></v-textarea>
           </v-col>
         </v-row>
@@ -47,18 +52,25 @@
 </template>
 
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
+
   props: {
     chiTieu: {
       type: Object,
       default: {
-          ma: "",
-          ten: "",
-          bieuNhapLieuId: 0,
-          chiTieuId: 0,
-          ghiChu: "",
-          hieuLuc: 1,
-          xoa: 0
+        ma: "",
+        ten: "",
+        bieuNhapLieuId: 1,
+        chiTieuId: 1,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
       }
     },
 
@@ -66,6 +78,18 @@ export default {
       type: String,
       default: "Thêm Mới"
     }
+  },
+
+  computed: {
+    ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
+    bieuNhapLieuList() {
+      if (this.searchBnlList.length > 0) return this.searchBnlList;
+      else return this.bnlList;
+    }
+  },
+
+  methods: {
+    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getSearchBieuNhapLieuList"])
   }
-}
+};
 </script>
