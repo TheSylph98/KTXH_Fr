@@ -8,7 +8,12 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="xa.qcHuyenId" label="ID Huyện"></v-text-field>
+                <SelectedWithSearch
+                :items="huyenList"
+                label="Huyện"
+                @select="xa.qcHuyenId = $event.id"
+                @search="getSearchHuyenList($event)"
+                />
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field v-model="xa.ma" label="Mã xã"></v-text-field>
@@ -69,30 +74,49 @@
         </v-card-actions>
     </v-card>
 </template>
+
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
-    props: {
-      xa: {
-        type: Object,
-        default: {
-          ma: "",
-          ten: "",
-          qcHuyenId: "",
-          sysCapDonViHanhChinhId: 0,
-          loaiDonViHanhChinh: "",
-          nongThon: 1,
-          bienGioi: 0,
-          haiDao: 0,
-          vungDBKhoKhan: 0,
-          ghiChu: "",
-          hieuLuc: 1,
-          xoa: 0
-        }
-      },
-      formTitle: {
-        type: String,
-        default: "Thêm Mới"
+  components: {
+    SelectedWithSearch
+  },
+  props: {
+    xa: {
+      type: Object,
+      default: {
+        ma: "",
+        ten: "",
+        qcHuyenId: "",
+        sysCapDonViHanhChinhId: 0,
+        loaiDonViHanhChinh: "",
+        nongThon: 1,
+        bienGioi: 0,
+        haiDao: 0,
+        vungDBKhoKhan: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
       }
+    },
+    donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
+    loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
+    formTitle: {
+      type: String,
+      default: "Thêm Mới"
     }
+  },
+  computed: {
+    ...mapState("quychuan/huyen", ["huyenList","searchHuyenList"]),
+    huyenList() {
+      if (this.searchHuyenList.length > 0) return this.searchHuyenList;
+      else return this.huyenList;
+    },
+  },
+  methods: {
+    ...mapActions("quychuan/huyen", ["getSearchHuyenList"])
+  }
 }
 </script>

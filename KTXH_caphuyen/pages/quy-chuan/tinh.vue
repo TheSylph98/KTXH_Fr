@@ -68,21 +68,20 @@ export default {
   },
 
   asyncData({ store }) {
-    store.dispatch("quychuan/qcTinh/getQCTinhList");
+    store.dispatch("quychuan/qcTinh/getTinhList");
   },
-
   created() {
-    this.getQCTinhList();
+    this.getTinhList();
   },
 
   methods: {
     ...mapActions("quychuan/qcTinh", [
-      "getQCTinhList",
-      "getQCTinh",
-      "addQCTinh",
-      "updateQCTinh",
-      "deleteQCTinh",
-      "restoreQCTinh"
+      "getTinhList",
+      "getTinh",
+      "addTinh",
+      "updateTinh",
+      "deleteTinh",
+      "restoreTinh"
     ]),
 
     clickAddNew() {

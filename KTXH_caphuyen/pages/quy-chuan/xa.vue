@@ -69,22 +69,24 @@ export default {
   },
 
   asyncData({ store }) {
-    store.dispatch("quychuan/qcXa/getQCXaList");
+    store.dispatch("quychuan/qcXa/getXaList");
   },
 
   created() {
-    this.getQCXaList();
+    this.getXaList();
+    this.getHuyenList();
   },
 
   methods: {
     ...mapActions("quychuan/qcXa", [
-      "getQCXaList",
-      "getQCXa",
-      "addQCXa",
-      "updateQCXa",
-      "deleteQCXa",
-      "restoreQCXa"
+      "getXaList",
+      "getXa",
+      "addXa",
+      "updateXa",
+      "deleteXa",
+      "restoreXa"
     ]),
+    ...mapActions("quychuan/huyen", ["getHuyenList"]),
 
     clickAddNew() {
       this.dialog = true;

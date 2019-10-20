@@ -74,22 +74,24 @@ export default {
   },
 
   asyncData({ store }) {
-    store.dispatch("quychuan/qcHuyen/getQCHuyenList");
+    store.dispatch("quychuan/qcHuyen/getHuyenList");
   },
 
   created() {
-    this.getQCHuyenList();
+    this.getHuyenList();
+    this.getTinhList()
   },
 
   methods: {
     ...mapActions("quychuan/qcHuyen", [
-      "getQCHuyenList",
-      "getQCHuyen",
-      "addQCHuyen",
-      "updateQCHuyen",
-      "deleteQCHuyen",
-      "restoreQCHuyen"
+      "getHuyenList",
+      "getHuyen",
+      "addHuyen",
+      "updateHuyen",
+      "deleteHuyen",
+      "restoreHuyen"
     ]),
+    ...mapActions("quychuan/tinh", ["getTinhList"]),
 
     clickAddNew() {
       this.dialog = true;

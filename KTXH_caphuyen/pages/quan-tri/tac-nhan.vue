@@ -78,6 +78,7 @@ export default {
 
   created() {
     this.getQTTacNhanList();
+    this.getCapHanhChinhList();
   },
 
   methods: {
@@ -89,14 +90,14 @@ export default {
       "deleteQTTacNhan",
       "restoreQTTacNhan"
     ]),
+    ...mapActions("sys/sysCapHanhChinh", ["getCapHanhChinhList"]),
 
     clickAddNew() {
       this.dialog = true;
       this.tacNhan = {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        tacNhanId: 0,
+        sysCapHanhChinhId: 0,
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0

@@ -25,18 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_BIEU_NHAP_LIEU_LIST: set('bnlList'),
+
   SET_SEARCH_BIEU_NHAP_LIEU_LIST: set('searchBnlList'),
+
   SET_DELETED_BIEU_NHAP_LIEU: set('deletedbnlList'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_BIEU_NHAP_LIEU: set('bnl'),
+  SET_BIEU_NHAP_LIEU: set('bnlList'),
 
-  ADD_BIEU_NHAP_LIEU: add('bieuNhapLieu'),
+  ADD_BIEU_NHAP_LIEU: add('bnlList'),
 
-  UPDATE_BIEU_NHAP_LIEU: update('bieuNhapLieu'),
+  UPDATE_BIEU_NHAP_LIEU: update('bnlList'),
 
-  DELETE_BIEU_NHAP_LIEU: remove('bieuNhapLieu'),
+  DELETE_BIEU_NHAP_LIEU: remove('bnlList'),
 }
 
 export const actions = {
@@ -50,15 +54,14 @@ export const actions = {
       const data = await this.$axios.$post(`${bieuNhapLieu}/list`, {
         page: payload.page,
         pageSize: payload.pageSize
-
       })
 
-      console.log("data", data.rows)
-      commit('SET_BIEU_NHAP_LIEU_LIST', data.rows)
+      console.log("data", data.data.rows)
+      commit('SET_BIEU_NHAP_LIEU_LIST', data.data.rows)
       commit('SET_PAGINATION', {
-        total: data.total,
-        page: data.page,
-        pageSize: data.pageSize
+        total: data.data.total,
+        page: data.data.page,
+        pageSize: data.data.pageSize
       })
     } catch (err) {
       console.log('getBieuNhapLieuList', err)
@@ -79,7 +82,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieu}/list`, queryData)
 
-      commit('SET_SEARCH_BIEU_NHAP_LIEU_LIST', data.rows)
+      commit('SET_SEARCH_BIEU_NHAP_LIEU_LIST', data.data.rows)
     } catch (err) {
       console.log('getSearchBieuNhapLieuList', err)
     }

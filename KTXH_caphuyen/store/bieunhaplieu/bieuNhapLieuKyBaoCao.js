@@ -12,6 +12,7 @@ export const state = () => {
       bieuNhapLieuKyBaoCao: '/api/v2/crud/bieunhaplieu-kybaocao'
     },
     bnlKyBaoCaoList: [],
+    searchBnlKyBaoCaoList: [],
     deletedbnlKyBaoCaoList: [],
     bnlKyBaoCao: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_BIEU_NHAP_LIEU_KY_BAO_CAO_LIST: set('bnlKyBaoCaoList'),
-  SET_DELETED_BIEU_NHAP_LIEU_CHI_TIEU: set('deletedbnlKyBaoCaoList'),
+
+  SET_SEARCH_BIEU_NHAP_LIEU_KY_BAO_CAO_LIST: set('searchBnlKyBaoCaoList'),
+
+  SET_DELETED_BIEU_NHAP_LIEU_KY_BAO_CAO: set('deletedbnlKyBaoCaoList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_BIEU_NHAP_LIEU_KY_BAO_CAO: set('bnlKyBaoCao'),
+  SET_BIEU_NHAP_LIEU_KY_BAO_CAO: set('bnlKyBaoCaoList'),
 
-  ADD_BIEU_NHAP_LIEU_KY_BAO_CAO: add('bieuNhapLieuKyBaoCao'),
+  ADD_BIEU_NHAP_LIEU_KY_BAO_CAO: add('bnlKyBaoCaoList'),
 
-  UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO: update('bieuNhapLieuKyBaoCao'),
+  UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO: update('bnlKyBaoCaoList'),
 
-  DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: remove('bieuNhapLieuKyBaoCao'),
+  DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: remove('bnlKyBaoCaoList'),
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getBieuNhapLieuKyBaoCaoList', err)
+    }
+  },
+
+  async getSearchBieuNhapLieuKyBaoCaoList(
+    { state, commit },
+    text
+  ) {
+    const { bieuNhapLieuKyBaoCao } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/list`, queryData)
+
+      commit('SET_SEARCH_BIEU_NHAP_LIEU_KY_BAO_CAO_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchBieuNhapLieuKyBaoCaoList', err)
     }
   },
 

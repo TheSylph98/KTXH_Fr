@@ -14,17 +14,22 @@
                 <v-text-field v-model="tacNhan.ten" label="Tên tác nhân"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="tacNhan.sysCapHanhChinhId" label="Cấp hành chính"></v-text-field>
+                <SelectedWithSearch
+                :items="capHanhChinhList"
+                label="Cấp hành chính"
+                @select="tacNhan.sysCapHanhChinhId = $event.id"
+                @search="getSearchCapHanhChinhList($event)"
+                />
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-textarea v-model="tacNhan.ghiChu" label="Chức năng, Nhiệm vụ"></v-textarea>
               </v-col>
-              <v-col cols="12" sm="6" md="8">
+              <!-- <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="tacNhan.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
               </v-col>
               <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="tacNhan.xoa" class="ma-1" label="Xóa"></v-switch>
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-container>
         </v-card-text>
@@ -36,8 +41,15 @@
         </v-card-actions>
     </v-card>
 </template>
+
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     tacNhan: {
       type: Object,
@@ -54,6 +66,17 @@ export default {
       type: String,
       default: "Thêm Mới"
     }
+  },
+  computed: {
+    ...mapState("sys/sysCapHanhChinh", ["caphanhchinhList","searchCapHanhChinhList"]),
+    capHanhChinhList() {
+    //console.log(this.bnlList)
+      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+      else return this.caphanhchinhList;
+      },
+  },
+  methods: {
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
   }
 }
 </script>

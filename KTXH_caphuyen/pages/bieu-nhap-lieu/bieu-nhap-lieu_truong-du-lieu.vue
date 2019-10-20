@@ -58,6 +58,8 @@ export default {
 
   created() {
     this.getBieuNhapLieuTruongNhapLieuList();
+    this.getBieuNhapLieuList();
+    this.getTruongNhaplieuList();
   },
 
   methods: {
@@ -69,10 +71,12 @@ export default {
       "deleteBieuNhapLieuTruongNhapLieu",
       "restoreBieuNhapLieuTruongNhapLieu"
     ]),
+    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getBieuNhapLieuList"]),
+    ...mapActions("truongNhapLieu", ["getTruongNhaplieuList"]),
 
     clickAddNew() {
       this.dialog = true;
-      this.titleDialog = "Thêm mới biểu nhập liệu trường dữ liệu";
+      this.titleDialog = "Thêm mới biểu nhập liệu trường nhập liệu";
       this.bnlTruongNhapLieu = {
         ma: "",
         ten: "",

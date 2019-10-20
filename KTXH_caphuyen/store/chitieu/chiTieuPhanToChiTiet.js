@@ -12,6 +12,7 @@ export const state = () => {
       chiTieuPhanToChiTiet: '/api/v2/crud/chitieuphantochitiet'
     },
     chiTieuPhanToChiTietList: [],
+    searchChiTieuPhanToChiTietList: [],
     deletedChiTieuPhanToChiTietList: [],
     chi_tieu_phan_to_chi_tiet: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_CHI_TIEU_PHAN_TO_CHI_TIET_LIST: set('chiTieuPhanToChiTietList'),
+
+  SET_SEARCH_CHI_TIEU_PHAN_TO_CHI_TIET_LIST: set('searchChiTieuPhanToChiTietList'),
+
   SET_DELETED_CHI_TIEU_PHAN_TO_CHI_TIET: set('deletedChiTieuPhanToChiTietList'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_CHI_TIEU_PHAN_TO_CHI_TIET: set('chi_tieu_phan_to_chi_tiet'),
+  SET_CHI_TIEU_PHAN_TO_CHI_TIET: set('chiTieuPhanToChiTietList'),
 
-  ADD_CHI_TIEU_PHAN_TO_CHI_TIET: add('chiTieuPhanToChiTiet'),
+  ADD_CHI_TIEU_PHAN_TO_CHI_TIET: add('chiTieuPhanToChiTietList'),
 
-  UPDATE_CHI_TIEU_PHAN_TO_CHI_TIET: update('chiTieuPhanToChiTiet'),
+  UPDATE_CHI_TIEU_PHAN_TO_CHI_TIET: update('chiTieuPhanToChiTietList'),
 
-  DELETE_CHI_TIEU_PHAN_TO_CHI_TIET: remove('chiTieuPhanToChiTiet')
+  DELETE_CHI_TIEU_PHAN_TO_CHI_TIET: remove('chiTieuPhanToChiTietList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getChiTieuPhanToChiTietList', err)
+    }
+  },
+
+  async getSearchChiTieuPhanToChiTietList(
+    { state, commit },
+    text
+  ) {
+    const { chiTieuPhanToChiTiet } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${chiTieuPhanToChiTiet}/list`, queryData)
+
+      commit('SET_SEARCH_CHI_TIEU_PHAN_TO_CHI_TIET_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchChiTieuPhanToChiTietList', err)
     }
   },
 

@@ -12,6 +12,7 @@ export const state = () => {
       qtTacNhan: '/api/v2/crud/qttacnhan'
     },
     tacNhanList: [],
+    searchTacNhanList: [],
     deletedTacNhanList: [],
     tacNhan: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_TAC_NHAN_LIST: set('tacNhanList'),
+
+  SET_SEARCH_TAC_NHAN_LIST: set('searchTacNhanList'),
+
   SET_DELETED_TAC_NHAN: set('deletedTacNhanList'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_TAC_NHAN: set('tacNhan'),
+  SET_TAC_NHAN: set('tacNhanList'),
 
-  ADD_TAC_NHAN: add('qtTacNhan'),
+  ADD_TAC_NHAN: add('tacNhanList'),
 
-  UPDATE_TAC_NHAN: update('qtTacNhan'),
+  UPDATE_TAC_NHAN: update('tacNhanList'),
 
-  DELETE_TAC_NHAN: remove('qtTacNhan')
+  DELETE_TAC_NHAN: remove('tacNhanList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getTacNhanList', err)
+    }
+  },
+
+  async getSearchTacNhanList(
+    { state, commit },
+    text
+  ) {
+    const { tacNhan } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${tacNhan}/list`, queryData)
+
+      commit('SET_SEARCH_TAC_NHAN_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchTacNhanList', err)
     }
   },
 

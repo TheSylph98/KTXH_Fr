@@ -12,6 +12,7 @@ export const state = () => {
       bieuNhapLieuTruongNhapLieu: '/api/v2/crud/bieunhaplieu-truongnhaplieu'
     },
     bnlTruongNhapLieuList: [],
+    searchBnlTruongNhapLieuList: [],
     deletedbnlTruongNhapLieuList: [],
     bnlTruongNhapLieu: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU_LIST: set('bnlTruongNhapLieuList'),
+
+  SET_SEARCH_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU_LIST: set('searchBnlTruongNhapLieuList'),
+
   SET_DELETED_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: set('deletedbnlTruongNhapLieuList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: set('bnlTruongNhapLieu'),
+  SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: set('bnlTruongNhapLieuList'),
 
-  ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: add('bieuNhapLieuTruongNhapLieu'),
+  ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: add('bnlTruongNhapLieuList'),
 
-  UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: update('bieuNhapLieuTruongNhapLieu'),
+  UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: update('bnlTruongNhapLieuList'),
 
-  DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: remove('bieuNhapLieuTruongNhapLieu')
+  DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: remove('bnlTruongNhapLieuList')
 }
 
 export const actions = {
@@ -63,6 +69,26 @@ export const actions = {
     }
   },
 
+  async getSearchBieuNhapLieuTruongNhapLieuList(
+    { state, commit },
+    text
+  ) {
+    const { bieuNhapLieuTruongNhapLieu } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/list`, queryData)
+
+      commit('SET_SEARCH_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchBieuNhapLieuTruongNhapLieuList', err)
+    }
+  },
+
   async getDeletedBieuNhapLieuTruongNhapLieuList(
     { state, commit },
     payload = { page: 0, pageSize: 20 }
@@ -78,7 +104,7 @@ export const actions = {
 
       commit('SET_DELETED_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data.data.rows)
     } catch (err) {
-      console.log('getBieuNhapLieuTruongNhapLieuList', err)
+      console.log('getDeletedBieuNhapLieuTruongNhapLieuList', err)
     }
   },
 

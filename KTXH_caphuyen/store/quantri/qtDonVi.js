@@ -12,6 +12,7 @@ export const state = () => {
       qtDonVi: '/api/v2/crud/qtdonvi'
     },
     donViList: [],
+    searchDonVi: [],
     deletedDonViList: [],
     donVi: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_DON_VI_LIST: set('donViList'),
+
+  SET_SEARCH_DON_VI_LIST: set('searchDonVi'),
+
   SET_DELETED_DON_VI: set('deletedDonViList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_DON_VI: set('donVi'),
+  SET_DON_VI: set('donViList'),
 
-  ADD_DON_VI: add('qtDonVi'),
+  ADD_DON_VI: add('donViList'),
 
-  UPDATE_DON_VI: update('qtDonVi'),
+  UPDATE_DON_VI: update('donViList'),
 
-  DELETE_DON_VI: remove('qtDonVi'),
+  DELETE_DON_VI: remove('donViList'),
 }
 
 export const actions = {
@@ -59,7 +65,27 @@ export const actions = {
         pageSize: data.pageSize
       })
     } catch (err) {
-      console.log('getDonViList', err)
+      console.log('getQTDonViList', err)
+    }
+  },
+
+  async getSearchDonViList(
+    { state, commit },
+    text
+  ) {
+    const { donVi } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${donVi}/list`, queryData)
+
+      commit('SET_SEARCH_DON_VI_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchDonViList', err)
     }
   },
 

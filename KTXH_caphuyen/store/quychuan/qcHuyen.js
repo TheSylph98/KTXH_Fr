@@ -12,6 +12,7 @@ export const state = () => {
       qcHuyen: '/api/v2/crud/qchuyen'
     },
     huyenList: [],
+    searchHuyenList: [],
     deletedHuyenList: [],
     huyen: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_HUYEN_LIST: set('huyenList'),
+
+  SET_SEARCH_HUYEN_LIST: set('searchHuyenList'),
+
   SET_DELETED_HUYEN: set('deletedHuyen'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_HUYEN: set('huyen'),
+  SET_HUYEN: set('huyenList'),
 
-  ADD_HUYEN: add('qcHuyen'),
+  ADD_HUYEN: add('huyenList'),
 
-  UPDATE_HUYEN: update('qcHuyen'),
+  UPDATE_HUYEN: update('huyenList'),
 
-  DELETE_HUYEN: remove('qcHuyen')
+  DELETE_HUYEN: remove('huyenList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getHuyenList', err)
+    }
+  },
+
+  async getSearchHuyenList(
+    { state, commit },
+    text
+  ) {
+    const { qcHuyen } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${qcHuyen}/list`, queryData)
+
+      commit('SET_SEARCH_HUYEN_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchHuyenList', err)
     }
   },
 

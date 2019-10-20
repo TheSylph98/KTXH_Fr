@@ -77,6 +77,8 @@ export default {
         ghiChu: ""
       }
     },
+    donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
+    loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
     formTitle: {
       type: String,
       default: "Thêm Mới"

@@ -24,7 +24,12 @@
             />
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="chiTieu.chiTieuId" label="Chi Tiêu ID*"></v-text-field>
+            <SelectedWithSearch
+              :items="chiTieuList"
+              label="Chỉ Tiêu"
+              @select="chiTieu.chiTieuId = $event.id"
+              @search="getSearchChiTieuList($event)"
+            />
           </v-col>
         </v-row>
         <!-- <v-row>
@@ -79,17 +84,27 @@ export default {
       default: "Thêm Mới"
     }
   },
+  // mounted() {
+  //  console.log("bnl", this.bnlList)
+  // },
 
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
+    ...mapState("chitieu/chiTieu", ["chiTieuList","searchChiTieuList"]),
     bieuNhapLieuList() {
+      //console.log(this.bnlList)
       if (this.searchBnlList.length > 0) return this.searchBnlList;
       else return this.bnlList;
+    },
+    chiTieuList() {
+      if (this.searchChiTieuList.length > 0) return this.searchChiTieuList;
+      else return this.chiTieuList;
     }
   },
 
   methods: {
-    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getSearchBieuNhapLieuList"])
+    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getSearchBieuNhapLieuList"]),
+    ...mapActions("chitieu/chiTieu", ["getSearchChiTieuList"])
   }
 };
 </script>

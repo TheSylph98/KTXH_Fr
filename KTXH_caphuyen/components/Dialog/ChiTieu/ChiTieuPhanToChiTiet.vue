@@ -8,16 +8,21 @@
             <v-container>
             <v-row>
                 <v-col cols="6">
-                <v-text-field v-model="chiTieuPhanToChiTiet.ma" label="Kí hiệu*"></v-text-field>
+                    <v-text-field v-model="chiTieuPhanToChiTiet.ma" label="Kí hiệu*"></v-text-field>
                 </v-col>
                 <v-col cols="6">
-                <v-text-field v-model="chiTieuPhanToChiTiet.ten" label="Tên biểu nhập liệu*"></v-text-field>
+                    <v-text-field v-model="chiTieuPhanToChiTiet.ten" label="Tên biểu nhập liệu*"></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                <v-text-field v-model="chiTieuPhanToChiTiet.chiTieuPhanToId" label="Chỉ Tiêu Phân Tổ*"></v-text-field>
+                    <SelectedWithSearch
+                    :items="chiTieuPhanToList"
+                    label="Chỉ tiêu phân tổ"
+                    @select="chiTieuPhanToChiTiet.chiTieuPhanToId = $event.id"
+                    @search="getSearchChiTieuPhanToList($event)"
+                    />
                 </v-col>
                 <v-col cols="12">
-                <v-textarea v-model="chiTieuPhanToChiTiet.ghiChu" label="Ghi Chú"></v-textarea>
+                    <v-textarea v-model="chiTieuPhanToChiTiet.ghiChu" label="Ghi Chú"></v-textarea>
                 </v-col>
                 <!-- <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="chiTieuPhanToChiTiet.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
@@ -37,7 +42,13 @@
     </v-card>
 </template>
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+    components: {
+        SelectedWithSearch
+    },
     props: {
         chiTieuPhanToChiTiet: {
             type: Object,
@@ -54,6 +65,17 @@ export default {
             type: String,
             default: "Thêm Mới"
         }
+    },
+    computed: {
+        ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList","searchChiTieuNhomList"]),
+        chiTieuPhanToList() {
+        //console.log(this.bnlList)
+            if (this.searchChiTieuNhomList.length > 0) return this.searchChiTieuNhomList;
+            else return this.chiTieuPhanToList;
+            },
+    },
+    methods: {
+        ...mapActions("chitieu/chiTieuPhanTo", ["getSearchChiTieuPhanToList"])
     }
 }
 </script>

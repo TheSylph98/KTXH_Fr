@@ -12,6 +12,7 @@ export const state = () => {
       qlKyBaoCao: '/api/v2/crud/qlkybaocao'
     },
     kyBaoCaoList: [],
+    searchKyBaoCaoList: [],
     deletedKyBaoCaoList: [],
     kyBaoCao: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_KY_BAO_CAO_LIST: set('kyBaoCaoList'),
+
+  SET_SEARCH_KY_BAO_CAO_LIST: set('searchKyBaoCaoList'),
+
   SET_DELETED_KY_BAO_CAO: set('deletedKyBaoCao'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_KY_BAO_CAO: set('kyBaoCao'),
+  SET_KY_BAO_CAO: set('kyBaoCaoList'),
 
-  ADD_KY_BAO_CAO: add('qlKyBaoCao'),
+  ADD_KY_BAO_CAO: add('kyBaoCaoList'),
 
-  UPDATE_KY_BAO_CAO: update('qlKyBaoCao'),
+  UPDATE_KY_BAO_CAO: update('kyBaoCaoList'),
 
-  DELETE_KY_BAO_CAO: remove('qlKyBaoCao')
+  DELETE_KY_BAO_CAO: remove('kyBaoCaoList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getKyBaoCaoList', err)
+    }
+  },
+
+  async getSearchKyBaoCaoList(
+    { state, commit },
+    text
+  ) {
+    const { qlKyBaoCao } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${qlKyBaoCao}/list`, queryData)
+
+      commit('SET_SEARCH_KY_BAO_CAO_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchKyBaoCaoList', err)
     }
   },
 

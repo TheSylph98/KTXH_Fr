@@ -23,7 +23,12 @@
             <v-text-field v-model="user.email" label="Email"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.qtDonViId" label="Đơn vị"></v-text-field>
+            <SelectedWithSearch
+            :items="donViList"
+            label="Đơn vị"
+            @select="user.qtDonViId = $event.id"
+            @search="getSearchDonViList($event)"
+            />
           </v-col>
           <v-col cols="12" sm="6" md="8">
             <v-text-field v-model="user.ghiChu" label="Ghi Chú"></v-text-field>
@@ -45,8 +50,15 @@
     </v-card-actions>
   </v-card>
 </template>
+
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     user: {
       type: Object,
@@ -63,6 +75,17 @@ export default {
       type: String,
       default: "Thêm Mới"
     }
+  },
+  computed: {
+    ...mapState("quantri/qtDonVi", ["donViList","searchDonVi"]),
+    donViList() {
+    //console.log(this.bnlList)
+      if (this.searchDonVi.length > 0) return this.searchDonVi;
+      else return this.donViList;
+      },
+  },
+  methods: {
+    ...mapActions("quantri/qtDonVi", ["getSearchDonViList"])
   }
 };
 </script>

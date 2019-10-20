@@ -8,39 +8,54 @@
           <v-container>
             <v-row>
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.ma" label="Mã Chỉ Tiêu*"></v-text-field>
+                <v-text-field v-model="chiTieu.ma" label="Mã chỉ tiêu*"></v-text-field>
               </v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.ten" label="Tên Chỉ Tiêu*"></v-text-field>
+                <v-text-field v-model="chiTieu.ten" label="Tên chỉ tiêu*"></v-text-field>
               </v-col>
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.capNhapLieuId" label="Cấp Nhập liệu Id*"></v-text-field>
-              </v-col>
-
-              <v-col cols="6">
-                <v-text-field v-model="chiTieu.capTongHopId" label="Cấp Tổng Hợp Id*"></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field v-model="chiTieu.chiTieuNhomId" label="Chỉ Tiêu Nhóm Id*"></v-text-field>
+                <v-text-field v-model="chiTieu.capNhapLieuId" label="Cấp nhập liệu"></v-text-field>
               </v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.chiTieuPhanToId" label="Chỉ Tiêu Phân Tổ*"></v-text-field>
+                <v-text-field v-model="chiTieu.capTongHopId" label="Cấp tổng hợp"></v-text-field>
               </v-col>
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.chiTieuChaId" label="Chỉ tiêu cha*"></v-text-field>
+                <SelectedWithSearch
+                :items="chiTieuNhomList"
+                label="Chỉ tiêu nhóm"
+                @select="chiTieu.chiTieuNhomId = $event.id"
+                @search="getSearchChiTieuNhomList($event)"
+                />
               </v-col>
 
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.donViTinh" label="Đơn Vị Tính*"></v-text-field>
+                <SelectedWithSearch
+                :items="chiTieuPhanToList"
+                label="Chỉ tiêu phân tổ"
+                @select="chiTieu.chiTieuPhanToId = $event.id"
+                @search="getSearchChiTieuPhanToList($event)"
+                />
+              </v-col>
+              <v-col cols="6">
+                <SelectedWithSearch
+                :items="chiTieuChaList"
+                label="Chỉ tiêu cha"
+                @select="chiTieu.chiTieuChaId = $event.id"
+                @search="getSearchChiTieuList($event)"
+                />
+              </v-col>
+
+              <v-col cols="6">
+                <v-text-field v-model="chiTieu.donViTinh" label="Đơn vị tính*"></v-text-field>
               </v-col>
 
               <v-col cols="12">
                 <v-switch
                   v-model="chiTieu.congDonTuDuoiLen"
                   class="ma-1"
-                  label="Cộng Từ Dưới Lên"
+                  label="Cộng từ dưới lên"
                 ></v-switch>
               </v-col>
 
@@ -96,7 +111,13 @@
     </v-card>
 </template>
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     chiTieu: {
       type: Object,
@@ -124,6 +145,29 @@ export default {
       type: String,
       default: "Thêm mới chỉ tiêu"
     }
+  },
+  computed: {
+    ...mapState("chitieu/chiTieuNhom", ["chiTieuNhomList","searchChiTieuNhomList"]),
+    ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList","searchChiTieuPhanToList"]),
+    ...mapState("chitieu/chiTieu", ["chiTieuList","searchChiTieuList"]),
+    chiTieuNhomList() {
+      if (this.searchChiTieuNhomList.length > 0) return this.searchChiTieuNhomList;
+      else return this.chiTieuNhomList;
+    },
+    chiTieuPhanToList() {
+      if (this.searchChiTieuPhanToList.length > 0) return this.searchChiTieuPhanToList;
+      else return this.chiTieuPhanToList;
+    },
+    chiTieuChaList() {
+      if (this.searchChiTieuList.length > 0) return this.searchChiTieuList;
+      else return this.chiTieuList;
+    },
+  },
+    
+  methods: {
+    ...mapActions("chitieu/chiTieuNhom", ["getSearchChiTieuNhomList"]),
+    ...mapActions("chitieu/chiTieuPhanTo", ["getSearchChiTieuPhanToList"]),
+    ...mapActions("chitieu/chiTieu", ["getSearchChiTieuList"])
   }
 }
 </script>

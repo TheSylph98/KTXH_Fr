@@ -28,13 +28,13 @@ import {
     SET_PAGINATION: set('pagination'),
     SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
   
-    SET_DATA_STATUS: set('datastatus'),
+    SET_DATA_STATUS: set('datastatusList'),
   
-    ADD_DATA_STATUS: add('sysDataStatus'),
+    ADD_DATA_STATUS: add('datastatusList'),
   
-    UPDATE_DATA_STATUS: update('sysDataStatus'),
+    UPDATE_DATA_STATUS: update('datastatusList'),
   
-    DELETE_DATA_STATUS: remove('sysDataStatus'),
+    DELETE_DATA_STATUS: remove('datastatusList'),
   }
   
   export const actions = {

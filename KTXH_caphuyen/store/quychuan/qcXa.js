@@ -12,6 +12,7 @@ export const state = () => {
       qcXa: '/api/v2/crud/qcxa'
     },
     xaList: [],
+    searchXaList: [],
     deletedXaList: [],
     xa: {},
     pagination: {
@@ -24,17 +25,18 @@ export const state = () => {
 
 export const mutations = {
   SET_XA_LIST: set('xaList'),
+  SET_SEARCH_XA_LIST: set('searchXaList'),
   SET_DELETED_XA: set('deletedXa'),
   SET_PAGINATION: set('pagination'),
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_XA: set('xa'),
+  SET_XA: set('xaList'),
 
-  ADD_XA: add('qcXa'),
+  ADD_XA: add('xaList'),
 
-  UPDATE_XA: update('qcXa'),
+  UPDATE_XA: update('xaList'),
 
-  DELETE_XA: remove('qcXa')
+  DELETE_XA: remove('xaList')
 }
 
 export const actions = {
@@ -63,6 +65,26 @@ export const actions = {
     }
   },
 
+  async getSearchXaList(
+    { state, commit },
+    text
+  ) {
+    const { qcXa } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${qcXa}/list`, queryData)
+
+      commit('SET_SEARCH_TINH_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchXaList', err)
+    }
+  },
+
   async getDeletedXaList(
     { state, commit },
     payload = { page: 0, pageSize: 20 }
@@ -78,7 +100,7 @@ export const actions = {
 
       commit('SET_DELETED_XA', data.rows)
     } catch (err) {
-      console.log('getXaList', err)
+      console.log('getDeletedXaList', err)
     }
   },
 

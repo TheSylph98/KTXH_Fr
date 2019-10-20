@@ -12,6 +12,7 @@ export const state = () => {
       bieuNhapLieuDonViTongHop: '/api/v2/crud/bieunhaplieu-donvitonghop'
     },
     bnlDonViTongHopList: [],
+    searchBnlDonViTongHopList: [],
     deletedbnlDonViTongHopList: [],
     bnlDonViTongHop: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_BIEU_NHAP_LIEU_DON_VI_TONG_HOP_LIST: set('bnlDonViTongHopList'),
+
+  SET_SEARCH_BIEU_NHAP_LIEU_DON_VI_TONG_HOP_LIST: set('searchBnlDonViTongHopList'),
+
   SET_DELETED_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: set('deletedbnlDonViTongHopList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: set('bnlDonViTongHop'),
+  SET_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: set('bnlDonViTongHopList'),
 
-  ADD_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: add('bieuNhapLieuDonViTongHop'),
+  ADD_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: add('bnlDonViTongHopList'),
 
-  UPDATE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: update('bieuNhapLieuDonViTongHop'),
+  UPDATE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: update('bnlDonViTongHopList'),
 
-  DELETE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: remove('bieuNhapLieuDonViTongHop'),
+  DELETE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: remove('bnlDonViTongHopList'),
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getBieuNhapLieuDonViTongHopList', err)
+    }
+  },
+
+  async getSearchBieuNhapLieuDonViTongHopList(
+    { state, commit },
+    text
+  ) {
+    const { bieuNhapLieuDonViTongHop } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/list`, queryData)
+
+      commit('SET_SEARCH_BIEU_NHAP_LIEU_DON_VI_TONG_HOP_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchBieuNhapLieuDonViTongHopList', err)
     }
   },
 

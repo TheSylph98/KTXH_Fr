@@ -12,6 +12,7 @@ export const state = () => {
       chiTieuNhom: '/api/v2/crud/chitieunhom'
     },
     chiTieuNhomList: [],
+    searchChiTieuNhomList: [],
     deletedChiTieuNhomList: [],
     chi_tieu_nhom: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_CHI_TIEU_NHOM_LIST: set('chiTieuNhomList'),
+
+  SET_SEARCH_CHI_TIEU_NHOM_LIST: set('searchChiTieuNhomList'),
+
   SET_DELETED_CHI_TIEU_NHOM: set('deletedChiTieuNhomList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_CHI_TIEU_NHOM: set('chi_tieu_nhom'),
+  SET_CHI_TIEU_NHOM: set('chiTieuNhomList'),
 
-  ADD_CHI_TIEU_NHOM: add('chiTieuNhom'),
+  ADD_CHI_TIEU_NHOM: add('chiTieuNhomList'),
 
-  UPDATE_CHI_TIEU_NHOM: update('chiTieuNhom'),
+  UPDATE_CHI_TIEU_NHOM: update('chiTieuNhomList'),
 
-  DELETE_CHI_TIEU_NHOM: remove('chiTieuNhom')
+  DELETE_CHI_TIEU_NHOM: remove('chiTieuNhomList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getChiTieuNhomList', err)
+    }
+  },
+
+  async getSearchChiTieuNhomList(
+    { state, commit },
+    text
+  ) {
+    const { chiTieuNhom } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${chiTieuNhom}/list`, queryData)
+
+      commit('SET_SEARCH_CHI_TIEU_NHOM_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchChiTieuNhomList', err)
     }
   },
 

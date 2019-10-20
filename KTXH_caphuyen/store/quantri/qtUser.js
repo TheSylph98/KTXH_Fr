@@ -12,6 +12,7 @@ export const state = () => {
       qtUser: '/api/v2/crud/qtusers'
     },
     userList: [],
+    searchUserList: [],
     deletedUserList: [],
     user: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_USER_LIST: set('userList'),
+
+  SET_SEARCH_USER_LIST: set('searchUserList'),
+
   SET_DELETED_USER: set('deletedUserList'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_USER: set('user'),
+  SET_USER: set('userList'),
 
-  ADD_USER: add('qtUser'),
+  ADD_USER: add('userList'),
 
-  UPDATE_USER: update('qtUser'),
+  UPDATE_USER: update('userList'),
 
-  DELETE_USER: remove('qtUser')
+  DELETE_USER: remove('userList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getUserList', err)
+    }
+  },
+
+  async getSearchUserList(
+    { state, commit },
+    text
+  ) {
+    const { user } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${user}/list`, queryData)
+
+      commit('SET_SEARCH_USER_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchUserList', err)
     }
   },
 

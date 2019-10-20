@@ -12,6 +12,7 @@ export const state = () => {
       truongNhapLieu: '/api/v2/crud/truongnhaplieu'
     },
     truongnhaplieuList: [],
+    searchTruongNhapLieuList: [],
     deletedtruongnhaplieuList: [],
     truongnhaplieu: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_TRUONG_NHAP_LIEU_LIST: set('truongnhaplieuList'),
+
+  SET_SEARCH_TRUONG_NHAP_LIEU_LIST: set('searchTruongNhapLieuList'),
+
   SET_DELETED_TRUONG_NHAP_LIEU: set('deletedtruongnhaplieuList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_TRUONG_NHAP_LIEU: set('truongnhaplieu'),
+  SET_TRUONG_NHAP_LIEU: set('truongnhaplieuList'),
 
-  ADD_TRUONG_NHAP_LIEU: add('truongNhapLieu'),
+  ADD_TRUONG_NHAP_LIEU: add('truongnhaplieuList'),
 
-  UPDATE_TRUONG_NHAP_LIEU: update('truongNhapLieu'),
+  UPDATE_TRUONG_NHAP_LIEU: update('truongnhaplieuList'),
 
-  DELETE_TRUONG_NHAP_LIEU: remove('truongNhapLieu'),
+  DELETE_TRUONG_NHAP_LIEU: remove('truongnhaplieuList'),
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getTruongNhaplieuList', err)
+    }
+  },
+
+  async getSearchTruongNhaplieuList(
+    { state, commit },
+    text
+  ) {
+    const { truongNhapLieu } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${truongNhapLieu}/list`, queryData)
+
+      commit('SET_SEARCH_TRUONG_NHAP_LIEU_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchTruongNhaplieuList', err)
     }
   },
 

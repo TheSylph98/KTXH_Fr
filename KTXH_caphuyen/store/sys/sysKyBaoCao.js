@@ -12,6 +12,7 @@ export const state = () => {
       sysKyBaoCao: '/api/v2/crud/syskybaocao'
     },
     loaikybaocaoList: [],
+    searchLoaiKyBaoCaoList: [],
     deletedloaikybaocaoList: [],
     loaikybaocao: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_LOAI_KY_BAO_CAO_LIST: set('loaikybaocaoList'),
+
+  SET_SEARCH_LOAI_KY_BAO_CAO_LIST: set('searchLoaiKyBaoCaoList'),
+
   SET_DELETED_LOAI_KY_BAO_CAO: set('deletedloaikybaocaoList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_LOAI_KY_BAO_CAO: set('loaikybaocao'),
+  SET_LOAI_KY_BAO_CAO: set('loaikybaocaoList'),
 
-  ADD_LOAI_KY_BAO_CAO: add('sysKyBaoCao'),
+  ADD_LOAI_KY_BAO_CAO: add('loaikybaocaoList'),
 
-  UPDATE_LOAI_KY_BAO_CAO: update('sysKyBaoCao'),
+  UPDATE_LOAI_KY_BAO_CAO: update('loaikybaocaoList'),
 
-  DELETE_LOAI_KY_BAO_CAO: remove('sysKyBaoCao'),
+  DELETE_LOAI_KY_BAO_CAO: remove('loaikybaocaoList'),
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getLoaiKyBaoCaoList', err)
+    }
+  },
+
+  async getSearchLoaiKyBaoCaoList(
+    { state, commit },
+    text
+  ) {
+    const { sysKyBaoCao } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${sysKyBaoCao}/list`, queryData)
+
+      commit('SET_SEARCH_LOAI_KY_BAO_CAO_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchLoaiKyBaoCaoList', err)
     }
   },
 

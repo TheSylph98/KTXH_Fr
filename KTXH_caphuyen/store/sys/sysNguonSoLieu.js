@@ -28,13 +28,13 @@ export const mutations = {
   SET_PAGINATION: set('pagination'),
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_NGUON_SO_LIEU: set('nguonsolieu'),
+  SET_NGUON_SO_LIEU: set('nguonsolieuList'),
 
-  ADD_NGUON_SO_LIEU: add('sysNguonSoLieu'),
+  ADD_NGUON_SO_LIEU: add('nguonsolieuList'),
 
-  UPDATE_NGUON_SO_LIEU: update('sysNguonSoLieu'),
+  UPDATE_NGUON_SO_LIEU: update('nguonsolieuList'),
 
-  DELETE_NGUON_SO_LIEU: remove('sysNguonSoLieu'),
+  DELETE_NGUON_SO_LIEU: remove('nguonsolieuList'),
 }
 
 export const actions = {

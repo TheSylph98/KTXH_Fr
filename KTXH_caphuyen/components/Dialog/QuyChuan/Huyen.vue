@@ -8,7 +8,12 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6" md="4">
-            <v-text-field v-model="huyen.qcTinhId" label="ID Tỉnh"></v-text-field>
+            <SelectedWithSearch
+              :items="tinhList"
+              label="Tỉnh"
+              @select="huyen.qcTinhId = $event.id"
+              @search="getSearchTinhList($event)"
+              />
           </v-col>
           <v-col cols="12" sm="6" md="4">
             <v-text-field v-model="huyen.ma" label="Mã huyện"></v-text-field>
@@ -63,8 +68,15 @@
     </v-card-actions>
   </v-card>
 </template>
+
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     huyen: {
       type: Object,
@@ -81,10 +93,22 @@ export default {
         ghiChu: ""
       }
     },
+    donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
+    loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
     formTitle: {
       type: String,
       default: "Thêm Mới"
     }
+  },
+  computed: {
+    ...mapState("quychuan/tinh", ["tinhList","searchTinhList"]),
+    tinhList() {
+      if (this.searchTinhList.length > 0) return this.searchTinhList;
+      else return this.tinhList;
+      },
+    },
+  methods: {
+    ...mapActions("quychuan/tinh", ["getSearchTinhList"])
   }
 };
 </script>

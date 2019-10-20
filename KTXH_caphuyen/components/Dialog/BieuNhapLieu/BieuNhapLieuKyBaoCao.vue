@@ -13,12 +13,26 @@
           <v-col cols="12" sm="6" md="8">
             <v-text-field v-model="kyBaoCao.ten" label="Tên biểu nhập liệu"></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="kyBaoCao.bieuNhapLieuId" label="Biểu Nhập Liệu ID"></v-text-field>
+        </v-row>
+        <v-row>
+          <v-col cols="6">
+            <SelectedWithSearch
+              :items="bieuNhapLieuList"
+              label="Biểu nhập liệu"
+              @select="kyBaoCao.bieuNhapLieuId = $event.id"
+              @search="getSearchBieuNhapLieuList($event)"
+            />
           </v-col>
-          <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="kyBaoCao.qlKyBaoCaoId" label="Kỳ Báo Cáo ID"></v-text-field>
+          <v-col cols="6">
+            <SelectedWithSearch
+              :items="kyBaoCaoList"
+              label="Ky Bao Cao"
+              @select="kyBaoCao.qlKyBaoCaoId = $event.id"
+              @search="getSearchKyBaoCaoList($event)"
+            />
           </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12" sm="6" md="8">
             <v-textarea v-model="kyBaoCao.ghiChu" label="Ghi Chú"></v-textarea>
           </v-col>
@@ -41,11 +55,18 @@
 </template>
 
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     kyBaoCao: {
       type: Object,
-      default: {
+      default:
+         {
         ma: "",
         ten: "",
         bieuNhapLieuId: 0,
@@ -59,6 +80,24 @@ export default {
       type: String,
       default: "Thêm Mới"
     }
+  },
+  computed: {
+    ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
+    ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList","searchKyBaoCaoList"]),
+    bieuNhapLieuList() {
+      //console.log(this.bnlList)
+      if (this.searchBnlList.length > 0) return this.searchBnlList;
+      else return this.bnlList;
+    },
+    kyBaoCaoList() {
+      if (this.searchKyBaoCaoList.length > 0) return this.searchKyBaoCaoList;
+      else return this.kyBaoCaoList;
+    }
+  },
+
+  methods: {
+    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getSearchBieuNhapLieuList"]),
+    ...mapActions("quanly/qlKyBaoCao", ["getSearchKyBaoCaoList"])
   }
 };
 </script>

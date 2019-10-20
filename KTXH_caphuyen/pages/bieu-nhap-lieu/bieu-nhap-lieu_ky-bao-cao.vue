@@ -58,6 +58,8 @@ export default {
 
   created() {
     this.getBieuNhapLieuKyBaoCaoList();
+    this.getBieuNhapLieuList();
+    this.getKyBaoCaoList();
   },
 
   methods: {
@@ -69,6 +71,8 @@ export default {
       "deleteBieuNhapLieuKyBaoCao",
       "restoreBieuNhapLieuKyBaoCao"
     ]),
+    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getBieuNhapLieuList"]),
+    ...mapActions("quanly/qlKyBaoCao", ["getKyBaoCaoList"]),
 
     clickAddNew() {
       this.dialog = true;

@@ -12,6 +12,7 @@ export const state = () => {
       bieuNhapLieuChiTieu: '/api/v2/crud/bieunhaplieu-chitieu'
     },
     bnlChiTieuList: [],
+    searchBnlChiTieuList: [],
     deletedbnlChiTieuList: [],
     bnlChiTieu: {},
     pagination: {
@@ -24,8 +25,13 @@ export const state = () => {
 
 export const mutations = {
   SET_BIEU_NHAP_LIEU_CHI_TIEU_LIST: set('bnlChiTieuList'),
+
+  SET_SEARCH_BIEU_NHAP_LIEU_CHI_TIEU_LIST: set('searchBnlChiTieuList'),
+
   SET_DELETED_BIEU_NHAP_LIEU_CHI_TIEU: set('deletedbnlChiTieuList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_BIEU_NHAP_LIEU_CHI_TIEU: set('bnlChiTieuList'),
@@ -61,6 +67,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getBieuNhapLieuChiTieuList', err)
+    }
+  },
+
+  async getSearchBieuNhapLieuList(
+    { state, commit },
+    text
+  ) {
+    const { bieuNhapLieuChiTieu } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/list`, queryData)
+
+      commit('SET_SEARCH_BIEU_NHAP_LIEU_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchBieuNhapLieuList', err)
     }
   },
 

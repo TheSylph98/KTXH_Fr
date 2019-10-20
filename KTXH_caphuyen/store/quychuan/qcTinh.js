@@ -12,6 +12,7 @@ export const state = () => {
       qcTinh: '/api/v2/crud/qctinh'
     },
     tinhList: [],
+    searchTinhList: [],
     deletedTinhList: [],
     tinh: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_TINH_LIST: set('tinhList'),
+
+  SET_SEARCH_TINH_LIST: set('searchTinhList'),
+
   SET_DELETED_TINH: set('deletedTinh'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_TINH: set('tinh'),
+  SET_TINH: set('tinhList'),
 
-  ADD_TINH: add('qcTinh'),
+  ADD_TINH: add('tinhList'),
 
-  UPDATE_TINH: update('qcTinh'),
+  UPDATE_TINH: update('tinhList'),
 
-  DELETE_TINH: remove('qcTinh')
+  DELETE_TINH: remove('tinhList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getTinhList', err)
+    }
+  },
+
+  async getSearchTinhList(
+    { state, commit },
+    text
+  ) {
+    const { qcTinh } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${qcTinh}/list`, queryData)
+
+      commit('SET_SEARCH_TINH_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchTinhList', err)
     }
   },
 

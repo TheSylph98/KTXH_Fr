@@ -13,12 +13,26 @@
               <v-col cols="6">
                 <v-text-field v-model="truongNhapLieu.ten" label="Tên Biểu Nhập Liệu*"></v-text-field>
               </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="6">
-                <v-text-field v-model="truongNhapLieu.bieuNhapLieuId" label="Biểu Nhập Liệu ID*"></v-text-field>
+                <SelectedWithSearch
+                  :items="bieuNhapLieuList"
+                  label="Biểu nhập liệu"
+                  @select="truongNhapLieu.bieuNhapLieuId = $event.id"
+                  @search="getSearchBieuNhapLieuList($event)"
+                />
               </v-col>
               <v-col cols="6">
-                <v-text-field v-model="truongNhapLieu.truongNhapLieuId" label="Trường Nhập Liệu ID*"></v-text-field>
+                <SelectedWithSearch
+                  :items="truongnhaplieuList"
+                  label="Trường nhập liệu"
+                  @select="truongNhapLieu.truongNhapLieuId = $event.id"
+                  @search="getSearchTruongNhaplieuList($event)"
+                />
               </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="12">
                 <v-textarea v-model="truongNhapLieu.ghiChu" label="Ghi Chú"></v-textarea>
               </v-col>
@@ -40,15 +54,21 @@
       </v-card>
 </template>
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     truongNhapLieu: {
       type: Object,
       default: {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
+        bieuNhapLieuId: 1,
+        truongNhapLieuId: 1,
         ghiChu: "",
         hieuLuc: 1,
         xoa: 0
@@ -57,8 +77,26 @@ export default {
 
     formTitle: {
       type: String,
-      default: "Thêm mới trường nhập liệu"
+      default: "Thêm mới biểu nhập liệu trường nhập liệu"
     }
+  },
+  computed: {
+    ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
+    ...mapState("truongNhapLieu", ["truongnhaplieuList","searchTruongNhapLieuList"]),
+    bieuNhapLieuList() {
+      //console.log(this.bnlList)
+      if (this.searchBnlList.length > 0) return this.searchBnlList;
+      else return this.bnlList;
+    },
+    truongnhaplieuList() {
+      if (this.searchTruongNhapLieuList.length > 0) return this.searchTruongNhapLieuList;
+      else return this.truongnhaplieuList;
+    }
+  },
+
+  methods: {
+    ...mapActions("bieunhaplieu/bieuNhapLieu", ["getSearchBieuNhapLieuList"]),
+    ...mapActions("truongNhapLieu", ["getSearchTruongNhaplieuList"])
   }
 }
 </script>

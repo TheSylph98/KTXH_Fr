@@ -60,6 +60,7 @@ export default {
   mounted() {
     this.getBieuNhapLieuChiTieuList();
     this.getBieuNhapLieuList();
+    this.getChiTieuList();
   },
 
   methods: {
@@ -72,11 +73,12 @@ export default {
       "restoreBieuNhapLieuChiTieu"
     ]),
     ...mapActions("bieunhaplieu/bieuNhapLieu", ["getBieuNhapLieuList"]),
+    ...mapActions("chitieu/chiTieu", ["getChiTieuList"]),
 
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
-      this.titleDialog = "Thêm chỉ tiêu mới";
+      this.titleDialog = "Thêm biểu nhập liệu chi tiêu mới";
       this.chiTieu = {
         ma: "",
         ten: "",

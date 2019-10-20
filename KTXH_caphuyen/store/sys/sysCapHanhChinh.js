@@ -12,6 +12,7 @@ import {
         sysCapHanhChinh: '/api/v2/crud/syscaphanhchinh'
       },
       caphanhchinhList: [],
+      searchCapHanhChinhList: [],
       deletedcaphanhchinhList: [],
       caphanhchinh: {},
       pagination: {
@@ -24,17 +25,22 @@ import {
   
   export const mutations = {
     SET_CAP_HANH_CHINH_LIST: set('caphanhchinhList'),
+
+    SET_CAP_HANH_CHINH_LIST: set('searchCapHanhChinhList'),
+
     SET_DELETED_CAP_HANH_CHINH: set('deletedcaphanhchinhList'),
+
     SET_PAGINATION: set('pagination'),
+    
     SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
   
-    SET_CAP_HANH_CHINH: set('caphanhchinh'),
+    SET_CAP_HANH_CHINH: set('caphanhchinhList'),
   
-    ADD_CAP_HANH_CHINH: add('sysCapHanhChinh'),
+    ADD_CAP_HANH_CHINH: add('caphanhchinhList'),
   
-    UPDATE_CAP_HANH_CHINH: update('sysCapHanhChinh'),
+    UPDATE_CAP_HANH_CHINH: update('caphanhchinhList'),
   
-    DELETE_CAP_HANH_CHINH: remove('sysCapHanhChinh'),
+    DELETE_CAP_HANH_CHINH: remove('caphanhchinhList'),
   }
   
   export const actions = {
@@ -60,6 +66,26 @@ import {
         })
       } catch (err) {
         console.log('getCapHanhChinhList', err)
+      }
+    },
+
+    async getSearchCapHanhChinhList(
+      { state, commit },
+      text
+    ) {
+      const { sysCapHanhChinh } = state.api
+  
+      let queryData = {}
+      if (text) {
+        queryData = { ten: { regexp: `^${text}` } }
+      }
+  
+      try {
+        const data = await this.$axios.$post(`${sysCapHanhChinh}/list`, queryData)
+  
+        commit('SET_CAP_HANH_CHINH_LIST', data.rows)
+      } catch (err) {
+        console.log('getSearchCapHanhChinhList', err)
       }
     },
   

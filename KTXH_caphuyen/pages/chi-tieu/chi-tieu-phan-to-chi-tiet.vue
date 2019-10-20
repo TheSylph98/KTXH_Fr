@@ -75,6 +75,7 @@ export default {
 
   created() {
     this.getChiTieuPhanToChiTietList();
+    this.getChiTieuPhanToList();
   },
 
   methods: {
@@ -86,6 +87,7 @@ export default {
       "deleteChiTieuPhanToChiTiet",
       "restoreChiTieuPhanToChiTiet"
     ]),
+    ...mapActions("chitieu/chiTieuPhanTo", ["getChiTieuPhanToList"]),
 
     clickAddNew() {
       this.dialog = true;

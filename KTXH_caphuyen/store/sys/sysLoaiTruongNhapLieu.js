@@ -12,6 +12,7 @@ export const state = () => {
       sysLoaiTruongNhapLieu: '/api/v2/crud/sysloaitruongnhaplieu'
     },
     loaitruongnhaplieuList: [],
+    searchLoaiTruongNhapLieuList: [],
     deletedloaitruongnhaplieuList: [],
     loaitruongnhaplieu: {},
     pagination: {
@@ -24,17 +25,18 @@ export const state = () => {
 
 export const mutations = {
   SET_LOAI_TRUONG_NHAP_LIEU_LIST: set('loaitruongnhaplieuList'),
+  SET_SEARCH_LOAI_TRUONG_NHAP_LIEU_LIST: set('searchLoaiTruongNhapLieuList'),
   SET_DELETED_LOAI_TRUONG_NHAP_LIEU: set('deletedloaitruongnhaplieuList'),
   SET_PAGINATION: set('pagination'),
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_LOAI_TRUONG_NHAP_LIEU: set('loaitruongnhaplieu'),
+  SET_LOAI_TRUONG_NHAP_LIEU: set('loaitruongnhaplieuList'),
 
-  ADD_LOAI_TRUONG_NHAP_LIEU: add('sysLoaiTruongNhapLieu'),
+  ADD_LOAI_TRUONG_NHAP_LIEU: add('loaitruongnhaplieuList'),
 
-  UPDATE_LOAI_TRUONG_NHAP_LIEU: update('sysLoaiTruongNhapLieu'),
+  UPDATE_LOAI_TRUONG_NHAP_LIEU: update('loaitruongnhaplieuList'),
 
-  DELETE_LOAI_TRUONG_NHAP_LIEU: remove('sysLoaiTruongNhapLieu'),
+  DELETE_LOAI_TRUONG_NHAP_LIEU: remove('loaitruongnhaplieuList'),
 }
 
 export const actions = {
@@ -60,6 +62,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getLoaiTruongNhapLieuList', err)
+    }
+  },
+
+  async getSearchLoaiTruongNhapLieuList(
+    { state, commit },
+    text
+  ) {
+    const { sysLoaiTruongNhapLieu } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${sysLoaiTruongNhapLieu}/list`, queryData)
+
+      commit('SET_SEARCH_LOAI_TRUONG_NHAP_LIEU_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchLoaiTruongNhapLieuList', err)
     }
   },
 

@@ -79,6 +79,7 @@ export default {
 
   created() {
     this.getQTUserList();
+    this.getDonViList();
   },
 
   methods: {
@@ -90,6 +91,7 @@ export default {
       "deleteQTUser",
       "restoreQTUser"
     ]),
+    ...mapActions("quantri/qtDonVi", ["getDonViList"]),
 
     clickAddNew() {
       this.dialog = true;

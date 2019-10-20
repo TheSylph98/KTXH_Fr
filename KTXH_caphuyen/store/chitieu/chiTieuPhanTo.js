@@ -12,6 +12,7 @@ export const state = () => {
       chiTieuPhanTo: '/api/v2/crud/chitieuphanto'
     },
     chiTieuPhanToList: [],
+    searchChiTieuNhomList: [],
     deletedChiTieuPhanToList: [],
     chi_tieu_phan_to: {},
     pagination: {
@@ -24,17 +25,22 @@ export const state = () => {
 
 export const mutations = {
   SET_CHI_TIEU_PHAN_TO_LIST: set('chiTieuPhanToList'),
+
+  SET_SEARCH_CHI_TIEU_PHAN_TO_LIST: set('searchChiTieuNhomList'),
+
   SET_DELETED_CHI_TIEU_PHAN_TO: set('deletedChiTieuPhanToList'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_CHI_TIEU_PHAN_TO: set('chi_tieu_phan_to'),
+  SET_CHI_TIEU_PHAN_TO: set('chiTieuPhanToList'),
 
-  ADD_CHI_TIEU_PHAN_TO: add('chiTieuPhanTo'),
+  ADD_CHI_TIEU_PHAN_TO: add('chiTieuPhanToList'),
 
-  UPDATE_CHI_TIEU_PHAN_TO: update('chiTieuPhanTo'),
+  UPDATE_CHI_TIEU_PHAN_TO: update('chiTieuPhanToList'),
 
-  DELETE_CHI_TIEU_PHAN_TO: remove('chiTieuPhanTo')
+  DELETE_CHI_TIEU_PHAN_TO: remove('chiTieuPhanToList')
 }
 
 export const actions = {
@@ -60,6 +66,26 @@ export const actions = {
       })
     } catch (err) {
       console.log('getChiTieuPhanToList', err)
+    }
+  },
+
+  async getSearchChiTieuPhanToList(
+    { state, commit },
+    text
+  ) {
+    const { chiTieuPhanTo } = state.api
+
+    let queryData = {}
+    if (text) {
+      queryData = { ten: { regexp: `^${text}` } }
+    }
+
+    try {
+      const data = await this.$axios.$post(`${chiTieuPhanTo}/list`, queryData)
+
+      commit('SET_SEARCH_CHI_TIEU_PHAN_TO_LIST', data.rows)
+    } catch (err) {
+      console.log('getSearchChiTieuPhanToList', err)
     }
   },
 

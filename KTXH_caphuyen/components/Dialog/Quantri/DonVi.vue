@@ -13,14 +13,17 @@
           <v-col cols="6">
             <v-text-field v-model="donVi.ten" label="Tên Đơn Vị*"></v-text-field>
           </v-col>
-
           <v-col cols="6">
-            <v-text-field v-model="donVi.donViChaId" label="Đơn Vị Cha*"></v-text-field>
+            <SelectedWithSearch
+            :items="donViList"
+            label="Đơn Vị Cha"
+            @select="donVi.donViChaId = $event.id"
+            @search="getSearchDonViList($event)"
+            />
           </v-col>
           <v-col cols="6">
             <v-text-field v-model="donVi.diaChi" label="Địa Chỉ"></v-text-field>
           </v-col>
-
           <v-col cols="6">
             <v-text-field v-model="donVi.soDienThoai" label="Số Điện Thoại"></v-text-field>
           </v-col>
@@ -50,7 +53,13 @@
   </v-card>
 </template>
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     donVi: {
       type: Object,
@@ -69,6 +78,17 @@ export default {
       type: String,
       default: "Thêm Mới"
     }
+  },
+  computed: {
+    ...mapState("quantri/qtDonVi", ["donViList","searchDonVi"]),
+    donViList() {
+    //console.log(this.bnlList)
+    if (this.searchDonVi.length > 0) return this.searchDonVi;
+    else return this.donViList;
+    },
+  },
+  methods: {
+    ...mapActions("quantri/qtDonVi", ["getSearchDonViList"])
   }
 };
 </script>
