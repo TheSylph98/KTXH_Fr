@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      v-model="selectItems"
       :headers="headerTables"
       :items="items"
       :items-per-page="5"
@@ -15,6 +16,7 @@
 
           <div class="flex-grow-1"></div>
           <v-btn color="primary" dark class="mb-2" @click="$emit('clickAdd')">Thêm mới</v-btn>
+          <v-btn v-if="selectItems.length" class="mb-2" @click="dialog = true">Xóa</v-btn>
           <slot></slot>
         </v-toolbar>
       </template>
@@ -58,14 +60,14 @@
             <span v-else-if="el.value === 'action'">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" class="mr-2" @click="$emit('edit', item)">mdi-pencil</v-icon>
+                  <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
                 </template>
                 <span>Chỉnh sửa</span>
               </v-tooltip>
 
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" @click="$emit('delete', item)">mdi-delete</v-icon>
+                  <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
                 </template>
                 <span>Xóa</span>
               </v-tooltip>
@@ -79,6 +81,44 @@
         <p>Chưa cập nhập dữ liệu</p>
       </template>
     </v-data-table>
+
+     <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+          {{ dialogTitle }}
+        </v-card-title>
+
+        <v-card-text>
+          {{ dialogContent }}
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="closeDialog"
+          >
+            Huỷ
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="handleDelete"
+          >
+            Xóa
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -113,12 +153,24 @@ export default {
     showIndex: {
       type: Boolean,
       default: true
+    },
+
+    dialogTitle: {
+      type: String,
+      default: "Xác nhận xóa"
+    },
+
+    dialogContent: {
+      type: String,
+      default: "Bạn có chắc chắn muốn xóa không?"
     }
   },
   data() {
     return {
       index: 1,
-      search: {}
+      search: {},
+      selectItems: [],
+      dialog: false
     };
   },
 
@@ -146,7 +198,21 @@ export default {
       this.search[el] = eValue;
     },
 
-    clickFilter() {}
+    closeDialog() {
+      this.selectItems = []
+      this.dialog = false
+    },
+
+    clickeDeleteItem(item) {
+      this.selectItems = [item]
+      this.dialog = true
+    },
+
+    handleDelete() {
+      this.$emit("delete", this.selectItems)
+      this.selectedItems = []
+      this.dialog = false
+    }
   }
 };
 </script>

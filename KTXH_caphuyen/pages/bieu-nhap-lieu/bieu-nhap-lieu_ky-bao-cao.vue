@@ -9,6 +9,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BNLKyBaoCao
+        v-if="dialog"
         :kyBaoCao="kyBaoCao"
         :formTitle="titleDialog"
         @close="closeDialog"
@@ -58,8 +59,8 @@ export default {
 
   created() {
     this.getBieuNhapLieuKyBaoCaoList();
-    this.getBieuNhapLieuList();
-    this.getKyBaoCaoList();
+    // this.getBieuNhapLieuList();
+    // this.getKyBaoCaoList();
   },
 
   methods: {

@@ -9,6 +9,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BNLTruongNhapLieu
+        v-if="dialog"
         :truongNhapLieu="bnlTruongNhapLieu"
         :formTitle="titleDialog"
         @close="closeDialog"
@@ -58,8 +59,8 @@ export default {
 
   created() {
     this.getBieuNhapLieuTruongNhapLieuList();
-    this.getBieuNhapLieuList();
-    this.getTruongNhaplieuList();
+    // this.getBieuNhapLieuList();
+    // this.getTruongNhaplieuList();
   },
 
   methods: {
@@ -77,7 +78,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.titleDialog = "Thêm mới biểu nhập liệu trường nhập liệu";
-      this.bnlTruongNhapLieu = {
+      this.bnlTruongNhapLieu  = {
         ma: "",
         ten: "",
         bieuNhapLieuId: 0,
@@ -90,10 +91,12 @@ export default {
       this.isUpdate = true;
       this.bnlTruongNhapLieu = this.bnlTruongNhapLieuList.indexOf(item);
     },
-    async deleted(item) {
-      confirm("Xác nhận xóa?") &&
-        (await this.deleteBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu));
+
+    async deleted(items) {
+      console.log("item", items)
+      await this.deleteBieuNhapLieuTruongNhapLieu(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;

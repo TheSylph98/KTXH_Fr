@@ -127,11 +127,13 @@ export const actions = {
 
   async addHuyen({ state, commit }, huyen) {
     const { qcHuyen } = state.api
-
+    const uuidv1 = require('uuid/v1');
+    huyen.uid = uuidv1();
+    huyen.qcTinhId = Number(huyen.qcTinhId)
     try {
       const data = await this.$axios.$post(`${qcHuyen}/create`, huyen)
 
-      commit('ADD_HUYEN', data)
+      commit('ADD_HUYEN', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

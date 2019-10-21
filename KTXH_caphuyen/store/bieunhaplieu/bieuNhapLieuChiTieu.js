@@ -151,7 +151,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/update`, bnlChiTieu)
 
-      commit('UPDATE_BIEU_NHAP_LIEU_CHI_TIEU', data)
+      commit('UPDATE_BIEU_NHAP_LIEU_CHI_TIEU', data )
     } catch (err) {
       console.log('updateBieuNhapLieuChiTieu', err)
     }

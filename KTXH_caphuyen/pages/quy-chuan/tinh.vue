@@ -8,7 +8,7 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <Tinh :tinh="tinh" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
+      <Tinh v-if="dialog" :tinh="tinh" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
   </Table>
 </template>

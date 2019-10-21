@@ -25,7 +25,7 @@
               </v-col>
               <v-col cols="6">
                 <SelectedWithSearch
-                  :items="truongnhaplieuList"
+                  :items="tnlList"
                   label="Trường nhập liệu"
                   @select="truongNhapLieu.truongNhapLieuId = $event.id"
                   @search="getSearchTruongNhaplieuList($event)"
@@ -88,7 +88,7 @@ export default {
       if (this.searchBnlList.length > 0) return this.searchBnlList;
       else return this.bnlList;
     },
-    truongnhaplieuList() {
+    tnlList() {
       if (this.searchTruongNhapLieuList.length > 0) return this.searchTruongNhapLieuList;
       else return this.truongnhaplieuList;
     }
@@ -96,7 +96,7 @@ export default {
 
   methods: {
     ...mapActions("bieunhaplieu/bieuNhapLieu", ["getSearchBieuNhapLieuList"]),
-    ...mapActions("truongNhapLieu", ["getSearchTruongNhaplieuList"])
+    ...mapActions("truongNhapLieu", ["getSearchTruongNhaplieuList"]),
   }
 }
 </script>

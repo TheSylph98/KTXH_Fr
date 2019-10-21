@@ -9,6 +9,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <Huyen
+        v-if="dialog"
         :huyen="huyen"
         :formTitle="titleDialog"
         @close="closeDialog"
@@ -79,7 +80,7 @@ export default {
 
   created() {
     this.getHuyenList();
-    this.getTinhList()
+    //this.getTinhList()
   },
 
   methods: {

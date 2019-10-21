@@ -25,7 +25,7 @@
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
-              :items="chiTieuList"
+              :items="ctList"
               label="Chỉ Tiêu"
               @select="chiTieu.chiTieuId = $event.id"
               @search="getSearchChiTieuList($event)"
@@ -96,7 +96,7 @@ export default {
       if (this.searchBnlList.length > 0) return this.searchBnlList;
       else return this.bnlList;
     },
-    chiTieuList() {
+    ctList() {
       if (this.searchChiTieuList.length > 0) return this.searchChiTieuList;
       else return this.chiTieuList;
     }

@@ -127,11 +127,13 @@ export const actions = {
 
   async addQTUser({ state, commit }, user) {
     const { qtUser } = state.api
-
+    const uuidv1 = require('uuid/v1');
+    user.uid = uuidv1();
+    user.qtDonViId = Number(user.qtDonViId);
     try {
       const data = await this.$axios.$post(`${qtUser}/create`, user)
 
-      commit('ADD_USER', data)
+      commit('ADD_USER', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

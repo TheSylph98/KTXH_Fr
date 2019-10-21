@@ -127,11 +127,11 @@ export const actions = {
 
   async addKyBaoCao({ state, commit }, kyBaoCao) {
     const { qlKyBaoCao } = state.api
-
+    
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/create`, kyBaoCao)
 
-      commit('ADD_KY_BAO_CAO', data)
+      commit('ADD_KY_BAO_CAO', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -143,7 +143,9 @@ export const actions = {
 
   async updateKyBaoCao({ state, commit }, kyBaoCao) {
     const { qlKyBaoCao } = state.api
-
+    const uuidv1 = require('uuid/v1');
+    kyBaoCao.uid = uuidv1();
+    
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/update`, kyBaoCao)
 

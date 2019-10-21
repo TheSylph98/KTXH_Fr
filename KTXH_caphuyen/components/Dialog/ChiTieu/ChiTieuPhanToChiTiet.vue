@@ -15,7 +15,7 @@
                 </v-col>
                 <v-col cols="12">
                     <SelectedWithSearch
-                    :items="chiTieuPhanToList"
+                    :items="ctPhanToList"
                     label="Chỉ tiêu phân tổ"
                     @select="chiTieuPhanToChiTiet.chiTieuPhanToId = $event.id"
                     @search="getSearchChiTieuPhanToList($event)"
@@ -68,7 +68,7 @@ export default {
     },
     computed: {
         ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList","searchChiTieuNhomList"]),
-        chiTieuPhanToList() {
+        ctPhanToList() {
         //console.log(this.bnlList)
             if (this.searchChiTieuNhomList.length > 0) return this.searchChiTieuNhomList;
             else return this.chiTieuPhanToList;

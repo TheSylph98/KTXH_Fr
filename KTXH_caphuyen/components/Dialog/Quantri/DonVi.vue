@@ -15,7 +15,7 @@
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
-            :items="donViList"
+            :items="dvList"
             label="Đơn Vị Cha"
             @select="donVi.donViChaId = $event.id"
             @search="getSearchDonViList($event)"
@@ -81,7 +81,7 @@ export default {
   },
   computed: {
     ...mapState("quantri/qtDonVi", ["donViList","searchDonVi"]),
-    donViList() {
+    dvList() {
     //console.log(this.bnlList)
     if (this.searchDonVi.length > 0) return this.searchDonVi;
     else return this.donViList;

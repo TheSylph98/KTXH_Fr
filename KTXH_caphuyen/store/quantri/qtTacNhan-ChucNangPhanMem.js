@@ -24,17 +24,20 @@ export const state = () => {
 
 export const mutations = {
   SET_TAC_NHAN_CHUC_NANG_PHAN_MEM_LIST: set('tacNhanChucNangPhanMemList'),
+
   SET_DELETED_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('deletedTacNhanChucNangPhanMemList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('tacNhanChucNangPhanMem'),
+  SET_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('tacNhanChucNangPhanMemList'),
 
-  ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM: add('qtTacNhanChucNangPhanMem'),
+  ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM: add('tacNhanChucNangPhanMemList'),
 
-  UPDATE_TAC_NHAN_CHUC_NANG_PHAN_MEM: update('qtTacNhanChucNangPhanMem'),
+  UPDATE_TAC_NHAN_CHUC_NANG_PHAN_MEM: update('tacNhanChucNangPhanMemList'),
 
-  DELETE_TAC_NHAN_CHUC_NANG_PHAN_MEM: remove('qtTacNhanChucNangPhanMem')
+  DELETE_TAC_NHAN_CHUC_NANG_PHAN_MEM: remove('tacNhanChucNangPhanMemList')
 }
 
 export const actions = {
@@ -101,11 +104,12 @@ export const actions = {
 
   async addQTTacNhanChucNangPhanMem({ state, commit }, tacNhanChucNangPhanMem) {
     const { qtTacNhanChucNangPhanMem } = state.api
-
+    const uuidv1 = require('uuid/v1');
+    tacNhanChucNangPhanMem.uid = uuidv1();
     try {
       const data = await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/create`, tacNhanChucNangPhanMem)
 
-      commit('ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM', data)
+      commit('ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

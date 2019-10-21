@@ -6,6 +6,8 @@ import {
   remove
 } from '@/util/actions'
 
+import uuidv1 from "uuid/v1"
+
 export const state = () => {
   return {
     api: {
@@ -128,15 +130,16 @@ export const actions = {
   async addBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
     
     const { bieuNhapLieuKyBaoCao } = state.api
-    const uuidv1 = require('uuid/v1');
+    // const uuidv1 = require('uuid/v1');
+    bnlKyBaoCao.uid = uuidv1();
     bnlKyBaoCao.bieuNhapLieuId = Number(bnlKyBaoCao.bieuNhapLieuId)
     bnlKyBaoCao.kyBaoCaoId = Number(bnlKyBaoCao.kyBaoCaoId)
-    bnlKyBaoCao.uid = uuidv1()
+    
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/create`, bnlKyBaoCao)
 
-      commit('ADD_BIEU_NHAP_LIEU_KY_BAO_CAO', data)
+      commit('ADD_BIEU_NHAP_LIEU_KY_BAO_CAO', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

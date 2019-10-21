@@ -56,12 +56,12 @@ export const actions = {
         pageSize: payload.pageSize
       })
 
-      console.log("data", data.data.rows)
-      commit('SET_BIEU_NHAP_LIEU_LIST', data.data.rows)
+      console.log("data", data.rows)
+      commit('SET_BIEU_NHAP_LIEU_LIST', data.rows)
       commit('SET_PAGINATION', {
-        total: data.data.total,
-        page: data.data.page,
-        pageSize: data.data.pageSize
+        total: data.total,
+        page: data.page,
+        pageSize: data.pageSize
       })
     } catch (err) {
       console.log('getBieuNhapLieuList', err)
@@ -82,7 +82,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieu}/list`, queryData)
 
-      commit('SET_SEARCH_BIEU_NHAP_LIEU_LIST', data.data.rows)
+      commit('SET_SEARCH_BIEU_NHAP_LIEU_LIST', data.rows)
     } catch (err) {
       console.log('getSearchBieuNhapLieuList', err)
     }

@@ -7,13 +7,12 @@
     hide-no-data
     hide-selected
     :item-text="itemText"
-    :item-value="itemValue"
     :label="label"
     :placeholder="placeholder"
     :prepend-icon="icon"
     return-object
     @update:search-input="changeSearch"
-    @select="$emit('select', $event)"
+    @input="$emit('select', $event)"
   ></v-autocomplete>
 </template>
 
@@ -35,7 +34,7 @@ export default {
 
     itemValue: {
       type: String,
-      value: "id"
+      value: "id" 
     },
 
     label: {
@@ -62,20 +61,28 @@ export default {
     return {
       model: null,
       search: "",
-      isLoading: false
+      text: "",
+      isLoading: false,
+      isChoosedItem: false
     };
   },
 
   created() {
     const time = this.time;
+    let flag = !this.isChoosedItem
     this.changeText = _.debounce(function() {
-      this.$emit("search", this.search);
-    }, time);
+      console.log("search", this.text)
+      this.$emit("search", this.text);
+      }, time);
   },
 
   methods: {
     changeSearch() {
-      this.changeText();
+      if (this.text !== this.search) {
+        this.text = this.search
+        this.changeText()
+      }
+      this.isChoosedItem = true
     }
   }
 };

@@ -6,6 +6,8 @@ import {
   remove
 } from '@/util/actions'
 
+import uuidv1 from 'uuid/v1'
+
 export const state = () => {
   return {
     api: {
@@ -127,11 +129,12 @@ export const actions = {
 
   async addChiTieuNhom({ state, commit }, chi_tieu_nhom) {
     const { chiTieuNhom } = state.api
-
+    // const uuidv1 = require('uuid/v1');
+    chi_tieu_nhom.uid = uuidv1();
     try {
       const data = await this.$axios.$post(`${chiTieuNhom}/create`, chi_tieu_nhom)
 
-      commit('ADD_CHI_TIEU_NHOM', data)
+      commit('ADD_CHI_TIEU_NHOM', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

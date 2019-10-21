@@ -10,6 +10,7 @@
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
       <TacNhan
+        v-if="dialog"
         :tacNhan="tacNhan"
         :formTitle="titleDialog"
         @close="closeDialog"

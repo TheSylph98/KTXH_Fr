@@ -6,6 +6,8 @@ import {
   remove
 } from '@/util/actions'
 
+import uuidv1 from 'uuid/v1'
+
 export const state = () => {
   return {
     api: {
@@ -54,15 +56,14 @@ export const actions = {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/list`, {
         page: payload.page,
         pageSize: payload.pageSize
-
       })
 
       console.log("data", data)
-      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU_LIST', data.data.rows)
+      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU_LIST', data.rows)
       commit('SET_PAGINATION', {
-        total: data.data.total,
-        page: data.data.page,
-        pageSize: data.data.pageSize
+        total: data.total,
+        page: data.page,
+        pageSize: data.pageSize
       })
     } catch (err) {
       console.log('getBieuNhapLieuTruongNhapLieuList', err)
@@ -102,7 +103,7 @@ export const actions = {
       }
       )
 
-      commit('SET_DELETED_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data.data.rows)
+      commit('SET_DELETED_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data.rows)
     } catch (err) {
       console.log('getDeletedBieuNhapLieuTruongNhapLieuList', err)
     }
@@ -119,7 +120,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data.data.rows)
+      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data.rows)
     } catch (err) {
       console.log('getBieuNhapLieuTruongNhapLieu', err)
     }
@@ -127,15 +128,15 @@ export const actions = {
 
   async addBieuNhapLieuTruongNhapLieu({ state, commit }, bnlTruongNhapLieu) {
     const { bieuNhapLieuTruongNhapLieu } = state.api
-    const uuidv1 = require('uuid/v1');
+    // const uuidv1 = require('uuid/v1');
     bnlTruongNhapLieu.bieuNhapLieuId = Number(bnlTruongNhapLieu.bieuNhapLieuId)
     bnlTruongNhapLieu.truongNhapLieuId = Number(bnlTruongNhapLieu.truongNhapLieuId)
     bnlTruongNhapLieu.uid = uuidv1()
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/create`, bnlTruongNhapLieu)
 
-      console.log(data)
-      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data)
+      console.log("createTNL", data)
+      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -161,7 +162,7 @@ export const actions = {
     const { bieuNhapLieuTruongNhapLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/delete`, bnlTruongNhapLieu)
+      const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/delete`, {id: bnlTruongNhapLieu})
 
       commit('DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data)
       commit('SET_PAGINATION_KEY', {
@@ -179,7 +180,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/restore`, bnlTruongNhapLieu)
 
-      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data)
+      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

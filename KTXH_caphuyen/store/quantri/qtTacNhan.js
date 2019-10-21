@@ -127,11 +127,13 @@ export const actions = {
 
   async addQTTacNhan({ state, commit }, tacNhan) {
     const { qtTacNhan } = state.api
-
+    const uuidv1 = require('uuid/v1');
+    tacNhan.uid = uuidv1();
+    tacNhan.sysCaphanhChinhId = Number(tacNhan.sysCaphanhChinhId);
     try {
       const data = await this.$axios.$post(`${qtTacNhan}/create`, tacNhan)
 
-      commit('ADD_TAC_NHAN', data)
+      commit('ADD_TAC_NHAN', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

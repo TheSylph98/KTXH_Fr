@@ -5,6 +5,7 @@ import {
   update,
   remove
 } from '@/util/actions'
+import uuidv1 from 'uuid/v1'
 
 export const state = () => {
   return {
@@ -127,11 +128,18 @@ export const actions = {
 
   async addChiTieu({ state, commit }, chi_tieu) {
     const { chiTieu } = state.api
+    // const uuidv1 = require('uuid/v1');
+    chi_tieu.uid = uuidv1();
+    chi_tieu.capNhapLieuId = Number(chi_tieu.capNhapLieuId);
+    chi_tieu.capTongHopId = Number(chi_tieu.capTongHopId);
+    chi_tieu.chiTieuNhomId = Number(chi_tieu.chiTieuNhomId);
+    chi_tieu.chiTieuPhanTo = Number(chi_tieu.chiTieuPhanTo);
+    chi_tieu.chiTieuCha = Number(chi_tieu.chiTieuCha);
 
     try {
       const data = await this.$axios.$post(`${chiTieu}/create`, chi_tieu)
 
-      commit('ADD_CHI_TIEU', data)
+      commit('ADD_CHI_TIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

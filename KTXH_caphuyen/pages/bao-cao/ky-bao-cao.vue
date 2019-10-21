@@ -10,6 +10,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <KyBaoCao
+        v-if="dialog"
         :kyBaoCao="kyBaoCao"
         :formTitle="titleDialog"
         @close="closeDialog"
@@ -179,6 +180,7 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
+    
     delete(tiem) {
       const index = this.items.indexOf(item);
       confirm("Xác nhận xóa?") && this.items.splice(index, 1);

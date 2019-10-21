@@ -127,11 +127,11 @@ export const actions = {
 
   async addBieuNhapLieuDonViTongHop({ state, commit }, bnlDonViTongHop) {
     const { bieuNhapLieuDonViTongHop } = state.api
-
+    
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/create`, bnlDonViTongHop)
 
-      commit('ADD_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', data)
+      commit('ADD_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

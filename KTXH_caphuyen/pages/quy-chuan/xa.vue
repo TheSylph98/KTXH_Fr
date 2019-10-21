@@ -8,7 +8,7 @@
     @clickAdd="clickAddNew"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <Xa :xa="xa" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
+      <Xa v-if="dialog" :xa="xa" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
   </Table>
 </template>

@@ -9,6 +9,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <ChiTieuPhanToChiTiet
+        v-if="dialog"
         :chiTieuPhanToChiTiet="chiTieuPhanToChiTiet"
         :formTitle="titleDialog"
         @close="closeDialog"

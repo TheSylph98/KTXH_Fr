@@ -9,6 +9,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <DonVi
+        v-if="dialog"
         :donVi="donVi"
         :formTitle="titleDialog"
         @close="closeDialog"

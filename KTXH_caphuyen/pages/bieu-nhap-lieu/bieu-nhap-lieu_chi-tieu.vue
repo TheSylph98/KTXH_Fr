@@ -10,6 +10,7 @@
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BieuNhapLieuChiTieu
+        v-if="dialog"
         :chiTieu="chiTieu"
         :formTitle="titleDialog"
         @close="closeDialog"
@@ -59,8 +60,8 @@ export default {
 
   mounted() {
     this.getBieuNhapLieuChiTieuList();
-    this.getBieuNhapLieuList();
-    this.getChiTieuList();
+    // this.getBieuNhapLieuList();
+    // this.getChiTieuList();
   },
 
   methods: {

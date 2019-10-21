@@ -9,7 +9,7 @@
         <v-row>
           <v-col cols="12" sm="6" md="4">
             <SelectedWithSearch
-              :items="tinhList"
+              :items="tList"
               label="Tỉnh"
               @select="huyen.qcTinhId = $event.id"
               @search="getSearchTinhList($event)"
@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     ...mapState("quychuan/tinh", ["tinhList","searchTinhList"]),
-    tinhList() {
+    tList() {
       if (this.searchTinhList.length > 0) return this.searchTinhList;
       else return this.tinhList;
       },

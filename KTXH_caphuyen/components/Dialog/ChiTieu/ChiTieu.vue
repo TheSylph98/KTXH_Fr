@@ -32,16 +32,15 @@
               </v-col>
               <v-col cols="6">
                 <SelectedWithSearch
-                :items="chiTieuNhomList"
+                :items="ctNhomList"
                 label="Chỉ tiêu nhóm"
                 @select="chiTieu.chiTieuNhomId = $event.id"
                 @search="getSearchChiTieuNhomList($event)"
                 />
               </v-col>
-
               <v-col cols="6">
                 <SelectedWithSearch
-                :items="chiTieuPhanToList"
+                :items="ctPhanToList"
                 label="Chỉ tiêu phân tổ"
                 @select="chiTieu.chiTieuPhanToId = $event.id"
                 @search="getSearchChiTieuPhanToList($event)"
@@ -55,11 +54,9 @@
                 @search="getSearchChiTieuList($event)"
                 />
               </v-col>
-
               <v-col cols="6">
                 <v-text-field v-model="chiTieu.donViTinh" label="Đơn vị tính*"></v-text-field>
               </v-col>
-
               <v-col cols="12">
                 <v-switch
                   v-model="chiTieu.congDonTuDuoiLen"
@@ -67,7 +64,6 @@
                   label="Cộng từ dưới lên"
                 ></v-switch>
               </v-col>
-
                <v-col cols="6">
                 <v-switch
                   v-model="chiTieu.congTheoMa"
@@ -75,11 +71,9 @@
                   label="Cộng theo mã"
                 ></v-switch>
               </v-col>
-
               <v-col class="d-flex" cols="6">
                 <v-textarea v-model="chiTieu.congThucCong" label="Cộng Công Thức"></v-textarea>
               </v-col>
-
               <v-col cols="12">
                 <v-switch
                   v-model="chiTieu.coPhanToKhong"
@@ -87,7 +81,6 @@
                   label="Có phân tổ hay không?"
                 ></v-switch>
               </v-col>
-
               <v-col class="d-flex" cols="4">
                 <v-switch v-model="chiTieu.tinhPhanTram" class="ma-1" label="Tính Phần Trăm"></v-switch>
               </v-col>
@@ -166,11 +159,11 @@ export default {
       if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
     },
-    chiTieuNhomList() {
+    ctNhomList() {
       if (this.searchChiTieuNhomList.length > 0) return this.searchChiTieuNhomList;
       else return this.chiTieuNhomList;
     },
-    chiTieuPhanToList() {
+    ctPhanToList() {
       if (this.searchChiTieuPhanToList.length > 0) return this.searchChiTieuPhanToList;
       else return this.chiTieuPhanToList;
     },
