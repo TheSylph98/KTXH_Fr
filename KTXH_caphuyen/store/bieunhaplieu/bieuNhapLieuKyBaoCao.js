@@ -126,7 +126,12 @@ export const actions = {
   },
 
   async addBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
+    
     const { bieuNhapLieuKyBaoCao } = state.api
+    const uuidv1 = require('uuid/v1');
+    bnlKyBaoCao.bieuNhapLieuId = Number(bnlKyBaoCao.bieuNhapLieuId)
+    bnlKyBaoCao.kyBaoCaoId = Number(bnlKyBaoCao.kyBaoCaoId)
+    bnlKyBaoCao.uid = uuidv1()
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/create`, bnlKyBaoCao)
