@@ -15,11 +15,20 @@
                 <v-text-field v-model="chiTieu.ten" label="Tên chỉ tiêu*"></v-text-field>
               </v-col>
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.capNhapLieuId" label="Cấp nhập liệu"></v-text-field>
+                <SelectedWithSearch
+                :items="capNhapLieuList"
+                label="Cấp nhập liệu"
+                @select="chiTieu.capNhapLieuId = $event.id"
+                @search="getSearchCapHanhChinhList($event)"
+                />
               </v-col>
-
               <v-col cols="6">
-                <v-text-field v-model="chiTieu.capTongHopId" label="Cấp tổng hợp"></v-text-field>
+                <SelectedWithSearch
+                :items="capTongHopList"
+                label="Cấp tổng hợp"
+                @select="chiTieu.capTongHopId = $event.id"
+                @search="getSearchCapHanhChinhList($event)"
+                />
               </v-col>
               <v-col cols="6">
                 <SelectedWithSearch
@@ -82,14 +91,12 @@
               <v-col class="d-flex" cols="4">
                 <v-switch v-model="chiTieu.tinhPhanTram" class="ma-1" label="Tính Phần Trăm"></v-switch>
               </v-col>
-
               <v-col class="d-flex" cols="4">
                 <v-text-field v-model="chiTieu.tuSo" label="Tử Số"></v-text-field>
               </v-col>
               <v-col class="d-flex" cols="4">
                 <v-text-field v-model="chiTieu.mauSo" label="Mẫu Số"></v-text-field>
               </v-col>
-
               <v-col class="d-flex" cols="12">
                 <v-textarea v-model="chiTieu.ghiChu" label="Ghi Chú"></v-textarea>
               </v-col>
@@ -150,6 +157,15 @@ export default {
     ...mapState("chitieu/chiTieuNhom", ["chiTieuNhomList","searchChiTieuNhomList"]),
     ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList","searchChiTieuPhanToList"]),
     ...mapState("chitieu/chiTieu", ["chiTieuList","searchChiTieuList"]),
+    ...mapState("sys/sysCapHanhChinh", ["caphanhchinhList", "searchCapHanhChinhList"]),
+    capNhapLieuList() {
+      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+      else return this.caphanhchinhList;
+    },
+    capTongHopList() {
+      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+      else return this.caphanhchinhList;
+    },
     chiTieuNhomList() {
       if (this.searchChiTieuNhomList.length > 0) return this.searchChiTieuNhomList;
       else return this.chiTieuNhomList;
@@ -167,7 +183,8 @@ export default {
   methods: {
     ...mapActions("chitieu/chiTieuNhom", ["getSearchChiTieuNhomList"]),
     ...mapActions("chitieu/chiTieuPhanTo", ["getSearchChiTieuPhanToList"]),
-    ...mapActions("chitieu/chiTieu", ["getSearchChiTieuList"])
+    ...mapActions("chitieu/chiTieu", ["getSearchChiTieuList"]),
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
   }
 }
 </script>

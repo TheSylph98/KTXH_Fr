@@ -88,6 +88,7 @@ export default {
     this.getChiTieuList();
     this.getChiTieunhomList();
     this.getChiTieuPhanToList();
+    this.getCapHanhChinhList();
   },
 
   methods: {
@@ -101,7 +102,7 @@ export default {
     ]),
     ...mapActions("chitieu/chiTieuNhom", ["getChiTieuNhomList"]),
     ...mapActions("chitieu/chiTieuPhanTo", ["getChiTieuPhanToList"]),
-
+    ...mapActions("sys/sysCapHanhChinh", ["getCapHanhChinhList"]),
 
     clickAddNew() {
       this.dialog = true;
