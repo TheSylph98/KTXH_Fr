@@ -1,11 +1,13 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="chiTieuPhanToChiTietList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getChiTieuPhanToChiTietList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <ChiTieuPhanToChiTiet
@@ -17,6 +19,10 @@
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+</div>
 </template>
 
 <script>
@@ -34,6 +40,7 @@ export default {
       title: "Chỉ Tiêu Phân Tổ Chi Tiết",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
       chiTieuPhanToChiTiet: {},
       titleDialog: "",
@@ -66,6 +73,7 @@ export default {
   computed: {
     ...mapState("chitieu/chiTieuPhanToChiTiet", [
       "chiTieuPhanToChiTietList",
+      "chi_tieu_phan_to_chi_tiet",
       "pagination"
     ])
   },
@@ -76,7 +84,7 @@ export default {
 
   created() {
     this.getChiTieuPhanToChiTietList();
-    this.getChiTieuPhanToList();
+    //this.getChiTieuPhanToList();
   },
 
   methods: {
@@ -103,29 +111,31 @@ export default {
         xoa: 0
       };
     },
-    edit(item) {
-      this.chiTieuPhanToChiTiet = this.chiTieuPhanToChiTietListList.indexOf(
-        item
-      );
-      this.dialog = true;
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getChiTieuPhanToChiTiet(Number(item.id))
+      this.chiTieuPhanToChiTiet = Object.assign({}, this.chi_tieu_phan_to_chi_tiet)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.chiTieuPhanToChiTietListList.indexOf(item);
-      confirm("Xác nhận xóa?") &&
-        this.chiTieuPhanToChiTietListList.splice(index, 1);
-      this.deleteChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
+
+    async deleted(items) {
+      await this.deleteChiTieuPhanToChiTiet(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieuPhanToChiTiet = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
+        await this.updateChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
       } else {
-        this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
+        await this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
       }
       this.closeDialog();
     }

@@ -8,7 +8,7 @@
           <v-container>
             <v-row>
               <v-col cols="6">
-                <v-text-field v-model="truongNhapLieu.ma" label="Kí Hiệu*"></v-text-field>
+                <v-text-field v-model="truongNhapLieu.ma" value="truongNhapLieu.ma" label="Kí Hiệu*"></v-text-field>
               </v-col>
               <v-col cols="6">
                 <v-text-field v-model="truongNhapLieu.ten" label="Tên Biểu Nhập Liệu*"></v-text-field>
@@ -63,16 +63,7 @@ export default {
   },
   props: {
     truongNhapLieu: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 1,
-        truongNhapLieuId: 1,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
 
     formTitle: {

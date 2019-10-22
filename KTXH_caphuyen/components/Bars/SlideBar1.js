@@ -19,11 +19,6 @@ export default [
                 to: "/quan-tri/tac-nhan"
             },
             {
-                icon: "mdi-adjust",
-                title: "Chức năng phần mềm",
-                to: "/quan-tri/tac-nhan_chuc-nang-phan-mem"
-            },
-            {
                 icon: "mdi-account-box-multiple",
                 title: "Khai Báo Người dùng",
                 to: "/quan-tri/User"
@@ -57,7 +52,7 @@ export default [
         children: [
             {
                 icon: "mdi-group",
-                title: "Chỉ tiêu KTXH",
+                title: "Chỉ tiêu",
                 to: "/chi-tieu/chi-tieu"
             },
             {

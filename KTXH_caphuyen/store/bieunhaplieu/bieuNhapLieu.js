@@ -34,7 +34,7 @@ export const mutations = {
   
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_BIEU_NHAP_LIEU: set('bnlList'),
+  SET_BIEU_NHAP_LIEU: set('bnl'),
 
   ADD_BIEU_NHAP_LIEU: add('bnlList'),
 

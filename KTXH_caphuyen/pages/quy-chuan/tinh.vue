@@ -1,16 +1,22 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="tinhList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getTinhList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <Tinh v-if="dialog" :tinh="tinh" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
+      <Tinh v-if="dialog" :tinh="tinh_data" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -27,17 +33,16 @@ export default {
       title: "Khai Báo Từ Điển: Tỉnh",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
-      tinh: {},
-      donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
+      tinh_data: {},
       headers: [
         {
           text: "Mã định danh",
           align: "center",
           sorttable: true,
           value: "ma",
-          typr: "string"
+          type: "string"
         },
         {
           text: "Tên",
@@ -64,7 +69,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("quychuan/qcTinh", ["tinhList", "pagination"])
+    ...mapState("quychuan/qcTinh", ["tinhList", "tinh", "pagination"])
   },
 
   asyncData({ store }) {
@@ -88,42 +93,46 @@ export default {
       this.dialog = true;
       this.isUpdate = false;
       this.titleDialog = "Thêm tỉnh mới";
-      this.tinh = {
+      this.tinh_data = {
         ma: "",
         ten: "",
         sysCapDonViHanhChinhId: 0,
         loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
+        nongThon: true,
+        bienGioi: false,
+        haiDao: true,
+        vungDBKhoKhan: false,
         ghiChu: ""
       };
     },
 
-    edit(item) {
-      this.tinh = this.tinhList.indexOf(item);
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getTinh(Number(item.id))
+      this.tinh_data = Object.assign({}, this.tinh)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.tinhList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.tinhList.splice(index, 1);
-      this.deleteQCTinh(this.tinh);
+
+    async deleted(items) {
+      await this.deleteTinh(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.tinh = {};
+      this.tinh_data = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateQCTinh(this.tinh);
+        await this.updateTinh(this.tinh_data);
       } else {
-        this.addQCTinh(this.tinh);
+        await this.addTinh(this.tinh_data);
       }
       this.closeDialog();
-    }
+    },
   }
 };
 </script>

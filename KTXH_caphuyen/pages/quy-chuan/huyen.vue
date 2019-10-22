@@ -1,22 +1,28 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="huyenList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getHuyenList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <Huyen
         v-if="dialog"
-        :huyen="huyen"
+        :huyen="huyen_data"
         :formTitle="titleDialog"
         @close="closeDialog"
         @save="saveChiTieuDialog"
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -34,10 +40,9 @@ export default {
       title: "Khai Báo Quy Chuẩn: Huyện",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
-      huyen: {},
-      donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
+      huyen_data: {},
       headers: [
         {
           text: "Mã",
@@ -71,7 +76,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("quychuan/qcHuyen", ["huyenList", "pagination"])
+    ...mapState("quychuan/qcHuyen", ["huyenList", "huyen", "pagination"])
   },
 
   asyncData({ store }) {
@@ -92,51 +97,54 @@ export default {
       "deleteHuyen",
       "restoreHuyen"
     ]),
-    ...mapActions("quychuan/tinh", ["getTinhList"]),
+    ...mapActions("quychuan/qcTinh", ["getTinhList"]),
 
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
       this.titleDialog = "Thêm huyện mới";
-      this.huyen = {
+      this.huyen_data = {
         ma: "",
         ten: "",
         qcTinhId: "",
         sysCapDonViHanhChinhId: 0,
         loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
+        nongThon: false,
+        bienGioi: false,
+        haiDao: false,
+        vungDBKhoKhan: false,
         ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        hieuLuc: true
       };
     },
 
-    edit(item) {
-      this.huyen = this.huyenList.indexOf(item);
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getHuyen(Number(item.id))
+      this.huyen_data = Object.assign({}, this.huyen)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.huyenList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.huyenList.splice(index, 1);
-      this.deleteQCHuyen(this.huyen);
+
+    async deleted(items) {
+      await this.deleteHuyen(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.huyen = {};
+      this.huyen_data = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateQCHuyen(this.huyen);
+        await this.updateHuyen(this.huyen_data);
       } else {
-        this.addQCHuyen(this.huyen);
+        await this.addHuyen(this.huyen_data);
       }
       this.closeDialog();
-    }
+    },
   }
 };
 </script>

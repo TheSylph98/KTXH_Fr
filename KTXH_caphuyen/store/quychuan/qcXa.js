@@ -25,12 +25,16 @@ export const state = () => {
 
 export const mutations = {
   SET_XA_LIST: set('xaList'),
+
   SET_SEARCH_XA_LIST: set('searchXaList'),
+
   SET_DELETED_XA: set('deletedXa'),
+
   SET_PAGINATION: set('pagination'),
+  
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_XA: set('xaList'),
+  SET_XA: set('xa'),
 
   ADD_XA: add('xaList'),
 
@@ -115,7 +119,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_XA', data.rows)
+      commit('SET_XA', data[0])
     } catch (err) {
       console.log('getXa', err)
     }
@@ -146,7 +150,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcXa}/update`, xa)
 
-      commit('UPDATE_XA', data)
+      commit('UPDATE_XA', {value: data})
     } catch (err) {
       console.log('updateXa', err)
     }

@@ -1,9 +1,10 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="bnlChiTieuList"
-    @edit="clickUpdateDialog($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getBieuNhapLieuChiTieuList({queryData: $event})"
@@ -18,6 +19,10 @@
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -35,6 +40,7 @@ export default {
       title: "Biểu Nhập Liệu Chỉ Tiêu",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
@@ -42,12 +48,13 @@ export default {
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      chiTieu: {}
+      chiTieu: {},
     };
   },
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieuChiTieu", [
       "bnlChiTieuList",
+      "bnlChiTieu",
       "pagination"
     ])
   },
@@ -91,10 +98,17 @@ export default {
       };
     },
 
-    clickUpdateDialog() {
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getBieuNhapLieuChiTieu(Number(item.id))
+      this.chiTieu = Object.assign({}, this.bnlChiTieu)
       this.isUpdate = true;
-      this.titleDialog = "Cập nhật chỉ tiêu";
+      this.overlay = false;
+      this.dialog = true;
+    },
+
+    async deleted(items) {
+      await this.deleteBieuNhapLieuChiTieu(items.map(e => e.id));
     },
 
     closeDialog() {
@@ -113,11 +127,6 @@ export default {
       this.closeDialog();
     },
 
-    async deleted(item) {
-      const index = this.bnlChiTieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlChiTieuList.splice(index, 1);
-      await this.deleteBieuNhapLieuChiTieu(this.chiTieu);
-    }
     // edit(item) {
     //   this.dialog = true;
     //   this.isUpdate = true;

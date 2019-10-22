@@ -1,11 +1,13 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="chiTieuPhanToList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getChiTieuPhanToList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <ChiTieuPhanTo
@@ -17,6 +19,10 @@
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+</div>
 </template>
 
 <script>
@@ -34,6 +40,7 @@ export default {
       title: "Nhóm Chỉ Tiêu Phân Tổ",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
       chiTieuPhanTo: {},
       headers: [
@@ -70,7 +77,7 @@ export default {
   },
 
   computed: {
-    ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList", "pagination"])
+    ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList", "chi_tieu_phan_to", "pagination"])
   },
 
   asyncData({ store }) {
@@ -102,26 +109,30 @@ export default {
       };
     },
 
-    edit(item) {
-      this.chiTieuPhanTo = this.chiTieuPhanToListList.indexOf(item);
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getChiTieuPhanTo(Number(item.id))
+      this.chiTieuPhanTo = Object.assign({}, this.chi_tieu_phan_to)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.chiTieuPhanToListList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.chiTieuPhanToListList.splice(index, 1);
-      this.deleteChiTieuPhanTo(this.chiTieuPhanTo);
+
+    async deleted(items) {
+      await this.deleteChiTieuPhanTo(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieuPhanTo = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateChiTieuPhanTo(this.chiTieuPhanTo);
+        await this.updateChiTieuPhanTo(this.chiTieuPhanTo);
       } else {
-        this.addChiTieuPhanTo(this.chiTieuPhanTo);
+        await this.addChiTieuPhanTo(this.chiTieuPhanTo);
       }
       this.closeDialog();
     }

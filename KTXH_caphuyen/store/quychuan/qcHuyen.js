@@ -34,7 +34,7 @@ export const mutations = {
 
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_HUYEN: set('huyenList'),
+  SET_HUYEN: set('huyen'),
 
   ADD_HUYEN: add('huyenList'),
 
@@ -119,7 +119,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_HUYEN', data.rows)
+      commit('SET_HUYEN', data[0])
     } catch (err) {
       console.log('getHuyen', err)
     }
@@ -130,6 +130,8 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
     huyen.uid = uuidv1();
     huyen.qcTinhId = Number(huyen.qcTinhId)
+    huyen.nongthon = Boolean(huyen.nongthon)
+    huyen.sysCapDonViHanhChinhId = Number(huyen.sysCapDonViHanhChinhId)
     try {
       const data = await this.$axios.$post(`${qcHuyen}/create`, huyen)
 
@@ -149,7 +151,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcHuyen}/update`, huyen)
 
-      commit('UPDATE_HUYEN', data)
+      commit('UPDATE_HUYEN', {value: data})
     } catch (err) {
       console.log('updateHuyen', err)
     }

@@ -34,7 +34,7 @@ export const mutations = {
   
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_TAC_NHAN: set('tacNhanList'),
+  SET_TAC_NHAN: set('tacNhan'),
 
   ADD_TAC_NHAN: add('tacNhanList'),
 
@@ -119,7 +119,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_TAC_NHAN', data.rows)
+      commit('SET_TAC_NHAN', data[0])
     } catch (err) {
       console.log('getQTTacNhan', err)
     }
@@ -149,7 +149,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtTacNhan}/update`, tacNhan)
 
-      commit('UPDATE_TAC_NHAN', data)
+      commit('UPDATE_TAC_NHAN', {value: data})
     } catch (err) {
       console.log('updateQTTacNhan', err)
     }

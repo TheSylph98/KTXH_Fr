@@ -1,16 +1,22 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="xaList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getXaList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
-      <Xa v-if="dialog" :xa="xa" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
+      <Xa v-if="dialog" :xa="xa_data" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -28,10 +34,9 @@ export default {
       title: "Khai Báo Từ Điển: Xã",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
-      xa: {},
-      donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
+      xa_data: {},
       headers: [
         {
           text: "Mã định danh",
@@ -65,7 +70,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("quychuan/qcXa", ["xaList", "pagination"])
+    ...mapState("quychuan/qcXa", ["xaList", "xa", "pagination"])
   },
 
   asyncData({ store }) {
@@ -74,7 +79,7 @@ export default {
 
   created() {
     this.getXaList();
-    this.getHuyenList();
+    //this.getHuyenList();
   },
 
   methods: {
@@ -86,13 +91,13 @@ export default {
       "deleteXa",
       "restoreXa"
     ]),
-    ...mapActions("quychuan/huyen", ["getHuyenList"]),
+    ...mapActions("quychuan/qcHuyen", ["getHuyenList"]),
 
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
       this.titleDialog = "Thêm xã mới";
-      this.xa = {
+      this.xa_data = {
         ma: "",
         ten: "",
         qcHuyenId: "",
@@ -108,29 +113,33 @@ export default {
       };
     },
 
-    edit(item) {
-      this.xa = this.xaList.indexOf(item);
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getXa(Number(item.id))
+      this.xa_data = Object.assign({}, this.xa)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.xaList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.xaList.splice(index, 1);
-      this.deleteQCXa(this.xa);
+
+    async deleted(items) {
+      await this.deleteXa(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.xa = {};
+      this.xa_data = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateQCXa(this.xa);
+        await this.updateXa(this.xa_data);
       } else {
-        this.addQCXa(this.xa);
+        await this.addXa(this.xa_data);
       }
       this.closeDialog();
-    }
+    },
   }
 };
 </script>

@@ -30,12 +30,12 @@
                 ></v-select>
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
-                <v-select
-                  :items="loaidonViHanhChinh"
-                  v-model="xa.loaiDonViHanhChinh"
-                  label="Loại đơn vị hành chính"
-                  outlined
-                ></v-select>
+                <SelectedWithSearch
+                :items="caphcList"
+                label="Cấp đơn vị hành chính"
+                @select="xa.sysCapDonViHanhChinhId = $event.id"
+                @search="getSearchCapHanhChinhList($event)"
+                />
               </v-col>
               <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-switch v-model="xa.nongThon" class="ma-1" label="Thành Thị - Nông thôn"></v-switch>
@@ -83,6 +83,11 @@ export default {
   components: {
     SelectedWithSearch
   },
+  data() {
+    return {
+      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
+    }
+  },
   props: {
     xa: {
       type: Object,
@@ -96,27 +101,29 @@ export default {
         bienGioi: 0,
         haiDao: 0,
         vungDBKhoKhan: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ghiChu: ""
       }
     },
-    donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
-    loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
     formTitle: {
       type: String,
       default: "Thêm Mới"
     }
   },
   computed: {
-    ...mapState("quychuan/huyen", ["huyenList","searchHuyenList"]),
+    ...mapState("quychuan/qcHuyen", ["huyenList","searchHuyenList"]),
+    ...mapState("sys/sysCapHanhChinh", ["caphanhchinhList","searchCapHanhChinhList"]),
     hList() {
       if (this.searchHuyenList.length > 0) return this.searchHuyenList;
       else return this.huyenList;
     },
+    caphcList(){
+      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+      else return this.caphanhchinhList;
+    }
   },
   methods: {
-    ...mapActions("quychuan/huyen", ["getSearchHuyenList"])
+    ...mapActions("quychuan/qcHuyen", ["getSearchHuyenList"]),
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
   }
 }
 </script>

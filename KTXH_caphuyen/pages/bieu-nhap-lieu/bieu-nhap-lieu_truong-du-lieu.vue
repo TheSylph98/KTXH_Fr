@@ -1,22 +1,28 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="bnlTruongNhapLieuList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getBieuNhapLieuTruongNhapLieuList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BNLTruongNhapLieu
         v-if="dialog"
-        :truongNhapLieu="bnlTruongNhapLieu"
+        :truongNhapLieu="bnlTNL"
         :formTitle="titleDialog"
         @close="closeDialog"
         @save="saveChiTieuDialog"
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -34,6 +40,7 @@ export default {
       title: "Biểu Nhập Liệu Trường Nhập Liệu",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
@@ -41,12 +48,13 @@ export default {
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      bnlTruongNhapLieu: {}
+      bnlTNL: {}
     };
   },
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieuTruongNhapLieu", [
       "bnlTruongNhapLieuList",
+      "bnlTruongNhapLieu",
       "pagination"
     ])
   },
@@ -78,7 +86,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.titleDialog = "Thêm mới biểu nhập liệu trường nhập liệu";
-      this.bnlTruongNhapLieu  = {
+      this.bnlTNL  = {
         ma: "",
         ten: "",
         bieuNhapLieuId: 0,
@@ -86,10 +94,16 @@ export default {
         ghiChu: ""
       };
     },
-    edit(item) {
-      this.dialog = true;
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getBieuNhapLieuTruongNhapLieu(Number(item.id))
+      this.bnlTNL = Object.assign({}, this.bnlTruongNhapLieu)
+      console.log("bnldsdhfd", this.bnlTNL)
       this.isUpdate = true;
-      this.bnlTruongNhapLieu = this.bnlTruongNhapLieuList.indexOf(item);
+      this.overlay = false;
+      this.dialog = true;
+      // console.log("item", item)
     },
 
     async deleted(items) {
@@ -100,13 +114,14 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.bnlTruongNhapLieu = {};
+      this.bnlTNL = {};
     },
+
     async saveChiTieuDialog() {
       if (this.isUpdate) {
-        await this.updateBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu);
+        await this.updateBieuNhapLieuTruongNhapLieu(this.bnlTNL);
       } else {
-        await this.addBieuNhapLieuTruongNhapLieu(this.bnlTruongNhapLieu);
+        await this.addBieuNhapLieuTruongNhapLieu(this.bnlTNL);
       }
       this.closeDialog();
     }

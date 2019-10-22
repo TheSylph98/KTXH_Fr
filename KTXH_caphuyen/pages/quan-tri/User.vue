@@ -1,21 +1,27 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="userList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getQTUserList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <User  
         v-if="dialog" 
-        :user="user" 
+        :user="user_data" 
         :formTitle="titleDialog" 
         @close="closeDialog" 
         @save="saveChiTieuDialog" />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -33,8 +39,9 @@ export default {
       title: "Khai Báo Người Dùng",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
-      user: {},
+      user_data: {},
       headers: [
         {
           text: "Họ và Tên",
@@ -75,7 +82,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("quantri/qtUser", ["userList", "pagination"])
+    ...mapState("quantri/qtUser", ["userList", "user", "pagination"])
   },
 
   asyncData({ store }) {
@@ -84,7 +91,7 @@ export default {
 
   created() {
     this.getQTUserList();
-    this.getDonViList();
+    //this.getDonViList();
   },
 
   methods: {
@@ -102,7 +109,7 @@ export default {
       this.dialog = true;
       this.isUpdate = false;
       this.titleDialog = "Thêm user mới";
-      this.user = {
+      this.user_data = {
         ma: "",
         ten: "",
         matKhau: "",
@@ -111,29 +118,35 @@ export default {
         qtDonViId: 0
       };
     },
-    edit(item) {
-      this.user = this.userList.indexOf(item);
-      this.dialog = true;
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getQTUser(Number(item.id))
+      this.user_data = Object.assign({}, this.user)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.userList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.userList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.user);
+
+    async deleted(items) {
+      await this.deleteQTUser(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.user = {};
+      this.user_data = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.user);
+        await this.updateQTUser(this.user_data);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.user);
+        await this.addQTUser(this.user_data);
       }
       this.closeDialog();
-    }
+    },
+
   }
 };
 </script>

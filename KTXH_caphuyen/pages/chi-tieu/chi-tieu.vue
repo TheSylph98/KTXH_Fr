@@ -1,13 +1,15 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="chiTieuList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getChiTieuList({queryData: $event})"
   >
-    <v-dialog v-model="dialog" max-width="1000px">
+    <v-dialog v-model="dialog" max-width="800px">
       <ChiTieu
         v-if="dialog"
         :chiTieu="chiTieu"
@@ -17,6 +19,10 @@
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -34,6 +40,7 @@ export default {
       title: "Chỉ Tiêu Kinh Tế Xã Hội",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
       chiTieu: {},
       caccap: ["cấp tỉnh", "cấp huyện", "cấp xã"],
@@ -78,7 +85,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("chitieu/chiTieu", ["chiTieuList", "pagination"])
+    ...mapState("chitieu/chiTieu", ["chiTieuList", "chi_tieu", "pagination"])
   },
 
   asyncData({ store }) {
@@ -87,9 +94,9 @@ export default {
 
   created() {
     this.getChiTieuList();
-    this.getChiTieunhomList();
-    this.getChiTieuPhanToList();
-    this.getCapHanhChinhList();
+    // this.getChiTieunhomList();
+    // this.getChiTieuPhanToList();
+    // this.getCapHanhChinhList();
   },
 
   methods: {
@@ -127,32 +134,35 @@ export default {
       };
     },
 
-    edit(item) {
-      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getChiTieu(Number(item.id))
+      this.chiTieu = Object.assign({}, this.chi_tieu)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
 
-    deleted(item) {
-      const index = this.bnlTruongDuLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+    async deleted(items) {
+      await this.deleteChiTieu(items.map(e => e.id));
     },
 
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.truongNhapLieu = {};
+      this.chiTieu = {};
     },
 
-    saveChiTieuDialog() {
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+        await this.updateChiTieu(this.chiTieu);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+        await this.addChiTieu(this.chiTieu);
       }
+
       this.closeDialog();
-    }
+    },
+
   }
 };
 </script>

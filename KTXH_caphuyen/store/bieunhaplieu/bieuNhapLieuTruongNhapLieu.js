@@ -36,7 +36,7 @@ export const mutations = {
 
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: set('bnlTruongNhapLieuList'),
+  SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: set('bnlTruongNhapLieu'),
 
   ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: add('bnlTruongNhapLieuList'),
 
@@ -120,7 +120,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data.rows)
+      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data[0])
     } catch (err) {
       console.log('getBieuNhapLieuTruongNhapLieu', err)
     }
@@ -128,7 +128,6 @@ export const actions = {
 
   async addBieuNhapLieuTruongNhapLieu({ state, commit }, bnlTruongNhapLieu) {
     const { bieuNhapLieuTruongNhapLieu } = state.api
-    // const uuidv1 = require('uuid/v1');
     bnlTruongNhapLieu.bieuNhapLieuId = Number(bnlTruongNhapLieu.bieuNhapLieuId)
     bnlTruongNhapLieu.truongNhapLieuId = Number(bnlTruongNhapLieu.truongNhapLieuId)
     bnlTruongNhapLieu.uid = uuidv1()
@@ -152,7 +151,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/update`, bnlTruongNhapLieu)
 
-      commit('UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data)
+      commit('UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', {value: data})
     } catch (err) {
       console.log('updateBieuNhapLieuTruongNhapLieu', err)
     }

@@ -34,7 +34,7 @@ export const mutations = {
   
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_TINH: set('tinhList'),
+  SET_TINH: set('tinh'),
 
   ADD_TINH: add('tinhList'),
 
@@ -57,12 +57,12 @@ export const actions = {
 
       })
 
-      console.log("data", data.data.rows)
-      commit('SET_TINH_LIST', data.data.rows)
+      console.log("data", data.rows)
+      commit('SET_TINH_LIST', data.rows)
       commit('SET_PAGINATION', {
-        total: data.data.total,
-        page: data.data.page,
-        pageSize: data.data.pageSize
+        total: data.total,
+        page: data.page,
+        pageSize: data.pageSize
       })
     } catch (err) {
       console.log('getTinhList', err)
@@ -102,7 +102,7 @@ export const actions = {
       }
       )
 
-      commit('SET_DELETED_TINH', data.data.rows)
+      commit('SET_DELETED_TINH', data.rows)
     } catch (err) {
       console.log('getTinhList', err)
     }
@@ -119,7 +119,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_TINH', data.data.rows)
+      commit('SET_TINH', data[0])
     } catch (err) {
       console.log('getTinh', err)
     }
@@ -148,7 +148,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcTinh}/update`, tinh)
 
-      commit('UPDATE_TINH', data)
+      commit('UPDATE_TINH', {value: data})
     } catch (err) {
       console.log('updateTinh', err)
     }

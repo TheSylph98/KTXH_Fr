@@ -1,11 +1,13 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="bnlKyBaoCaoList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getBieuNhapLieuKyBaoCaoList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BNLKyBaoCao
@@ -17,6 +19,10 @@
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+</div>
 </template>
 
 <script>
@@ -34,6 +40,7 @@ export default {
       title: "Biểu Nhập Liệu Kỳ Báo Cáo",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
       headers: [
         { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
@@ -47,6 +54,7 @@ export default {
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieuKyBaoCao", [
       "bnlKyBaoCaoList",
+      "bnlKyBaoCao",
       "pagination"
     ])
   },
@@ -90,17 +98,20 @@ export default {
       };
     },
 
-    edit(item) {
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getBieuNhapLieuKyBaoCao(Number(item.id))
+      this.kyBaoCao = Object.assign({}, this.bnlKyBaoCao)
       this.isUpdate = true;
-      this.titleDialog = "Chỉnh Sửa Biểu Nhập Liệu Kỳ Báo Cáo";
-      this.kyBaoCao = this.bnlKyBaoCaoList.indexOf(item);
+      this.overlay = false;
+      this.dialog = true;
     },
-    async deleted(item) {
-      const index = this.bnlKyBaoCaoList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlKyBaoCaoList.splice(index, 1);
-      await this.deleteBieuNhapLieuKyBaoCao(this.kyBaoCao);
+
+    async deleted(items) {
+      console.log("item", items)
+      await this.deleteBieuNhapLieuKyBaoCao(items.map(e => e.id));
     },
+    
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
