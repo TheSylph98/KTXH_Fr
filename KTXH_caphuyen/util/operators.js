@@ -2,28 +2,28 @@ export const stringOperators = [
   {
     label: 'Bắt đầu bằng',
     filter: (text) => {
-      return { like: new RegExp(`${text}*`) }
+      return { regexp: `^${text}` }
     },
     operator: 'begins-with'
   },
   {
     label: 'Chứa',
     filter: (text) => {
-      return { like: `/*${text}*/` }
+      return { regexp: `/*${text}*/` }
     },
     operator: 'contains'
   },
   {
     label: 'Không chứa',
     filter: (text) => {
-      return { nlike: `/*${text}*/` }
+      return { regexp: `^((?!${text}).)*$` }
     },
     operator: "doesn't-contain"
   },
   {
     label: 'Kết thúc bằng',
     filter: (text) => {
-      return { like: `/*${text}/` }
+      return { exgexp: `^*${text}$/` }
     },
     operator: 'ends-with'
   },
