@@ -52,6 +52,7 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieu}/list`, {
+        queryData: payload.queryData,
         page: payload.page,
         pageSize: payload.pageSize
       })

@@ -7,7 +7,7 @@
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
-    @filter="getBieuNhapLieuTruongNhapLieuList({queryData: $event})"
+    @filter="handleFilter"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BNLTruongNhapLieu
@@ -124,6 +124,12 @@ export default {
         await this.addBieuNhapLieuTruongNhapLieu(this.bnlTNL);
       }
       this.closeDialog();
+    },
+
+    async handleFilter(value) {
+      this.overlay = true
+      await this.getBieuNhapLieuTruongNhapLieuList({queryData: value})
+      this.overlay = false
     }
   }
 };

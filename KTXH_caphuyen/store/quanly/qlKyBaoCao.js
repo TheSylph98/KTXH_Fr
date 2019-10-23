@@ -52,6 +52,7 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/list`, {
+        queryData: payload.queryData,
         page: payload.page,
         pageSize: payload.pageSize
 
@@ -127,7 +128,9 @@ export const actions = {
 
   async addKyBaoCao({ state, commit }, kyBaoCao) {
     const { qlKyBaoCao } = state.api
-    
+    const uuidv1 = require('uuid/v1');
+    kyBaoCao.uid = uuidv1();
+    kyBaoCao.donViCha = Number(kyBaoCao.donViCha);
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/create`, kyBaoCao)
 

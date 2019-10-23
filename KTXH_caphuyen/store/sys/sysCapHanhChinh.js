@@ -52,6 +52,7 @@ import {
   
       try {
         const data = await this.$axios.$post(`${sysCapHanhChinh}/list`, {
+          queryData: payload.queryData,
           page: payload.page,
           pageSize: payload.pageSize
   

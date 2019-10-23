@@ -18,6 +18,7 @@
               <v-col cols="6">
                 <SelectedWithSearch
                   :items="bieuNhapLieuList"
+                  :itemObj="truongNhapLieu.belongsToBieuNhapLieu"
                   label="Biểu nhập liệu"
                   @select="truongNhapLieu.bieuNhapLieuId = $event.id"
                   @search="getSearchBieuNhapLieuList($event)"
@@ -26,6 +27,7 @@
               <v-col cols="6">
                 <SelectedWithSearch
                   :items="tnlList"
+                  :itemObj="truongNhapLieu.belongsToBieuNhapLieu"
                   label="Trường nhập liệu"
                   @select="truongNhapLieu.truongNhapLieuId = $event.id"
                   @search="getSearchTruongNhaplieuList($event)"

@@ -4,8 +4,8 @@
       v-model="selectItems"
       :headers="headerTables"
       :items="items"
-      :items-per-page="5"
       class="elevation-1"
+      :footer-props="footerProps"
       show-select
       dense
     >
@@ -81,6 +81,7 @@
         <p>Chưa cập nhập dữ liệu</p>
       </template>
     </v-data-table>
+
 
      <v-dialog
       v-model="dialog"
@@ -163,6 +164,14 @@ export default {
     dialogContent: {
       type: String,
       default: "Bạn có chắc chắn muốn xóa không?"
+    },
+
+    pagination: {
+      type: Object,
+      default: {
+        page: 0, 
+        pageSize: 20
+      }
     }
   },
   data() {
@@ -170,7 +179,22 @@ export default {
       index: 1,
       search: {},
       selectItems: [],
-      dialog: false
+      dialog: false,
+      footerProps: {
+         pagination: {
+          page: this.pagination.page,
+          pageStart: this.pagination.page * this.pagination.pageSize,
+          pageStop: (this.pagination.page + 1) * this.pagination.pageSize,
+          pageCount: this.pagination.pageSize,
+          itemsPerPage: this.pagination.pageSize,
+          itemsLength: this.pagination.total ? this.pagination.total : this.items.length
+        },
+
+        options: {
+          page: this.pagination.page,
+          itemsPerPage: this.pagination.pageSize,
+        }
+      }
     };
   },
 

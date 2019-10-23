@@ -20,6 +20,11 @@
 import _ from "lodash";
 export default {
   props: {
+    itemObj: {
+      type: Object,
+      default: {}
+    },
+
     items: {
       type: Array,
       default() {
@@ -74,6 +79,10 @@ export default {
       console.log("search", this.text)
       this.$emit("search", this.text);
       }, time);
+
+    if (Object.keys(this.itemObj).length) {
+      this.model = this.itemObj
+    }
   },
 
   methods: {

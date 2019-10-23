@@ -58,7 +58,7 @@ export default {
           value: "soDienThoai",
           type: "string"
         },
-        { text: "Đơn vị cha", align: "center", value: "donViChaId", type: "" },
+        { text: "Đơn vị cha", align: "center", value: "belongsToQTDonVi.ten", type: "" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ]
     };
@@ -93,9 +93,9 @@ export default {
       this.dv = {
         ma: "",
         ten: "",
-        donViChaId: 0,
         diaChi: "",
         soDienThoai: "",
+        donViChaId: 0,
         email: "",
         ghiChu: "",
         laDonVi: false

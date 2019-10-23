@@ -48,12 +48,13 @@ export const mutations = {
 export const actions = {
   async getBieuNhapLieuTruongNhapLieuList(
     { state, commit },
-    payload = { page: 0, pageSize: 20 }
+    payload = { queryData: {}, page: 0, pageSize: 20 }
   ) {
     const { bieuNhapLieuTruongNhapLieu } = state.api
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/list`, {
+        queryData: payload.queryData,
         page: payload.page,
         pageSize: payload.pageSize
       })

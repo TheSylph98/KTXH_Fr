@@ -52,6 +52,7 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${qtDonVi}/list`, {
+        queryData: payload.queryData,
         page: payload.page,
         pageSize: payload.pageSize
 
@@ -128,7 +129,7 @@ export const actions = {
   async addQTDonVi({ state, commit }, donVi) {
     const { qtDonVi } = state.api
     const uuidv1 = require('uuid/v1');
-    donVi.uuid = uuidv1();
+    donVi.uid = uuidv1();
     donVi.donViChaId = Number(donVi.donViChaId)
     
     try {
