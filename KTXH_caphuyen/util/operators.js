@@ -108,9 +108,9 @@ export const dateOperators = [
     filter: (dates) => {
       return {
         and: [{
-          lte: dates[0]
+          gte: dates[0]
         },
-        { gte: dates[1] }
+        { lte: dates[1] }
         ]
       }
     },
@@ -121,10 +121,10 @@ export const dateOperators = [
     filter: (year) => {
       return {
         and: [{
-          lte: new Date(`${year}/01/01`)
+          gte: new Date(`${year}/01/01`)
         },
         {
-          gte: new Date(`${year}/12/31`)
+          lte: new Date(`${year}/12/31`)
         }]
       }
     },
@@ -133,12 +133,24 @@ export const dateOperators = [
   {
     label: 'Vào tháng/năm',
     filter: (month) => {
+      const year = Number(month.substr(0, 4))
+      const monthOfYear = Number(month.substr(5, 2))
+
+      const thisMonth = new Date(year.toString, monthOfYear.toString)
+
+      let nextMonth
+      if (monthOfYear === 12) {
+        nextMonth = new Date((year + 1).toString, "1")
+      } else {
+        nextMonth = new Date(year.toString, (monthOfYear + 1).toString)
+      }
+
       return {
         and: [{
-          lte: new Date(`${month}/01`)
+          lt: nextMonth
         },
         {
-          gte: new Date(`${month}/31`)
+          gte: thisMonth
         }]
       }
     },
