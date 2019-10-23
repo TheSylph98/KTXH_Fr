@@ -28,7 +28,7 @@ import {
     SET_PAGINATION: set('pagination'),
     SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
   
-    SET_DATA_STATUS: set('datastatusList'),
+    SET_DATA_STATUS: set('datastatus'),
   
     ADD_DATA_STATUS: add('datastatusList'),
   
@@ -93,7 +93,7 @@ import {
           id: id
         })
   
-        commit('SET_DATA_STATUS', data.rows)
+        commit('SET_DATA_STATUS', data[0])
       } catch (err) {
         console.log('getDataStatus', err)
       }
@@ -105,7 +105,7 @@ import {
       try {
         const data = await this.$axios.$post(`${sysDataStatus}/create`, datastatus)
   
-        commit('ADD_DATA_STATUS', data)
+        commit('ADD_DATA_STATUS', { newEl: data })
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total + 1
@@ -121,7 +121,7 @@ import {
       try {
         const data = await this.$axios.$post(`${sysDataStatus}/update`, datastatus)
   
-        commit('UPDATE_DATA_STATUS', data)
+        commit('UPDATE_DATA_STATUS', {value: data})
       } catch (err) {
         console.log('updateDataStatus', err)
       }

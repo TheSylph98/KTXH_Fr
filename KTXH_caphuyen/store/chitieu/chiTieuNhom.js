@@ -36,7 +36,7 @@ export const mutations = {
 
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_CHI_TIEU_NHOM: set('chiTieuNhomList'),
+  SET_CHI_TIEU_NHOM: set('chi_tieu_nhom'),
 
   ADD_CHI_TIEU_NHOM: add('chiTieuNhomList'),
 
@@ -121,7 +121,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_CHI_TIEU_NHOM', data.rows)
+      commit('SET_CHI_TIEU_NHOM', data[0])
     } catch (err) {
       console.log('getChiTieuNhom', err)
     }
@@ -150,7 +150,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${chiTieuNhom}/update`, chi_tieu_nhom)
 
-      commit('UPDATE_CHI_TIEU_NHOM', data)
+      commit('UPDATE_CHI_TIEU_NHOM', {value: data})
     } catch (err) {
       console.log('updateChiTieuNhom', err)
     }

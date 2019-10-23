@@ -1,23 +1,29 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="tacNhanList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
+    @clickAdd="clickAddNew"
+    @filter="getQTTacNhanList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
       <TacNhan
         v-if="dialog"
-        :tacNhan="tacNhan"
+        :tacNhan="tN"
         :formTitle="titleDialog"
         @close="closeDialog"
         @save="saveChiTieuDialog"
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -35,8 +41,9 @@ export default {
       title: "Biểu Nhập Liệu Chỉ Tiêu",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
-      tacNhan: {},
+      tN: {},
       headers: [
         {
           text: "Tên tác nhân",
@@ -70,7 +77,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("quantri/qtTacNhan", ["tacNhanList", "pagination"])
+    ...mapState("quantri/qtTacNhan", ["tacNhanList", "tacNhan", "pagination"])
   },
 
   asyncData({ store }) {
@@ -79,7 +86,7 @@ export default {
 
   created() {
     this.getQTTacNhanList();
-    this.getCapHanhChinhList();
+    //this.getCapHanhChinhList();
   },
 
   methods: {
@@ -95,7 +102,7 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
-      this.tacNhan = {
+      this.tN = {
         ma: "",
         ten: "",
         sysCapHanhChinhId: 0,
@@ -104,29 +111,35 @@ export default {
         xoa: 0
       };
     },
-    edit(item) {
-      this.tacNhan = this.tacNhanList.indexOf(item);
-      this.dialog = true;
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getQTTacNhan(Number(item.id))
+      this.tN = Object.assign({}, this.tacNhan)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.tacNhanList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.tacNhanList.splice(index, 1);
-      this.deleteQTTacNhan(this.tacNhan);
+
+    async deleted(items) {
+      await this.deleteQTTacNhan(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.tacNhan = {};
+      this.tN = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateQTTacNhan(this.tacNhan);
+        await this.updateQTTacNhan(this.tN);
       } else {
-        this.addQTTacNhan(this.tacNhan);
+        await this.addQTTacNhan(this.tN);
       }
       this.closeDialog();
-    }
+    },
+
   }
 };
 </script>

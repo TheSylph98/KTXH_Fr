@@ -34,7 +34,7 @@ export const mutations = {
   
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_USER: set('userList'),
+  SET_USER: set('user'),
 
   ADD_USER: add('userList'),
 
@@ -119,7 +119,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_USER', data.rows)
+      commit('SET_USER', data[0])
     } catch (err) {
       console.log('getQTUser', err)
     }
@@ -149,7 +149,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtUser}/update`, user)
 
-      commit('UPDATE_USER', data)
+      commit('UPDATE_USER', {value: data})
     } catch (err) {
       console.log('updateQTUser', err)
     }

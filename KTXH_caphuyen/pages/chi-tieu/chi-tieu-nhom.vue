@@ -1,22 +1,28 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="chiTieuNhomList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getChiTieuNhomList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <ChiTieuNhom
         v-if="dialog"
-        :chiTieuNhom="chiTieuNhom"
+        :chiTieuNhom="ctNhom"
         :formTitle="titleDialog"
         @close="closeDialog"
         @save="saveChiTieuDialog"
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+</div>
 </template>
 
 <script>
@@ -33,6 +39,7 @@ export default {
     return {
       title: "Khai Báo Nhóm Chỉ Tiêu",
       dialog: false,
+      overlay: false,
       isUpdate: false,
       titleDialog: "",
       headers: [
@@ -65,11 +72,11 @@ export default {
           type: ""
         }
       ],
-      chiTieuNhomNhom: {}
+      ctNhom: {}
     };
   },
   computed: {
-    ...mapState("chitieu/chiTieuNhom", ["chiTieuNhomList", "pagination"])
+    ...mapState("chitieu/chiTieuNhom", ["chiTieuNhomList", "chi_tieu_nhom", "pagination"])
   },
 
   asyncData({ store }) {
@@ -93,39 +100,36 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.titleDialog = "Thêm chỉ tiêu nhóm mới";
-      this.chiTieuNhom = {
+      this.ctNhom = {
         ma: "",
         ten: "",
-        bieuNhapLieuId: 0,
-        qlKyBaoCaoId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ghiChu: ""
       };
     },
-    edit(item) {
-      this.chiTieuNhom = this.chiTieuNhomList.indexOf(item);
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getChiTieuNhom(Number(item.id))
+      this.ctNhom = Object.assign({}, this.chi_tieu_nhom)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
 
-    deleted(item) {
-      const index = this.chiTieuNhomList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.chiTieuNhomList.splice(index, 1);
-      this.deleteChiTieuNhom(this.chiTieuNhom);
+    async deleted(items) {
+      await this.deleteChiTieuNhom(items.map(e => e.id));
     },
 
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.chiTieuNhom = {};
+      this.ctNhom = {};
     },
 
-    saveChiTieuDialog() {
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateChiTieuNhom(this.chiTieuNhom);
+        await this.updateChiTieuNhom(this.ctNhom);
       } else {
-        this.addChiTieuNhom(this.chiTieuNhom);
+        await this.addChiTieuNhom(this.ctNhom);
       }
       this.closeDialog();
     }

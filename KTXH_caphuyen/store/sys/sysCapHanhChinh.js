@@ -34,7 +34,7 @@ import {
     
     SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
   
-    SET_CAP_HANH_CHINH: set('caphanhchinhList'),
+    SET_CAP_HANH_CHINH: set('caphanhchinh'),
   
     ADD_CAP_HANH_CHINH: add('caphanhchinhList'),
   
@@ -119,7 +119,7 @@ import {
           id: id
         })
   
-        commit('SET_CAP_HANH_CHINH', data.rows)
+        commit('SET_CAP_HANH_CHINH', data[0])
       } catch (err) {
         console.log('getCapHanhChinh', err)
       }
@@ -131,7 +131,7 @@ import {
       try {
         const data = await this.$axios.$post(`${sysCapHanhChinh}/create`, caphanhchinh)
   
-        commit('ADD_CAP_HANH_CHINH', data)
+        commit('ADD_CAP_HANH_CHINH', { newEl: data })
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total + 1
@@ -147,7 +147,7 @@ import {
       try {
         const data = await this.$axios.$post(`${sysCapHanhChinh}/update`, caphanhchinh)
   
-        commit('UPDATE_CAP_HANH_CHINH', data)
+        commit('UPDATE_CAP_HANH_CHINH', {value: data})
       } catch (err) {
         console.log('updateCapHanhChinh', err)
       }

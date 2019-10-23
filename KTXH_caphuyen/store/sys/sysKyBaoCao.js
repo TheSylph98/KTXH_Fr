@@ -34,7 +34,7 @@ export const mutations = {
 
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_LOAI_KY_BAO_CAO: set('loaikybaocaoList'),
+  SET_LOAI_KY_BAO_CAO: set('loaikybaocao'),
 
   ADD_LOAI_KY_BAO_CAO: add('loaikybaocaoList'),
 
@@ -119,7 +119,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_LOAI_KY_BAO_CAO', data.rows)
+      commit('SET_LOAI_KY_BAO_CAO', data[0])
     } catch (err) {
       console.log('getLoaiKyBaoCao', err)
     }
@@ -131,7 +131,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${sysKyBaoCao}/create`, loaikybaocao)
 
-      commit('ADD_LOAI_KY_BAO_CAO', data)
+      commit('ADD_LOAI_KY_BAO_CAO', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -147,7 +147,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${sysKyBaoCao}/update`, loaikybaocao)
 
-      commit('UPDATE_LOAI_KY_BAO_CAO', data)
+      commit('UPDATE_LOAI_KY_BAO_CAO', {value: data})
     } catch (err) {
       console.log('updateLoaiKyBaoCao', err)
     }

@@ -14,12 +14,12 @@
             <v-text-field v-model="tinh.ten" label="Tỉnh*"></v-text-field>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-select
-              :items="donViHanhChinh"
-              v-model="tinh.sysCapDonViHanhChinhId"
+            <SelectedWithSearch
+              :items="caphcList"
               label="Cấp đơn vị hành chính"
-              outlined
-            ></v-select>
+              @select="tinh.sysCapDonViHanhChinhId = $event.id"
+              @search="getSearchCapHanhChinhList($event)"
+              />
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <v-select
@@ -61,7 +61,18 @@
   </v-card>
 </template>
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
+  data() {
+    return {
+      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
+    }
+  },
   props: {
     tinh: {
       type: Object,
@@ -77,12 +88,25 @@ export default {
         ghiChu: ""
       }
     },
-    donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
-    loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
     formTitle: {
       type: String,
       default: "Thêm Mới"
+    },
+    data() {
+      return {
+        loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
+      }
     }
+  },
+  computed: {
+    ...mapState("sys/sysCapHanhChinh", ["caphanhchinhList","searchCapHanhChinhList"]),
+    caphcList(){
+      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+      else return this.caphanhchinhList;
+    }
+  },
+  methods: {
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
   }
 };
 </script>

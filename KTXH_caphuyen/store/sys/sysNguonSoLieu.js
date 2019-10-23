@@ -24,11 +24,14 @@ export const state = () => {
 
 export const mutations = {
   SET_NGUON_SO_LIEU_LIST: set('nguonsolieuList'),
+
   SET_DELETED_NGUON_SO_LIEU: set('deletednguonsolieuList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_NGUON_SO_LIEU: set('nguonsolieuList'),
+  SET_NGUON_SO_LIEU: set('nguonsolieu'),
 
   ADD_NGUON_SO_LIEU: add('nguonsolieuList'),
 
@@ -93,7 +96,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_NGUON_SO_LIEU', data.rows)
+      commit('SET_NGUON_SO_LIEU', data[0])
     } catch (err) {
       console.log('getNguonSoLieu', err)
     }
@@ -105,7 +108,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${sysNguonSoLieu}/create`, nguonsolieu)
 
-      commit('ADD_NGUON_SO_LIEU', data)
+      commit('ADD_NGUON_SO_LIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -121,7 +124,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${sysNguonSoLieu}/update`, nguonsolieu)
 
-      commit('UPDATE_NGUON_SO_LIEU', data)
+      commit('UPDATE_NGUON_SO_LIEU', {value: data})
     } catch (err) {
       console.log('updateNguonSoLieu', err)
     }

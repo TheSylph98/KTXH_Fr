@@ -42,9 +42,7 @@ export default {
       default: {
         ma: "",
         ten: "",
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ghiChu: ""
       }
     },
     formTitle: {

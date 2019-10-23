@@ -1,23 +1,28 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="kyBaoCaoList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
-    @add="add($event)"
     @clickAdd="clickAddNew"
+    @filter="getKyBaoCaoList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <KyBaoCao
         v-if="dialog"
-        :kyBaoCao="kyBaoCao"
+        :kyBaoCao="kyBC"
         :formTitle="titleDialog"
         @close="closeDialog"
         @save="saveKyBaoCaoDialog"
       />
     </v-dialog>
   </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -35,7 +40,9 @@ export default {
       title: "Khai Báo Kỳ Báo Cáo",
       dialog: false,
       isUpdate: false,
+      overlay: false,
       titleDialog: "",
+      kyBC: {},
       headers: [
         {
           text: "Năm",
@@ -72,34 +79,6 @@ export default {
           value: "ngayDong",
           type: "date"
         },
-        // {
-        //   text: "Ngày bắt đầu cập nhập",
-        //   align: "center",
-        //   sorttable: true,
-        //   value: "ngayBatDau",
-        //   type: "date"
-        // },
-        // {
-        //   text: "Ngày kết thúc tổng hợp báo cáo",
-        //   align: "center",
-        //   sorttable: true,
-        //   value: "ngayKetThuc",
-        //   type: "date"
-        // },
-        // {
-        //   text: "Ngày hoàn thành báo cáo cấp huyện",
-        //   align: "center",
-        //   sorttable: true,
-        //   value: "ngayBaoCaoHuyen",
-        //   type: "date"
-        // },
-        // {
-        //   text: "Ngày hoàn thành báo cáo cấp tỉnh",
-        //   align: "center",
-        //   sorttable: true,
-        //   value: "ngayBaoCaoTinh",
-        //   type: "date"
-        // },
         {
           text: "Trạng Thái",
           align: "center",
@@ -111,7 +90,7 @@ export default {
   },
 
   computed: {
-    ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList", "pagination"])
+    ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList", "kyBaoCao", "pagination"])
   },
 
   asyncData({ store }) {
@@ -136,7 +115,7 @@ export default {
       this.dialog = true;
       this.isUpdate = false;
       this.titleDialog = "Thêm kỳ báo cáo mới";
-      this.kyBaoCao = {
+      this.kyBC = {
         nam: "",
         ma: "",
         ten: "",
@@ -153,53 +132,32 @@ export default {
       };
     },
 
-    clickUpdateKyBaoCao() {
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getKyBaoCao(Number(item.id))
+      this.kyBC = Object.assign({}, this.kyBaoCao)
       this.isUpdate = true;
-      this.titleDialog = "Chỉnh sửa kỳ báo cáo";
-    },
-
-    closeDialog() {
-      this.dialog = false;
-      this.kyBaoCao = {};
-    },
-
-    async saveKyBaoCaoDialog() {
-      if (this.isUpdate) {
-        await this.updateKyBaoCao(this.kyBaoCao);
-      } else {
-        await this.addKyBaocao(this.kyBaoCao);
-      }
-
-      this.dialog = false;
-    },
-
-    edit(item) {
-      this.addKyBaoCao(this.editedIndex);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.overlay = false;
       this.dialog = true;
+    },
+
+    async deleted(items) {
+      console.log("item", items)
+      await this.deleteKyBaoCao(items.map(e => e.id));
     },
     
-    delete(tiem) {
-      const index = this.items.indexOf(item);
-      confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-      this.deleteKyBaoCao(this.editedItem);
-    },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
-    },
-    close() {
+    closeDialog() {
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+      this.isUpdate = false;
+      this.kyBC = {};
+    },
+    async saveChiTieuDialog() {
+      if (this.isUpdate) {
+        await this.updateKyBaoCao(this.kyBC);
+      } else {
+        await this.addKyBaoCao(this.kyBC);
+      }
+      this.closeDialog();
     }
   }
 };

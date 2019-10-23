@@ -1,22 +1,28 @@
 <template>
+<div>
   <Table
     :title="title"
     :headers="headers"
     :items="donViList"
-    @edit="edit($event)"
+    @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
+    @filter="getQTDonViList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <DonVi
         v-if="dialog"
-        :donVi="donVi"
+        :donVi="dv"
         :formTitle="titleDialog"
         @close="closeDialog"
         @save="saveChiTieuDialog"
       />
     </v-dialog>
   </Table>
+  <v-overlay :value="overlay">
+    <v-progress-circular indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+</div>
 </template>
 
 <script>
@@ -34,7 +40,8 @@ export default {
       title: "Khai Báo Đơn Vị",
       dialog: false,
       isUpdate: false,
-      donVi: {},
+      overlay: false,
+      dv: {},
       titleDialog: "",
       headers: [
         {
@@ -58,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapState("quantri/qtDonVi", ["donViList", "pagination"])
+    ...mapState("quantri/qtDonVi", ["donViList", "donVi", "pagination"])
   },
 
   asyncData({ store }) {
@@ -83,7 +90,7 @@ export default {
       this.dialog = true;
       this.isUpdate = false;
       this.titleDialog = "Thêm đơn vị mới";
-      this.donVi = {
+      this.dv = {
         ma: "",
         ten: "",
         donViChaId: 0,
@@ -95,29 +102,33 @@ export default {
       };
     },
 
-    edit(item) {
-      this.truongNhapLieu = this.bnlTruongDuLieuList.indexOf(item);
-      this.dialog = true;
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getQTDonVi(Number(item.id))
+      this.dv = Object.assign({}, this.donVi)
       this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
-    deleted(item) {
-      const index = this.bnlTruongDuLieuList.indexOf(item);
-      confirm("Xác nhận xóa?") && this.bnlTruongDuLieuList.splice(index, 1);
-      this.deleteBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+
+    async deleted(items) {
+      await this.deleteQTDonVi(items.map(e => e.id));
     },
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
-      this.truongNhapLieu = {};
+      this.dv = {};
     },
-    saveChiTieuDialog() {
+
+    async saveChiTieuDialog() {
       if (this.isUpdate) {
-        this.updateBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+        await this.updateQTDonVi(this.dv);
       } else {
-        this.addBieuNhapLieuTruongDuLieu(this.truongNhapLieu);
+        await this.addQTDonVi(this.dv);
       }
       this.closeDialog();
-    }
+    },
   }
 };
 </script>

@@ -25,12 +25,16 @@ export const state = () => {
 
 export const mutations = {
   SET_LOAI_TRUONG_NHAP_LIEU_LIST: set('loaitruongnhaplieuList'),
+
   SET_SEARCH_LOAI_TRUONG_NHAP_LIEU_LIST: set('searchLoaiTruongNhapLieuList'),
+
   SET_DELETED_LOAI_TRUONG_NHAP_LIEU: set('deletedloaitruongnhaplieuList'),
+
   SET_PAGINATION: set('pagination'),
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
-  SET_LOAI_TRUONG_NHAP_LIEU: set('loaitruongnhaplieuList'),
+  SET_LOAI_TRUONG_NHAP_LIEU: set('loaitruongnhaplieu'),
 
   ADD_LOAI_TRUONG_NHAP_LIEU: add('loaitruongnhaplieuList'),
 
@@ -115,7 +119,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_LOAI_TRUONG_NHAP_LIEU', data.rows)
+      commit('SET_LOAI_TRUONG_NHAP_LIEU', data[0])
     } catch (err) {
       console.log('getLoaiTruongNhapLieu', err)
     }
@@ -127,7 +131,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${sysLoaiTruongNhapLieu}/create`, loaitruongnhaplieu)
 
-      commit('ADD_LOAI_TRUONG_NHAP_LIEU', data)
+      commit('ADD_LOAI_TRUONG_NHAP_LIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -143,7 +147,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${sysLoaiTruongNhapLieu}/update`, loaitruongnhaplieu)
 
-      commit('UPDATE_LOAI_TRUONG_NHAP_LIEU', data)
+      commit('UPDATE_LOAI_TRUONG_NHAP_LIEU', {value: data})
     } catch (err) {
       console.log('updateLoaiTruongNhapLieu', err)
     }

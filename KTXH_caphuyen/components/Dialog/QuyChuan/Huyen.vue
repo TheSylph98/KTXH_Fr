@@ -15,19 +15,21 @@
               @search="getSearchTinhList($event)"
               />
           </v-col>
-          <v-col cols="12" sm="6" md="4">
+        </v-row>
+        <v-row>  
+          <v-col cols="12" sm="6" md="2">
             <v-text-field v-model="huyen.ma" label="Mã huyện"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
             <v-text-field v-model="huyen.ten" label="Huyện"></v-text-field>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-select
-              :items="donViHanhChinh"
-              v-model="huyen.sysCapDonViHanhChinhId"
+            <SelectedWithSearch
+              :items="caphcList"
               label="Cấp đơn vị hành chính"
-              outlined
-            ></v-select>
+              @select="huyen.sysCapDonViHanhChinhId = $event.id"
+              @search="getSearchCapHanhChinhList($event)"
+              />
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <v-select
@@ -77,6 +79,11 @@ export default {
   components: {
     SelectedWithSearch
   },
+  data() {
+    return {
+      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
+    }
+  },
   props: {
     huyen: {
       type: Object,
@@ -84,31 +91,37 @@ export default {
         ma: "",
         ten: "",
         qcTinhId: "",
-        sysCapDonViHanhChinhId: 0,
+        sysCapDonViHanhChinhId: 1,
         loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
-        ghiChu: ""
+        nongThon: true,
+        bienGioi: false,
+        haiDao: true,
+        vungDBKhoKhan: false,
+        ghiChu: "",
+        hieuLuc: true,
+        xoa: false
       }
     },
-    donViHanhChinh: ["Cấp tỉnh", "Cấp huyện", "Cấp Xã", "Đặc khu kinh tế"],
-    loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
     formTitle: {
       type: String,
       default: "Thêm Mới"
     }
   },
   computed: {
-    ...mapState("quychuan/tinh", ["tinhList","searchTinhList"]),
+    ...mapState("quychuan/qcTinh", ["tinhList","searchTinhList"]),
+    ...mapState("sys/sysCapHanhChinh", ["caphanhchinhList","searchCapHanhChinhList"]),
     tList() {
       if (this.searchTinhList.length > 0) return this.searchTinhList;
       else return this.tinhList;
-      },
     },
+    caphcList(){
+      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+      else return this.caphanhchinhList;
+    }
+  },
   methods: {
-    ...mapActions("quychuan/tinh", ["getSearchTinhList"])
+    ...mapActions("quychuan/qcTinh", ["getSearchTinhList"]),
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
   }
 };
 </script>
