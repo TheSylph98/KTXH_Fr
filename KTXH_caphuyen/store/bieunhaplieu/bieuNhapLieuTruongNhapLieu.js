@@ -59,7 +59,6 @@ export const actions = {
         pageSize: payload.pageSize
       })
 
-      console.log("data", data)
       commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -121,7 +120,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data[0])
+      commit('SET_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data)
     } catch (err) {
       console.log('getBieuNhapLieuTruongNhapLieu', err)
     }
@@ -135,8 +134,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/create`, bnlTruongNhapLieu)
 
-      console.log("createTNL", data)
-      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', {newEl: data})
+      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -152,7 +150,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/update`, bnlTruongNhapLieu)
 
-      commit('UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', {value: data})
+      commit('UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', { value: data })
     } catch (err) {
       console.log('updateBieuNhapLieuTruongNhapLieu', err)
     }
@@ -162,7 +160,7 @@ export const actions = {
     const { bieuNhapLieuTruongNhapLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/delete`, {id: bnlTruongNhapLieu})
+      const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/delete`, { id: bnlTruongNhapLieu })
 
       commit('DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data)
       commit('SET_PAGINATION_KEY', {
@@ -180,7 +178,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/restore`, bnlTruongNhapLieu)
 
-      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', {newEl: data})
+      commit('ADD_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

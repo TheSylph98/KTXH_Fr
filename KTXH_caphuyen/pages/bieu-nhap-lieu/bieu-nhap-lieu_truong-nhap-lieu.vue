@@ -1,28 +1,31 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="bnlTruongNhapLieuList"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="handleFilter"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <BNLTruongNhapLieu
-        v-if="dialog"
-        :truongNhapLieu="bnlTNL"
-        :formTitle="titleDialog"
-        @close="closeDialog"
-        @save="saveChiTieuDialog"
-      />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-</div>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="bnlTruongNhapLieuList"
+      :pagination="pagination"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="handleFilter"
+      @changePageSize="getBieuNhapLieuTruongNhapLieuList({ pageSize: $event})"
+      @changePage="getBieuNhapLieuTruongNhapLieuList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <BNLTruongNhapLieu
+          v-if="dialog"
+          :truongNhapLieu="bnlTNL"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -35,6 +38,7 @@ export default {
     Table,
     BNLTruongNhapLieu
   },
+
   data() {
     return {
       title: "Biểu Nhập Liệu Trường Nhập Liệu",
@@ -51,6 +55,7 @@ export default {
       bnlTNL: {}
     };
   },
+
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieuTruongNhapLieu", [
       "bnlTruongNhapLieuList",
@@ -65,10 +70,10 @@ export default {
     );
   },
 
-  created() {
+  mounted() {
     this.getBieuNhapLieuTruongNhapLieuList();
-    // this.getBieuNhapLieuList();
-    // this.getTruongNhaplieuList();
+    this.getBieuNhapLieuList();
+    this.getTruongNhaplieuList();
   },
 
   methods: {
@@ -86,7 +91,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.titleDialog = "Thêm mới biểu nhập liệu trường nhập liệu";
-      this.bnlTNL  = {
+      this.bnlTNL = {
         ma: "",
         ten: "",
         bieuNhapLieuId: 0,
@@ -97,9 +102,9 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getBieuNhapLieuTruongNhapLieu(Number(item.id))
-      this.bnlTNL = Object.assign({}, this.bnlTruongNhapLieu)
-      console.log("bnldsdhfd", this.bnlTNL)
+      await this.getBieuNhapLieuTruongNhapLieu(Number(item.id));
+      this.bnlTNL = Object.assign({}, this.bnlTruongNhapLieu);
+      console.log("bnldsdhfd", this.bnlTNL);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
@@ -107,7 +112,7 @@ export default {
     },
 
     async deleted(items) {
-      console.log("item", items)
+      console.log("item", items);
       await this.deleteBieuNhapLieuTruongNhapLieu(items.map(e => e.id));
     },
 
@@ -127,9 +132,9 @@ export default {
     },
 
     async handleFilter(value) {
-      this.overlay = true
-      await this.getBieuNhapLieuTruongNhapLieuList({queryData: value})
-      this.overlay = false
+      this.overlay = true;
+      await this.getBieuNhapLieuTruongNhapLieuList({ queryData: value });
+      this.overlay = false;
     }
   }
 };

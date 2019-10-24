@@ -9,7 +9,7 @@ export const stringOperators = [
   {
     label: 'Chứa',
     filter: (text) => {
-      return { regexp: `/*${text}*/` }
+      return { regexp: `/${text}/` }
     },
     operator: 'contains'
   },

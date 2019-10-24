@@ -5,9 +5,10 @@
       :headers="headerTables"
       :items="items"
       class="elevation-1"
-      :footer-props="footerProps"
       show-select
+      hide-default-footer
       dense
+      :items-per-page="pagination.pageSize"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -72,7 +73,7 @@
                 <span>Xóa</span>
               </v-tooltip>
             </span>
-            <span v-else>{{row.item[el.value]}}</span>
+            <span v-else>{{getTableValue(row.item, el.value)}}</span>
           </td>
         </tr>
       </template>
@@ -80,43 +81,47 @@
       <template v-slot:no-data>
         <p>Chưa cập nhập dữ liệu</p>
       </template>
+
+      <template v-slot:footer>
+        <v-divider></v-divider>
+        <v-row>
+          <v-col cols="2"></v-col>
+          <v-col cols="2">
+            <v-form>
+              <v-autocomplete
+                outlined
+                label="Số hàng trên trang"
+                :items="pageSizeList"
+                v-model="pageSize"
+                @change="$emit('changePageSize', $event)"
+              ></v-autocomplete>
+            </v-form>
+          </v-col>
+          <v-col cols="8">
+            <v-pagination
+              v-model="page"
+              :total-visible="paginationValue.visiblePage"
+              :length="paginationValue.numberOfPage"
+              circle
+              @input="$emit('changePage', pagination.pageSize)"
+            ></v-pagination>
+          </v-col>
+        </v-row>
+      </template>
     </v-data-table>
 
-
-     <v-dialog
-      v-model="dialog"
-      width="500"
-    >
+    <v-dialog v-model="dialog" width="500">
       <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          {{ dialogTitle }}
-        </v-card-title>
+        <v-card-title class="headline grey lighten-2" primary-title>{{ dialogTitle }}</v-card-title>
 
-        <v-card-text>
-          {{ dialogContent }}
-        </v-card-text>
+        <v-card-text>{{ dialogContent }}</v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="closeDialog"
-          >
-            Huỷ
-          </v-btn>
-          <v-btn
-            color="primary"
-            text
-            @click="handleDelete"
-          >
-            Xóa
-          </v-btn>
+          <v-btn color="primary" text @click="closeDialog">Huỷ</v-btn>
+          <v-btn color="primary" text @click="handleDelete">Xóa</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -168,9 +173,18 @@ export default {
 
     pagination: {
       type: Object,
-      default: {
-        page: 0, 
-        pageSize: 20
+      default() {
+        return {
+          page: 0,
+          pageSize: 20
+        };
+      }
+    },
+
+    pageSizeList: {
+      type: Array,
+      default() {
+        return [20, 50, 100, 200];
       }
     }
   },
@@ -180,21 +194,8 @@ export default {
       search: {},
       selectItems: [],
       dialog: false,
-      footerProps: {
-         pagination: {
-          page: this.pagination.page,
-          pageStart: this.pagination.page * this.pagination.pageSize,
-          pageStop: (this.pagination.page + 1) * this.pagination.pageSize,
-          pageCount: this.pagination.pageSize,
-          itemsPerPage: this.pagination.pageSize,
-          itemsLength: this.pagination.total ? this.pagination.total : this.items.length
-        },
-
-        options: {
-          page: this.pagination.page,
-          itemsPerPage: this.pagination.pageSize,
-        }
-      }
+      page: 1,
+      pageSize: 20
     };
   },
 
@@ -209,7 +210,25 @@ export default {
         return this.headers.concat([
           { text: "Thao tác", align: "center", value: "action" }
         ]);
+    },
+
+    paginationValue() {
+      // const numberOfPage = Number(
+      //   (Number(this.pagination.total) / Number(this.pagination.page)).toFixed()
+      // );
+
+      // const visiblePage = numberOfPage < 6 ? numberOfPage : 6;
+
+      return {
+        numberOfPage: 3,
+        visiblePage: 3
+      };
     }
+  },
+
+  created() {
+    this.page = Number(this.pagination.page) + 1;
+    this.pageSize = Number(this.pagination.pageSize);
   },
 
   methods: {
@@ -218,24 +237,33 @@ export default {
       else return "text-start";
     },
 
+    getTableValue(obj, attibuteText) {
+      let result = obj;
+      const attibuteArr = attibuteText.split(".");
+      attibuteArr.forEach(e => {
+        result = result[e];
+      });
+      return result;
+    },
+
     filterChange(eValue, el) {
       this.search[el] = eValue;
     },
 
     closeDialog() {
-      this.selectItems = []
-      this.dialog = false
+      this.selectItems = [];
+      this.dialog = false;
     },
 
     clickeDeleteItem(item) {
-      this.selectItems = [item]
-      this.dialog = true
+      this.selectItems = [item];
+      this.dialog = true;
     },
 
     handleDelete() {
-      this.$emit("delete", this.selectItems)
-      this.selectedItems = []
-      this.dialog = false
+      this.$emit("delete", this.selectItems);
+      this.selectedItems = [];
+      this.dialog = false;
     }
   }
 };
