@@ -3,6 +3,7 @@
     :title="title"
     :headers="headers"
     :items="tacNhanChucNangPhanMemList"
+    :pagination="pagination"
     @edit="edit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"

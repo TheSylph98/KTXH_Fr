@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 import uuidv1 from 'uuid/v1'
@@ -42,7 +42,7 @@ export const mutations = {
 
   UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: update('bnlTruongNhapLieuList'),
 
-  DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: remove('bnlTruongNhapLieuList')
+  DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU: removeByIds('bnlTruongNhapLieuList')
 }
 
 export const actions = {
@@ -127,6 +127,8 @@ export const actions = {
   },
 
   async addBieuNhapLieuTruongNhapLieu({ state, commit }, bnlTruongNhapLieu) {
+    const res = { isSuccess: false }
+
     const { bieuNhapLieuTruongNhapLieu } = state.api
     bnlTruongNhapLieu.bieuNhapLieuId = Number(bnlTruongNhapLieu.bieuNhapLieuId)
     bnlTruongNhapLieu.truongNhapLieuId = Number(bnlTruongNhapLieu.truongNhapLieuId)
@@ -139,40 +141,53 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+
+      res.isSuccess = true
     } catch (err) {
       console.log('addBieuNhapLieuTruongNhapLieu', err)
     }
+
+    return res
   },
 
   async updateBieuNhapLieuTruongNhapLieu({ state, commit }, bnlTruongNhapLieu) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuTruongNhapLieu } = state.api
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/update`, bnlTruongNhapLieu)
 
       commit('UPDATE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', { value: data })
+      res.isSuccess = true
     } catch (err) {
       console.log('updateBieuNhapLieuTruongNhapLieu', err)
     }
+
+    return res
   },
 
-  async deleteBieuNhapLieuTruongNhapLieu({ state, commit }, bnlTruongNhapLieu) {
+  async deleteBieuNhapLieuTruongNhapLieu({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuTruongNhapLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/delete`, { id: bnlTruongNhapLieu })
+      const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/delete`, { id: idList })
 
-      commit('DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      if(data) {
+        commit('DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length  
+        })
+        res.isSuccess = true
+      }
     } catch (err) {
       console.log('deleteBieuNhapLieuTruongNhapLieu', err)
     }
   },
 
   async restoreBieuNhapLieuTruongNhapLieu({ state, commit }, bnlTruongNhapLieu) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuTruongNhapLieu } = state.api
 
     try {
@@ -183,8 +198,12 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreBieuNhapLieuTruongNhapLieu', err)
     }
+
+    return res
   }
 }

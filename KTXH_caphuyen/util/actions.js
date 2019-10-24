@@ -34,3 +34,7 @@ export const remove = property => (state, { id, index }) => {
     index = state[property].findIndex(_e => _e.id === id)
   if (index > -1) state[property].splice(index, 1)
 }
+
+export const removeByIds = (property) => (state, ids) => {
+  state[property] = state[property].filter((_e) => !ids.includes(_e.id))
+}

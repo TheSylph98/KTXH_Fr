@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="chiTieuPhanToChiTietList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getChiTieuPhanToChiTietList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <ChiTieuPhanToChiTiet
@@ -35,6 +38,7 @@ export default {
     Table,
     ChiTieuPhanToChiTiet
   },
+
   data() {
     return {
       title: "Chỉ Tiêu Phân Tổ Chi Tiết",
@@ -70,6 +74,7 @@ export default {
       ]
     };
   },
+
   computed: {
     ...mapState("chitieu/chiTieuPhanToChiTiet", [
       "chiTieuPhanToChiTietList",
@@ -82,9 +87,12 @@ export default {
     store.dispatch("chitieu/chiTieuPhanToChiTiet/getChiTieuPhanToChiTietList");
   },
 
-  created() {
-    this.getChiTieuPhanToChiTietList();
-    //this.getChiTieuPhanToList();
+   async created() {
+    if (!this.chiTieuPhanToChiTietList.length) {
+      this.overlay = true
+      await this.getChiTieuPhanToChiTietList()
+      this.overlay = false
+    }
   },
 
   methods: {
@@ -138,7 +146,13 @@ export default {
         await this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
       }
       this.closeDialog();
-    }
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getChiTieuPhanToChiTietList(value);
+      this.overlay = false;
+    },
   }
 };
 </script>

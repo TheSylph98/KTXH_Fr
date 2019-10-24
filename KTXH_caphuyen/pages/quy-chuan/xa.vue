@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="xaList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getXaList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <Xa v-if="dialog" :xa="xa_data" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
@@ -77,9 +80,16 @@ export default {
     store.dispatch("quychuan/qcXa/getXaList");
   },
 
-  created() {
-    this.getXaList();
-    //this.getHuyenList();
+  async created() {
+    if (!this.xaList.length) {
+      this.overlay = true
+      await this.getXaList()
+      this.overlay = false
+    }
+  },
+
+  async mounted() {
+    await this.getHuyenList();
   },
 
   methods: {
@@ -139,6 +149,12 @@ export default {
         await this.addXa(this.xa_data);
       }
       this.closeDialog();
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getXaList(value);
+      this.overlay = false;
     },
   }
 };

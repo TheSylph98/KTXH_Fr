@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="donViList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getQTDonViList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <DonVi
@@ -35,6 +38,7 @@ export default {
     Table,
     DonVi
   },
+
   data() {
     return {
       title: "Khai Báo Đơn Vị",
@@ -47,7 +51,6 @@ export default {
         {
           text: "Mã đơn vị",
           align: "center",
-          divider: true,
           value: "ma",
           type: "string"
         },
@@ -58,7 +61,7 @@ export default {
           value: "soDienThoai",
           type: "string"
         },
-        { text: "Đơn vị cha", align: "center", value: "belongsToQTDonVi.ten", type: "" },
+        { text: "Đơn vị cha", align: "center", value: "belongsToQTDonVi.0.ten", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ]
     };
@@ -72,8 +75,12 @@ export default {
     store.dispatch("quantri/qtDonVi/getQTDonViList");
   },
 
-  created() {
-    this.getQTDonViList();
+  async created() {
+    if (!this.donViList.length) {
+      this.overlay = true
+      await this.getQTDonViList()
+      this.overlay = false
+    }
   },
 
   methods: {
@@ -128,6 +135,12 @@ export default {
         await this.addQTDonVi(this.dv);
       }
       this.closeDialog();
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getQTDonViList(value);
+      this.overlay = false;
     },
   }
 };

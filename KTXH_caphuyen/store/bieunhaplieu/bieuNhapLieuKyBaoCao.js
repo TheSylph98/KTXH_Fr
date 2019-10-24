@@ -122,14 +122,14 @@ export const actions = {
         id: id
       })
 
-      commit('SET_BIEU_NHAP_LIEU_KY_BAO_CAO', data[0])
+      commit('SET_BIEU_NHAP_LIEU_KY_BAO_CAO', data)
     } catch (err) {
       console.log('getBieuNhapLieuKyBaoCao', err)
     }
   },
 
   async addBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
-    
+    const res = { isSuccess: false }
     const { bieuNhapLieuKyBaoCao } = state.api
     // const uuidv1 = require('uuid/v1');
     bnlKyBaoCao.uid = uuidv1();
@@ -145,50 +145,59 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addBieuNhapLieuKyBaoCao', err)
     }
   },
 
   async updateBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuKyBaoCao } = state.api
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/update`, bnlKyBaoCao)
 
       commit('UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateBieuNhapLieuKyBaoCao', err)
     }
   },
 
-  async deleteBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
+  async deleteBieuNhapLieuKyBaoCao({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuKyBaoCao } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/delete`, bnlKyBaoCao)
+      const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/delete`, {id: idList})
 
-      commit('DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      if(data){
+        commit('DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteBieuNhapLieuKyBaoCao', err)
     }
   },
 
   async restoreBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuKyBaoCao } = state.api
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/restore`, bnlKyBaoCao)
 
-      commit('ADD_BIEU_NHAP_LIEU_KY_BAO_CAO', data)
+      commit('ADD_BIEU_NHAP_LIEU_KY_BAO_CAO', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreBieuNhapLieuKyBaoCao', err)
     }

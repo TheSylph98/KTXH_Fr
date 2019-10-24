@@ -120,7 +120,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_LOAI_TRUONG_NHAP_LIEU', data[0])
+      commit('SET_LOAI_TRUONG_NHAP_LIEU', data)
     } catch (err) {
       console.log('getLoaiTruongNhapLieu', err)
     }
@@ -158,7 +158,7 @@ export const actions = {
     const { sysLoaiTruongNhapLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${sysLoaiTruongNhapLieu}/delete`, loaitruongnhaplieu)
+      const data = await this.$axios.$post(`${sysLoaiTruongNhapLieu}/delete`, {id: loaitruongnhaplieu})
 
       commit('DELETE_LOAI_TRUONG_NHAP_LIEU', data)
       commit('SET_PAGINATION_KEY', {

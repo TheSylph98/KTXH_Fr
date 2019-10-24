@@ -8,9 +8,9 @@
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
-      @filter="handleFilter"
-      @changePageSize="getBieuNhapLieuTruongNhapLieuList({ pageSize: $event})"
-      @changePage="getBieuNhapLieuTruongNhapLieuList({ page: $event})"
+      @filter="changeList({ queryData: $event })"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
     >
       <v-dialog v-model="dialog" max-width="800px">
         <BNLTruongNhapLieu
@@ -32,6 +32,7 @@
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 import BNLTruongNhapLieu from "@/components/Dialog/BieuNhapLieu/BieuNhapLieuTruongNhapLieu";
+// import { Promise } from "lodash"
 
 export default {
   components: {
@@ -70,11 +71,20 @@ export default {
     );
   },
 
-  mounted() {
-    this.getBieuNhapLieuTruongNhapLieuList();
-    this.getBieuNhapLieuList();
-    this.getTruongNhaplieuList();
+  async created() {
+    if (!this.bnlTruongNhapLieuList.length) {
+      this.overlay = true
+      await this.getBieuNhapLieuTruongNhapLieuList()
+      this.overlay = false
+    }
   },
+
+  async mounted() {
+      await Promise.all([
+        this.getBieuNhapLieuList(),
+        this.getTruongNhaplieuList(),
+      ])
+    },
 
   methods: {
     ...mapActions("bieunhaplieu/bieuNhapLieuTruongNhapLieu", [
@@ -131,11 +141,11 @@ export default {
       this.closeDialog();
     },
 
-    async handleFilter(value) {
+    async changeList(value) {
       this.overlay = true;
-      await this.getBieuNhapLieuTruongNhapLieuList({ queryData: value });
+      await this.getBieuNhapLieuTruongNhapLieuList(value);
       this.overlay = false;
-    }
+    },
   }
 };
 </script>

@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="tinhList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getTinhList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <Tinh v-if="dialog" :tinh="tinh_data" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
@@ -28,6 +31,7 @@ export default {
     Table,
     Tinh
   },
+
   data() {
     return {
       title: "Khai Báo Từ Điển: Tỉnh",
@@ -68,6 +72,7 @@ export default {
       ]
     };
   },
+
   computed: {
     ...mapState("quychuan/qcTinh", ["tinhList", "tinh", "pagination"])
   },
@@ -75,8 +80,13 @@ export default {
   asyncData({ store }) {
     store.dispatch("quychuan/qcTinh/getTinhList");
   },
-  created() {
-    this.getTinhList();
+
+  async created() {
+    if (!this.tinhList.length) {
+      this.overlay = true
+      await this.getTinhList()
+      this.overlay = false
+    }
   },
 
   methods: {
@@ -132,6 +142,12 @@ export default {
         await this.addTinh(this.tinh_data);
       }
       this.closeDialog();
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getTinhList(value);
+      this.overlay = false;
     },
   }
 };

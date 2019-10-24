@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="chiTieuPhanToList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getChiTieuPhanToList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <ChiTieuPhanTo
@@ -84,8 +87,12 @@ export default {
     store.dispatch("chitieu/chiTieuPhanTo/getChiTieuPhanToList");
   },
 
-  created() {
-    this.getChiTieuPhanToList();
+   async created() {
+    if (!this.chiTieuPhanToList.length) {
+      this.overlay = true
+      await this.getChiTieuPhanToList()
+      this.overlay = false
+    }
   },
 
   methods: {
@@ -135,7 +142,13 @@ export default {
         await this.addChiTieuPhanTo(this.chiTieuPhanTo);
       }
       this.closeDialog();
-    }
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getChiTieuPhanToList(value);
+      this.overlay = false;
+    },
   }
 };
 </script>

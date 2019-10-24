@@ -120,7 +120,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_LOAI_KY_BAO_CAO', data[0])
+      commit('SET_LOAI_KY_BAO_CAO', data)
     } catch (err) {
       console.log('getLoaiKyBaoCao', err)
     }
@@ -158,7 +158,7 @@ export const actions = {
     const { sysKyBaoCao } = state.api
 
     try {
-      const data = await this.$axios.$post(`${sysKyBaoCao}/delete`, loaikybaocao)
+      const data = await this.$axios.$post(`${sysKyBaoCao}/delete`, {id: loaikybaocao})
 
       commit('DELETE_LOAI_KY_BAO_CAO', data)
       commit('SET_PAGINATION_KEY', {

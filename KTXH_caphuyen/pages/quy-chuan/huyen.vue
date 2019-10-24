@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="huyenList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getHuyenList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <Huyen
@@ -83,9 +86,16 @@ export default {
     store.dispatch("quychuan/qcHuyen/getHuyenList");
   },
 
-  created() {
-    this.getHuyenList();
-    //this.getTinhList()
+  async created() {
+    if (!this.huyenList.length) {
+      this.overlay = true
+      await this.getHuyenList()
+      this.overlay = false
+    }
+  },
+
+  async mounted() {
+    await this.getTinhList()
   },
 
   methods: {
@@ -144,6 +154,12 @@ export default {
         await this.addHuyen(this.huyen_data);
       }
       this.closeDialog();
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getHuyenList(value);
+      this.overlay = false;
     },
   }
 };

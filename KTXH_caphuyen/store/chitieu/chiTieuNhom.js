@@ -122,13 +122,14 @@ export const actions = {
         id: id
       })
 
-      commit('SET_CHI_TIEU_NHOM', data[0])
+      commit('SET_CHI_TIEU_NHOM', data)
     } catch (err) {
       console.log('getChiTieuNhom', err)
     }
   },
 
   async addChiTieuNhom({ state, commit }, chi_tieu_nhom) {
+    const res = { isSuccess: false }
     const { chiTieuNhom } = state.api
     // const uuidv1 = require('uuid/v1');
     chi_tieu_nhom.uid = uuidv1();
@@ -140,50 +141,58 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addChiTieuNhom', err)
     }
   },
 
   async updateChiTieuNhom({ state, commit }, chi_tieu_nhom) {
+    const res = { isSuccess: false }
     const { chiTieuNhom } = state.api
 
     try {
       const data = await this.$axios.$post(`${chiTieuNhom}/update`, chi_tieu_nhom)
 
       commit('UPDATE_CHI_TIEU_NHOM', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateChiTieuNhom', err)
     }
   },
 
-  async deleteChiTieuNhom({ state, commit }, chi_tieu_nhom) {
+  async deleteChiTieuNhom({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { chiTieuNhom } = state.api
 
     try {
-      const data = await this.$axios.$post(`${chiTieuNhom}/delete`, chi_tieu_nhom)
-
-      commit('DELETE_CHI_TIEU_NHOM', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${chiTieuNhom}/delete`, {id: idList})
+      if(data){
+        commit('DELETE_CHI_TIEU_NHOM', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteChiTieuNhom', err)
     }
   },
 
   async restoreChiTieuNhom({ state, commit }, chi_tieu_nhom) {
+    const res = { isSuccess: false }
     const { ChiTieuNhom } = state.api
 
     try {
       const data = await this.$axios.$post(`${ChiTieuNhom}/restore`, chi_tieu_nhom)
 
-      commit('ADD_CHI_TIEU_NHOM', data)
+      commit('ADD_CHI_TIEU_NHOM', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreChiTieuNhom', err)
     }

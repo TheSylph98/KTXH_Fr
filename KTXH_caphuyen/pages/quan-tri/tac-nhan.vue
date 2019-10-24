@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="tacNhanList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
-    @filter="getQTTacNhanList({queryData: $event})"
+    @filter="getTacNhanList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <template v-slot:activator="{ on }"></template>
@@ -16,7 +19,7 @@
         :tacNhan="tN"
         :formTitle="titleDialog"
         @close="closeDialog"
-        @save="saveChiTieuDialog"
+        @save="saveTacNhanDialog"
       />
     </v-dialog>
   </Table>
@@ -38,7 +41,7 @@ export default {
   },
   data() {
     return {
-      title: "Biểu Nhập Liệu Chỉ Tiêu",
+      title: "Khai báo tác nhân",
       dialog: false,
       isUpdate: false,
       overlay: false,
@@ -81,17 +84,20 @@ export default {
   },
 
   asyncData({ store }) {
-    store.dispatch("quantri/qtTacNhan/getQTTacNhanList");
+    store.dispatch("quantri/qtTacNhan/getTacNhanList");
   },
 
-  created() {
-    this.getQTTacNhanList();
-    //this.getCapHanhChinhList();
+  async created() {
+    if (!this.tacNhanList.length) {
+      this.overlay = true
+      await this.getTacNhanList()
+      this.overlay = false
+    }
   },
 
   methods: {
     ...mapActions("quantri/qtTacNhan", [
-      "getQTTacNhanList",
+      "getTacNhanList",
       "getQTTacNhan",
       "addQTTacNhan",
       "updateQTTacNhan",
@@ -131,13 +137,19 @@ export default {
       this.tN = {};
     },
 
-    async saveChiTieuDialog() {
+    async saveTacNhanDialog() {
       if (this.isUpdate) {
         await this.updateQTTacNhan(this.tN);
       } else {
         await this.addQTTacNhan(this.tN);
       }
       this.closeDialog();
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getTacNhanList(value);
+      this.overlay = false;
     },
 
   }

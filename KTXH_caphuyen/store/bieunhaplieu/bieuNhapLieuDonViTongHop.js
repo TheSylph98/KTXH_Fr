@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: update('bnlDonViTongHopList'),
 
-  DELETE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: remove('bnlDonViTongHopList'),
+  DELETE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP: removeByIds('bnlDonViTongHopList'),
 }
 
 export const actions = {
@@ -120,7 +120,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', data[0])
+      commit('SET_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', data)
     } catch (err) {
       console.log('getBieuNhapLieuDonViTongHop', err)
     }
@@ -158,7 +158,7 @@ export const actions = {
     const { bieuNhapLieuDonViTongHop } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/delete`, bnlDonViTongHop)
+      const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/delete`, {id: bnlDonViTongHop})
 
       commit('DELETE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', data)
       commit('SET_PAGINATION_KEY', {

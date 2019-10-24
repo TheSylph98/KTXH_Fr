@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_KY_BAO_CAO_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -120,13 +119,14 @@ export const actions = {
         id: id
       })
 
-      commit('SET_KY_BAO_CAO', data[0])
+      commit('SET_KY_BAO_CAO', data)
     } catch (err) {
       console.log('getKyBaoCao', err)
     }
   },
 
   async addKyBaoCao({ state, commit }, kyBaoCao) {
+    const res = { isSuccess: false }
     const { qlKyBaoCao } = state.api
     const uuidv1 = require('uuid/v1');
     kyBaoCao.uid = uuidv1();
@@ -139,12 +139,14 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addKyBaoCao', err)
     }
   },
 
   async updateKyBaoCao({ state, commit }, kyBaoCao) {
+    const res = { isSuccess: false }
     const { qlKyBaoCao } = state.api
     const uuidv1 = require('uuid/v1');
     kyBaoCao.uid = uuidv1();
@@ -153,38 +155,44 @@ export const actions = {
       const data = await this.$axios.$post(`${qlKyBaoCao}/update`, kyBaoCao)
 
       commit('UPDATE_KY_BAO_CAO', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateKyBaoCao', err)
     }
   },
 
-  async deleteKyBaoCao({ state, commit }, kyBaoCao) {
+  async deleteKyBaoCao({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { qlKyBaoCao } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qlKyBaoCao}/delete`, kyBaoCao)
-
-      commit('DELETE_KY_BAO_CAO', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${qlKyBaoCao}/delete`, {id: idList})
+      if (data) {
+        commit('DELETE_KY_BAO_CAO', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteKyBaoCao', err)
     }
   },
 
   async restoreKyBaoCao({ state, commit }, kyBaoCao) {
+    const res = { isSuccess: false }
     const { qlKyBaoCao } = state.api
 
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/restore`, kyBaoCao)
 
-      commit('ADD_KY_BAO_CAO', data)
+      commit('ADD_KY_BAO_CAO', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreKyBaoCao', err)
     }

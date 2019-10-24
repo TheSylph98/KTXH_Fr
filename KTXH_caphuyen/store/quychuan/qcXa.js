@@ -120,15 +120,17 @@ export const actions = {
         id: id
       })
 
-      commit('SET_XA', data[0])
+      commit('SET_XA', data)
     } catch (err) {
       console.log('getXa', err)
     }
   },
 
   async addXa({ state, commit }, xa) {
+    const res = { isSuccess: false }
     const { qcXa } = state.api
     const uuidv1 = require('uuid/v1');
+
     xa.uid = uuidv1();
     xa.qcHuyenId = Number(xa.qcHuyenId);
     
@@ -140,50 +142,58 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addXa', err)
     }
   },
 
   async updateXa({ state, commit }, xa) {
+    const res = { isSuccess: false }
     const { qcXa } = state.api
 
     try {
       const data = await this.$axios.$post(`${qcXa}/update`, xa)
 
       commit('UPDATE_XA', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateXa', err)
     }
   },
 
-  async deleteXa({ state, commit }, xa) {
+  async deleteXa({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { qcXa } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qcXa}/delete`, xa)
-
-      commit('DELETE_XA', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${qcXa}/delete`, {id: idList})
+      if(data){
+        commit('DELETE_XA', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteXa', err)
     }
   },
 
   async restoreXa({ state, commit }, xa) {
+    const res = { isSuccess: false }
     const { qcXa } = state.api
 
     try {
       const data = await this.$axios.$post(`${qcXa}/restore`, xa)
 
-      commit('ADD_XA', data)
+      commit('ADD_XA', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreXa', err)
     }

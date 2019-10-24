@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="kyBaoCaoList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getKyBaoCaoList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <KyBaoCao
@@ -97,8 +100,12 @@ export default {
     store.dispatch("quanly/qlKyBaoCao/getKyBaoCaoList");
   },
 
-  created() {
-    this.getKyBaoCaoList();
+   async created() {
+    if (!this.kyBaoCaoList.length) {
+      this.overlay = true
+      await this.getKyBaoCaoList()
+      this.overlay = false
+    }
   },
 
   methods: {
@@ -151,6 +158,7 @@ export default {
       this.isUpdate = false;
       this.kyBC = {};
     },
+
     async saveChiTieuDialog() {
       if (this.isUpdate) {
         await this.updateKyBaoCao(this.kyBC);
@@ -158,7 +166,13 @@ export default {
         await this.addKyBaoCao(this.kyBC);
       }
       this.closeDialog();
-    }
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getKyBaoCaoList(value);
+      this.overlay = false;
+    },
   }
 };
 </script>

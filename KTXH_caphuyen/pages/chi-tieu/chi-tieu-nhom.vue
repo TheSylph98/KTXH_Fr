@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="chiTieuNhomList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getChiTieuNhomList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <ChiTieuNhom
@@ -35,6 +38,7 @@ export default {
     Table,
     ChiTieuNhom
   },
+
   data() {
     return {
       title: "Khai Báo Nhóm Chỉ Tiêu",
@@ -75,6 +79,7 @@ export default {
       ctNhom: {}
     };
   },
+
   computed: {
     ...mapState("chitieu/chiTieuNhom", ["chiTieuNhomList", "chi_tieu_nhom", "pagination"])
   },
@@ -83,8 +88,12 @@ export default {
     store.dispatch("chitieu/chiTieuNhom/getChiTieuNhomList");
   },
 
-  created() {
-    this.getChiTieuNhomList();
+  async created() {
+    if (!this.chiTieuNhomList.length) {
+      this.overlay = true
+      await this.getChiTieuNhomList()
+      this.overlay = false
+    }
   },
 
   methods: {
@@ -106,6 +115,7 @@ export default {
         ghiChu: ""
       };
     },
+
     async clickEdit(item) {
       this.overlay = true;
       await this.getChiTieuNhom(Number(item.id))
@@ -132,7 +142,13 @@ export default {
         await this.addChiTieuNhom(this.ctNhom);
       }
       this.closeDialog();
-    }
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getChiTieuNhomList(value);
+      this.overlay = false;
+    },
   }
 };
 </script>

@@ -74,7 +74,7 @@ export const actions = {
     { state, commit },
     text
   ) {
-    const { user } = state.api
+    const { qtUser } = state.api
 
     let queryData = {}
     if (text) {
@@ -82,7 +82,7 @@ export const actions = {
     }
 
     try {
-      const data = await this.$axios.$post(`${user}/list`, queryData)
+      const data = await this.$axios.$post(`${qtUser}/list`, queryData)
 
       commit('SET_SEARCH_USER_LIST', data.rows)
     } catch (err) {
@@ -120,15 +120,17 @@ export const actions = {
         id: id
       })
 
-      commit('SET_USER', data[0])
+      commit('SET_USER', data)
     } catch (err) {
       console.log('getQTUser', err)
     }
   },
 
   async addQTUser({ state, commit }, user) {
+    const res = { isSuccess: false }
     const { qtUser } = state.api
     const uuidv1 = require('uuid/v1');
+
     user.uid = uuidv1();
     user.qtDonViId = Number(user.qtDonViId);
     try {
@@ -139,50 +141,58 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addQTUser', err)
     }
   },
 
   async updateQTUser({ state, commit }, user) {
+    const res = { isSuccess: false }
     const { qtUser } = state.api
 
     try {
       const data = await this.$axios.$post(`${qtUser}/update`, user)
 
       commit('UPDATE_USER', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateQTUser', err)
     }
   },
 
-  async deleteQTUser({ state, commit }, user) {
+  async deleteQTUser({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { qtUser } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtUser}/delete`, user)
-
-      commit('DELETE_USER', data)
+      const data = await this.$axios.$post(`${qtUser}/delete`, {id: idList})
+      if (data) {
+      commit('DELETE_USER', idList)
       commit('SET_PAGINATION_KEY', {
         property: 'total',
-        value: state.pagination.total - 1
+        value: state.pagination.total - idList.length
       })
+      res.isSuccess = true
+    }
     } catch (err) {
       console.log('deleteQTUser', err)
     }
   },
 
   async restoreQTUser({ state, commit }, user) {
+    const res = { isSuccess: false }
     const { qtUser } = state.api
 
     try {
       const data = await this.$axios.$post(`${qtUser}/restore`, user)
 
-      commit('ADD_USER', data)
+      commit('ADD_USER', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreQTUser', err)
     }

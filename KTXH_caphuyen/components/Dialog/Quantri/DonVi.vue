@@ -34,7 +34,9 @@
           <v-col class="d-flex" cols="12">
             <v-textarea v-model="donVi.ghiChu" label="Ghi Chú"></v-textarea>
           </v-col>
-
+          <v-col cols="12" sm="6" md="8">
+              <v-switch v-model="donVi.laDonVi" class="ma-1" label="Là đơn vị"></v-switch>
+          </v-col>
           <!-- <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="donVi.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
               </v-col>
@@ -82,7 +84,6 @@ export default {
   computed: {
     ...mapState("quantri/qtDonVi", ["donViList","searchDonVi"]),
     dvList() {
-    //console.log(this.bnlList)
     if (this.searchDonVi.length > 0) return this.searchDonVi;
     else return this.donViList;
     },

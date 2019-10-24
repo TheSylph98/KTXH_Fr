@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="bnlKyBaoCaoList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getBieuNhapLieuKyBaoCaoList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BNLKyBaoCao
@@ -65,10 +68,12 @@ export default {
     );
   },
 
-  created() {
-    this.getBieuNhapLieuKyBaoCaoList();
-    // this.getBieuNhapLieuList();
-    // this.getKyBaoCaoList();
+  async created() {
+    if (!this.bnlKyBaoCaoList.length) {
+      this.overlay = true
+      await this.getBieuNhapLieukyBaoCaoList()
+      this.overlay = false
+    }
   },
 
   methods: {
@@ -117,6 +122,7 @@ export default {
       this.isUpdate = false;
       this.kyBaoCao = {};
     },
+
     async saveChiTieuDialog() {
       if (this.isUpdate) {
         await this.updateBieuNhapLieuKyBaoCao(this.kyBaoCao);
@@ -124,7 +130,13 @@ export default {
         await this.addBieuNhapLieuKyBaoCao(this.kyBaoCao);
       }
       this.closeDialog();
-    }
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getBieuNhapLieukyBaoCaoList(value);
+      this.overlay = false;
+    },
   }
 };
 </script>

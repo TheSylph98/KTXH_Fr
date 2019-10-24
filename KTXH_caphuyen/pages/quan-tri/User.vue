@@ -4,10 +4,11 @@
     :title="title"
     :headers="headers"
     :items="userList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
-    @filter="getQTUserList({queryData: $event})"
+    @filter="getUserList({queryData: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <User  
@@ -34,6 +35,7 @@ export default {
     Table,
     User
   },
+
   data() {
     return {
       title: "Khai Báo Người Dùng",
@@ -81,22 +83,30 @@ export default {
       ]
     };
   },
+
   computed: {
     ...mapState("quantri/qtUser", ["userList", "user", "pagination"])
   },
 
   asyncData({ store }) {
-    store.dispatch("quantri/qtUser/getQTUserList");
+    store.dispatch("quantri/qtUser/getUserList");
   },
 
-  created() {
-    this.getQTUserList();
-    //this.getDonViList();
+  async created() {
+    if (!this.userList.length) {
+      this.overlay = true
+      await this.getUserList()
+      this.overlay = false
+    }
+  },
+
+  async mounted() {
+    await this.getDonViList();
   },
 
   methods: {
     ...mapActions("quantri/qtUser", [
-      "getQTUserList",
+      "getUserList",
       "getQTUser",
       "addQTUser",
       "updateQTUser",
@@ -145,6 +155,12 @@ export default {
         await this.addQTUser(this.user_data);
       }
       this.closeDialog();
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getUserList(value);
+      this.overlay = false;
     },
 
   }

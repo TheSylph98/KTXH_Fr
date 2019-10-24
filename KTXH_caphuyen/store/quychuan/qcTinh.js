@@ -120,15 +120,17 @@ export const actions = {
         id: id
       })
 
-      commit('SET_TINH', data[0])
+      commit('SET_TINH', data)
     } catch (err) {
       console.log('getTinh', err)
     }
   },
 
   async addTinh({ state, commit }, tinh) {
+    const res = { isSuccess: false }
     const { qcTinh } = state.api
     const uuidv1 = require('uuid/v1');
+
     tinh.uid = uuidv1();
     try {
       const data = await this.$axios.$post(`${qcTinh}/create`, tinh)
@@ -138,50 +140,58 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addTinh', err)
     }
   },
 
   async updateTinh({ state, commit }, tinh) {
+    const res = { isSuccess: false }
     const { qcTinh } = state.api
 
     try {
       const data = await this.$axios.$post(`${qcTinh}/update`, tinh)
 
       commit('UPDATE_TINH', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateTinh', err)
     }
   },
 
-  async deleteTinh({ state, commit }, tinh) {
+  async deleteTinh({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { qcTinh } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qcTinh}/delete`, tinh)
-
-      commit('DELETE_TINH', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${qcTinh}/delete`, {id: idList})
+      if (data) {
+        commit('DELETE_TINH', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteTinh', err)
     }
   },
 
   async restoreTinh({ state, commit }, tinh) {
+    const res = { isSuccess: false }
     const { qcTinh } = state.api
 
     try {
       const data = await this.$axios.$post(`${qcTinh}/restore`, tinh)
 
-      commit('ADD_TINH', data)
+      commit('ADD_TINH', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreTinh', err)
     }

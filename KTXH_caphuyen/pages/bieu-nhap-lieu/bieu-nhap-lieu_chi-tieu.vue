@@ -4,10 +4,13 @@
     :title="title"
     :headers="headers"
     :items="bnlChiTieuList"
+    :pagination="pagination"
     @edit="clickEdit($event)"
     @delete="deleted($event)"
     @clickAdd="clickAddNew"
     @filter="getBieuNhapLieuChiTieuList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
   >
     <v-dialog v-model="dialog" max-width="800px">
       <BieuNhapLieuChiTieu
@@ -65,10 +68,19 @@ export default {
     );
   },
 
-  mounted() {
-    this.getBieuNhapLieuChiTieuList();
-    // this.getBieuNhapLieuList();
-    // this.getChiTieuList();
+  async created() {
+    if (!this.bnlChiTieuList.length) {
+      this.overlay = true
+      await this.getBieuNhapLieuChiTieuList()
+      this.overlay = false
+    }
+  },
+
+  async mounted() {
+    await Promise.all([
+    this.getBieuNhapLieuList(),
+    this.getChiTieuList()
+    ])
   },
 
   methods: {
@@ -125,6 +137,12 @@ export default {
       }
 
       this.closeDialog();
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getBieuNhapLieuChiTieuList(value);
+      this.overlay = false;
     },
 
     // edit(item) {

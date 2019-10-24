@@ -97,7 +97,7 @@ export const actions = {
         id: id
       })
 
-      commit('SET_NGUON_SO_LIEU', data[0])
+      commit('SET_NGUON_SO_LIEU', data)
     } catch (err) {
       console.log('getNguonSoLieu', err)
     }
@@ -135,7 +135,7 @@ export const actions = {
     const { sysNguonSoLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${sysNguonSoLieu}/delete`, nguonsolieu)
+      const data = await this.$axios.$post(`${sysNguonSoLieu}/delete`, {id: nguonsolieu})
 
       commit('DELETE_NGUON_SO_LIEU', data)
       commit('SET_PAGINATION_KEY', {

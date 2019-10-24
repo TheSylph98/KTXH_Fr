@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_DON_VI_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -74,7 +73,7 @@ export const actions = {
     { state, commit },
     text
   ) {
-    const { donVi } = state.api
+    const { qtDonVi } = state.api
 
     let queryData = {}
     if (text) {
@@ -82,8 +81,9 @@ export const actions = {
     }
 
     try {
-      const data = await this.$axios.$post(`${donVi}/list`, queryData)
+      const data = await this.$axios.$post(`${qtDonVi}/list`, queryData)
 
+      console.log("data", data.rows)
       commit('SET_SEARCH_DON_VI_LIST', data.rows)
     } catch (err) {
       console.log('getSearchDonViList', err)
@@ -120,18 +120,22 @@ export const actions = {
         id: id
       })
 
-      commit('SET_DON_VI', data[0])
+      commit('SET_DON_VI', data)
     } catch (err) {
       console.log('getQTDonVi', err)
     }
   },
 
   async addQTDonVi({ state, commit }, donVi) {
+    const res = { isSuccess: false }
     const { qtDonVi } = state.api
     const uuidv1 = require('uuid/v1');
+
     donVi.uid = uuidv1();
     donVi.donViChaId = Number(donVi.donViChaId)
-    
+    if (donVi.donViChaId == 0) {
+      delete donVi.donViChaId
+    }
     try {
       const data = await this.$axios.$post(`${qtDonVi}/create`, donVi)
 
@@ -140,50 +144,59 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addQTDonVi', err)
     }
   },
 
   async updateQTDonVi({ state, commit }, donVi) {
+    const res = { isSuccess: false }
     const { qtDonVi } = state.api
 
     try {
       const data = await this.$axios.$post(`${qtDonVi}/update`, donVi)
 
       commit('UPDATE_DON_VI', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateQTDonVi', err)
     }
   },
 
-  async deleteQTDonVi({ state, commit }, donVi) {
+  async deleteQTDonVi({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { qtDonVi } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtDonVi}/delete`, donVi)
+      const data = await this.$axios.$post(`${qtDonVi}/delete`, {id: idList})
 
-      commit('DELETE_DON_VI', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      if(data){
+        commit('DELETE_DON_VI', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteQTDonVi', err)
     }
   },
 
   async restoreQTDonVi({ state, commit }, donVi) {
+    const res = { isSuccess: false }
     const { qtDonVi } = state.api
 
     try {
       const data = await this.$axios.$post(`${qtDonVi}/restore`, donVi)
 
-      commit('ADD_DON_VI', data)
+      commit('ADD_DON_VI', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreQTDonVi', err)
     }

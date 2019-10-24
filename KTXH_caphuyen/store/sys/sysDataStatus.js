@@ -24,8 +24,11 @@ import {
   
   export const mutations = {
     SET_DATA_STATUS_LIST: set('datastatusList'),
+
     SET_DELETED_DATA_STATUS: set('deleteddatastatusList'),
+
     SET_PAGINATION: set('pagination'),
+
     SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
   
     SET_DATA_STATUS: set('datastatus'),
@@ -94,7 +97,7 @@ import {
           id: id
         })
   
-        commit('SET_DATA_STATUS', data[0])
+        commit('SET_DATA_STATUS', data)
       } catch (err) {
         console.log('getDataStatus', err)
       }
@@ -132,7 +135,7 @@ import {
       const { sysDataStatus } = state.api
   
       try {
-        const data = await this.$axios.$post(`${sysDataStatus}/delete`, datastatus)
+        const data = await this.$axios.$post(`${sysDataStatus}/delete`, {id: datastatus})
   
         commit('DELETE_DATA_STATUS', data)
         commit('SET_PAGINATION_KEY', {

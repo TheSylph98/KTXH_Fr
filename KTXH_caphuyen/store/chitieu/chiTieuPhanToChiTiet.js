@@ -120,13 +120,14 @@ export const actions = {
         id: id
       })
 
-      commit('SET_CHI_TIEU_PHAN_TO_CHI_TIET', data[0])
+      commit('SET_CHI_TIEU_PHAN_TO_CHI_TIET', data)
     } catch (err) {
       console.log('getChiTieuPhanToChiTiet', err)
     }
   },
 
   async addChiTieuPhanToChiTiet({ state, commit }, chi_tieu_phan_to_chi_tiet) {
+    const res = { isSuccess: false }
     const { chiTieuPhanToChiTiet } = state.api
     const uuidv1 = require('uuid/v1');
     chi_tieu_phan_to_chi_tiet.uid = uuidv1();
@@ -140,50 +141,58 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addChiTieuPhanToChiTiet', err)
     }
   },
 
   async updateChiTieuPhanToChiTiet({ state, commit }, chi_tieu_phan_to_chi_tiet) {
+    const res = { isSuccess: false }
     const { chiTieuPhanToChiTiet } = state.api
 
     try {
       const data = await this.$axios.$post(`${chiTieuPhanToChiTiet}/update`, chi_tieu_phan_to_chi_tiet)
 
       commit('UPDATE_CHI_TIEU_PHAN_TO_CHI_TIET', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateChiTieuPhanToChiTiet', err)
     }
   },
 
-  async deleteChiTieuPhanToChiTiet({ state, commit }, chi_tieu_phan_to_chi_tiet) {
+  async deleteChiTieuPhanToChiTiet({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { chiTieuPhanToChiTiet } = state.api
 
     try {
-      const data = await this.$axios.$post(`${chiTieuPhanToChiTiet}/delete`, chi_tieu_phan_to_chi_tiet)
-
-      commit('DELETE_CHI_TIEU_PHAN_TO_CHI_TIET', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${chiTieuPhanToChiTiet}/delete`, {id: idList})
+      if (data){
+        commit('DELETE_CHI_TIEU_PHAN_TO_CHI_TIET', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteChiTieuPhanToChiTiet', err)
     }
   },
 
   async restoreChiTieuPhanToChiTiet({ state, commit }, chi_tieu_phan_to_chi_tiet) {
+    const res = { isSuccess: false }
     const { ChiTieuPhanToChiTiet } = state.api
 
     try {
       const data = await this.$axios.$post(`${ChiTieuPhanToChiTiet}/restore`, chi_tieu_phan_to_chi_tiet)
 
-      commit('ADD_CHI_TIEU_PHAN_TO_CHI_TIET', data)
+      commit('ADD_CHI_TIEU_PHAN_TO_CHI_TIET', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreChiTieuPhanToChiTiet', err)
     }

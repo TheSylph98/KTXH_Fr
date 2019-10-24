@@ -8,7 +8,7 @@
       show-select
       hide-default-footer
       dense
-      :items-per-page="pagination.pageSize"
+      :items-per-page="20"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -73,7 +73,7 @@
                 <span>Xóa</span>
               </v-tooltip>
             </span>
-            <span v-else>{{getTableValue(row.item, el.value)}}</span>
+            <span v-else>{{ row.item[el.value] }}</span>
           </td>
         </tr>
       </template>
@@ -92,14 +92,14 @@
                 outlined
                 label="Số hàng trên trang"
                 :items="pageSizeList"
-                v-model="pageSize"
+                v-model="paginationValue.pageSize"
                 @change="$emit('changePageSize', $event)"
               ></v-autocomplete>
             </v-form>
           </v-col>
           <v-col cols="8">
             <v-pagination
-              v-model="page"
+              v-model="paginationValue.page"
               :total-visible="paginationValue.visiblePage"
               :length="paginationValue.numberOfPage"
               circle
@@ -188,14 +188,13 @@ export default {
       }
     }
   },
+
   data() {
     return {
       index: 1,
       search: {},
       selectItems: [],
-      dialog: false,
-      page: 1,
-      pageSize: 20
+      dialog: false
     };
   },
 
@@ -213,22 +212,19 @@ export default {
     },
 
     paginationValue() {
-      // const numberOfPage = Number(
-      //   (Number(this.pagination.total) / Number(this.pagination.page)).toFixed()
-      // );
+      const total = this.pagination.total ? Number(this.pagination.total) : 0
+      const pageSize = Number(this.pagination.pageSize)
 
-      // const visiblePage = numberOfPage < 6 ? numberOfPage : 6;
-
+      const numberOfPage = Math.ceil(total / pageSize) 
+      const visiblePage = numberOfPage < 6 ? numberOfPage : 6
+      
       return {
-        numberOfPage: 3,
-        visiblePage: 3
+        numberOfPage: Number(numberOfPage),
+        visiblePage: visiblePage,
+        pageSize: pageSize,
+        page: Number(this.pagination.page) + 1
       };
     }
-  },
-
-  created() {
-    this.page = Number(this.pagination.page) + 1;
-    this.pageSize = Number(this.pagination.pageSize);
   },
 
   methods: {
@@ -243,6 +239,7 @@ export default {
       attibuteArr.forEach(e => {
         result = result[e];
       });
+      console.log("resulte", result)
       return result;
     },
 

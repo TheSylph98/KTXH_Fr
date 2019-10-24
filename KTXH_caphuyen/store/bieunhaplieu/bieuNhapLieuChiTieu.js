@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_BIEU_NHAP_LIEU_CHI_TIEU: update('bnlChiTieuList'),
 
-  DELETE_BIEU_NHAP_LIEU_CHI_TIEU: remove('bnlChiTieuList'),
+  DELETE_BIEU_NHAP_LIEU_CHI_TIEU: removeByIds('bnlChiTieuList'),
 }
 
 export const actions = {
@@ -120,71 +120,83 @@ export const actions = {
         id: id
       })
 
-      commit('SET_BIEU_NHAP_LIEU_CHI_TIEU', data[0])
+      commit('SET_BIEU_NHAP_LIEU_CHI_TIEU', data)
     } catch (err) {
       console.log('getBieuNhapLieuChiTieu', err)
     }
   },
 
   async addBieuNhapLieuChiTieu({ state, commit }, bnlChiTieu) {
+    const res = { isSuccess: false }
+
     const { bieuNhapLieuChiTieu } = state.api
-    bnlChiTieu.bieuNhapLieuId = Number(bnlChiTieu.bieuNhapLieuId)
-    bnlChiTieu.chiTieuId = Number(bnlChiTieu.chiTieuId)
     const uuidv1 = require('uuid/v1');
     bnlChiTieu.uid = uuidv1();
+    
+    bnlChiTieu.bieuNhapLieuId = Number(bnlChiTieu.bieuNhapLieuId)
+    bnlChiTieu.chiTieuId = Number(bnlChiTieu.chiTieuId)
+    
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/create`, bnlChiTieu)
+      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/create`, {id: bnlChiTieu})
 
       commit('ADD_BIEU_NHAP_LIEU_CHI_TIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addBieuNhapLieuChiTieu', err)
     }
   },
 
   async updateBieuNhapLieuChiTieu({ state, commit }, bnlChiTieu) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuChiTieu } = state.api
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/update`, bnlChiTieu)
 
       commit('UPDATE_BIEU_NHAP_LIEU_CHI_TIEU', {value: data} )
+      res.isSuccess = true
     } catch (err) {
       console.log('updateBieuNhapLieuChiTieu', err)
     }
   },
 
-  async deleteBieuNhapLieuChiTieu({ state, commit }, bnlChiTieu) {
+  async deleteBieuNhapLieuChiTieu({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuChiTieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/delete`, bnlChiTieu)
-
-      commit('DELETE_BIEU_NHAP_LIEU_CHI_TIEU', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/delete`, idList)
+      if (data){
+        commit('DELETE_BIEU_NHAP_LIEU_CHI_TIEU', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true
+      }
     } catch (err) {
       console.log('deleteBieuNhapLieuChiTieu', err)
     }
   },
 
   async restoreBieuNhapLieuChiTieu({ state, commit }, bnlChiTieu) {
+    const res = { isSuccess: false }
     const { bieuNhapLieuChiTieu } = state.api
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/restore`, bnlChiTieu)
 
-      commit('ADD_BIEU_NHAP_LIEU_CHI_TIEU', data)
+      commit('ADD_BIEU_NHAP_LIEU_CHI_TIEU', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreBieuNhapLieuChiTieu', err)
     }

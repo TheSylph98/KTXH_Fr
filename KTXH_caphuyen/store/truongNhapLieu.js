@@ -120,13 +120,14 @@ export const actions = {
         id: id
       })
 
-      commit('SET_TRUONG_NHAP_LIEU', data[0])
+      commit('SET_TRUONG_NHAP_LIEU', data)
     } catch (err) {
       console.log('getTruongNhaplieu', err)
     }
   },
 
   async addTruongNhaplieu({ state, commit }, truongnhaplieu) {
+    const res = { isSuccess: false }
     const { truongNhapLieu } = state.api
 
     try {
@@ -137,50 +138,58 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addTruongNhaplieu', err)
     }
   },
 
   async updateTruongNhaplieu({ state, commit }, truongnhaplieu) {
+    const res = { isSuccess: false }
     const { truongNhapLieu } = state.api
 
     try {
       const data = await this.$axios.$post(`${truongNhapLieu}/update`, truongnhaplieu)
 
       commit('UPDATE_TRUONG_NHAP_LIEU', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateTruongNhaplieu', err)
     }
   },
 
-  async deleteTruongNhaplieu({ state, commit }, truongnhaplieu) {
+  async deleteTruongNhaplieu({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { truongNhapLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${truongNhapLieu}/delete`, truongnhaplieu)
-
-      commit('DELETE_TRUONG_NHAP_LIEU', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${truongNhapLieu}/delete`, {id: idList})
+      if(data) {
+        commit('DELETE_TRUONG_NHAP_LIEU', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteTruongNhaplieu', err)
     }
   },
 
   async restoreTruongNhaplieu({ state, commit }, truongnhaplieu) {
+    const res = { isSuccess: false }
     const { truongNhapLieu } = state.api
 
     try {
       const data = await this.$axios.$post(`${truongNhapLieu}/restore`, truongnhaplieu)
 
-      commit('ADD_TRUONG_NHAP_LIEU', data)
+      commit('ADD_TRUONG_NHAP_LIEU', {newEl: data})
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreTruongNhaplieu', err)
     }

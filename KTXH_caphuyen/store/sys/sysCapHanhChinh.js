@@ -58,7 +58,6 @@ import {
   
         })
   
-        console.log("data", data.rows)
         commit('SET_CAP_HANH_CHINH_LIST', data.rows)
         commit('SET_PAGINATION', {
           total: data.total,
@@ -120,7 +119,7 @@ import {
           id: id
         })
   
-        commit('SET_CAP_HANH_CHINH', data[0])
+        commit('SET_CAP_HANH_CHINH', data)
       } catch (err) {
         console.log('getCapHanhChinh', err)
       }
@@ -158,7 +157,7 @@ import {
       const { sysCapHanhChinh } = state.api
   
       try {
-        const data = await this.$axios.$post(`${sysCapHanhChinh}/delete`, caphanhchinh)
+        const data = await this.$axios.$post(`${sysCapHanhChinh}/delete`, {id: caphanhchinh})
   
         commit('DELETE_CAP_HANH_CHINH', data)
         commit('SET_PAGINATION_KEY', {

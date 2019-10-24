@@ -74,7 +74,7 @@ export const actions = {
     { state, commit },
     text
   ) {
-    const { tacNhan } = state.api
+    const { qtTacNhan } = state.api
 
     let queryData = {}
     if (text) {
@@ -82,7 +82,7 @@ export const actions = {
     }
 
     try {
-      const data = await this.$axios.$post(`${tacNhan}/list`, queryData)
+      const data = await this.$axios.$post(`${qtTacNhan}/list`, queryData)
 
       commit('SET_SEARCH_TAC_NHAN_LIST', data.rows)
     } catch (err) {
@@ -120,15 +120,17 @@ export const actions = {
         id: id
       })
 
-      commit('SET_TAC_NHAN', data[0])
+      commit('SET_TAC_NHAN', data)
     } catch (err) {
       console.log('getQTTacNhan', err)
     }
   },
 
   async addQTTacNhan({ state, commit }, tacNhan) {
+    const res = { isSuccess: false }
     const { qtTacNhan } = state.api
     const uuidv1 = require('uuid/v1');
+
     tacNhan.uid = uuidv1();
     tacNhan.sysCaphanhChinhId = Number(tacNhan.sysCaphanhChinhId);
     try {
@@ -139,40 +141,47 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('addQTTacNhan', err)
     }
   },
 
   async updateQTTacNhan({ state, commit }, tacNhan) {
+    const res = { isSuccess: false }
     const { qtTacNhan } = state.api
 
     try {
       const data = await this.$axios.$post(`${qtTacNhan}/update`, tacNhan)
 
       commit('UPDATE_TAC_NHAN', {value: data})
+      res.isSuccess = true
     } catch (err) {
       console.log('updateQTTacNhan', err)
     }
   },
 
-  async deleteQTTacNhan({ state, commit }, tacNhan) {
+  async deleteQTTacNhan({ state, commit }, idList) {
+    const res = { isSuccess: false }
     const { qtTacNhan } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtTacNhan}/delete`, tacNhan)
-
-      commit('DELETE_TAC_NHAN', data)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - 1
-      })
+      const data = await this.$axios.$post(`${qtTacNhan}/delete`, {id: idList})
+      if(data){
+        commit('DELETE_TAC_NHAN', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true 
+      }
     } catch (err) {
       console.log('deleteQTTacNhan', err)
     }
   },
 
   async restoreQTTacNhan({ state, commit }, tacNhan) {
+    const res = { isSuccess: false }
     const { qtTacNhan } = state.api
 
     try {
@@ -183,6 +192,7 @@ export const actions = {
         property: 'total',
         value: state.pagination.total + 1
       })
+      res.isSuccess = true
     } catch (err) {
       console.log('restoreQTTacNhan', err)
     }
