@@ -48,8 +48,7 @@ export const mutations = {
 export const actions = {
   async getBieuNhapLieuKyBaoCaoList(
     { state, commit },
-    payload = { page: 0, pageSize: 20 }
-  ) {
+    payload = { page: 0, pageSize: 20 }) {
     const { bieuNhapLieuKyBaoCao } = state.api
 
     try {
@@ -135,7 +134,7 @@ export const actions = {
     bnlKyBaoCao.uid = uuidv1();
     bnlKyBaoCao.bieuNhapLieuId = Number(bnlKyBaoCao.bieuNhapLieuId)
     bnlKyBaoCao.kyBaoCaoId = Number(bnlKyBaoCao.kyBaoCaoId)
-    
+
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/create`, bnlKyBaoCao)
@@ -149,6 +148,8 @@ export const actions = {
     } catch (err) {
       console.log('addBieuNhapLieuKyBaoCao', err)
     }
+
+    return res
   },
 
   async updateBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
@@ -158,11 +159,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/update`, bnlKyBaoCao)
 
-      commit('UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO', {value: data})
+      commit('UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateBieuNhapLieuKyBaoCao', err)
     }
+
+    return res
   },
 
   async deleteBieuNhapLieuKyBaoCao({ state, commit }, idList) {
@@ -170,15 +173,15 @@ export const actions = {
     const { bieuNhapLieuKyBaoCao } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/delete`, {id: idList})
+      const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/delete`, { id: idList })
 
-      if(data){
+      if (data) {
         commit('DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteBieuNhapLieuKyBaoCao', err)
@@ -192,7 +195,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuKyBaoCao}/restore`, bnlKyBaoCao)
 
-      commit('ADD_BIEU_NHAP_LIEU_KY_BAO_CAO', {newEl: data})
+      commit('ADD_BIEU_NHAP_LIEU_KY_BAO_CAO', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1

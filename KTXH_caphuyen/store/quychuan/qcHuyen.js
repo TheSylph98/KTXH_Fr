@@ -134,7 +134,7 @@ export const actions = {
     huyen.uid = uuidv1();
     huyen.qcTinhId = Number(huyen.qcTinhId)
     huyen.nongthon = Boolean(huyen.nongthon)
-    huyen.sysCapDonViHanhChinhId = Number(huyen.sysCapDonViHanhChinhId)
+    huyen.sysCapDonViHanhChinh = Number(huyen.sysCapDonViHanhChinh)
     try {
       const data = await this.$axios.$post(`${qcHuyen}/create`, huyen)
 
@@ -147,6 +147,8 @@ export const actions = {
     } catch (err) {
       console.log('addHuyen', err)
     }
+
+    return res
   },
 
   async updateHuyen({ state, commit }, huyen) {
@@ -156,11 +158,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcHuyen}/update`, huyen)
 
-      commit('UPDATE_HUYEN', {value: data})
+      commit('UPDATE_HUYEN', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateHuyen', err)
     }
+
+    return res
   },
 
   async deleteHuyen({ state, commit }, idList) {
@@ -168,18 +172,20 @@ export const actions = {
     const { qcHuyen } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qcHuyen}/delete`, {id: idList})
-      if(data){
+      const data = await this.$axios.$post(`${qcHuyen}/delete`, { id: idList })
+      if (data) {
         commit('DELETE_HUYEN', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
-        }) 
+        })
         res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteHuyen', err)
     }
+
+    return res
   },
 
   async restoreHuyen({ state, commit }, huyen) {
@@ -189,7 +195,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcHuyen}/restore`, huyen)
 
-      commit('ADD_HUYEN', {newEl: data})
+      commit('ADD_HUYEN', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -198,5 +204,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreHuyen', err)
     }
+
+    return res
   }
 }

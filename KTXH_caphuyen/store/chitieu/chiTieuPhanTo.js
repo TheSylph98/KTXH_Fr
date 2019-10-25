@@ -12,7 +12,7 @@ export const state = () => {
       chiTieuPhanTo: '/api/v2/crud/chitieuphanto'
     },
     chiTieuPhanToList: [],
-    searchChiTieuNhomList: [],
+    searchChiTieuPhanToList: [],
     deletedChiTieuPhanToList: [],
     chi_tieu_phan_to: {},
     pagination: {
@@ -31,7 +31,7 @@ export const mutations = {
   SET_DELETED_CHI_TIEU_PHAN_TO: set('deletedChiTieuPhanToList'),
 
   SET_PAGINATION: set('pagination'),
-  
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_CHI_TIEU_PHAN_TO: set('chi_tieu_phan_to'),
@@ -143,6 +143,8 @@ export const actions = {
     } catch (err) {
       console.log('addChiTieuPhanTo', err)
     }
+
+    return res
   },
 
   async updateChiTieuPhanTo({ state, commit }, chi_tieu_phan_to) {
@@ -152,11 +154,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${chiTieuPhanTo}/update`, chi_tieu_phan_to)
 
-      commit('UPDATE_CHI_TIEU_PHAN_TO', {value: data})
+      commit('UPDATE_CHI_TIEU_PHAN_TO', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateChiTieuPhanTo', err)
     }
+
+    return res
   },
 
   async deleteChiTieuPhanTo({ state, commit }, chi_tieu_phan_to) {
@@ -164,7 +168,7 @@ export const actions = {
     const { chiTieuPhanTo } = state.api
 
     try {
-      const data = await this.$axios.$post(`${chiTieuPhanTo}/delete`, {id: chi_tieu_phan_to})
+      const data = await this.$axios.$post(`${chiTieuPhanTo}/delete`, { id: chi_tieu_phan_to })
 
       if (data) {
         commit('DELETE_CHI_TIEU_PHAN_TO', data)
@@ -177,6 +181,8 @@ export const actions = {
     } catch (err) {
       console.log('deleteChiTieuPhanTo', err)
     }
+
+    return res
   },
 
   async restoreChiTieuPhanTo({ state, commit }, chi_tieu_phan_to) {
@@ -186,7 +192,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${ChiTieuPhanTo}/restore`, chi_tieu_phan_to)
 
-      commit('ADD_CHI_TIEU_PHAN_TO', {newEl: data})
+      commit('ADD_CHI_TIEU_PHAN_TO', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -195,5 +201,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreChiTieuPhanTo', err)
     }
+
+    return res
   }
 }

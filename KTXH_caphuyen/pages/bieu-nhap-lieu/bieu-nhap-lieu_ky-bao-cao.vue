@@ -1,31 +1,35 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="bnlKyBaoCaoList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getBieuNhapLieuKyBaoCaoList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <BNLKyBaoCao
-        v-if="dialog"
-        :kyBaoCao="kyBaoCao"
-        :formTitle="titleDialog"
-        @close="closeDialog"
-        @save="saveChiTieuDialog"
-      />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="bnlKyBaoCaoList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getBieuNhapLieuKyBaoCaoList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <BNLKyBaoCao
+          v-if="dialog"
+          :kyBaoCao="kyBaoCao"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
-</div>
+  </div>
 </template>
 
 <script>
@@ -51,7 +55,11 @@ export default {
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      kyBaoCao: {}
+      kyBaoCao: {},
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
   computed: {
@@ -70,9 +78,9 @@ export default {
 
   async created() {
     if (!this.bnlKyBaoCaoList.length) {
-      this.overlay = true
-      await this.getBieuNhapLieukyBaoCaoList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getBieuNhapLieukyBaoCaoList();
+      this.overlay = false;
     }
   },
 
@@ -105,18 +113,32 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getBieuNhapLieuKyBaoCao(Number(item.id))
-      this.kyBaoCao = Object.assign({}, this.bnlKyBaoCao)
+      await this.getBieuNhapLieuKyBaoCao(Number(item.id));
+      this.kyBaoCao = Object.assign({}, this.bnlKyBaoCao);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      console.log("item", items)
-      await this.deleteBieuNhapLieuKyBaoCao(items.map(e => e.id));
+      const { isSuccess } = await this.deleteBieuNhapLieuKyBaoCao(
+        items.map(e => e.id)
+      );
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa kỳ báo cáo thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
-    
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
@@ -124,19 +146,35 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
       if (this.isUpdate) {
-        await this.updateBieuNhapLieuKyBaoCao(this.kyBaoCao);
+        res = await this.updateBieuNhapLieuKyBaoCao(this.kyBaoCao);
       } else {
-        await this.addBieuNhapLieuKyBaoCao(this.kyBaoCao);
+        res = await this.addBieuNhapLieuKyBaoCao(this.kyBaoCao);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật kỳ báo cáo thành công"
+          : "Thêm kỳ báo cáo thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getBieuNhapLieukyBaoCaoList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="custom-table">
     <v-data-table
       v-model="selectItems"
       :headers="headerTables"
@@ -73,7 +73,7 @@
                 <span>Xóa</span>
               </v-tooltip>
             </span>
-            <span v-else>{{ row.item[el.value] }}</span>
+            <span v-else>{{ getTableValue(row.item, el.value) }}</span>
           </td>
         </tr>
       </template>
@@ -125,6 +125,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar v-model="snackbar" top color="#fff" :timeout="timeout">
+      <v-alert text :type="notifiedType">{{ notification }}</v-alert>
+    </v-snackbar>
   </div>
 </template>
 
@@ -186,6 +190,26 @@ export default {
       default() {
         return [20, 50, 100, 200];
       }
+    },
+
+    timeout: {
+      type: Number,
+      default: 1000
+    },
+
+    notification: {
+      type: String,
+      default: "Cập nhật dữ liệu thành công"
+    },
+
+    snackbar: {
+      type: Boolean,
+      default: false
+    },
+
+    notifiedType: {
+      type: String,
+      default: "success"
     }
   },
 
@@ -212,12 +236,12 @@ export default {
     },
 
     paginationValue() {
-      const total = this.pagination.total ? Number(this.pagination.total) : 0
-      const pageSize = Number(this.pagination.pageSize)
+      const total = this.pagination.total ? Number(this.pagination.total) : 0;
+      const pageSize = Number(this.pagination.pageSize);
 
-      const numberOfPage = Math.ceil(total / pageSize) 
-      const visiblePage = numberOfPage < 6 ? numberOfPage : 6
-      
+      const numberOfPage = Math.ceil(total / pageSize);
+      const visiblePage = numberOfPage < 6 ? numberOfPage : 6;
+
       return {
         numberOfPage: Number(numberOfPage),
         visiblePage: visiblePage,
@@ -237,9 +261,11 @@ export default {
       let result = obj;
       const attibuteArr = attibuteText.split(".");
       attibuteArr.forEach(e => {
-        result = result[e];
+        if (result) {
+          result = result[e];
+        }
       });
-      console.log("resulte", result)
+      console.log("resulte", result);
       return result;
     },
 
@@ -265,3 +291,17 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.custom-table {
+  .v-snack__content {
+    margin: 0;
+    padding: 0;
+
+    .v-alert {
+      margin: 0;
+      width: inherit;
+    }
+  }
+}
+</style>

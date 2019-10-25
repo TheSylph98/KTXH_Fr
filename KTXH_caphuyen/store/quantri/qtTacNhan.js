@@ -31,7 +31,7 @@ export const mutations = {
   SET_DELETED_TAC_NHAN: set('deletedTacNhanList'),
 
   SET_PAGINATION: set('pagination'),
-  
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_TAC_NHAN: set('tacNhan'),
@@ -145,6 +145,8 @@ export const actions = {
     } catch (err) {
       console.log('addQTTacNhan', err)
     }
+
+    return res
   },
 
   async updateQTTacNhan({ state, commit }, tacNhan) {
@@ -154,11 +156,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtTacNhan}/update`, tacNhan)
 
-      commit('UPDATE_TAC_NHAN', {value: data})
+      commit('UPDATE_TAC_NHAN', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateQTTacNhan', err)
     }
+
+    return res
   },
 
   async deleteQTTacNhan({ state, commit }, idList) {
@@ -166,18 +170,20 @@ export const actions = {
     const { qtTacNhan } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtTacNhan}/delete`, {id: idList})
-      if(data){
+      const data = await this.$axios.$post(`${qtTacNhan}/delete`, { id: idList })
+      if (data) {
         commit('DELETE_TAC_NHAN', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteQTTacNhan', err)
     }
+
+    return res
   },
 
   async restoreQTTacNhan({ state, commit }, tacNhan) {
@@ -196,6 +202,8 @@ export const actions = {
     } catch (err) {
       console.log('restoreQTTacNhan', err)
     }
+
+    return res
   }
 }
 

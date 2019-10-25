@@ -131,7 +131,7 @@ export const actions = {
   async addChiTieuNhom({ state, commit }, chi_tieu_nhom) {
     const res = { isSuccess: false }
     const { chiTieuNhom } = state.api
-    // const uuidv1 = require('uuid/v1');
+
     chi_tieu_nhom.uid = uuidv1();
     try {
       const data = await this.$axios.$post(`${chiTieuNhom}/create`, chi_tieu_nhom)
@@ -145,6 +145,8 @@ export const actions = {
     } catch (err) {
       console.log('addChiTieuNhom', err)
     }
+
+    return res
   },
 
   async updateChiTieuNhom({ state, commit }, chi_tieu_nhom) {
@@ -154,11 +156,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${chiTieuNhom}/update`, chi_tieu_nhom)
 
-      commit('UPDATE_CHI_TIEU_NHOM', {value: data})
+      commit('UPDATE_CHI_TIEU_NHOM', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateChiTieuNhom', err)
     }
+
+    return res
   },
 
   async deleteChiTieuNhom({ state, commit }, idList) {
@@ -166,18 +170,20 @@ export const actions = {
     const { chiTieuNhom } = state.api
 
     try {
-      const data = await this.$axios.$post(`${chiTieuNhom}/delete`, {id: idList})
-      if(data){
+      const data = await this.$axios.$post(`${chiTieuNhom}/delete`, { id: idList })
+      if (data) {
         commit('DELETE_CHI_TIEU_NHOM', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteChiTieuNhom', err)
     }
+
+    return res
   },
 
   async restoreChiTieuNhom({ state, commit }, chi_tieu_nhom) {
@@ -187,7 +193,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${ChiTieuNhom}/restore`, chi_tieu_nhom)
 
-      commit('ADD_CHI_TIEU_NHOM', {newEl: data})
+      commit('ADD_CHI_TIEU_NHOM', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -196,5 +202,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreChiTieuNhom', err)
     }
+
+    return res
   }
 }

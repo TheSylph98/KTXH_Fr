@@ -1,31 +1,35 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="huyenList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getHuyenList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <Huyen
-        v-if="dialog"
-        :huyen="huyen_data"
-        :formTitle="titleDialog"
-        @close="closeDialog"
-        @save="saveChiTieuDialog"
-      />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-</div>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="huyenList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getHuyenList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <Huyen
+          v-if="dialog"
+          :huyen="huyen_data"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -75,7 +79,11 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
   computed: {
@@ -88,14 +96,15 @@ export default {
 
   async created() {
     if (!this.huyenList.length) {
-      this.overlay = true
-      await this.getHuyenList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getHuyenList();
+      this.overlay = false;
     }
   },
 
   async mounted() {
-    await this.getTinhList()
+    await this.getTinhList();
+    await this.getCapHanhChinhList();
   },
 
   methods: {
@@ -108,6 +117,7 @@ export default {
       "restoreHuyen"
     ]),
     ...mapActions("quychuan/qcTinh", ["getTinhList"]),
+    ...mapActions("sys/sysCapHanhChinh", ["getCapHanhChinhList"]),
 
     clickAddNew() {
       this.dialog = true;
@@ -117,7 +127,7 @@ export default {
         ma: "",
         ten: "",
         qcTinhId: "",
-        sysCapDonViHanhChinhId: 0,
+        sysCapDonViHanhChinh: 0,
         loaiDonViHanhChinh: "",
         nongThon: false,
         bienGioi: false,
@@ -130,15 +140,28 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getHuyen(Number(item.id))
-      this.huyen_data = Object.assign({}, this.huyen)
+      await this.getHuyen(Number(item.id));
+      this.huyen_data = Object.assign({}, this.huyen);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      await this.deleteHuyen(items.map(e => e.id));
+      const { isSuccess } = await this.deleteHuyen(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa huyện thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -148,19 +171,36 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
+
       if (this.isUpdate) {
-        await this.updateHuyen(this.huyen_data);
+        res = await this.updateHuyen(this.huyen_data);
       } else {
-        await this.addHuyen(this.huyen_data);
+        res = await this.addHuyen(this.huyen_data);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật huyện thành công"
+          : "Thêm huyện thành công thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getHuyenList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

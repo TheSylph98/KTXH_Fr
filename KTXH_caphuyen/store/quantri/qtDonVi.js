@@ -148,6 +148,8 @@ export const actions = {
     } catch (err) {
       console.log('addQTDonVi', err)
     }
+
+    return res
   },
 
   async updateQTDonVi({ state, commit }, donVi) {
@@ -157,11 +159,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtDonVi}/update`, donVi)
 
-      commit('UPDATE_DON_VI', {value: data})
+      commit('UPDATE_DON_VI', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateQTDonVi', err)
     }
+
+    return res
   },
 
   async deleteQTDonVi({ state, commit }, idList) {
@@ -169,19 +173,21 @@ export const actions = {
     const { qtDonVi } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtDonVi}/delete`, {id: idList})
+      const data = await this.$axios.$post(`${qtDonVi}/delete`, { id: idList })
 
-      if(data){
+      if (data) {
         commit('DELETE_DON_VI', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteQTDonVi', err)
     }
+
+    return res
   },
 
   async restoreQTDonVi({ state, commit }, donVi) {
@@ -191,7 +197,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtDonVi}/restore`, donVi)
 
-      commit('ADD_DON_VI', {newEl: data})
+      commit('ADD_DON_VI', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -200,6 +206,8 @@ export const actions = {
     } catch (err) {
       console.log('restoreQTDonVi', err)
     }
+
+    return res
   }
 }
 

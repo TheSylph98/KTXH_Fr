@@ -1,28 +1,33 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="userList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getUserList({queryData: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <User  
-        v-if="dialog" 
-        :user="user_data" 
-        :formTitle="titleDialog" 
-        @close="closeDialog" 
-        @save="saveChiTieuDialog" />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-</div>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="userList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getUserList({queryData: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <User
+          v-if="dialog"
+          :user="user_data"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -80,7 +85,11 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
 
@@ -94,9 +103,9 @@ export default {
 
   async created() {
     if (!this.userList.length) {
-      this.overlay = true
-      await this.getUserList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getUserList();
+      this.overlay = false;
     }
   },
 
@@ -131,15 +140,28 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getQTUser(Number(item.id))
-      this.user_data = Object.assign({}, this.user)
+      await this.getQTUser(Number(item.id));
+      this.user_data = Object.assign({}, this.user);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      await this.deleteQTUser(items.map(e => e.id));
+      const { isSuccess } = await this.deleteQTUser(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa người dùng thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -149,20 +171,33 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
       if (this.isUpdate) {
-        await this.updateQTUser(this.user_data);
+        res = await this.updateQTUser(this.user_data);
       } else {
-        await this.addQTUser(this.user_data);
+        res = await this.addQTUser(this.user_data);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa chỉ tiêu nhóm thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getUserList(value);
       this.overlay = false;
-    },
-
+    }
   }
 };
 </script>

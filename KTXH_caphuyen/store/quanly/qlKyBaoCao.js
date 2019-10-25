@@ -31,7 +31,7 @@ export const mutations = {
   SET_DELETED_KY_BAO_CAO: set('deletedKyBaoCao'),
 
   SET_PAGINATION: set('pagination'),
-  
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_KY_BAO_CAO: set('kyBaoCao'),
@@ -129,8 +129,10 @@ export const actions = {
     const res = { isSuccess: false }
     const { qlKyBaoCao } = state.api
     const uuidv1 = require('uuid/v1');
+
     kyBaoCao.uid = uuidv1();
     kyBaoCao.donViCha = Number(kyBaoCao.donViCha);
+
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/create`, kyBaoCao)
 
@@ -143,22 +145,25 @@ export const actions = {
     } catch (err) {
       console.log('addKyBaoCao', err)
     }
+
+    return res
   },
 
   async updateKyBaoCao({ state, commit }, kyBaoCao) {
     const res = { isSuccess: false }
     const { qlKyBaoCao } = state.api
-    const uuidv1 = require('uuid/v1');
-    kyBaoCao.uid = uuidv1();
-    
+
+
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/update`, kyBaoCao)
 
-      commit('UPDATE_KY_BAO_CAO', {value: data})
+      commit('UPDATE_KY_BAO_CAO', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateKyBaoCao', err)
     }
+
+    return res
   },
 
   async deleteKyBaoCao({ state, commit }, idList) {
@@ -166,18 +171,20 @@ export const actions = {
     const { qlKyBaoCao } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qlKyBaoCao}/delete`, {id: idList})
+      const data = await this.$axios.$post(`${qlKyBaoCao}/delete`, { id: idList })
       if (data) {
         commit('DELETE_KY_BAO_CAO', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteKyBaoCao', err)
     }
+
+    return res
   },
 
   async restoreKyBaoCao({ state, commit }, kyBaoCao) {
@@ -187,7 +194,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/restore`, kyBaoCao)
 
-      commit('ADD_KY_BAO_CAO', {newEl: data})
+      commit('ADD_KY_BAO_CAO', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -196,5 +203,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreKyBaoCao', err)
     }
+
+    return res
   }
 }

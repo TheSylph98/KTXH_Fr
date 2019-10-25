@@ -1,25 +1,35 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="tinhList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getTinhList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <Tinh v-if="dialog" :tinh="tinh_data" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-</div>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="tinhList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getTinhList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <Tinh
+          v-if="dialog"
+          :tinh="tinh_data"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -69,7 +79,11 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
 
@@ -83,9 +97,9 @@ export default {
 
   async created() {
     if (!this.tinhList.length) {
-      this.overlay = true
-      await this.getTinhList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getTinhList();
+      this.overlay = false;
     }
   },
 
@@ -118,15 +132,28 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getTinh(Number(item.id))
-      this.tinh_data = Object.assign({}, this.tinh)
+      await this.getTinh(Number(item.id));
+      this.tinh_data = Object.assign({}, this.tinh);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      await this.deleteTinh(items.map(e => e.id));
+      const { isSuccess } = await this.deleteTinh(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa chỉ tỉnh thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -136,19 +163,36 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
+
       if (this.isUpdate) {
-        await this.updateTinh(this.tinh_data);
+        res = await this.updateTinh(this.tinh_data);
       } else {
-        await this.addTinh(this.tinh_data);
+        res = await this.addTinh(this.tinh_data);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật tỉnh thành công"
+          : "Thêm tỉnh thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getTinhList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

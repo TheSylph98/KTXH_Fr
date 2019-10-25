@@ -8,10 +8,14 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="chiTieu.ma" label="Kí Hiệu*"></v-text-field>
+            <v-text-field v-model="chiTieu.ma" label="Kí Hiệu*" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="chiTieu.ten" label="Tên Biểu Nhập Liệu*"></v-text-field>
+            <v-text-field
+              v-model="chiTieu.ten"
+              label="Tên Biểu Nhập Liệu*"
+              prepend-inner-icon="mdi-drag"
+            ></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -19,6 +23,7 @@
             <SelectedWithSearch
               :items="bieuNhapLieuList"
               label="Biểu nhập liệu"
+              icon="mdi-apps"
               @select="chiTieu.bieuNhapLieuId = $event.id"
               @search="getSearchBieuNhapLieuList($event)"
             />
@@ -27,6 +32,7 @@
             <SelectedWithSearch
               :items="ctList"
               label="Chỉ Tiêu"
+              icon="mdi-apps"
               @select="chiTieu.chiTieuId = $event.id"
               @search="getSearchChiTieuList($event)"
             />
@@ -42,7 +48,7 @@
         </v-row>-->
         <v-row>
           <v-col cols="12">
-            <v-textarea v-model="chiTieu.ghiChu" label="Ghi Chú"></v-textarea>
+            <v-textarea v-model="chiTieu.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
         </v-row>
       </v-container>
@@ -90,7 +96,7 @@ export default {
 
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
-    ...mapState("chitieu/chiTieu", ["chiTieuList","searchChiTieuList"]),
+    ...mapState("chitieu/chiTieu", ["chiTieuList", "searchChiTieuList"]),
     bieuNhapLieuList() {
       //console.log(this.bnlList)
       if (this.searchBnlList.length > 0) return this.searchBnlList;

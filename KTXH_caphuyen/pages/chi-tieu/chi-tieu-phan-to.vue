@@ -1,31 +1,35 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="chiTieuPhanToList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getChiTieuPhanToList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <ChiTieuPhanTo
-        v-if="dialog"
-        :chiTieuPhanTo="chiTieuPhanTo"
-        :formTitle="titleDialog"
-        @close="closeDialog"
-        @save="saveChiTieuDialog"
-      />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="chiTieuPhanToList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getChiTieuPhanToList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <ChiTieuPhanTo
+          v-if="dialog"
+          :chiTieuPhanTo="chiTieuPhanTo"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
-</div>
+  </div>
 </template>
 
 <script>
@@ -75,23 +79,31 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
 
   computed: {
-    ...mapState("chitieu/chiTieuPhanTo", ["chiTieuPhanToList", "chi_tieu_phan_to", "pagination"])
+    ...mapState("chitieu/chiTieuPhanTo", [
+      "chiTieuPhanToList",
+      "chi_tieu_phan_to",
+      "pagination"
+    ])
   },
 
   asyncData({ store }) {
     store.dispatch("chitieu/chiTieuPhanTo/getChiTieuPhanToList");
   },
 
-   async created() {
+  async created() {
     if (!this.chiTieuPhanToList.length) {
-      this.overlay = true
-      await this.getChiTieuPhanToList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getChiTieuPhanToList();
+      this.overlay = false;
     }
   },
 
@@ -118,15 +130,30 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getChiTieuPhanTo(Number(item.id))
-      this.chiTieuPhanTo = Object.assign({}, this.chi_tieu_phan_to)
+      await this.getChiTieuPhanTo(Number(item.id));
+      this.chiTieuPhanTo = Object.assign({}, this.chi_tieu_phan_to);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      await this.deleteChiTieuPhanTo(items.map(e => e.id));
+      const { isSuccess } = await this.deleteChiTieuPhanTo(
+        items.map(e => e.id)
+      );
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa chỉ tiêu phân tổ thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -136,19 +163,36 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
+
       if (this.isUpdate) {
-        await this.updateChiTieuPhanTo(this.chiTieuPhanTo);
+        res = await this.updateChiTieuPhanTo(this.chiTieuPhanTo);
       } else {
-        await this.addChiTieuPhanTo(this.chiTieuPhanTo);
+        res = await this.addChiTieuPhanTo(this.chiTieuPhanTo);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật chỉ tiêu phân tổ thành công"
+          : "Thêm chỉ tiêu phân tổ thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getChiTieuPhanToList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

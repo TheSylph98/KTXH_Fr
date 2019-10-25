@@ -31,7 +31,7 @@ export const mutations = {
   SET_DELETED_USER: set('deletedUserList'),
 
   SET_PAGINATION: set('pagination'),
-  
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_USER: set('user'),
@@ -145,6 +145,8 @@ export const actions = {
     } catch (err) {
       console.log('addQTUser', err)
     }
+
+    return res
   },
 
   async updateQTUser({ state, commit }, user) {
@@ -154,11 +156,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtUser}/update`, user)
 
-      commit('UPDATE_USER', {value: data})
+      commit('UPDATE_USER', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateQTUser', err)
     }
+
+    return res
   },
 
   async deleteQTUser({ state, commit }, idList) {
@@ -166,18 +170,20 @@ export const actions = {
     const { qtUser } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtUser}/delete`, {id: idList})
+      const data = await this.$axios.$post(`${qtUser}/delete`, { id: idList })
       if (data) {
-      commit('DELETE_USER', idList)
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total - idList.length
-      })
-      res.isSuccess = true
-    }
+        commit('DELETE_USER', idList)
+        commit('SET_PAGINATION_KEY', {
+          property: 'total',
+          value: state.pagination.total - idList.length
+        })
+        res.isSuccess = true
+      }
     } catch (err) {
       console.log('deleteQTUser', err)
     }
+
+    return res
   },
 
   async restoreQTUser({ state, commit }, user) {
@@ -187,7 +193,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtUser}/restore`, user)
 
-      commit('ADD_USER', {newEl: data})
+      commit('ADD_USER', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -196,6 +202,8 @@ export const actions = {
     } catch (err) {
       console.log('restoreQTUser', err)
     }
+
+    return res
   }
 }
 

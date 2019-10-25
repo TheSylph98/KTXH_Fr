@@ -8,30 +8,43 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.ma" label="Mã"></v-text-field>
+            <v-text-field v-model="user.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.ten" label="Họ Và Tên*"></v-text-field>
+            <v-text-field
+              v-model="user.ten"
+              label="Họ và tên*"
+              prepend-inner-icon="mdi-account-box"
+            ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.matKhau" label="Mat Khau*"></v-text-field>
+            <v-text-field
+              v-model="user.matKhau"
+              label="Mật khẩu*"
+              prepend-inner-icon="mdi-spellcheck"
+            ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.soDienThoai" label="Số điện thoại"></v-text-field>
+            <v-text-field
+              v-model="user.soDienThoai"
+              label="Số điện thoại"
+              prepend-inner-icon="mdi-phone"
+            ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.email" label="Email"></v-text-field>
+            <v-text-field v-model="user.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
             <SelectedWithSearch
-            :items="dvList"
-            label="Đơn vị"
-            @select="user.qtDonViId = $event.id"
-            @search="getSearchDonViList($event)"
+              :items="dvList"
+              label="Đơn vị"
+              icon="mdi-apps"
+              @select="user.qtDonViId = $event.id"
+              @search="getSearchDonViList($event)"
             />
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.ghiChu" label="Ghi Chú"></v-text-field>
+            <v-text-field v-model="user.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-text-field>
           </v-col>
           <!-- <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="user.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
@@ -77,12 +90,12 @@ export default {
     }
   },
   computed: {
-    ...mapState("quantri/qtDonVi", ["donViList","searchDonVi"]),
+    ...mapState("quantri/qtDonVi", ["donViList", "searchDonVi"]),
     dvList() {
-    //console.log(this.bnlList)
+      //console.log(this.bnlList)
       if (this.searchDonVi.length > 0) return this.searchDonVi;
       else return this.donViList;
-      },
+    }
   },
   methods: {
     ...mapActions("quantri/qtDonVi", ["getSearchDonViList"])

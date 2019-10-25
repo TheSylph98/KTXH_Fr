@@ -31,7 +31,7 @@ export const mutations = {
   SET_DELETED_XA: set('deletedXa'),
 
   SET_PAGINATION: set('pagination'),
-  
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_XA: set('xa'),
@@ -133,7 +133,7 @@ export const actions = {
 
     xa.uid = uuidv1();
     xa.qcHuyenId = Number(xa.qcHuyenId);
-    
+
     try {
       const data = await this.$axios.$post(`${qcXa}/create`, xa)
 
@@ -146,6 +146,8 @@ export const actions = {
     } catch (err) {
       console.log('addXa', err)
     }
+
+    return res
   },
 
   async updateXa({ state, commit }, xa) {
@@ -155,11 +157,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcXa}/update`, xa)
 
-      commit('UPDATE_XA', {value: data})
+      commit('UPDATE_XA', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateXa', err)
     }
+
+    return res
   },
 
   async deleteXa({ state, commit }, idList) {
@@ -167,18 +171,20 @@ export const actions = {
     const { qcXa } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qcXa}/delete`, {id: idList})
-      if(data){
+      const data = await this.$axios.$post(`${qcXa}/delete`, { id: idList })
+      if (data) {
         commit('DELETE_XA', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteXa', err)
     }
+
+    return res
   },
 
   async restoreXa({ state, commit }, xa) {
@@ -188,7 +194,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcXa}/restore`, xa)
 
-      commit('ADD_XA', {newEl: data})
+      commit('ADD_XA', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -197,5 +203,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreXa', err)
     }
+
+    return res
   }
 }

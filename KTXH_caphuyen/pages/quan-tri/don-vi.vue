@@ -1,31 +1,35 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="donViList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getQTDonViList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <DonVi
-        v-if="dialog"
-        :donVi="dv"
-        :formTitle="titleDialog"
-        @close="closeDialog"
-        @save="saveChiTieuDialog"
-      />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-</div>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="donViList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getQTDonViList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <DonVi
+          v-if="dialog"
+          :donVi="dv"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -61,9 +65,18 @@ export default {
           value: "soDienThoai",
           type: "string"
         },
-        { text: "Đơn vị cha", align: "center", value: "belongsToQTDonVi.0.ten", type: "string" },
+        {
+          text: "Đơn vị cha",
+          align: "center",
+          value: "belongsToQTDonVi.ten",
+          type: "string"
+        },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
 
@@ -77,9 +90,9 @@ export default {
 
   async created() {
     if (!this.donViList.length) {
-      this.overlay = true
-      await this.getQTDonViList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getQTDonViList();
+      this.overlay = false;
     }
   },
 
@@ -111,15 +124,28 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getQTDonVi(Number(item.id))
-      this.dv = Object.assign({}, this.donVi)
+      await this.getQTDonVi(Number(item.id));
+      this.dv = Object.assign({}, this.donVi);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      await this.deleteQTDonVi(items.map(e => e.id));
+      const { isSucess } = await this.deleteQTDonVi(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa đơn vị thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -129,19 +155,36 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
+
       if (this.isUpdate) {
-        await this.updateQTDonVi(this.dv);
+        res = await this.updateQTDonVi(this.dv);
       } else {
-        await this.addQTDonVi(this.dv);
+        res = await this.addQTDonVi(this.dv);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật đơn vị thành công"
+          : "Thêm đơn vị thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getQTDonViList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

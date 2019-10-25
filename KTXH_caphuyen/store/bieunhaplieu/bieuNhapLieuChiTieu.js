@@ -132,13 +132,13 @@ export const actions = {
     const { bieuNhapLieuChiTieu } = state.api
     const uuidv1 = require('uuid/v1');
     bnlChiTieu.uid = uuidv1();
-    
+
     bnlChiTieu.bieuNhapLieuId = Number(bnlChiTieu.bieuNhapLieuId)
     bnlChiTieu.chiTieuId = Number(bnlChiTieu.chiTieuId)
-    
+
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/create`, {id: bnlChiTieu})
+      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/create`, { id: bnlChiTieu })
 
       commit('ADD_BIEU_NHAP_LIEU_CHI_TIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
@@ -149,6 +149,8 @@ export const actions = {
     } catch (err) {
       console.log('addBieuNhapLieuChiTieu', err)
     }
+
+    return res
   },
 
   async updateBieuNhapLieuChiTieu({ state, commit }, bnlChiTieu) {
@@ -158,11 +160,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/update`, bnlChiTieu)
 
-      commit('UPDATE_BIEU_NHAP_LIEU_CHI_TIEU', {value: data} )
+      commit('UPDATE_BIEU_NHAP_LIEU_CHI_TIEU', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateBieuNhapLieuChiTieu', err)
     }
+
+    return res
   },
 
   async deleteBieuNhapLieuChiTieu({ state, commit }, idList) {
@@ -171,7 +175,7 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/delete`, idList)
-      if (data){
+      if (data) {
         commit('DELETE_BIEU_NHAP_LIEU_CHI_TIEU', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
@@ -182,6 +186,8 @@ export const actions = {
     } catch (err) {
       console.log('deleteBieuNhapLieuChiTieu', err)
     }
+
+    return res
   },
 
   async restoreBieuNhapLieuChiTieu({ state, commit }, bnlChiTieu) {
@@ -191,7 +197,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/restore`, bnlChiTieu)
 
-      commit('ADD_BIEU_NHAP_LIEU_CHI_TIEU', {newEl: data})
+      commit('ADD_BIEU_NHAP_LIEU_CHI_TIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -200,5 +206,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreBieuNhapLieuChiTieu', err)
     }
+
+    return res
   }
 }

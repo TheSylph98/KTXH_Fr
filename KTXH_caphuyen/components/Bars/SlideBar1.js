@@ -26,7 +26,7 @@ export default [
         ]
     },
     {
-        icon: "mdi-map-marker",
+        icon: "mdi-map-marker-multiple",
         title: "Quy Chuẩn",
         children: [
             {
@@ -35,24 +35,24 @@ export default [
                 to: "/quy-chuan/tinh"
             },
             {
-                icon: "mdi-map-marker",
+                icon: "mdi-map-marker-circle",
                 title: "Huyện",
                 to: "/quy-chuan/huyen"
             },
             {
-                icon: "mdi-map-marker",
+                icon: "mdi-map-marker-box",
                 title: "Xã",
                 to: "/quy-chuan/xa"
             }
         ]
     },
     {
-        icon: "mdi-group",
+        icon: "mdi-grid",
         title: "Chỉ Tiêu",
         children: [
             {
                 icon: "mdi-group",
-                title: "Chỉ tiêu",
+                title: "Chỉ Tiêu",
                 to: "/chi-tieu/chi-tieu"
             },
             {

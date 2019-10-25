@@ -154,6 +154,8 @@ export const actions = {
     } catch (err) {
       console.log('addChiTieu', err)
     }
+
+    return res
   },
 
   async updateChiTieu({ state, commit }, chi_tieu) {
@@ -163,11 +165,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${chiTieu}/update`, chi_tieu)
 
-      commit('UPDATE_CHI_TIEU', {value: data})
+      commit('UPDATE_CHI_TIEU', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateChiTieu', err)
     }
+
+    return res
   },
 
   async deleteChiTieu({ state, commit }, idList) {
@@ -175,18 +179,20 @@ export const actions = {
     const { chiTieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${chiTieu}/delete`, {id: idList})
+      const data = await this.$axios.$post(`${chiTieu}/delete`, { id: idList })
       if (data) {
         commit('DELETE_CHI_TIEU', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteChiTieu', err)
     }
+
+    return res
   },
 
   async restoreChiTieu({ state, commit }, chi_tieu) {
@@ -196,7 +202,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${ChiTieu}/restore`, chi_tieu)
 
-      commit('ADD_CHI_TIEU', {newEl: data})
+      commit('ADD_CHI_TIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -205,5 +211,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreChiTieu', err)
     }
+
+    return res
   }
 }

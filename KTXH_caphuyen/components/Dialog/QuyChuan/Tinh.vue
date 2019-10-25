@@ -8,18 +8,19 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6" md="4">
-            <v-text-field v-model="tinh.ma" label="Mã tỉnh*"></v-text-field>
+            <v-text-field v-model="tinh.ma" label="Mã tỉnh*" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="tinh.ten" label="Tỉnh*"></v-text-field>
+            <v-text-field v-model="tinh.ten" label="Tỉnh*" prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <SelectedWithSearch
               :items="caphcList"
               label="Cấp đơn vị hành chính"
+              icon="mdi-apps"
               @select="tinh.sysCapDonViHanhChinhId = $event.id"
               @search="getSearchCapHanhChinhList($event)"
-              />
+            />
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <v-select
@@ -42,7 +43,7 @@
             <v-switch v-model="tinh.vungDBKhoKhan" class="ma-1" label="Vùng đặc biệt khó khăn"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="12">
-            <v-textarea v-model="tinh.ghiChu" label="Ghi Chú"></v-textarea>
+            <v-textarea v-model="tinh.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <!-- <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-switch v-model="tinh.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
@@ -71,7 +72,7 @@ export default {
   data() {
     return {
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
-    }
+    };
   },
   props: {
     tinh: {
@@ -94,14 +95,18 @@ export default {
     },
     data() {
       return {
-        loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"],
-      }
+        loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
+      };
     }
   },
   computed: {
-    ...mapState("sys/sysCapHanhChinh", ["caphanhchinhList","searchCapHanhChinhList"]),
-    caphcList(){
-      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+    ...mapState("sys/sysCapHanhChinh", [
+      "caphanhchinhList",
+      "searchCapHanhChinhList"
+    ]),
+    caphcList() {
+      if (this.searchCapHanhChinhList.length > 0)
+        return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
     }
   },

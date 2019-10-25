@@ -1,32 +1,36 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="tacNhanList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getTacNhanList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }"></template>
-      <TacNhan
-        v-if="dialog"
-        :tacNhan="tN"
-        :formTitle="titleDialog"
-        @close="closeDialog"
-        @save="saveTacNhanDialog"
-      />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-</div>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="tacNhanList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getTacNhanList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <template v-slot:activator="{ on }"></template>
+        <TacNhan
+          v-if="dialog"
+          :tacNhan="tN"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveTacNhanDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -76,7 +80,11 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
   computed: {
@@ -89,9 +97,9 @@ export default {
 
   async created() {
     if (!this.tacNhanList.length) {
-      this.overlay = true
-      await this.getTacNhanList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getTacNhanList();
+      this.overlay = false;
     }
   },
 
@@ -120,15 +128,28 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getQTTacNhan(Number(item.id))
-      this.tN = Object.assign({}, this.tacNhan)
+      await this.getQTTacNhan(Number(item.id));
+      this.tN = Object.assign({}, this.tacNhan);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      await this.deleteQTTacNhan(items.map(e => e.id));
+      const { isSuccess } = await this.deleteQTTacNhan(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa chỉ tiêu nhóm thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -138,20 +159,36 @@ export default {
     },
 
     async saveTacNhanDialog() {
+      let res;
+
       if (this.isUpdate) {
-        await this.updateQTTacNhan(this.tN);
+        res = await this.updateQTTacNhan(this.tN);
       } else {
-        await this.addQTTacNhan(this.tN);
+        res = await this.addQTTacNhan(this.tN);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật tác nhân thành công"
+          : "Thêm tác nhân thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getTacNhanList(value);
       this.overlay = false;
-    },
-
+    }
   }
 };
 </script>

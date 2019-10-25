@@ -11,25 +11,27 @@
             <SelectedWithSearch
               :items="tList"
               label="Tỉnh"
+              icon="mdi-map-marker"
               @select="huyen.qcTinhId = $event.id"
               @search="getSearchTinhList($event)"
-              />
+            />
           </v-col>
         </v-row>
-        <v-row>  
-          <v-col cols="12" sm="6" md="2">
-            <v-text-field v-model="huyen.ma" label="Mã huyện"></v-text-field>
+        <v-row>
+          <v-col cols="12" sm="6" md="3">
+            <v-text-field v-model="huyen.ma" label="Mã huyện" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="huyen.ten" label="Huyện"></v-text-field>
+          <v-col cols="12" sm="6" md="7">
+            <v-text-field v-model="huyen.ten" label="Huyện" prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <SelectedWithSearch
               :items="caphcList"
               label="Cấp đơn vị hành chính"
-              @select="huyen.sysCapDonViHanhChinhId = $event.id"
+              icon="mdi-apps"
+              @select="huyen.sysCapDonViHanhChinh = $event.id"
               @search="getSearchCapHanhChinhList($event)"
-              />
+            />
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <v-select
@@ -52,7 +54,7 @@
             <v-switch v-model="huyen.vungDBKhoKhan" class="ma-1" label="Vùng đặc biệt khó khăn"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="12">
-            <v-textarea v-model="huyen.ghiChu" label="Ghi Chú"></v-textarea>
+            <v-textarea v-model="huyen.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <!-- <v-col class="d-flex" cols="12" sm="6" md="8">
                 <v-switch v-model="huyen.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
@@ -82,25 +84,11 @@ export default {
   data() {
     return {
       loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
-    }
+    };
   },
   props: {
     huyen: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        qcTinhId: "",
-        sysCapDonViHanhChinhId: 1,
-        loaiDonViHanhChinh: "",
-        nongThon: true,
-        bienGioi: false,
-        haiDao: true,
-        vungDBKhoKhan: false,
-        ghiChu: "",
-        hieuLuc: true,
-        xoa: false
-      }
+      type: Object
     },
     formTitle: {
       type: String,
@@ -108,14 +96,18 @@ export default {
     }
   },
   computed: {
-    ...mapState("quychuan/qcTinh", ["tinhList","searchTinhList"]),
-    ...mapState("sys/sysCapHanhChinh", ["caphanhchinhList","searchCapHanhChinhList"]),
+    ...mapState("quychuan/qcTinh", ["tinhList", "searchTinhList"]),
+    ...mapState("sys/sysCapHanhChinh", [
+      "caphanhchinhList",
+      "searchCapHanhChinhList"
+    ]),
     tList() {
       if (this.searchTinhList.length > 0) return this.searchTinhList;
       else return this.tinhList;
     },
-    caphcList(){
-      if (this.searchCapHanhChinhList.length > 0) return this.searchCapHanhChinhList;
+    caphcList() {
+      if (this.searchCapHanhChinhList.length > 0)
+        return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
     }
   },

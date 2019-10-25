@@ -1,27 +1,31 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="kyBaoCaoList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getKyBaoCaoList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <KyBaoCao
-        v-if="dialog"
-        :kyBaoCao="kyBC"
-        :formTitle="titleDialog"
-        @close="closeDialog"
-        @save="saveKyBaoCaoDialog"
-      />
-    </v-dialog>
-  </Table>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="kyBaoCaoList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getKyBaoCaoList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <KyBaoCao
+          v-if="dialog"
+          :kyBaoCao="kyBC"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveKyBaoCaoDialog"
+        />
+      </v-dialog>
+    </Table>
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -88,7 +92,11 @@ export default {
           value: "trangThai",
           type: "string"
         }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
 
@@ -100,11 +108,11 @@ export default {
     store.dispatch("quanly/qlKyBaoCao/getKyBaoCaoList");
   },
 
-   async created() {
+  async created() {
     if (!this.kyBaoCaoList.length) {
-      this.overlay = true
-      await this.getKyBaoCaoList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getKyBaoCaoList();
+      this.overlay = false;
     }
   },
 
@@ -141,18 +149,29 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getKyBaoCao(Number(item.id))
-      this.kyBC = Object.assign({}, this.kyBaoCao)
+      await this.getKyBaoCao(Number(item.id));
+      this.kyBC = Object.assign({}, this.kyBaoCao);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      console.log("item", items)
-      await this.deleteKyBaoCao(items.map(e => e.id));
+      const res = await this.deleteKyBaoCao(items.map(e => e.id));
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa kỳ báo cáo thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
-    
+
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
@@ -160,19 +179,36 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
       if (this.isUpdate) {
-        await this.updateKyBaoCao(this.kyBC);
+        res = await this.updateKyBaoCao(this.kyBC);
       } else {
-        await this.addKyBaoCao(this.kyBC);
+        res = await this.addKyBaoCao(this.kyBC);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật kỳ báo cáo thành công!"
+          : "Thêm kỳ báo cáo thành công";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getKyBaoCaoList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

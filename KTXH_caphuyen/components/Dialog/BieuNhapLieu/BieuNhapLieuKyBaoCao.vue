@@ -8,10 +8,14 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="kyBaoCao.ma" label="Kí hiệu"></v-text-field>
+            <v-text-field v-model="kyBaoCao.ma" label="Kí hiệu" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="kyBaoCao.ten" label="Tên biểu nhập liệu"></v-text-field>
+            <v-text-field
+              v-model="kyBaoCao.ten"
+              label="Tên biểu nhập liệu"
+              prepend-inner-icon="mdi-drag"
+            ></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -19,6 +23,7 @@
             <SelectedWithSearch
               :items="bieuNhapLieuList"
               label="Biểu nhập liệu"
+              icon="mdi-apps"
               @select="kyBaoCao.bieuNhapLieuId = $event.id"
               @search="getSearchBieuNhapLieuList($event)"
             />
@@ -27,6 +32,7 @@
             <SelectedWithSearch
               :items="kyBaoCaoList"
               label="Ky Bao Cao"
+              icon="mdi-apps"
               @select="kyBaoCao.qlKyBaoCaoId = $event.id"
               @search="getSearchKyBaoCaoList($event)"
             />
@@ -34,7 +40,7 @@
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" md="8">
-            <v-textarea v-model="kyBaoCao.ghiChu" label="Ghi Chú"></v-textarea>
+            <v-textarea v-model="kyBaoCao.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <!-- <v-col cols="12" sm="6" md="8">
             <v-switch v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
@@ -65,8 +71,7 @@ export default {
   props: {
     kyBaoCao: {
       type: Object,
-      default:
-         {
+      default: {
         ma: "",
         ten: "",
         bieuNhapLieuId: 0,
@@ -83,7 +88,7 @@ export default {
   },
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
-    ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList","searchKyBaoCaoList"]),
+    ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList", "searchKyBaoCaoList"]),
     bieuNhapLieuList() {
       //console.log(this.bnlList)
       if (this.searchBnlList.length > 0) return this.searchBnlList;

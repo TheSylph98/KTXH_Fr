@@ -5,8 +5,12 @@
       :headers="headers"
       :items="bnlTruongNhapLieuList"
       :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
       @edit="clickEdit($event)"
-      @delete="deleted($event)"
+      @delete="handleDeleted($event)"
       @clickAdd="clickAddNew"
       @filter="changeList({ queryData: $event })"
       @changePageSize="changeList({ pageSize: $event})"
@@ -53,7 +57,11 @@ export default {
         { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      bnlTNL: {}
+      bnlTNL: {},
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
 
@@ -73,18 +81,18 @@ export default {
 
   async created() {
     if (!this.bnlTruongNhapLieuList.length) {
-      this.overlay = true
-      await this.getBieuNhapLieuTruongNhapLieuList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getBieuNhapLieuTruongNhapLieuList();
+      this.overlay = false;
     }
   },
 
   async mounted() {
-      await Promise.all([
-        this.getBieuNhapLieuList(),
-        this.getTruongNhaplieuList(),
-      ])
-    },
+    await Promise.all([
+      this.getBieuNhapLieuList(),
+      this.getTruongNhaplieuList()
+    ]);
+  },
 
   methods: {
     ...mapActions("bieunhaplieu/bieuNhapLieuTruongNhapLieu", [
@@ -118,12 +126,25 @@ export default {
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
-      // console.log("item", item)
     },
 
-    async deleted(items) {
-      console.log("item", items);
-      await this.deleteBieuNhapLieuTruongNhapLieu(items.map(e => e.id));
+    async handleDeleted(items) {
+      const { isSuccess } = await this.deleteBieuNhapLieuTruongNhapLieu(
+        items.map(e => e.id)
+      );
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa trường nhập liệu thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -133,19 +154,36 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
       if (this.isUpdate) {
-        await this.updateBieuNhapLieuTruongNhapLieu(this.bnlTNL);
+        res = await this.updateBieuNhapLieuTruongNhapLieu(this.bnlTNL);
       } else {
-        await this.addBieuNhapLieuTruongNhapLieu(this.bnlTNL);
+        res = await this.addBieuNhapLieuTruongNhapLieu(this.bnlTNL);
+
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật trường nhập liệu thành công"
+          : "Thêm trường nhập liệu thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getBieuNhapLieuTruongNhapLieuList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

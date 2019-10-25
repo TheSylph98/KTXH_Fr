@@ -1,25 +1,35 @@
 <template>
-<div>
-  <Table
-    :title="title"
-    :headers="headers"
-    :items="xaList"
-    :pagination="pagination"
-    @edit="clickEdit($event)"
-    @delete="deleted($event)"
-    @clickAdd="clickAddNew"
-    @filter="getXaList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-  >
-    <v-dialog v-model="dialog" max-width="800px">
-      <Xa v-if="dialog" :xa="xa_data" :formTitle="titleDialog" @close="closeDialog" @save="saveChiTieuDialog" />
-    </v-dialog>
-  </Table>
-  <v-overlay :value="overlay">
-    <v-progress-circular indeterminate size="64"></v-progress-circular>
-  </v-overlay>
-</div>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="xaList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getXaList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <Xa
+          v-if="dialog"
+          :xa="xa_data"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
@@ -69,7 +79,11 @@ export default {
           value: "hieuLuc",
           type: ""
         }
-      ]
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
     };
   },
   computed: {
@@ -82,9 +96,9 @@ export default {
 
   async created() {
     if (!this.xaList.length) {
-      this.overlay = true
-      await this.getXaList()
-      this.overlay = false
+      this.overlay = true;
+      await this.getXaList();
+      this.overlay = false;
     }
   },
 
@@ -111,7 +125,7 @@ export default {
         ma: "",
         ten: "",
         qcHuyenId: "",
-        sysCapDonViHanhChinhId: 0,
+        sysCapDonViHanhChinh: 0,
         loaiDonViHanhChinh: "",
         nongThon: 1,
         bienGioi: 0,
@@ -125,15 +139,28 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
-      await this.getXa(Number(item.id))
-      this.xa_data = Object.assign({}, this.xa)
+      await this.getXa(Number(item.id));
+      this.xa_data = Object.assign({}, this.xa);
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
     },
 
     async deleted(items) {
-      await this.deleteXa(items.map(e => e.id));
+      const { isSuccess } = await this.deleteXa(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa xã thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     closeDialog() {
@@ -143,19 +170,36 @@ export default {
     },
 
     async saveChiTieuDialog() {
+      let res;
+
       if (this.isUpdate) {
-        await this.updateXa(this.xa_data);
+        res = await this.updateXa(this.xa_data);
       } else {
-        await this.addXa(this.xa_data);
+        res = await this.addXa(this.xa_data);
+        this.closeDialog();
       }
-      this.closeDialog();
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật xã thành công!"
+          : "Thêm xã thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     },
 
     async changeList(value) {
       this.overlay = true;
       await this.getXaList(value);
       this.overlay = false;
-    },
+    }
   }
 };
 </script>

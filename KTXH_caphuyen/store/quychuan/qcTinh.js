@@ -31,7 +31,7 @@ export const mutations = {
   SET_DELETED_TINH: set('deletedTinh'),
 
   SET_PAGINATION: set('pagination'),
-  
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_TINH: set('tinh'),
@@ -144,6 +144,8 @@ export const actions = {
     } catch (err) {
       console.log('addTinh', err)
     }
+
+    return res
   },
 
   async updateTinh({ state, commit }, tinh) {
@@ -153,11 +155,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcTinh}/update`, tinh)
 
-      commit('UPDATE_TINH', {value: data})
+      commit('UPDATE_TINH', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateTinh', err)
     }
+
+    return res
   },
 
   async deleteTinh({ state, commit }, idList) {
@@ -165,18 +169,20 @@ export const actions = {
     const { qcTinh } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qcTinh}/delete`, {id: idList})
+      const data = await this.$axios.$post(`${qcTinh}/delete`, { id: idList })
       if (data) {
         commit('DELETE_TINH', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteTinh', err)
     }
+
+    return res
   },
 
   async restoreTinh({ state, commit }, tinh) {
@@ -186,7 +192,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qcTinh}/restore`, tinh)
 
-      commit('ADD_TINH', {newEl: data})
+      commit('ADD_TINH', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -195,5 +201,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreTinh', err)
     }
+
+    return res
   }
 }

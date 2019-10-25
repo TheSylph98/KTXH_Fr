@@ -151,11 +151,13 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${truongNhapLieu}/update`, truongnhaplieu)
 
-      commit('UPDATE_TRUONG_NHAP_LIEU', {value: data})
+      commit('UPDATE_TRUONG_NHAP_LIEU', { value: data })
       res.isSuccess = true
     } catch (err) {
       console.log('updateTruongNhaplieu', err)
     }
+
+    return res
   },
 
   async deleteTruongNhaplieu({ state, commit }, idList) {
@@ -163,18 +165,20 @@ export const actions = {
     const { truongNhapLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${truongNhapLieu}/delete`, {id: idList})
-      if(data) {
+      const data = await this.$axios.$post(`${truongNhapLieu}/delete`, { id: idList })
+      if (data) {
         commit('DELETE_TRUONG_NHAP_LIEU', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
           value: state.pagination.total - idList.length
         })
-        res.isSuccess = true 
+        res.isSuccess = true
       }
     } catch (err) {
       console.log('deleteTruongNhaplieu', err)
     }
+
+    return res
   },
 
   async restoreTruongNhaplieu({ state, commit }, truongnhaplieu) {
@@ -184,7 +188,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${truongNhapLieu}/restore`, truongnhaplieu)
 
-      commit('ADD_TRUONG_NHAP_LIEU', {newEl: data})
+      commit('ADD_TRUONG_NHAP_LIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
         value: state.pagination.total + 1
@@ -193,5 +197,7 @@ export const actions = {
     } catch (err) {
       console.log('restoreTruongNhaplieu', err)
     }
+
+    return res
   }
 }
