@@ -23,6 +23,14 @@
             <v-text-field v-model="xa.ten" label="Xã" prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
+            <v-select
+              :items="donViHanhChinh"
+              v-model="xa.sysCapDonViHanhChinhId"
+              label="Cấp đơn vị hành chính"
+              outlined
+            ></v-select>
+          </v-col>
+          <v-col class="d-flex" cols="12" sm="6" md="8">
             <SelectedWithSearch
               :items="caphcList"
               label="Cấp đơn vị hành chính"
@@ -32,15 +40,7 @@
             />
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-select
-              :items="loaidonViHanhChinh"
-              v-model="xa.loaiDonViHanhChinh"
-              label="Loại đơn vị hành chính"
-              outlined
-            ></v-select>
-          </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-switch v-model="xa.nongThon" class="ma-1" label="Nông thôn"></v-switch>
+            <v-switch v-model="xa.nongThon" class="ma-1" label="Thành Thị - Nông thôn"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <v-switch v-model="xa.bienGioi" class="ma-1" label="Biên giới"></v-switch>

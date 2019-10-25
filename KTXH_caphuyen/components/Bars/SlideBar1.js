@@ -40,33 +40,33 @@ export default [
                 to: "/quy-chuan/huyen"
             },
             {
-                icon: "mdi-map-marker-radius",
+                icon: "mdi-map-marker-box",
                 title: "Xã",
                 to: "/quy-chuan/xa"
             }
         ]
     },
     {
-        icon: "mdi-group",
+        icon: "mdi-grid",
         title: "Chỉ Tiêu",
         children: [
             {
-                icon: "mdi-nature",
+                icon: "mdi-group",
                 title: "Chỉ Tiêu",
                 to: "/chi-tieu/chi-tieu"
             },
             {
-                icon: "mdi-bulletin-board",
+                icon: "mdi-group",
                 title: "Chỉ Tiêu Nhóm",
                 to: "/chi-tieu/chi-tieu-nhom"
             },
             {
-                icon: "mdi-layers",
+                icon: "mdi-group",
                 title: "Chỉ Tiêu Phân Tổ",
                 to: "/chi-tieu/chi-tieu-phan-to"
             },
             {
-                icon: "mdi-library-books",
+                icon: "mdi-group",
                 title: "Chỉ Tiêu Phân Tổ Chi Tiết",
                 to: "/chi-tieu/chi-tieu-phan-to-chi-tiet"
             },
