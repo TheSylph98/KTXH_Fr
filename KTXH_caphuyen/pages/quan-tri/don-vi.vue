@@ -132,7 +132,7 @@ export default {
     },
 
     async deleted(items) {
-      const { isSucess } = await this.deleteQTDonVi(items.map(e => e.id));
+      const { isSuccess } = await this.deleteQTDonVi(items.map(e => e.id));
 
       if (isSuccess) {
         this.notifiedType = "success";

@@ -120,11 +120,11 @@ export default {
       this.tinh_data = {
         ma: "",
         ten: "",
-        sysCapDonViHanhChinhId: 0,
+        sysCapDonViHanhChinh: 0,
         loaiDonViHanhChinh: "",
-        nongThon: true,
+        nongThon: false,
         bienGioi: false,
-        haiDao: true,
+        haiDao: false,
         vungDBKhoKhan: false,
         ghiChu: ""
       };

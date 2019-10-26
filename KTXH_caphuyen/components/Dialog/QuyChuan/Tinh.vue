@@ -18,7 +18,7 @@
               :items="caphcList"
               label="Cấp đơn vị hành chính"
               icon="mdi-apps"
-              @select="tinh.sysCapDonViHanhChinhId = $event.id"
+              @select="tinh.sysCapDonViHanhChinh = $event.id"
               @search="getSearchCapHanhChinhList($event)"
             />
           </v-col>
@@ -31,7 +31,7 @@
             ></v-select>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-switch v-model="tinh.nongThon" class="ma-1" label="Thành Thị - Nông thôn"></v-switch>
+            <v-switch v-model="tinh.nongThon" class="ma-1" label="Nông thôn"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <v-switch v-model="tinh.bienGioi" class="ma-1" label="Biên giới"></v-switch>
@@ -76,18 +76,7 @@ export default {
   },
   props: {
     tinh: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        sysCapDonViHanhChinhId: 0,
-        loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
-        ghiChu: ""
-      }
+      type: Object
     },
     formTitle: {
       type: String,
