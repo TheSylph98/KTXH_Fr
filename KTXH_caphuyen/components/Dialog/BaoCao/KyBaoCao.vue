@@ -94,23 +94,23 @@
 
           <v-col cols="6">
             <v-menu
-              v-model="menu.ngayKetThuc"
+              v-model="menu.ngayTongHop"
               :close-on-content-click="false"
               transition="scale-transition"
               offset-y
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="kyBaoCao.ngayKetThuc"
+                  v-model="kyBaoCao.ngayTongHop"
                   label="Ngày kết thúc tổng hợp"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
               <v-date-picker
-                v-model="kyBaoCao.ngayKetThuc"
+                v-model="kyBaoCao.ngayTongHop"
                 no-title
-                @input="menu.ngayKetThuc = false"
+                @input="menu.ngayTongHop = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
@@ -160,6 +160,29 @@
               ></v-date-picker>
             </v-menu>
           </v-col>
+
+          <v-col cols="7">
+            <v-menu
+              v-model="menu.ngayBaoCaoTW"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="kyBaoCao.ngayBaoCaoTW"
+                  label="Ngày hoàn thành báo cáo cấp Trung ương"
+                  prepend-icon="mdi-calendar"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="kyBaoCao.ngayBaoCaoTW"
+                no-title
+                @input="menu.ngayBaoCaoTW = false"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -176,22 +199,7 @@
 export default {
   props: {
     kyBaoCao: {
-      type: Object,
-      default: {
-        nam: "",
-        ma: "",
-        ten: "",
-        sysCapHanhChinhId: 0,
-        ngayMo: "",
-        ngayDong: "",
-        ngayBatDau: "",
-        ngayKetThuc: "",
-        ngayBaoCaoHuyen: "",
-        ngayBaoCaoTinh: "",
-        trangThai: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
 
     formTitle: {
@@ -206,9 +214,10 @@ export default {
         ngayMo: false,
         ngayDong: false,
         ngayBatDau: false,
-        ngayKetThuc: false,
+        ngayTongHop: false,
         ngayBaoCaoHuyen: false,
-        ngayBaoCaoTinh: false
+        ngayBaoCaoTinh: false,
+        ngayBaoCaoTW: false
       }
     };
   }

@@ -16,7 +16,8 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="dvList"
-              label="Đơn Vị Cha"
+              :itemObj="qtDonViObj"
+              label="Nhóm đơn vị"
               icon="mdi-apps"
               @select="donVi.donViChaId = $event.id"
               @search="getSearchDonViList($event)"
@@ -73,17 +74,7 @@ export default {
   },
   props: {
     donVi: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        donViChaId: 0,
-        diaChi: "",
-        soDienThoai: "",
-        email: "",
-        ghiChu: "",
-        laDonVi: false
-      }
+      type: Object
     },
     formTitle: {
       type: String,
@@ -93,8 +84,17 @@ export default {
   computed: {
     ...mapState("quantri/qtDonVi", ["donViList", "searchDonVi"]),
     dvList() {
-      if (this.searchDonVi.length > 0) return this.searchDonVi;
-      else return this.donViList;
+      const qtDonVi = this.donVi.belongsToQTDonVi
+        ? this.donVi.belongsToQTDonVi
+        : [];
+      if (this.searchDonVi.length > 0) return qtDonVi.concat(this.searchDonVi);
+      else return qtDonVi.concat(this.donViList);
+    },
+
+    qtDonViObj() {
+      if (this.donVi.belongsToQTDonVi) {
+        return this.donVi.belongsToQTDonVi[0];
+      } else return {};
     }
   },
   methods: {

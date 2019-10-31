@@ -134,13 +134,14 @@ export default {
         nam: "",
         ma: "",
         ten: "",
-        sysCapHanhChinhId: 0,
+        //sysCapHanhChinhId: 0,
         ngayMo: "",
         ngayDong: "",
         ngayBatDau: "",
-        ngayKetThuc: "",
+        ngayTongHop: "",
         ngayBaoCaoHuyen: "",
         ngayBaoCaoTinh: "",
+        ngayBaoCaoTW: "",
         trangThai: "",
         hieuLuc: 1,
         xoa: 0
@@ -178,7 +179,7 @@ export default {
       this.kyBC = {};
     },
 
-    async saveChiTieuDialog() {
+    async saveKyBaoCaoDialog() {
       let res;
       if (this.isUpdate) {
         res = await this.updateKyBaoCao(this.kyBC);

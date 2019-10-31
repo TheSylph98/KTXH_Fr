@@ -20,6 +20,7 @@
           <v-col cols="12" sm="6" md="8">
             <SelectedWithSearch
               :items="capHanhChinhList"
+              :itemObj="capHanhchinhObj"
               label="Cấp hành chính"
               icon="mdi-apps"
               @select="tacNhan.sysCapHanhChinhId = $event.id"
@@ -61,17 +62,8 @@ export default {
   },
   props: {
     tacNhan: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        sysCapHanhChinhId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
-
     formTitle: {
       type: String,
       default: "Thêm Mới"
@@ -83,10 +75,18 @@ export default {
       "searchCapHanhChinhList"
     ]),
     capHanhChinhList() {
-      //console.log(this.bnlList)
+      const sysCapHanhChinh = this.tacNhan.belongsToSysCapHanhChinh
+        ? this.tacNhan.belongsToSysCapHanhChinh
+        : [];
       if (this.searchCapHanhChinhList.length > 0)
-        return this.searchCapHanhChinhList;
-      else return this.caphanhchinhList;
+        return sysCapHanhChinh.concat(this.searchCapHanhChinhList);
+      else return sysCapHanhChinh.concat(this.caphanhchinhList);
+    },
+
+    capHanhchinhObj() {
+      if (this.tacNhan.belongsToSysCapHanhChinh) {
+        return this.tacNhan.belongsToSysCapHanhChinh[0];
+      } else return {};
     }
   },
   methods: {

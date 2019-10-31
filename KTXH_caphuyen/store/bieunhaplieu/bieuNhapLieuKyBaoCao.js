@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 import uuidv1 from "uuid/v1"
@@ -42,7 +42,7 @@ export const mutations = {
 
   UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO: update('bnlKyBaoCaoList'),
 
-  DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: remove('bnlKyBaoCaoList'),
+  DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: removeByIds('bnlKyBaoCaoList'),
 }
 
 export const actions = {
@@ -59,7 +59,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_BIEU_NHAP_LIEU_KY_BAO_CAO_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,

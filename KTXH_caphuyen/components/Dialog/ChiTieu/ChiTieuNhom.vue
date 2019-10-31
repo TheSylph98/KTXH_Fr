@@ -11,7 +11,11 @@
             <v-text-field v-model="chiTieuNhom.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="chiTieuNhom.ten" label="Tên" prepend-inner-icon="mdi-drag"></v-text-field>
+            <v-text-field
+              v-model="chiTieuNhom.ten"
+              label="Tên chỉ tiêu nhóm"
+              prepend-inner-icon="mdi-drag"
+            ></v-text-field>
           </v-col>
 
           <v-col cols="12">

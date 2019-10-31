@@ -62,7 +62,7 @@ export default {
           text: "Nội Dung",
           align: "center",
           sorttable: false,
-          value: "noiDung",
+          value: "ten",
           type: "string"
         },
         {

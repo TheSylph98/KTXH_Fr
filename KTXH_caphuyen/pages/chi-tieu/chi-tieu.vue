@@ -55,7 +55,7 @@ export default {
           text: "Nhóm Chỉ Tiêu",
           align: "center",
           sorttable: false,
-          value: "chiTieuNhomId",
+          value: "belongsToChiTieuNhom.ten",
           type: "string"
         },
         {
@@ -83,7 +83,7 @@ export default {
           text: "Phân tổ",
           align: "center",
           sorttable: false,
-          value: "chiTieuPhanToId",
+          value: "belongsToChiTieuPhanTo.ten",
           type: ""
         },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }

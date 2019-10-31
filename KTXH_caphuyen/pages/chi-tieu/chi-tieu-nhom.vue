@@ -59,7 +59,7 @@ export default {
           type: "string"
         },
         {
-          text: "Tên nhóm chỉ tiêu KTXH",
+          text: "Tên nhóm chỉ tiêu",
           align: "center",
           sorttable: false,
           value: "ten",

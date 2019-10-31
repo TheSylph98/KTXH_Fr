@@ -17,7 +17,7 @@
           <v-col cols="6">
             <v-text-field
               v-model="chiTieuPhanTo.ten"
-              label="Tên biểu nhập liệu*"
+              label="Nội dung*"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>

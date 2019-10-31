@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_KY_BAO_CAO: update('kyBaoCaoList'),
 
-  DELETE_KY_BAO_CAO: remove('kyBaoCaoList')
+  DELETE_KY_BAO_CAO: removeByIds('kyBaoCaoList')
 }
 
 export const actions = {

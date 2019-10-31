@@ -196,6 +196,8 @@ export default {
     },
 
     async changeList(value) {
+      console.log("valueeeeeeee,", value);
+
       this.overlay = true;
       await this.getXaList(value);
       this.overlay = false;

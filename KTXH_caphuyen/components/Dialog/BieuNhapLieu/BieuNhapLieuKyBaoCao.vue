@@ -22,6 +22,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="bieuNhapLieuList"
+              :itemObj="bieuNhapLieuObj"
               label="Biểu nhập liệu"
               icon="mdi-apps"
               @select="kyBaoCao.bieuNhapLieuId = $event.id"
@@ -31,6 +32,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="kyBaoCaoList"
+              :itemObj="kyBaoCaoObj"
               label="Ky Bao Cao"
               icon="mdi-apps"
               @select="kyBaoCao.qlKyBaoCaoId = $event.id"
@@ -89,14 +91,28 @@ export default {
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
     ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList", "searchKyBaoCaoList"]),
+
     bieuNhapLieuList() {
       //console.log(this.bnlList)
       if (this.searchBnlList.length > 0) return this.searchBnlList;
       else return this.bnlList;
     },
+
     kyBaoCaoList() {
       if (this.searchKyBaoCaoList.length > 0) return this.searchKyBaoCaoList;
       else return this.kyBaoCaoList;
+    },
+
+    bieuNhapLieuObj() {
+      if (this.kyBaoCao.belongsToBieuNhapLieu) {
+        return this.kyBaoCao.belongsToBieuNhapLieu[0];
+      } else return {};
+    },
+
+    kyBaoCaoObj() {
+      if (this.kyBaoCao.belongsToQLKyBaoCao) {
+        return this.kyBaoCao.belongsToQLKyBaoCao[0];
+      } else return {};
     }
   },
 

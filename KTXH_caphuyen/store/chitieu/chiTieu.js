@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 import uuidv1 from 'uuid/v1'
 
@@ -41,7 +41,7 @@ export const mutations = {
 
   UPDATE_CHI_TIEU: update('chiTieuList'),
 
-  DELETE_CHI_TIEU: remove('chiTieuList')
+  DELETE_CHI_TIEU: removeByIds('chiTieuList')
 }
 
 export const actions = {
@@ -59,7 +59,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_CHI_TIEU_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,

@@ -22,6 +22,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="bieuNhapLieuList"
+              :itemObj="bieuNhapLieuObj"
               label="Biểu nhập liệu"
               icon="mdi-apps"
               @select="chiTieu.bieuNhapLieuId = $event.id"
@@ -31,6 +32,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="ctList"
+              :itemObj="chiTieuObj"
               label="Chỉ Tiêu"
               icon="mdi-apps"
               @select="chiTieu.chiTieuId = $event.id"
@@ -105,6 +107,17 @@ export default {
     ctList() {
       if (this.searchChiTieuList.length > 0) return this.searchChiTieuList;
       else return this.chiTieuList;
+    },
+    bieuNhapLieuObj() {
+      if (this.chiTieu.belongsToBieuNhapLieu) {
+        return this.chiTieu.belongsToBieuNhapLieu[0];
+      } else return {};
+    },
+
+    chiTieuObj() {
+      if (this.chiTieu.belongsToChiTieu) {
+        return this.chiTieu.belongsToChiTieu[0];
+      } else return {};
     }
   },
 

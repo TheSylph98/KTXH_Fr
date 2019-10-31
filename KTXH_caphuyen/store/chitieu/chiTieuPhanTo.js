@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -26,7 +26,7 @@ export const state = () => {
 export const mutations = {
   SET_CHI_TIEU_PHAN_TO_LIST: set('chiTieuPhanToList'),
 
-  SET_SEARCH_CHI_TIEU_PHAN_TO_LIST: set('searchChiTieuNhomList'),
+  SET_SEARCH_CHI_TIEU_PHAN_TO_LIST: set('searchChiTieuPhanToList'),
 
   SET_DELETED_CHI_TIEU_PHAN_TO: set('deletedChiTieuPhanToList'),
 
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_CHI_TIEU_PHAN_TO: update('chiTieuPhanToList'),
 
-  DELETE_CHI_TIEU_PHAN_TO: remove('chiTieuPhanToList')
+  DELETE_CHI_TIEU_PHAN_TO: removeByIds('chiTieuPhanToList')
 }
 
 export const actions = {
@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_CHI_TIEU_PHAN_TO_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,

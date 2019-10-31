@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_LOAI_KY_BAO_CAO: update('loaikybaocaoList'),
 
-  DELETE_LOAI_KY_BAO_CAO: remove('loaikybaocaoList'),
+  DELETE_LOAI_KY_BAO_CAO: removeByIds('loaikybaocaoList'),
 }
 
 export const actions = {
@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_LOAI_KY_BAO_CAO_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -148,7 +147,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${sysKyBaoCao}/update`, loaikybaocao)
 
-      commit('UPDATE_LOAI_KY_BAO_CAO', {value: data})
+      commit('UPDATE_LOAI_KY_BAO_CAO', { value: data })
     } catch (err) {
       console.log('updateLoaiKyBaoCao', err)
     }
@@ -158,7 +157,7 @@ export const actions = {
     const { sysKyBaoCao } = state.api
 
     try {
-      const data = await this.$axios.$post(`${sysKyBaoCao}/delete`, {id: loaikybaocao})
+      const data = await this.$axios.$post(`${sysKyBaoCao}/delete`, { id: loaikybaocao })
 
       commit('DELETE_LOAI_KY_BAO_CAO', data)
       commit('SET_PAGINATION_KEY', {

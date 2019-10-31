@@ -22,7 +22,9 @@ export default {
   props: {
     itemObj: {
       type: Object,
-      default: {}
+      default() {
+        return {};
+      }
     },
 
     items: {
@@ -39,7 +41,7 @@ export default {
 
     itemValue: {
       type: String,
-      value: "id" 
+      value: "id"
     },
 
     label: {
@@ -74,24 +76,24 @@ export default {
 
   created() {
     const time = this.time;
-    let flag = !this.isChoosedItem
+    let flag = !this.isChoosedItem;
     this.changeText = _.debounce(function() {
-      console.log("search", this.text)
+      console.log("search", this.text);
       this.$emit("search", this.text);
-      }, time);
+    }, time);
 
     if (Object.keys(this.itemObj).length) {
-      this.model = this.itemObj
+      this.model = this.itemObj;
     }
   },
 
   methods: {
     changeSearch() {
       if (this.text !== this.search) {
-        this.text = this.search
-        this.changeText()
+        this.text = this.search;
+        this.changeText();
       }
-      this.isChoosedItem = true
+      this.isChoosedItem = true;
     }
   }
 };

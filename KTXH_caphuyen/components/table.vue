@@ -24,9 +24,11 @@
 
       <template slot="body.prepend" class="search">
         <tr>
-          <td></td>
+          <td>
+            <div class="empty-content"></div>
+          </td>
           <td v-for="(item, index) in headerTables" :key="index" :class="getClass(index)">
-            <div v-if="item.value === 'index'"></div>
+            <div v-if="item.value === 'index'" class="empty-content"></div>
             <div v-else-if="item.value === 'action'">
               <v-btn color="warning" dark rounded small @click="$emit('filter', search)">Lọc</v-btn>
             </div>
@@ -52,12 +54,14 @@
 
       <template slot="item" slot-scope="row">
         <tr>
-          <td v-for="(el, inx) in row.headers" :key="inx">
+          <td v-for="(el, inx) in row.headers" :key="inx" class="column-content">
             <span v-if="el.value === 'data-table-select'">
-              <v-checkbox v-model="row.isSelected"></v-checkbox>
+              <v-checkbox v-model="row.isSelected" @change="changeSelectItem($event, row.item)"></v-checkbox>
             </span>
 
-            <span v-else-if="el.value === 'index'">{{row.index + 1}}</span>
+            <span
+              v-else-if="el.value === 'index'"
+            >{{row.index + 1 + pagination.page * pagination.pageSize}}</span>
             <span v-else-if="el.value === 'action'">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -73,7 +77,10 @@
                 <span>Xóa</span>
               </v-tooltip>
             </span>
-            <span v-else>{{ getTableValue(row.item, el.value) }}</span>
+            <span
+              v-else-if="getTableValue(row.item, el.value)"
+            >{{ getTableValue(row.item, el.value) }}</span>
+            <div v-else class="empty-content"></div>
           </td>
         </tr>
       </template>
@@ -103,7 +110,7 @@
               :total-visible="paginationValue.visiblePage"
               :length="paginationValue.numberOfPage"
               circle
-              @input="$emit('changePage', pagination.pageSize)"
+              @input="$emit('changePage', $event - 1)"
             ></v-pagination>
           </v-col>
         </v-row>
@@ -265,8 +272,18 @@ export default {
           result = result[e];
         }
       });
-      console.log("resulte", result);
       return result;
+    },
+
+    changeSelectItem(value, element) {
+      if (value) {
+        this.selectItems.push(element);
+      } else {
+        const index = this.selectItems.findIndex(
+          item => item.id === element.id
+        );
+        this.selectItems.splice(index, 1);
+      }
     },
 
     filterChange(eValue, el) {
@@ -301,6 +318,32 @@ export default {
     .v-alert {
       margin: 0;
       width: inherit;
+    }
+  }
+
+  td {
+    padding: 0;
+    .empty-content {
+      background-color: rgba(0, 0, 0, 0.05);
+      height: 100%;
+    }
+  }
+
+  .v-data-table {
+    .v-data-table-header {
+      th {
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+
+      th:not(:last-child) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
+    }
+    tbody {
+      td:not(:last-child) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
     }
   }
 }

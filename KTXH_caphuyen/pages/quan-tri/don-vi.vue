@@ -56,20 +56,23 @@ export default {
           text: "Mã đơn vị",
           align: "center",
           value: "ma",
-          type: "string"
+          type: "string",
+          divider: false
         },
         { text: "Tên đơn vị", align: "center", value: "ten", type: "string" },
         {
           text: "Số điện thoại",
           align: "center",
           value: "soDienThoai",
-          type: "string"
+          type: "string",
+          divider: false
         },
         {
-          text: "Đơn vị cha",
+          text: "Nhóm đơn vị",
           align: "center",
           value: "belongsToQTDonVi.ten",
-          type: "string"
+          type: "string",
+          divider: true
         },
         { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],

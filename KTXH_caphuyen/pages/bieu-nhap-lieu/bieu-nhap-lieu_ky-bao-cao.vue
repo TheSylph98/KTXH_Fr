@@ -12,7 +12,7 @@
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
-      @filter="getBieuNhapLieuKyBaoCaoList({queryData: $event})"
+      @filter="changeList({queryData: $event})"
       @changePageSize="changeList({ pageSize: $event})"
       @changePage="changeList({ page: $event})"
     >
@@ -79,7 +79,7 @@ export default {
   async created() {
     if (!this.bnlKyBaoCaoList.length) {
       this.overlay = true;
-      await this.getBieuNhapLieukyBaoCaoList();
+      await this.getBieuNhapLieuKyBaoCaoList();
       this.overlay = false;
     }
   },
@@ -172,7 +172,7 @@ export default {
 
     async changeList(value) {
       this.overlay = true;
-      await this.getBieuNhapLieukyBaoCaoList(value);
+      await this.getBieuNhapLieuKyBaoCaoList(value);
       this.overlay = false;
     }
   }

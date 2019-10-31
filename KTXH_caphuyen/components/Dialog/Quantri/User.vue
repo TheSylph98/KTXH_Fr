@@ -37,6 +37,7 @@
           <v-col cols="12" sm="6" md="8">
             <SelectedWithSearch
               :items="dvList"
+              :itemObj="qtDonViObj"
               label="Đơn vị"
               icon="mdi-apps"
               @select="user.qtDonViId = $event.id"
@@ -44,7 +45,7 @@
             />
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-text-field>
+            <v-textarea v-model="user.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <!-- <v-col cols="12" sm="6" md="8">
                 <v-switch v-model="user.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
@@ -74,15 +75,7 @@ export default {
   },
   props: {
     user: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        matKhau: "",
-        soDienThoai: "",
-        email: "",
-        qtDonViId: 0
-      }
+      type: Object
     },
     formTitle: {
       type: String,
@@ -92,9 +85,13 @@ export default {
   computed: {
     ...mapState("quantri/qtDonVi", ["donViList", "searchDonVi"]),
     dvList() {
-      //console.log(this.bnlList)
       if (this.searchDonVi.length > 0) return this.searchDonVi;
       else return this.donViList;
+    },
+    qtDonViObj() {
+      if (this.user.belongsToQTDonVi) {
+        return this.user.belongsToQTDonVi[0];
+      } else return {};
     }
   },
   methods: {

@@ -13,6 +13,8 @@
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getUserList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
     >
       <v-dialog v-model="dialog" max-width="800px">
         <User
@@ -75,7 +77,7 @@ export default {
           text: "Đơn Vị",
           align: "center",
           sorttable: false,
-          value: "donvi",
+          value: "belongsToQTDonVi.ten",
           type: "string"
         },
         {
@@ -181,7 +183,7 @@ export default {
 
       if (res.isSuccess) {
         this.notifiedType = "success";
-        this.notification = "Xóa chỉ tiêu nhóm thành công!";
+        this.notification = "Thêm người dùng thành công!";
       } else {
         this.notifiedType = "error";
         this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";

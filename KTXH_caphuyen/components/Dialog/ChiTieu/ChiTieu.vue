@@ -21,6 +21,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="capNhapLieuList"
+              :itemObj="capNhapLieuObj"
               label="Cấp nhập liệu"
               icon="mdi-apps"
               @select="chiTieu.capNhapLieuId = $event.id"
@@ -30,6 +31,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="capTongHopList"
+              :itemObj="capTongHopObj"
               label="Cấp tổng hợp"
               icon="mdi-apps"
               @select="chiTieu.capTongHopId = $event.id"
@@ -39,6 +41,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="ctNhomList"
+              :itemObj="ctNhomObj"
               label="Chỉ tiêu nhóm"
               icon="mdi-apps"
               @select="chiTieu.chiTieuNhomId = $event.id"
@@ -48,6 +51,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="ctPhanToList"
+              :itemObj="ctPhanToObj"
               label="Chỉ tiêu phân tổ"
               icon="mdi-apps"
               @select="chiTieu.chiTieuPhanToId = $event.id"
@@ -57,6 +61,7 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="chiTieuChaList"
+              :itemObj="ctChaObj"
               label="Chỉ tiêu cha"
               icon="mdi-apps"
               @select="chiTieu.chiTieuChaId = $event.id"
@@ -130,26 +135,7 @@ export default {
   },
   props: {
     chiTieu: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        capNhapLieuId: 0,
-        capTongHopId: 0,
-        chiTieuNhomId: 0,
-        chiTieuPhanToId: 0,
-        chiTieuChaId: 0,
-        congDonTuDuoiLen: true,
-        congTheoMa: 0,
-        congThucCong: "",
-        coPhanToKhong: 1,
-        donViTinh: "",
-        tuSo: "",
-        mauSo: "",
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
     formTitle: {
       type: String,
@@ -175,24 +161,58 @@ export default {
         return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
     },
+
+    capNhapLieuObj() {
+      if (this.chiTieu.belongsToSysCapHanhChinh1) {
+        return this.chiTieu.belongsToSysCapHanhChinh1[0];
+      } else return {};
+    },
+
     capTongHopList() {
       if (this.searchCapHanhChinhList.length > 0)
         return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
     },
+
+    capTongHopObj() {
+      if (this.chiTieu.belongsToSysCapHanhChinh2) {
+        return this.chiTieu.belongsToSysCapHanhChinh2[0];
+      } else return {};
+    },
+
     ctNhomList() {
       if (this.searchChiTieuNhomList.length > 0)
         return this.searchChiTieuNhomList;
       else return this.chiTieuNhomList;
     },
+
+    ctNhomObj() {
+      if (this.chiTieu.belongsToChiTieuNhom) {
+        return this.chiTieu.belongsToChiTieuNhom[0];
+      } else return {};
+    },
+
     ctPhanToList() {
       if (this.searchChiTieuPhanToList.length > 0)
         return this.searchChiTieuPhanToList;
       else return this.chiTieuPhanToList;
     },
+
+    ctPhanToObj() {
+      if (this.chiTieu.belongsToChiTieuPhanTo) {
+        return this.chiTieu.belongsToChiTieuPhanTo[0];
+      } else return {};
+    },
+
     chiTieuChaList() {
       if (this.searchChiTieuList.length > 0) return this.searchChiTieuList;
       else return this.chiTieuList;
+    },
+
+    ctChaObj() {
+      if (this.chiTieu.belongsToChiTieuCha) {
+        return this.chiTieu.belongsToChiTieuCha[0];
+      } else return {};
     }
   },
 

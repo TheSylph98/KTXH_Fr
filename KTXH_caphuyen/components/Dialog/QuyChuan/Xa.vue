@@ -10,6 +10,7 @@
           <v-col cols="12" sm="6" md="4">
             <SelectedWithSearch
               :items="hList"
+              :itemObj="huyenObj"
               label="Huyện"
               icon="mdi-map-marker"
               @select="xa.qcHuyenId = $event.id"
@@ -25,6 +26,7 @@
           <v-col class="d-flex" cols="12" sm="6" md="8">
             <SelectedWithSearch
               :items="caphcList"
+              :itemObj="capHanhChinhObj"
               label="Cấp đơn vị hành chính"
               icon="mdi-apps"
               @select="xa.sysCapDonViHanhChinh = $event.id"
@@ -104,10 +106,20 @@ export default {
       if (this.searchHuyenList.length > 0) return this.searchHuyenList;
       else return this.huyenList;
     },
+    huyenObj() {
+      if (this.xa.belongsToQCHuyen) {
+        return this.xa.belongsToQCHuyen[0];
+      } else return {};
+    },
     caphcList() {
       if (this.searchCapHanhChinhList.length > 0)
         return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
+    },
+    capHanhChinhObj() {
+      if (this.xa.belongsToSysCapHanhChinh) {
+        return this.xa.belongsToSysCapHanhChinh[0];
+      } else return {};
     }
   },
   methods: {
