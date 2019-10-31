@@ -1,169 +1,201 @@
 <template>
-    <Table 
-    :title="title" 
-    :headers="headers"
-    :items="items"
-    @edit="edit($event)"
-    @delete="deleted($event)"
-    @add="add($event)">
-  
-    <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }">
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Kí hiệu*" ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên biểu nhập liệu*" ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.chiTieuPhanToId" label="Chỉ Tiêu Phân Tổ*" ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.hieuLuc"
-                  class="ma-1"
-                  label="Hiệu lực"
-                ></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.xoa"
-                  class="ma-1"
-                  label="Xóa"
-                ></v-switch>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-          <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
-
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="chiTieuPhanToChiTietList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getChiTieuPhanToChiTietList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <ChiTieuPhanToChiTiet
+          v-if="dialog"
+          :chiTieuPhanToChiTiet="chiTieuPhanToChiTiet"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
     </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
-import Table from '../../components/table.vue';
-import { operators } from "..//..//util//operators";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
+import ChiTieuPhanToChiTiet from "@/components/Dialog/ChiTieu/ChiTieuPhanToChiTiet";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Chỉ Tiêu Phân Tổ Chi Tiết',
-        dialog: false,
-        operators: operators,
-        search: {
+  components: {
+    Table,
+    ChiTieuPhanToChiTiet
+  },
+
+  data() {
+    return {
+      title: "Chỉ Tiêu Phân Tổ Chi Tiết",
+      dialog: false,
+      isUpdate: false,
+      overlay: false,
+      titleDialog: "",
+      chiTieuPhanToChiTiet: {},
+      titleDialog: "",
+      headers: [
+        {
+          text: "Mã",
+          align: "center",
+          sorttable: true,
+          value: "ma",
+          type: "string"
         },
-        headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'id'},
-            { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
-            { text: 'Nội dung', align: 'left', sorttable: false, value:'ten'},
-            { text: 'Ghi chú', align: 'left', sorttable: false, value:'ghiChu'},
-            { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
-            { text: 'Thao Tác', align: 'left',  value:'action'},
-        ],
-        editedIndex: -1,
-        editedItem: {
-          ma: '',
-          ten: '',
-          chiTieuPhanToId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Nội dung",
+          align: "center",
+          sorttable: false,
+          value: "ten",
+          type: "string"
         },
-        defaultItem: {
-          ma: '',
-          ten: '',
-          chiTieuPhanToId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
-        }
-      }
-    },
-    computed: {
-      ...mapState("chiTieuPhanToChiTiet", ["chiTieuPhanToChiTietList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
-    },
+        {
+          text: "Ghi chú",
+          align: "center",
+          sorttable: false,
+          value: "ghiChu",
+          type: "string"
+        },
+        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
+    };
+  },
 
-    asyncData({ store }) {
-      store.dispatch("chiTieuPhanToChiTiet/getChiTieuPhanToChiTietList");
-    },
+  computed: {
+    ...mapState("chitieu/chiTieuPhanToChiTiet", [
+      "chiTieuPhanToChiTietList",
+      "chi_tieu_phan_to_chi_tiet",
+      "pagination"
+    ])
+  },
 
-    created() {
-      this.getChiTieuPhanToChiTietList();
-    },
+  asyncData({ store }) {
+    store.dispatch("chitieu/chiTieuPhanToChiTiet/getChiTieuPhanToChiTietList");
+  },
 
-    methods: {
-      ...mapActions("chiTieuPhanToChiTiet", [
-        "getChiTieuPhanToChiTietList",
-        "getChiTieuPhanToChiTiet",
-        "addChiTieuPhanToChiTiet",
-        "updateChiTieuPhanToChiTiet",
-        "deleteChiTieuPhanToChiTiet",
-        "restoreChiTieuPhanToChiTiet"
-      ]),
-
-      getClass(index) {
-        if (!index) return "text-left";
-        else return "text-start";
-      },
-      add() {
-        this.dialog = true
-      },
-      edit(item) {
-        this.addChiTieuPhanToChiTiet(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteChiTieuPhanToChiTiet(this.editedItem)
-      },
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
-      },
-      close() {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      }
+  async created() {
+    if (!this.chiTieuPhanToChiTietList.length) {
+      this.overlay = true;
+      await this.getChiTieuPhanToChiTietList();
+      this.overlay = false;
     }
-}
+  },
+
+  methods: {
+    ...mapActions("chitieu/chiTieuPhanToChiTiet", [
+      "getChiTieuPhanToChiTietList",
+      "getChiTieuPhanToChiTiet",
+      "addChiTieuPhanToChiTiet",
+      "updateChiTieuPhanToChiTiet",
+      "deleteChiTieuPhanToChiTiet",
+      "restoreChiTieuPhanToChiTiet"
+    ]),
+    ...mapActions("chitieu/chiTieuPhanTo", ["getChiTieuPhanToList"]),
+
+    clickAddNew() {
+      this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm mới chỉ tiêu phân tổ chi tiết";
+      this.chiTieuPhanToChiTiet = {
+        ma: "",
+        ten: "",
+        chiTieuPhanToId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      };
+    },
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getChiTieuPhanToChiTiet(Number(item.id));
+      this.chiTieuPhanToChiTiet = Object.assign(
+        {},
+        this.chi_tieu_phan_to_chi_tiet
+      );
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
+
+    async deleted(items) {
+      const { isSuccess } = await this.deleteChiTieuPhanToChiTiet(
+        items.map(e => e.id)
+      );
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa trường chỉ tiêu phân tổ chi tiết thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    closeDialog() {
+      this.dialog = false;
+      this.isUpdate = false;
+      this.chiTieuPhanToChiTiet = {};
+    },
+
+    async saveChiTieuDialog() {
+      let res;
+
+      if (this.isUpdate) {
+        res = await this.updateChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
+      } else {
+        res = await this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
+        this.closeDialog();
+      }
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật chỉ tiêu phân tổ chi tiết thành công"
+          : "Thêm chỉ tiêu phân tổ chi tiết thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getChiTieuPhanToChiTietList(value);
+      this.overlay = false;
+    }
+  }
+};
 </script>

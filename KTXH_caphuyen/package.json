@@ -1,5 +1,5 @@
 {
-  "name": "KTXH_caphuyen",
+  "name": "ktxh_caphuyen",
   "version": "1.0.0",
   "description": "frontend for Ktxh_caphuyen",
   "author": "teamBit",
@@ -17,7 +17,8 @@
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
     "nuxt": "^2.0.0",
-    "nuxt-env": "^0.1.0"
+    "nuxt-env": "^0.1.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",

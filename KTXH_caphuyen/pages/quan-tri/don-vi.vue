@@ -1,194 +1,193 @@
 <template>
-    <Table 
-    :title="title" 
-    :headers="headers"
-    :items="items"
-    @edit="edit($event)"
-    @delete="deleted($event)"
-    @add="add($event)">
-  
-    <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }">
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Mã Đơn Vị*" ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên Đơn Vị*" ></v-text-field>
-              </v-col>
-              
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.donViChaId" label="Đơn Vị Cha*" ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.diaChi" label="Địa Chỉ"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.sdt" label="Số Điện Thoại"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
-              </v-col>
-              <v-col class="d-flex" cols="12" sm="6" md="8">
-                <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú" ></v-textarea>
-              </v-col>
-              <v-col class="d-flex" cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.laDonVi"
-                  class="ma-1"
-                  label="Là Đơn Vị"
-                ></v-switch>
-              </v-col>  
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.hieuLuc"
-                  class="ma-1"
-                  label="Hiệu lực"
-                ></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.xoa"
-                  class="ma-1"
-                  label="Xóa"
-                ></v-switch>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-          <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
-
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="donViList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getQTDonViList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <DonVi
+          v-if="dialog"
+          :donVi="dv"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
     </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
-import Table from '../../components/table.vue';
-import { operators } from "..//..//util//operators";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
+import DonVi from "../../components/Dialog/Quantri/DonVi";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Khai Báo Đơn Vị',
-        operators: operators,
-        search: {
+  components: {
+    Table,
+    DonVi
+  },
+
+  data() {
+    return {
+      title: "Khai Báo Đơn Vị",
+      dialog: false,
+      isUpdate: false,
+      overlay: false,
+      dv: {},
+      titleDialog: "",
+      headers: [
+        {
+          text: "Mã đơn vị",
+          align: "center",
+          value: "ma",
+          type: "string",
+          divider: false
         },
-        headers: [
-            { text: 'STT', align: 'left', sorttable: true, divider:true, value:'id'},
-            { text: 'Mã đơn vị', align: 'left', divider:true, value:'ma'},
-            { text: 'Tên đơn vị', align: 'left', value:'ten'},
-            { text: 'Số điện thoại', align: 'left', value:'sdt'},
-            { text: 'Nhóm đơn vị', align: 'left', value:'nhomdv'},
-            { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
-            { text: 'Thao Tác', align: 'left', value:'action'},
-              ],
-        editedIndex: -1,
-        editedItem: {
-          ma: '',
-          ten: '',
-          donViChaId: 0,
-          diaChi: '',
-          soDienThoai: '',
-          email: '',
-          ghiChu: '',
-          laDonVi: false,
-          hieuLuc: 1,
-          xoa: 0
+        { text: "Tên đơn vị", align: "center", value: "ten", type: "string" },
+        {
+          text: "Số điện thoại",
+          align: "center",
+          value: "soDienThoai",
+          type: "string",
+          divider: false
         },
-        defaultItem: {
-          ma: '',
-          ten: '',
-          donViChaId: 0,
-          diaChi: '',
-          soDienThoai: '',
-          email: '',
-          ghiChu: '',
-          laDonVi: false,
-          hieuLuc: 1,
-          xoa: 0
-        }
-      }
-    },
-    computed: {
-      ...mapState("qtDonVi", ["donViList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
-    },
+        {
+          text: "Nhóm đơn vị",
+          align: "center",
+          value: "belongsToQTDonVi.ten",
+          type: "string",
+          divider: true
+        },
+        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
+    };
+  },
 
-    asyncData({ store }) {
-      store.dispatch("qtDonVi/getQTDonViList");
-    },
+  computed: {
+    ...mapState("quantri/qtDonVi", ["donViList", "donVi", "pagination"])
+  },
 
-    created() {
-      this.getQTDonViList();
-    },
+  asyncData({ store }) {
+    store.dispatch("quantri/qtDonVi/getQTDonViList");
+  },
 
-    methods: {
-      ...mapActions("qtDonVi", [
-        "getQTDonViList",
-        "getQTDonVi",
-        "addQTDonVi",
-        "updateQTDonVi",
-        "deleteQTDonVi",
-        "restoreQTDonVi"
-      ]),
-
-      getClass(index) {
-        if (!index) return "text-left";
-        else return "text-start";
-      },
-      add() {
-        this.dialog = true
-      },
-      edit(item) {
-        this.addQTDonVi(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteQTDonVi(this.editedItem)
-      },
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
-      },
-      close() {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      }
+  async created() {
+    if (!this.donViList.length) {
+      this.overlay = true;
+      await this.getQTDonViList();
+      this.overlay = false;
     }
-}
+  },
+
+  methods: {
+    ...mapActions("quantri/qtDonVi", [
+      "getQTDonViList",
+      "getQTDonVi",
+      "addQTDonVi",
+      "updateQTDonVi",
+      "deleteQTDonVi",
+      "restoreQTDonVi"
+    ]),
+
+    clickAddNew() {
+      this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm đơn vị mới";
+      this.dv = {
+        ma: "",
+        ten: "",
+        diaChi: "",
+        soDienThoai: "",
+        donViChaId: 0,
+        email: "",
+        ghiChu: "",
+        laDonVi: false
+      };
+    },
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getQTDonVi(Number(item.id));
+      this.dv = Object.assign({}, this.donVi);
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
+
+    async deleted(items) {
+      const { isSuccess } = await this.deleteQTDonVi(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa đơn vị thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    closeDialog() {
+      this.dialog = false;
+      this.isUpdate = false;
+      this.dv = {};
+    },
+
+    async saveChiTieuDialog() {
+      let res;
+
+      if (this.isUpdate) {
+        res = await this.updateQTDonVi(this.dv);
+      } else {
+        res = await this.addQTDonVi(this.dv);
+        this.closeDialog();
+      }
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật đơn vị thành công"
+          : "Thêm đơn vị thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getQTDonViList(value);
+      this.overlay = false;
+    }
+  }
+};
 </script>

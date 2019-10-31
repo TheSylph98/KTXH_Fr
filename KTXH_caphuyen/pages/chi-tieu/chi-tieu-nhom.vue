@@ -1,165 +1,195 @@
 <template>
-    <Table 
-    :title="title" 
-    :headers="headers"
-    :items="items"
-    @edit="edit($event)"
-    @delete="deleted($event)"
-    @add="add($event)">
-
-    <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }">
-      </template>
-
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú"></v-textarea>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.hieuLuc"
-                  class="ma-1"
-                  label="Hieu luc"
-                ></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.xoa"
-                  class="ma-1"
-                  label="Xóa"
-                ></v-switch>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-          <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
-
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="chiTieuNhomList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getChiTieuNhomList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <ChiTieuNhom
+          v-if="dialog"
+          :chiTieuNhom="ctNhom"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
     </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
-import Table from '../../components/table.vue';
-import { operators } from "..//..//util//operators";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
+import ChiTieuNhom from "@/components/Dialog/ChiTieu/ChiTieuNhom";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Khai Báo Nhóm Chỉ Tiêu',
-        dialog: false,
-        operators: operators,
-        search: {
+  components: {
+    Table,
+    ChiTieuNhom
+  },
+
+  data() {
+    return {
+      title: "Khai Báo Nhóm Chỉ Tiêu",
+      dialog: false,
+      overlay: false,
+      isUpdate: false,
+      titleDialog: "",
+      headers: [
+        {
+          text: "Mã",
+          align: "center",
+          sorttable: true,
+          value: "ma",
+          type: "string"
         },
-        headers: [
-            { text: 'STT', align: 'left', sorttable: true, value:'index'},
-            { text: 'Mã', align: 'left', sorttable: true, value:'ma'},
-            { text: 'Tên nhóm chỉ tiêu KTXH', align: 'left', sorttable: false, value:'ten'},
-            { text: 'Ghi Chú', align: 'left', sorttable: false, value:'ghiChu'},
-            { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
-            { text: 'Thao Tác', align: 'left',  value:'action'}
-        ],
-        editedIndex: -1,
-        editedItem: {
-          ma: '',
-          ten: '',
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Tên nhóm chỉ tiêu",
+          align: "center",
+          sorttable: false,
+          value: "ten",
+          type: "string"
         },
-        defaultItem: {
-          ma: '',
-          ten: '',
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Ghi Chú",
+          align: "center",
+          sorttable: false,
+          value: "ghiChu",
+          type: "string"
+        },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc",
+          type: ""
         }
-      }
-    },
-    computed: {
-      ...mapState("chiTieuNhom", ["chiTieuNhomList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
-    },
+      ],
+      ctNhom: {},
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
+    };
+  },
 
-    asyncData({ store }) {
-      store.dispatch("chiTieuNhom/getChiTieuNhomList");
-    },
+  computed: {
+    ...mapState("chitieu/chiTieuNhom", [
+      "chiTieuNhomList",
+      "chi_tieu_nhom",
+      "pagination"
+    ])
+  },
 
-    created() {
-      this.getChiTieuNhomList();
-    },
+  asyncData({ store }) {
+    store.dispatch("chitieu/chiTieuNhom/getChiTieuNhomList");
+  },
 
-    methods: {
-      ...mapActions("chiTieuNhom", [
-        "getChiTieuNhomList",
-        "getChiTieuNhom",
-        "addChiTieuNhom",
-        "updateChiTieuNhom",
-        "deleteChiTieuNhom",
-        "restoreChiTieuNhom"
-      ]),
-
-      getClass(index) {
-        if (!index) return "text-left";
-        else return "text-start";
-      },
-      add() {
-        this.dialog = true
-      },
-      edit(item) {
-        this.addChiTieuNhom(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteChiTieuNhom(this.editedItem)
-      },
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
-      },
-      close() {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      }
+  async created() {
+    if (!this.chiTieuNhomList.length) {
+      this.overlay = true;
+      await this.getChiTieuNhomList();
+      this.overlay = false;
     }
-}
+  },
+
+  methods: {
+    ...mapActions("chitieu/chiTieuNhom", [
+      "getChiTieuNhomList",
+      "getChiTieuNhom",
+      "addChiTieuNhom",
+      "updateChiTieuNhom",
+      "deleteChiTieuNhom",
+      "restoreChiTieuNhom"
+    ]),
+
+    clickAddNew() {
+      this.dialog = true;
+      this.titleDialog = "Thêm chỉ tiêu nhóm mới";
+      this.ctNhom = {
+        ma: "",
+        ten: "",
+        ghiChu: ""
+      };
+    },
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getChiTieuNhom(Number(item.id));
+      this.ctNhom = Object.assign({}, this.chi_tieu_nhom);
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
+
+    async deleted(items) {
+      const { isSuccess } = await this.deleteChiTieuNhom(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa chỉ tiêu nhóm thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    closeDialog() {
+      this.dialog = false;
+      this.isUpdate = false;
+      this.ctNhom = {};
+    },
+
+    async saveChiTieuDialog() {
+      let res;
+      if (this.isUpdate) {
+        res = await this.updateChiTieuNhom(this.ctNhom);
+      } else {
+        res = await this.addChiTieuNhom(this.ctNhom);
+        this.closeDialog();
+      }
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật chỉ tiêu nhóm thành công"
+          : "Thêm chỉ tiêu nhóm thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getChiTieuNhomList(value);
+      this.overlay = false;
+    }
+  }
+};
 </script>

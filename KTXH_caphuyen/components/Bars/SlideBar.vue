@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import slideBar  from "./SlideBar1";
+import slideBar from "./SlideBar1";
 
 export default {
   props: {

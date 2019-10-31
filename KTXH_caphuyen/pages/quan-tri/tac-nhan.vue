@@ -1,169 +1,194 @@
 <template>
-  <Table 
-  :title="title" 
-  :headers="headers"
-  :items="items"
-  @edit="edit($event)"
-  @delete="deleted($event)"
-  @add="add($event)">
-  
-    <v-dialog v-model="dialog" max-width="800px">
-      <template v-slot:activator="{ on }">
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ma" label="Mã"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.ten" label="Tên tác nhân"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-text-field v-model="editedItem.sysCapHanhChinhId" label="Cấp hành chính"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-textarea v-model="editedItem.ghiChu" label="Chức năng, Nhiệm vụ"></v-textarea>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.hieuLuc"
-                  class="ma-1"
-                  label="Hiệu lực"
-                ></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch
-                  v-model="editedItem.xoa"
-                  class="ma-1"
-                  label="Xóa"
-                ></v-switch>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-          <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <template slot="item.operator">
-      <div>OKIE</div>
-    </template>
-
-  </Table>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="tacNhanList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getTacNhanList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <template v-slot:activator="{ on }"></template>
+        <TacNhan
+          v-if="dialog"
+          :tacNhan="tN"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveTacNhanDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
-import Table from '../../components/table.vue';
-import { operators } from "..//..//util//operators";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
+import TacNhan from "@/components/Dialog/Quantri/TacNhan";
 
 export default {
-    components: {
-        Table
-    },
-    data() {
-      return {
-        title: 'Biểu Nhập Liệu Chỉ Tiêu',
-        dialog: false,
-        operators: operators,
-        search: {
+  components: {
+    Table,
+    TacNhan
+  },
+  data() {
+    return {
+      title: "Khai báo tác nhân",
+      dialog: false,
+      isUpdate: false,
+      overlay: false,
+      titleDialog: "",
+      tN: {},
+      headers: [
+        {
+          text: "Tên tác nhân",
+          align: "center",
+          sorttable: false,
+          value: "ten",
+          type: "string"
         },
-        headers: [
-          { text: 'STT', align: 'left', sorttable: true, value:'id'},
-          { text: 'Tên tác nhân', align: 'left', sorttable: false, value:'ten'},
-          { text: 'Cấp hành chính', align: 'left', sorttable: false, value:'sysCapHanhChinhId'},
-          { text: 'Chức năng, nhiệm vụ', align: 'left', sorttable: false, value:'ghiChu'},
-          { text: 'Hiệu lực', align: 'left', sorttable: true, value:'hieuLuc'},
-          { text: 'Thao Tác', align: 'left',  value:'action'},
-        ],
-        editedIndex: -1,
-        editedItem: {
-          ma: '',
-          ten: '',
-          sysCapHanhChinhId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Cấp hành chính",
+          align: "center",
+          sorttable: false,
+          value: "sysCapHanhChinhId",
+          type: ""
         },
-        defaultItem: {
-          ma: '',
-          ten: '',
-          sysCapHanhChinhId: 0,
-          ghiChu: '',
-          hieuLuc: 1,
-          xoa: 0
+        {
+          text: "Chức năng, nhiệm vụ",
+          align: "center",
+          sorttable: false,
+          value: "ghiChu",
+          type: "string"
+        },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          sorttable: true,
+          value: "hieuLuc",
+          type: ""
         }
-      }
-    },
-    computed: {
-      ...mapState("qtTacNhan", ["tacNhanList", "pagination"]),
-      formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
-    },
+      ],
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
+    };
+  },
+  computed: {
+    ...mapState("quantri/qtTacNhan", ["tacNhanList", "tacNhan", "pagination"])
+  },
 
-    asyncData({ store }) {
-      store.dispatch("qtTacNhan/getQTTacNhanList");
-    },
+  asyncData({ store }) {
+    store.dispatch("quantri/qtTacNhan/getTacNhanList");
+  },
 
-    created() {
-      this.getQTTacNhanList();
-    },
-
-    methods: {
-      ...mapActions("qtTacNhan", [
-        "getQTTacNhanList",
-        "getQTTacNhan",
-        "addQTTacNhan",
-        "updateQTTacNhan",
-        "deleteQTTacNhan",
-        "restoreQTTacNhan"
-      ]),
-
-      getClass(index) {
-        if (!index) return "text-left";
-        else return "text-start";
-      },
-      add() {
-        this.dialog = true
-      },
-      edit(item) {
-        this.addQTTacNhan(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteQTTacNhan(this.editedItem)
-      },
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
-      },
-      close() {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      }
+  async created() {
+    if (!this.tacNhanList.length) {
+      this.overlay = true;
+      await this.getTacNhanList();
+      this.overlay = false;
     }
-}
+  },
+
+  methods: {
+    ...mapActions("quantri/qtTacNhan", [
+      "getTacNhanList",
+      "getQTTacNhan",
+      "addQTTacNhan",
+      "updateQTTacNhan",
+      "deleteQTTacNhan",
+      "restoreQTTacNhan"
+    ]),
+    ...mapActions("sys/sysCapHanhChinh", ["getCapHanhChinhList"]),
+
+    clickAddNew() {
+      this.dialog = true;
+      this.tN = {
+        ma: "",
+        ten: "",
+        sysCapHanhChinhId: 0,
+        ghiChu: "",
+        hieuLuc: 1,
+        xoa: 0
+      };
+    },
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getQTTacNhan(Number(item.id));
+      this.tN = Object.assign({}, this.tacNhan);
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
+
+    async deleted(items) {
+      const { isSuccess } = await this.deleteQTTacNhan(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa chỉ tiêu nhóm thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    closeDialog() {
+      this.dialog = false;
+      this.isUpdate = false;
+      this.tN = {};
+    },
+
+    async saveTacNhanDialog() {
+      let res;
+
+      if (this.isUpdate) {
+        res = await this.updateQTTacNhan(this.tN);
+      } else {
+        res = await this.addQTTacNhan(this.tN);
+        this.closeDialog();
+      }
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật tác nhân thành công"
+          : "Thêm tác nhân thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getTacNhanList(value);
+      this.overlay = false;
+    }
+  }
+};
 </script>

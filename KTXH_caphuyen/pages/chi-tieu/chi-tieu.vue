@@ -1,210 +1,125 @@
 <template>
-  <Table 
-  :title="title" 
-  :headers="headers"
-  :items="items_t"
-  @edit="edit($event)"
-  @delete="deleted($event)"
-  @add="add($event)">
-
-  <v-dialog v-model="dialog" max-width="1000px">
-    <template v-slot:activator="{ on }">
-    </template>
-    <v-card>
-      <v-card-title>
-        <span class="headline">{{ formTitle }}</span>
-      </v-card-title>
-
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12" sm="6" md="4">
-              <v-text-field v-model="editedItem.id" label="STT*" ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <v-text-field v-model="editedItem.ma" label="Mã Chỉ Tiêu*" ></v-text-field>
-            </v-col>
-             <v-col cols="12" sm="6" md="4">
-              <v-text-field v-model="editedItem.ten" label="Tên Chỉ Tiêu*" ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.capNhapLieuId" label="Cấp Nhập liệu Id*" ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.capTongHopId" label="Cấp Tổng Hợp Id*" ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <v-text-field v-model="editedItem.chiTieuNhomId" label="Chỉ Tiêu Nhóm Id*" ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.chiTieuPhanToId" label="Chỉ Tiêu Phân Tổ*" ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.chiTieuChaId" label="Chỉ Tiêu Cha*" ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.congDonTuDuoiLen" label="Chỉ Tiêu Cha*" ></v-text-field>
-              <v-switch
-                v-model="editedItem.congDonTuDuoiLen"
-                class="ma-1"
-                label="Cộng Từ Dưới Lên"
-              ></v-switch>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.congTheoMa" label="Cộng Theo Mã" ></v-text-field>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-textarea v-model="editedItem.congThucCong" label="Cộng Công Thức" ></v-textarea>
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <v-switch
-                v-model="editedItem.coPhanToKhong"
-                class="ma-1"
-                label="Có phân tổ hay không?"
-              ></v-switch>
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <v-text-field v-model="editedItem.donViTinh" label="Đơn Vị Tính*" ></v-text-field>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.tuSo" label="Tử Số" ></v-text-field>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-text-field v-model="editedItem.mauSo" label="Mẫu Số" ></v-text-field>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-switch
-                v-model="editedItem.tinhPhanTram"
-                class="ma-1"
-                label="Tính Phần Trăm"
-              ></v-switch>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-textarea v-model="editedItem.ghiChu" label="Ghi Chú" ></v-textarea>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-switch
-                v-model="editedItem.hieuLuc"
-                class="ma-1"
-                label="Hiệu lực"
-              ></v-switch>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-switch
-                v-model="editedItem.xoa"
-                class="ma-1"
-                label="Xóa"
-              ></v-switch>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-
-      <v-card-actions>
-        <div class="flex-grow-1"></div>
-        <v-btn color="blue darken-1" text @click="close">Đóng</v-btn>
-        <v-btn color="blue darken-1" text @click="save">Lưu</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  <template slot="item.operator">
-    <div>OKIE</div>
-  </template>
-
-  </Table>
+  <div>
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="chiTieuList"
+      :pagination="pagination"
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      @edit="clickEdit($event)"
+      @delete="deleted($event)"
+      @clickAdd="clickAddNew"
+      @filter="getChiTieuList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <v-dialog v-model="dialog" max-width="800px">
+        <ChiTieu
+          v-if="dialog"
+          :chiTieu="chiTieu"
+          :formTitle="titleDialog"
+          @close="closeDialog"
+          @save="saveChiTieuDialog"
+        />
+      </v-dialog>
+    </Table>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
-import Table from '../../components/table.vue';
-import { operators } from "..//..//util//operators";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
+import ChiTieu from "@/components/Dialog/ChiTieu/ChiTieu";
 
 export default {
   components: {
-      Table
+    Table,
+    ChiTieu
   },
   data() {
     return {
-      title: 'Chỉ Tiêu Kinh Tế Xã Hội',
+      title: "Chỉ Tiêu Kinh Tế Xã Hội",
       dialog: false,
-      operators: operators,
-      search: {
-      },
-      caccap: [
-        'cấp tỉnh',
-        'cấp huyện',
-        'cấp xã'
-      ],
+      isUpdate: false,
+      overlay: false,
+      titleDialog: "",
+      chiTieu: {},
       headers: [
-          { text: 'STT', align: 'left', sorttable: true, value:'id'},
-          { text: 'Nhóm CT', align: 'left', sorttable: false, value:'nhomCT'},
-          { text: 'Mã', align: 'left', sorttable: true, value:'maCT'},
-          { text: 'Tên chỉ tiêu', align: 'left', sorttable: false, value:'tenCT'},
-          { text: 'Đơn vị tính', align: 'left', sorttable: false, value:'dvt'},
-          { text: 'Phân tổ', align: 'left', sorttable: false, value:'phanTo'},
-          { text: 'Loại', align: 'left', value:'loai'},
-          { text: 'Hiệu lực', align: 'left', value:'hieuLuc'},
-          { text: 'Thao Tác', align: 'left',  value:'action'},
+        {
+          text: "Nhóm Chỉ Tiêu",
+          align: "center",
+          sorttable: false,
+          value: "belongsToChiTieuNhom.ten",
+          type: "string"
+        },
+        {
+          text: "Mã",
+          align: "center",
+          sorttable: true,
+          value: "ma",
+          type: "string"
+        },
+        {
+          text: "Tên chỉ tiêu",
+          align: "center",
+          sorttable: false,
+          value: "ten",
+          type: "string"
+        },
+        {
+          text: "Đơn vị tính",
+          align: "center",
+          sorttable: false,
+          value: "donViTinh",
+          type: "string"
+        },
+        {
+          text: "Phân tổ",
+          align: "center",
+          sorttable: false,
+          value: "belongsToChiTieuPhanTo.ten",
+          type: ""
+        },
+        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
       ],
-      editedIndex: -1,
-      editedItem: {
-        ma: '',
-        ten: '',
-        capNhapLieuId: 0,
-        capTongHopId: 0,
-        chiTieuNhomId: 0,
-        chiTieuPhanToId: 0,
-        chiTieuChaId: 0,
-        congDonTuDuoiLen: true,
-        congTheoMa: 0,
-        congThucCong: '',
-        coPhanToKhong: 1,
-        donViTinh: '',
-        tuSo:'',
-        mauSo: '',
-        ghiChu: '',
-        hieuLuc: 1,
-        xoa: 0
-      },
-      defaultItem: {
-        ma: '',
-        ten: '',
-        capNhapLieuId: 0,
-        capTongHopId: 0,
-        chiTieuNhomId: 0,
-        chiTieuPhanToId: 0,
-        chiTieuChaId: 0,
-        congDonTuDuoiLen: true,
-        congTheoMa: 0,
-        congThucCong: '',
-        coPhanToKhong: 1,
-        donViTinh: '',
-        tuSo:'',
-        mauSo: '',
-        ghiChu: '',
-        hieuLuc: 1,
-        xoa: 0
-      }
-    }
+      snackbar: false,
+      notifiedType: "success",
+      notification: "",
+      timeout: 1000
+    };
   },
   computed: {
-    ...mapState("chiTieu", ["chiTieuList", "pagination"]),
-    formTitle () {
-        return this.editedIndex === -1 ? 'Thêm mới' : 'Cập nhật chi tiết'
-      },
+    ...mapState("chitieu/chiTieu", ["chiTieuList", "chi_tieu", "pagination"])
   },
 
   asyncData({ store }) {
     store.dispatch("chiTieu/getChiTieuList");
   },
 
-  created() {
-    this.getChiTieuList();
+  async created() {
+    if (!this.chiTieuList.length) {
+      this.overlay = true;
+      await this.getChiTieuList();
+      this.overlay = false;
+    }
+  },
+
+  async mounted() {
+    await Promise.all([
+      this.getChiTieuNhomList(),
+      this.getChiTieuPhanToList(),
+      this.getCapHanhChinhList()
+    ]);
   },
 
   methods: {
-    ...mapActions("chiTieu", [
+    ...mapActions("chitieu/chiTieu", [
       "getChiTieuList",
       "getChiTieu",
       "addChiTieu",
@@ -212,40 +127,94 @@ export default {
       "deleteChiTieu",
       "restoreChiTieu"
     ]),
+    ...mapActions("chitieu/chiTieuNhom", ["getChiTieuNhomList"]),
+    ...mapActions("chitieu/chiTieuPhanTo", ["getChiTieuPhanToList"]),
+    ...mapActions("sys/sysCapHanhChinh", ["getCapHanhChinhList"]),
 
-    getClass(index) {
-      if (!index) return "text-left";
-      else return "text-start";
+    clickAddNew() {
+      this.dialog = true;
+      this.formTitle = "Thêm chỉ tiêu mới";
+      this.chiTieu = {
+        ma: "",
+        ten: "",
+        capNhapLieuId: 0,
+        capTongHopId: 0,
+        chiTieuNhomId: 0,
+        chiTieuPhanToId: 0,
+        chiTieuChaId: 0,
+        congDonTuDuoiLen: true,
+        congTheoMa: 0,
+        congThucCong: "",
+        coPhanToKhong: 1,
+        donViTinh: "",
+        tuSo: "",
+        mauSo: "",
+        ghiChu: ""
+      };
     },
-    add() {
-        this.dialog = true
-      },
-      edit(item) {
-        this.addChiTieu(this.editedIndex)
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      delete(tiem) {
-        const index = this.items.indexOf(item)
-        confirm('Xác nhận xóa?') && this.items.splice(index, 1)
-        this.deleteChiTieu(this.editedItem)
-      },
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
-        } else {
-          this.items.push(this.editedItem)
-        }
-        this.close()
-      },
-      close() {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
+
+    async clickEdit(item) {
+      this.overlay = true;
+      await this.getChiTieu(Number(item.id));
+      this.chiTieu = Object.assign({}, this.chi_tieu);
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
+
+    async deleted(items) {
+      const { isSuccess } = await this.deleteChiTieu(items.map(e => e.id));
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Xóa chỉ tiêu thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
       }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    closeDialog() {
+      this.dialog = false;
+      this.isUpdate = false;
+      this.chiTieu = {};
+    },
+
+    async saveChiTieuDialog() {
+      let res;
+      if (this.isUpdate) {
+        res = await this.updateChiTieu(this.chiTieu);
+      } else {
+        res = await this.addChiTieu(this.chiTieu);
+        this.closeDialog();
+      }
+
+      if (res.isSuccess) {
+        this.notifiedType = "success";
+        this.notification = this.isUpdate
+          ? "Cập nhật chỉ tiêu thành công"
+          : "Thêm chỉ tiêu thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+    },
+
+    async changeList(value) {
+      this.overlay = true;
+      await this.getChiTieuList(value);
+      this.overlay = false;
+    }
   }
-}
+};
 </script>
