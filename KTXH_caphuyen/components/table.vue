@@ -60,7 +60,7 @@
         <span v-else>Không</span>
       </template>
 
-      <template slot="item.action" slot-scope="row">
+      <template v-slot:item.action="row">
         <span>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
@@ -274,6 +274,7 @@ export default {
       const visiblePage = numberOfPage < 6 ? numberOfPage : 6;
 
       return {
+        total: Number(total),
         numberOfPage: Number(numberOfPage),
         visiblePage: visiblePage,
         pageSize: pageSize,

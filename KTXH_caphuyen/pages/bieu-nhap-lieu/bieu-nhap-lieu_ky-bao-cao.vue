@@ -26,6 +26,7 @@
           v-if="dialog"
           :kyBaoCao="kyBaoCao"
           :formTitle="titleDialog"
+          :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
         />

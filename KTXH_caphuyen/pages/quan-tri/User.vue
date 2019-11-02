@@ -26,6 +26,7 @@
           v-if="dialog"
           :user="user_data"
           :formTitle="titleDialog"
+          :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
         />
@@ -189,6 +190,7 @@ export default {
       let res;
       if (this.isUpdate) {
         res = await this.updateQTUser(this.user_data);
+        this.titleDialog = "";
       } else {
         res = await this.addQTUser(this.user_data);
         this.closeDialog();

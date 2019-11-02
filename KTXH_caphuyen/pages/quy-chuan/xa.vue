@@ -26,6 +26,7 @@
           v-if="dialog"
           :xa="xa_data"
           :formTitle="titleDialog"
+          :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
         />

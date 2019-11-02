@@ -214,6 +214,9 @@
               ></v-date-picker>
             </v-menu>
           </v-col>
+          <v-col v-if="isUpdate" class="d-flex" cols="4" >
+            <v-switch dense v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -236,6 +239,10 @@ export default {
     formTitle: {
       type: String,
       default: "Thêm kỳ báo cáo mới"
+    },
+    isUpdate: {
+      type: Boolean,
+      default: false
     }
   },
 
