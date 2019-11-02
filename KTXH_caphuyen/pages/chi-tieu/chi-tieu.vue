@@ -168,11 +168,12 @@ export default {
         chiTieuChaId: 0,
         congDonTuDuoiLen: true,
         congTheoMa: false,
-        congThucCong: null,
+        congThucCong: "",
         coPhanToKhong: true,
-        donViTinh: null,
+        donViTinh: "",
         tuSo: "",
         mauSo: "",
+        tinhPhanTram: false,
         ghiChu: ""
       };
     },

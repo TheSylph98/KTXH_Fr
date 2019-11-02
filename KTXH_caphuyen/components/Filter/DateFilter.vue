@@ -282,5 +282,9 @@ export default {
       margin: auto;
     }
   }
+
+  .v-text-field__details {
+    display: none;
+  }
 }
 </style>

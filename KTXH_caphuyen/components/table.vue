@@ -8,7 +8,7 @@
       show-select
       hide-default-footer
       dense
-      :items-per-page="20"
+      :items-per-page="pagination.total"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -111,7 +111,7 @@
       </template>
     </v-data-table>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" @click:outside="closeDialog">
       <v-card>
         <v-card-title class="headline grey lighten-2" primary-title>{{ dialogTitle }}</v-card-title>
 
@@ -287,7 +287,8 @@ export default {
       Object.keys(this.items).forEach(el => {
         const key = this.items[el].id;
         if (key) {
-          indexObject[key] = Number(el) + 1;
+          indexObject[key] =
+            Number(el) + this.pagination.page * this.pagination.pageSize + 1;
         }
       });
       return indexObject;

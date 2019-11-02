@@ -135,10 +135,10 @@ export const actions = {
     chi_tieu.capTongHopId = chi_tieu.capTongHopId ? Number(chi_tieu.capTongHopId) : chi_tieu.capTongHopId;
     chi_tieu.chiTieuNhomId = chi_tieu.chiTieuNhomId ? Number(chi_tieu.chiTieuNhomId) : chi_tieu.chiTieuNhomId;
     chi_tieu.chiTieuPhanTo = chi_tieu.chiTieuPhanTo ? Number(chi_tieu.chiTieuPhanTo) : chi_tieu.chiTieuPhanTo;
-    if (chi_tieu.chiTieuCha === 0) {
-      delete chi_tieu.chiTieuCha
+    if (chi_tieu.chiTieuChaId == 0) {
+      delete chi_tieu.chiTieuChaId
     } else {
-      chi_tieu.chiTieuCha = Number(chi_tieu.chiTieuCha)
+      chi_tieu.chiTieuChaId = Number(chi_tieu.chiTieuChaId)
     };
 
     try {

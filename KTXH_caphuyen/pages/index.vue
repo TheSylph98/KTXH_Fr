@@ -1,9 +1,17 @@
 <template>
-  <v-data-table dense :headers="headers" :items="desserts" item-key="name" class="elevation-1"></v-data-table>
+  <div>
+    <v-data-table dense :headers="headers" :items="desserts" item-key="name" class="elevation-1"></v-data-table>
+    <StringFilter />
+  </div>
 </template>
 
 <script>
+import StringFilter from "@/components/Filter/StringFilter";
 export default {
+  components: {
+    StringFilter
+  },
+
   data: () => ({
     desserts: [
       {

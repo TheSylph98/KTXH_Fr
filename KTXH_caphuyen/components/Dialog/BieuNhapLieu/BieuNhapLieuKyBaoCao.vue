@@ -7,7 +7,7 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <v-text-field
               dense
               v-model="kyBaoCao.ma"
@@ -15,7 +15,7 @@
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <v-text-field
               dense
               v-model="kyBaoCao.ten"
@@ -37,7 +37,7 @@
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
-              :items="kyBaoCaoList"
+              :items="kyBaoCaoDataList"
               :itemObj="kyBaoCaoObj"
               label="Kỳ Báo Cáo*"
               icon="mdi-apps"
@@ -47,7 +47,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="12">
             <v-textarea
               dense
               v-model="kyBaoCao.ghiChu"
@@ -93,7 +93,7 @@ export default {
       else return this.bnlList;
     },
 
-    kyBaoCaoList() {
+    kyBaoCaoDataList() {
       if (this.searchKyBaoCaoList.length > 0) return this.searchKyBaoCaoList;
       else return this.kyBaoCaoList;
     },
