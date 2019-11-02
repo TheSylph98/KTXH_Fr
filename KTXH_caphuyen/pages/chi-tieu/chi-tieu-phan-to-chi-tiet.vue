@@ -26,6 +26,7 @@
           v-if="dialog"
           :chiTieuPhanToChiTiet="chiTieuPhanToChiTiet"
           :formTitle="titleDialog"
+          :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
         />

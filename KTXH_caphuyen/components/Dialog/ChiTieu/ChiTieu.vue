@@ -142,6 +142,9 @@
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
+          <v-col v-if="isUpdate" class="d-flex" cols="4" >
+            <v-switch dense v-model="chiTieu.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -168,6 +171,10 @@ export default {
     formTitle: {
       type: String,
       default: "Thêm mới chỉ tiêu"
+    },
+    isUpdate: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

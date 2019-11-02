@@ -26,6 +26,7 @@
           v-if="dialog"
           :truongNhapLieu="bnlTNL"
           :formTitle="titleDialog"
+          :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
         />
