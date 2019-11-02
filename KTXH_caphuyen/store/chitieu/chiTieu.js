@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 import uuidv1 from 'uuid/v1'
 
@@ -41,7 +41,7 @@ export const mutations = {
 
   UPDATE_CHI_TIEU: update('chiTieuList'),
 
-  DELETE_CHI_TIEU: remove('chiTieuList')
+  DELETE_CHI_TIEU: removeByIds('chiTieuList')
 }
 
 export const actions = {
@@ -59,7 +59,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_CHI_TIEU_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -132,11 +131,11 @@ export const actions = {
     const { chiTieu } = state.api
     // const uuidv1 = require('uuid/v1');
     chi_tieu.uid = uuidv1();
-    chi_tieu.capNhapLieuId = Number(chi_tieu.capNhapLieuId);
-    chi_tieu.capTongHopId = Number(chi_tieu.capTongHopId);
-    chi_tieu.chiTieuNhomId = Number(chi_tieu.chiTieuNhomId);
-    chi_tieu.chiTieuPhanTo = Number(chi_tieu.chiTieuPhanTo);
-    if (chi_tieu.chiTieuCha == 0) {
+    chi_tieu.capNhapLieuId = chi_tieu.capNhapLieuId ? Number(chi_tieu.capNhapLieuId) : chi_tieu.capNhapLieuId;
+    chi_tieu.capTongHopId = chi_tieu.capTongHopId ? Number(chi_tieu.capTongHopId) : chi_tieu.capTongHopId;
+    chi_tieu.chiTieuNhomId = chi_tieu.chiTieuNhomId ? Number(chi_tieu.chiTieuNhomId) : chi_tieu.chiTieuNhomId;
+    chi_tieu.chiTieuPhanTo = chi_tieu.chiTieuPhanTo ? Number(chi_tieu.chiTieuPhanTo) : chi_tieu.chiTieuPhanTo;
+    if (chi_tieu.chiTieuCha === 0) {
       delete chi_tieu.chiTieuCha
     } else {
       chi_tieu.chiTieuCha = Number(chi_tieu.chiTieuCha)
@@ -164,7 +163,6 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${chiTieu}/update`, chi_tieu)
-
       commit('UPDATE_CHI_TIEU', { value: data })
       res.isSuccess = true
     } catch (err) {

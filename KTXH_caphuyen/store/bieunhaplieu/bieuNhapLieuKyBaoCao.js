@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 import uuidv1 from "uuid/v1"
@@ -42,7 +42,7 @@ export const mutations = {
 
   UPDATE_BIEU_NHAP_LIEU_KY_BAO_CAO: update('bnlKyBaoCaoList'),
 
-  DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: remove('bnlKyBaoCaoList'),
+  DELETE_BIEU_NHAP_LIEU_KY_BAO_CAO: removeByIds('bnlKyBaoCaoList'),
 }
 
 export const actions = {
@@ -59,7 +59,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_BIEU_NHAP_LIEU_KY_BAO_CAO_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -130,10 +129,9 @@ export const actions = {
   async addBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
     const res = { isSuccess: false }
     const { bieuNhapLieuKyBaoCao } = state.api
-    // const uuidv1 = require('uuid/v1');
     bnlKyBaoCao.uid = uuidv1();
-    bnlKyBaoCao.bieuNhapLieuId = Number(bnlKyBaoCao.bieuNhapLieuId)
-    bnlKyBaoCao.kyBaoCaoId = Number(bnlKyBaoCao.kyBaoCaoId)
+    bnlKyBaoCao.bieuNhapLieuId = bnlKyBaoCao.bieuNhapLieuId ? Number(bnlKyBaoCao.bieuNhapLieuId) : bnlKyBaoCao.bieuNhapLieuId
+    bnlKyBaoCao.kyBaoCaoId = bnlKyBaoCao.kyBaoCaoId ? Number(bnlKyBaoCao.kyBaoCaoId) : bnlKyBaoCao.kyBaoCaoId
 
 
     try {

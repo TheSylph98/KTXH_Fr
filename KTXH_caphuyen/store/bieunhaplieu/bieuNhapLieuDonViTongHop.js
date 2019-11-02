@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_BIEU_NHAP_LIEU_DON_VI_TONG_HOP_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -128,7 +127,7 @@ export const actions = {
 
   async addBieuNhapLieuDonViTongHop({ state, commit }, bnlDonViTongHop) {
     const { bieuNhapLieuDonViTongHop } = state.api
-    
+
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/create`, bnlDonViTongHop)
 
@@ -148,7 +147,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/update`, bnlDonViTongHop)
 
-      commit('UPDATE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', {value: data})
+      commit('UPDATE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', { value: data })
     } catch (err) {
       console.log('updateBieuNhapLieuDonViTongHop', err)
     }
@@ -158,7 +157,7 @@ export const actions = {
     const { bieuNhapLieuDonViTongHop } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/delete`, {id: bnlDonViTongHop})
+      const data = await this.$axios.$post(`${bieuNhapLieuDonViTongHop}/delete`, { id: bnlDonViTongHop })
 
       commit('DELETE_BIEU_NHAP_LIEU_DON_VI_TONG_HOP', data)
       commit('SET_PAGINATION_KEY', {

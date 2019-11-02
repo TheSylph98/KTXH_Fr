@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_TINH: update('tinhList'),
 
-  DELETE_TINH: remove('tinhList')
+  DELETE_TINH: removeByIds('tinhList')
 }
 
 export const actions = {
@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_TINH_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,

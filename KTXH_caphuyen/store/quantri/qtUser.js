@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_USER: update('userList'),
 
-  DELETE_USER: remove('userList')
+  DELETE_USER: removeByIds('userList')
 }
 
 export const actions = {
@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_USER_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -132,7 +131,7 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     user.uid = uuidv1();
-    user.qtDonViId = Number(user.qtDonViId);
+    user.qtDonViId = user.qtDonViId ? Number(user.qtDonViId) : user.qtDonViId;
     try {
       const data = await this.$axios.$post(`${qtUser}/create`, user)
 

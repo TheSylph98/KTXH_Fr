@@ -9,10 +9,15 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
-      @filter="getBieuNhapLieuKyBaoCaoList({queryData: $event})"
+      @filter="changeList({queryData: $event})"
       @changePageSize="changeList({ pageSize: $event})"
       @changePage="changeList({ page: $event})"
     >
@@ -50,10 +55,34 @@ export default {
       overlay: false,
       titleDialog: "",
       headers: [
-        { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
-        { text: "Tên biểu", align: "center", value: "ten", type: "string" },
-        { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
-        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+        {
+          text: "Kí hiệu",
+          align: "center",
+          value: "ma",
+          type: "string",
+          width: "8.5%"
+        },
+        {
+          text: "Tên biểu",
+          align: "center",
+          value: "ten",
+          type: "string",
+          width: "29.75%"
+        },
+        {
+          text: "Ghi chú",
+          align: "center",
+          value: "ghiChu",
+          type: "string",
+          width: "38.25%"
+        },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          value: "hieuLuc",
+          type: "",
+          width: "8.5%"
+        }
       ],
       kyBaoCao: {},
       snackbar: false,
@@ -79,7 +108,7 @@ export default {
   async created() {
     if (!this.bnlKyBaoCaoList.length) {
       this.overlay = true;
-      await this.getBieuNhapLieukyBaoCaoList();
+      await this.getBieuNhapLieuKyBaoCaoList();
       this.overlay = false;
     }
   },
@@ -101,18 +130,17 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm Mới Biểu Nhập Liệu Kỳ Báo Cáo";
       this.kyBaoCao = {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        qlKyBaoCaoId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ma: null,
+        ten: null,
+        bieuNhapLieuId: null,
+        qlKyBaoCaoId: null,
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa biểu nhập liệu kỳ báo cáo";
       await this.getBieuNhapLieuKyBaoCao(Number(item.id));
       this.kyBaoCao = Object.assign({}, this.bnlKyBaoCao);
       this.isUpdate = true;
@@ -143,6 +171,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.kyBaoCao = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {
@@ -172,7 +201,7 @@ export default {
 
     async changeList(value) {
       this.overlay = true;
-      await this.getBieuNhapLieukyBaoCaoList(value);
+      await this.getBieuNhapLieuKyBaoCaoList(value);
       this.overlay = false;
     }
   }

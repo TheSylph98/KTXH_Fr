@@ -8,15 +8,26 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="donVi.ma" label="Mã đơn vị" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field
+              dense
+              v-model="donVi.ma"
+              label="Mã đơn vị*"
+              prepend-inner-icon="mdi-codepen"
+            ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="donVi.ten" label="Tên Đơn Vị*" prepend-inner-icon="mdi-drag"></v-text-field>
+            <v-text-field
+              dense
+              v-model="donVi.ten"
+              label="Tên Đơn Vị*"
+              prepend-inner-icon="mdi-drag"
+            ></v-text-field>
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
               :items="dvList"
-              label="Đơn Vị Cha"
+              :itemObj="qtDonViObj"
+              label="Nhóm đơn vị*"
               icon="mdi-apps"
               @select="donVi.donViChaId = $event.id"
               @search="getSearchDonViList($event)"
@@ -24,6 +35,7 @@
           </v-col>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="donVi.diaChi"
               label="Địa Chỉ"
               prepend-inner-icon="mdi-map-marker"
@@ -31,27 +43,22 @@
           </v-col>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="donVi.soDienThoai"
               label="Số Điện Thoại"
               prepend-inner-icon="mdi-phone"
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="donVi.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
+            <v-text-field dense v-model="donVi.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
           </v-col>
 
           <v-col class="d-flex" cols="12">
-            <v-textarea v-model="donVi.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+            <v-textarea dense v-model="donVi.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <v-col cols="12" sm="6" md="8">
-            <v-switch v-model="donVi.laDonVi" class="ma-1" label="Là đơn vị"></v-switch>
+            <v-switch dense v-model="donVi.laDonVi" class="ma-1" label="Là đơn vị"></v-switch>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="donVi.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="donVi.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>
@@ -73,17 +80,7 @@ export default {
   },
   props: {
     donVi: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        donViChaId: 0,
-        diaChi: "",
-        soDienThoai: "",
-        email: "",
-        ghiChu: "",
-        laDonVi: false
-      }
+      type: Object
     },
     formTitle: {
       type: String,
@@ -93,8 +90,17 @@ export default {
   computed: {
     ...mapState("quantri/qtDonVi", ["donViList", "searchDonVi"]),
     dvList() {
-      if (this.searchDonVi.length > 0) return this.searchDonVi;
-      else return this.donViList;
+      const qtDonVi = this.donVi.belongsToQTDonVi
+        ? this.donVi.belongsToQTDonVi
+        : [];
+      if (this.searchDonVi.length > 0) return qtDonVi.concat(this.searchDonVi);
+      else return qtDonVi.concat(this.donViList);
+    },
+
+    qtDonViObj() {
+      if (this.donVi.belongsToQTDonVi) {
+        return this.donVi.belongsToQTDonVi[0];
+      } else return {};
     }
   },
   methods: {

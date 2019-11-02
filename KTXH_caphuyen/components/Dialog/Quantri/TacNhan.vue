@@ -7,38 +7,40 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="tacNhan.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <v-text-field
+              dense
+              v-model="tacNhan.ma"
+              label="Mã tác nhân*"
+              prepend-inner-icon="mdi-codepen"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="6">
+            <v-text-field
+              dense
               v-model="tacNhan.ten"
-              label="Tên tác nhân"
+              label="Tên tác nhân*"
               prepend-inner-icon="mdi-account"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="12">
             <SelectedWithSearch
               :items="capHanhChinhList"
-              label="Cấp hành chính"
+              :itemObj="capHanhchinhObj"
+              label="Cấp hành chính*"
               icon="mdi-apps"
               @select="tacNhan.sysCapHanhChinhId = $event.id"
               @search="getSearchCapHanhChinhList($event)"
             />
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="12">
             <v-textarea
+              dense
               v-model="tacNhan.ghiChu"
               label="Chức năng, Nhiệm vụ"
               prepend-inner-icon="mdi-star"
             ></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="tacNhan.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="tacNhan.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>
@@ -61,17 +63,8 @@ export default {
   },
   props: {
     tacNhan: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        sysCapHanhChinhId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
-
     formTitle: {
       type: String,
       default: "Thêm Mới"
@@ -83,10 +76,18 @@ export default {
       "searchCapHanhChinhList"
     ]),
     capHanhChinhList() {
-      //console.log(this.bnlList)
+      const sysCapHanhChinh = this.tacNhan.belongsToSysCapHanhChinh
+        ? this.tacNhan.belongsToSysCapHanhChinh
+        : [];
       if (this.searchCapHanhChinhList.length > 0)
-        return this.searchCapHanhChinhList;
-      else return this.caphanhchinhList;
+        return sysCapHanhChinh.concat(this.searchCapHanhChinhList);
+      else return sysCapHanhChinh.concat(this.caphanhchinhList);
+    },
+
+    capHanhchinhObj() {
+      if (this.tacNhan.belongsToSysCapHanhChinh) {
+        return this.tacNhan.belongsToSysCapHanhChinh[0];
+      } else return {};
     }
   },
   methods: {

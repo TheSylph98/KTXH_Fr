@@ -130,8 +130,8 @@ export const actions = {
     const res = { isSuccess: false }
 
     const { bieuNhapLieuTruongNhapLieu } = state.api
-    bnlTruongNhapLieu.bieuNhapLieuId = Number(bnlTruongNhapLieu.bieuNhapLieuId)
-    bnlTruongNhapLieu.truongNhapLieuId = Number(bnlTruongNhapLieu.truongNhapLieuId)
+    bnlTruongNhapLieu.bieuNhapLieuId = bnlTruongNhapLieu.bieuNhapLieuId ? Number(bnlTruongNhapLieu.bieuNhapLieuId) : bnlTruongNhapLieu.bieuNhapLieuId
+    bnlTruongNhapLieu.truongNhapLieuId = bnlTruongNhapLieu.truongNhapLieuId ? Number(bnlTruongNhapLieu.truongNhapLieuId) : bnlTruongNhapLieu.truongNhapLieuId
     bnlTruongNhapLieu.uid = uuidv1()
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/create`, bnlTruongNhapLieu)
@@ -173,11 +173,11 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuTruongNhapLieu}/delete`, { id: idList })
 
-      if(data) {
+      if (data) {
         commit('DELETE_BIEU_NHAP_LIEU_TRUONG_NHAP_LIEU', idList)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
-          value: state.pagination.total - idList.length  
+          value: state.pagination.total - idList.length
         })
         res.isSuccess = true
       }

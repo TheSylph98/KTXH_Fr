@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -57,6 +62,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ten",
+          width: "34%",
           type: "string"
         },
         {
@@ -64,6 +70,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "sysCapHanhChinhId",
+          width: "12.75%",
           type: ""
         },
         {
@@ -71,6 +78,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ghiChu",
+          width: "29.75%",
           type: "string"
         },
         {
@@ -78,6 +86,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "hieuLuc",
+          width: "8.5%",
           type: ""
         }
       ],
@@ -117,17 +126,16 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.tN = {
-        ma: "",
-        ten: "",
-        sysCapHanhChinhId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ma: null,
+        ten: null,
+        sysCapHanhChinhId: null,
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa tác nhân";
       await this.getQTTacNhan(Number(item.id));
       this.tN = Object.assign({}, this.tacNhan);
       this.isUpdate = true;
@@ -156,6 +164,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.tN = {};
+      this.titleDialog = "";
     },
 
     async saveTacNhanDialog() {

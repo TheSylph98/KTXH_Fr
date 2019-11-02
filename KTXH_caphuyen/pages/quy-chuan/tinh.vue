@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        checkbox: '2.25%',
+        index: '4.25%',
+        action: '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -56,6 +61,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "ma",
+          width: "12.75%",
           type: "string"
         },
         {
@@ -63,6 +69,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ten",
+          width: "34%",
           type: "string"
         },
         {
@@ -70,6 +77,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ghiChu",
+          width: "29.75%",
           type: "string"
         },
         {
@@ -77,6 +85,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "hieuLuc",
+          width: "8.5%",
           type: ""
         }
       ],
@@ -118,13 +127,13 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm tỉnh mới";
       this.tinh_data = {
-        ma: "",
-        ten: "",
-        sysCapDonViHanhChinhId: 0,
+        ma: null,
+        ten: null,
+        sysCapDonViHanhChinh: null,
         loaiDonViHanhChinh: "",
-        nongThon: true,
+        nongThon: false,
         bienGioi: false,
-        haiDao: true,
+        haiDao: false,
         vungDBKhoKhan: false,
         ghiChu: ""
       };
@@ -132,6 +141,7 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa tỉnh";
       await this.getTinh(Number(item.id));
       this.tinh_data = Object.assign({}, this.tinh);
       this.isUpdate = true;
@@ -160,6 +170,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.tinh_data = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

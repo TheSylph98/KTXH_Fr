@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-table">
+  <div class="custom-table" ::style="{ '--check-box-width': checkBoxWidth}">
     <v-data-table
       v-model="selectItems"
       :headers="headerTables"
@@ -24,12 +24,14 @@
 
       <template slot="body.prepend" class="search">
         <tr>
-          <td></td>
+          <td>
+            <span class="empty-content"></span>
+          </td>
           <td v-for="(item, index) in headerTables" :key="index" :class="getClass(index)">
-            <div v-if="item.value === 'index'"></div>
-            <div v-else-if="item.value === 'action'">
+            <span v-if="item.value === 'index'" class="empty-content"></span>
+            <span v-else-if="item.value === 'action'">
               <v-btn color="warning" dark rounded small @click="$emit('filter', search)">Lọc</v-btn>
-            </div>
+            </span>
             <StringFilter
               v-if="item.type === 'string'"
               @change="filterChange($event, item.value)"
@@ -45,37 +47,36 @@
               @change="filterChange($event, item.value)"
               @enter="$emit('filter', search)"
             />
-            <div v-else></div>
+            <span v-else></span>
           </td>
         </tr>
       </template>
 
-      <template slot="item" slot-scope="row">
-        <tr>
-          <td v-for="(el, inx) in row.headers" :key="inx">
-            <span v-if="el.value === 'data-table-select'">
-              <v-checkbox v-model="row.isSelected"></v-checkbox>
-            </span>
+      <template slot="item.id" slot-scope="column">
+        <span>{{ indexObject[column.item.id] }}</span>
+      </template>
 
-            <span v-else-if="el.value === 'index'">{{row.index + 1}}</span>
-            <span v-else-if="el.value === 'action'">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
-                </template>
-                <span>Chỉnh sửa</span>
-              </v-tooltip>
+      <template slot="item.hieuLuc" slot-scope="column">
+        <span v-if="column.item.hieuLuc">Có</span>
+        <span v-else>Không</span>
+      </template>
 
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
-                </template>
-                <span>Xóa</span>
-              </v-tooltip>
-            </span>
-            <span v-else>{{ getTableValue(row.item, el.value) }}</span>
-          </td>
-        </tr>
+      <template slot="item.action" slot-scope="row">
+        <span>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
+            </template>
+            <span>Chỉnh sửa</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
+            </template>
+            <span>Xóa</span>
+          </v-tooltip>
+        </span>
       </template>
 
       <template v-slot:no-data>
@@ -103,7 +104,7 @@
               :total-visible="paginationValue.visiblePage"
               :length="paginationValue.numberOfPage"
               circle
-              @input="$emit('changePage', pagination.pageSize)"
+              @input="$emit('changePage', $event - 1)"
             ></v-pagination>
           </v-col>
         </v-row>
@@ -210,6 +211,17 @@ export default {
     notifiedType: {
       type: String,
       default: "success"
+    },
+
+    tableWidth: {
+      type: Object,
+      default() {
+        return {
+          index: null,
+          checkbox: null,
+          action: null
+        };
+      }
     }
   },
 
@@ -223,15 +235,35 @@ export default {
   },
 
   computed: {
+    checkBoxWidth() {
+      return this.tableWidth.checkbox;
+    },
+
     headerTables() {
       if (this.showIndex) {
-        return [{ text: "STT", align: "center", value: "index" }].concat(
-          this.headers,
-          [{ text: "Thao tác", align: "center", value: "action" }]
-        );
+        return [
+          {
+            text: "STT",
+            align: "center",
+            width: this.tableWidth.index,
+            value: "id"
+          }
+        ].concat(this.headers, [
+          {
+            text: "Thao tác",
+            width: this.tableWidth.action,
+            align: "center",
+            value: "action"
+          }
+        ]);
       } else
         return this.headers.concat([
-          { text: "Thao tác", align: "center", value: "action" }
+          {
+            text: "Thao tác",
+            width: this.tableWidth.action,
+            align: "center",
+            value: "action"
+          }
         ]);
     },
 
@@ -248,6 +280,17 @@ export default {
         pageSize: pageSize,
         page: Number(this.pagination.page) + 1
       };
+    },
+
+    indexObject() {
+      const indexObject = {};
+      Object.keys(this.items).forEach(el => {
+        const key = this.items[el].id;
+        if (key) {
+          indexObject[key] = Number(el) + 1;
+        }
+      });
+      return indexObject;
     }
   },
 
@@ -265,8 +308,18 @@ export default {
           result = result[e];
         }
       });
-      console.log("resulte", result);
       return result;
+    },
+
+    changeSelectItem(value, element) {
+      if (value) {
+        this.selectItems.push(element);
+      } else {
+        const index = this.selectItems.findIndex(
+          item => item.id === element.id
+        );
+        this.selectItems.splice(index, 1);
+      }
     },
 
     filterChange(eValue, el) {
@@ -301,6 +354,40 @@ export default {
     .v-alert {
       margin: 0;
       width: inherit;
+    }
+  }
+
+  td {
+    padding: 0;
+    .empty-content {
+      background-color: rgba(0, 0, 0, 0.05);
+      height: 100%;
+    }
+  }
+
+  .v-data-table {
+    td.text-start {
+      text-align: center;
+    }
+
+    .v-data-table-header {
+      th {
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+
+      th:not(:last-child) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      th.text-start {
+        width: var(--check-box-width);
+      }
+    }
+    tbody {
+      td:not(:last-child) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
     }
   }
 }

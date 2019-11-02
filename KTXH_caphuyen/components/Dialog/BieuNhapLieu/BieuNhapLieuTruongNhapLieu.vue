@@ -9,6 +9,7 @@
         <v-row>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="truongNhapLieu.ma"
               value="truongNhapLieu.ma"
               label="Kí Hiệu*"
@@ -17,6 +18,7 @@
           </v-col>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="truongNhapLieu.ten"
               label="Tên Biểu Nhập Liệu*"
               prepend-inner-icon="mdi-drag"
@@ -48,17 +50,12 @@
         <v-row>
           <v-col cols="12">
             <v-textarea
+              dense
               v-model="truongNhapLieu.ghiChu"
               label="Ghi Chú"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="truongNhapLieu.hieuLuc" class="ma-1" label="Hiệu Lực"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="truongNhapLieu.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>

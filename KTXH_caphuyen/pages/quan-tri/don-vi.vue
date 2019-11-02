@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -56,22 +61,40 @@ export default {
           text: "Mã đơn vị",
           align: "center",
           value: "ma",
+          type: "string",
+          width: "8.5%",
+          divider: false
+        },
+        {
+          text: "Tên đơn vị",
+          width: "29.75%",
+          align: "center",
+          value: "ten",
           type: "string"
         },
-        { text: "Tên đơn vị", align: "center", value: "ten", type: "string" },
         {
           text: "Số điện thoại",
           align: "center",
           value: "soDienThoai",
-          type: "string"
+          type: "string",
+          width: "12.75%",
+          divider: false
         },
         {
-          text: "Đơn vị cha",
+          text: "Nhóm đơn vị",
           align: "center",
           value: "belongsToQTDonVi.ten",
-          type: "string"
+          type: "string",
+          width: "25.5%",
+          divider: true
         },
-        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+        {
+          text: "Hiệu lực",
+          align: "center",
+          value: "hieuLuc",
+          width: "8.5%",
+          type: ""
+        }
       ],
       snackbar: false,
       notifiedType: "success",
@@ -111,8 +134,8 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm đơn vị mới";
       this.dv = {
-        ma: "",
-        ten: "",
+        ma: null,
+        ten: null,
         diaChi: "",
         soDienThoai: "",
         donViChaId: 0,
@@ -124,6 +147,7 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa đơn vị";
       await this.getQTDonVi(Number(item.id));
       this.dv = Object.assign({}, this.donVi);
       this.isUpdate = true;
@@ -132,7 +156,7 @@ export default {
     },
 
     async deleted(items) {
-      const { isSucess } = await this.deleteQTDonVi(items.map(e => e.id));
+      const { isSuccess } = await this.deleteQTDonVi(items.map(e => e.id));
 
       if (isSuccess) {
         this.notifiedType = "success";
@@ -152,6 +176,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.dv = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

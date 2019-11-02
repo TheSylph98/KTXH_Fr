@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_HUYEN: update('huyenList'),
 
-  DELETE_HUYEN: remove('huyenList')
+  DELETE_HUYEN: removeByIds('huyenList')
 }
 
 export const actions = {
@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_HUYEN_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -132,9 +131,8 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     huyen.uid = uuidv1();
-    huyen.qcTinhId = Number(huyen.qcTinhId)
-    huyen.nongthon = Boolean(huyen.nongthon)
-    huyen.sysCapDonViHanhChinh = Number(huyen.sysCapDonViHanhChinh)
+    huyen.qcTinhId = huyen.qcTinhId ? Number(huyen.qcTinhId) : huyen.qcTinhId;
+    huyen.sysCapDonViHanhChinh = huyen.sysCapDonViHanhChinh ? Number(huyen.sysCapDonViHanhChinh) : huyen.sysCapDonViHanhChinh
     try {
       const data = await this.$axios.$post(`${qcHuyen}/create`, huyen)
 

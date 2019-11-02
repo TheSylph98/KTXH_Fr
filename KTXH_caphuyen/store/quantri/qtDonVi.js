@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_DON_VI: update('donViList'),
 
-  DELETE_DON_VI: remove('donViList'),
+  DELETE_DON_VI: removeByIds('donViList'),
 }
 
 export const actions = {
@@ -83,7 +83,6 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtDonVi}/list`, queryData)
 
-      console.log("data", data.rows)
       commit('SET_SEARCH_DON_VI_LIST', data.rows)
     } catch (err) {
       console.log('getSearchDonViList', err)
@@ -132,7 +131,7 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     donVi.uid = uuidv1();
-    donVi.donViChaId = Number(donVi.donViChaId)
+    donVi.donViChaId = donVi.donViChaId ? Number(donVi.donViChaId) : donVi.donViChaId
     if (donVi.donViChaId == 0) {
       delete donVi.donViChaId
     }

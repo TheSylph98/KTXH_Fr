@@ -8,21 +8,30 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="chiTieuNhom.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field
+              dense
+              v-model="chiTieuNhom.ma"
+              label="Mã*"
+              prepend-inner-icon="mdi-codepen"
+            ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="chiTieuNhom.ten" label="Tên" prepend-inner-icon="mdi-drag"></v-text-field>
+            <v-text-field
+              dense
+              v-model="chiTieuNhom.ten"
+              label="Tên chỉ tiêu nhóm*"
+              prepend-inner-icon="mdi-drag"
+            ></v-text-field>
           </v-col>
 
           <v-col cols="12">
-            <v-textarea v-model="chiTieuNhom.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+            <v-textarea
+              dense
+              v-model="chiTieuNhom.ghiChu"
+              label="Ghi Chú"
+              prepend-inner-icon="mdi-note"
+            ></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="chiTieuNhom.hieuLuc" class="ma-1" label="Hieu luc"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="chiTieuNhom.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>

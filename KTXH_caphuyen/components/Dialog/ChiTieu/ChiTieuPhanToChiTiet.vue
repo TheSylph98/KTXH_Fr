@@ -9,6 +9,7 @@
         <v-row>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="chiTieuPhanToChiTiet.ma"
               label="Kí hiệu*"
               prepend-inner-icon="mdi-codepen"
@@ -16,14 +17,16 @@
           </v-col>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="chiTieuPhanToChiTiet.ten"
-              label="Tên biểu nhập liệu*"
+              label="Tên chỉ tiêu phân tổ chi tiết*"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
           <v-col cols="12">
             <SelectedWithSearch
               :items="ctPhanToList"
+              :itemObj="ctPhanToObj"
               label="Chỉ tiêu phân tổ"
               icon="mdi-apps"
               @select="chiTieuPhanToChiTiet.chiTieuPhanToId = $event.id"
@@ -32,17 +35,12 @@
           </v-col>
           <v-col cols="12">
             <v-textarea
+              dense
               v-model="chiTieuPhanToChiTiet.ghiChu"
               label="Ghi Chú"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="chiTieuPhanToChiTiet.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-                </v-col>
-                <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="chiTieuPhanToChiTiet.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>
@@ -64,15 +62,7 @@ export default {
   },
   props: {
     chiTieuPhanToChiTiet: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        chiTieuPhanToId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
     formTitle: {
       type: String,
@@ -82,13 +72,17 @@ export default {
   computed: {
     ...mapState("chitieu/chiTieuPhanTo", [
       "chiTieuPhanToList",
-      "searchChiTieuNhomList"
+      "searchChiTieuPhanToList"
     ]),
     ctPhanToList() {
-      //console.log(this.bnlList)
-      if (this.searchChiTieuNhomList.length > 0)
-        return this.searchChiTieuNhomList;
+      if (this.searchChiTieuPhanToList.length > 0)
+        return this.searchChiTieuPhanToList;
       else return this.chiTieuPhanToList;
+    },
+    ctPhanToObj() {
+      if (this.chiTieuPhanToChiTiet.belongsToChiTieuPhanTo) {
+        return this.chiTieuPhanToChiTiet.belongsToChiTieuPhanTo[0];
+      } else return {};
     }
   },
   methods: {

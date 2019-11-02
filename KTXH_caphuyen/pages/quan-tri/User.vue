@@ -9,10 +9,17 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getUserList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
     >
       <v-dialog v-model="dialog" max-width="800px">
         <User
@@ -55,6 +62,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ten",
+          width: "21.25%",
           type: "string"
         },
         {
@@ -62,6 +70,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "soDienThoai",
+          width: "12.75%",
           type: "string"
         },
         {
@@ -69,13 +78,15 @@ export default {
           align: "center",
           sorttable: false,
           value: "email",
+          width: "12.75%",
           type: "string"
         },
         {
           text: "Đơn Vị",
           align: "center",
           sorttable: false,
-          value: "donvi",
+          value: "belongsToQTDonVi.ten",
+          width: "29.75%",
           type: "string"
         },
         {
@@ -83,6 +94,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "hieuLuc",
+          width: "8.5%",
           type: ""
         }
       ],
@@ -127,19 +139,21 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
-      this.titleDialog = "Thêm user mới";
+      this.titleDialog = "Thêm người dùng mới";
       this.user_data = {
-        ma: "",
-        ten: "",
-        matKhau: "",
+        ma: null,
+        ten: null,
+        matKhau: null,
         soDienThoai: "",
         email: "",
-        qtDonViId: 0
+        qtDonViId: 0,
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa người dùng";
       await this.getQTUser(Number(item.id));
       this.user_data = Object.assign({}, this.user);
       this.isUpdate = true;
@@ -168,6 +182,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.user_data = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {
@@ -181,7 +196,9 @@ export default {
 
       if (res.isSuccess) {
         this.notifiedType = "success";
-        this.notification = "Xóa chỉ tiêu nhóm thành công!";
+        this.notification = this.isUpdate
+          ? "Cập nhật người dùng thành công"
+          : "Thêm người dùng thành công!";
       } else {
         this.notifiedType = "error";
         this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";

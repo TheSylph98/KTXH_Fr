@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -40,7 +40,7 @@ export const mutations = {
 
   UPDATE_CHI_TIEU_PHAN_TO_CHI_TIET: update('chiTieuPhanToChiTietList'),
 
-  DELETE_CHI_TIEU_PHAN_TO_CHI_TIET: remove('chiTieuPhanToChiTietList')
+  DELETE_CHI_TIEU_PHAN_TO_CHI_TIET: removeByIds('chiTieuPhanToChiTietList')
 }
 
 export const actions = {
@@ -58,7 +58,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_CHI_TIEU_PHAN_TO_CHI_TIET_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -131,7 +130,7 @@ export const actions = {
     const { chiTieuPhanToChiTiet } = state.api
     const uuidv1 = require('uuid/v1');
     chi_tieu_phan_to_chi_tiet.uid = uuidv1();
-    chi_tieu_phan_to_chi_tiet.chiTieuPhanToId = Number(chi_tieu_phan_to_chi_tiet.chiTieuPhanToId)
+    chi_tieu_phan_to_chi_tiet.chiTieuPhanToId = chi_tieu_phan_to_chi_tiet.chiTieuPhanToId ? Number(chi_tieu_phan_to_chi_tiet.chiTieuPhanToId) : chi_tieu_phan_to_chi_tiet.chiTieuPhanToId;
 
     try {
       const data = await this.$axios.$post(`${chiTieuPhanToChiTiet}/create`, chi_tieu_phan_to_chi_tiet)

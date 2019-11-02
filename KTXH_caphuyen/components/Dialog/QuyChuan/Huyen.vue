@@ -7,61 +7,66 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="4">
             <SelectedWithSearch
               :items="tList"
-              label="Tỉnh"
+              :itemObj="tinhObj"
+              label="Tỉnh*"
               icon="mdi-map-marker"
               @select="huyen.qcTinhId = $event.id"
               @search="getSearchTinhList($event)"
             />
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="6" md="3">
-            <v-text-field v-model="huyen.ma" label="Mã huyện" prepend-inner-icon="mdi-codepen"></v-text-field>
+          <v-col cols="4">
+            <v-text-field
+              dense
+              v-model="huyen.ma"
+              label="Mã huyện*"
+              prepend-inner-icon="mdi-codepen"
+            ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="7">
-            <v-text-field v-model="huyen.ten" label="Huyện" prepend-inner-icon="mdi-drag"></v-text-field>
+          <v-col cols="4">
+            <v-text-field dense v-model="huyen.ten" label="Huyện*" prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="8">
+          <v-col class="d-flex" cols="6">
             <SelectedWithSearch
               :items="caphcList"
+              :itemObj="capHanhChinhObj"
               label="Cấp đơn vị hành chính"
               icon="mdi-apps"
               @select="huyen.sysCapDonViHanhChinh = $event.id"
               @search="getSearchCapHanhChinhList($event)"
             />
           </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="8">
+          <v-col class="d-flex" cols="6">
             <v-select
+              dense
               :items="loaidonViHanhChinh"
               v-model="huyen.loaiDonViHanhChinh"
               label="Loại đơn vị hành chính"
               outlined
             ></v-select>
           </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-switch v-model="huyen.nongThon" class="ma-1" label="Nông thôn"></v-switch>
+          <v-col class="d-flex" cols="3">
+            <v-switch dense v-model="huyen.nongThon" class="ma-1" label="Nông thôn"></v-switch>
           </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-switch v-model="huyen.bienGioi" class="ma-1" label="Biên giới"></v-switch>
+          <v-col class="d-flex" cols="3">
+            <v-switch dense v-model="huyen.bienGioi" class="ma-1" label="Biên giới"></v-switch>
           </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-switch v-model="huyen.haiDao" class="ma-1" label="Hải đảo"></v-switch>
+          <v-col class="d-flex" cols="3">
+            <v-switch dense v-model="huyen.haiDao" class="ma-1" label="Hải đảo"></v-switch>
           </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="8">
-            <v-switch v-model="huyen.vungDBKhoKhan" class="ma-1" label="Vùng đặc biệt khó khăn"></v-switch>
+          <v-col class="d-flex" cols="3">
+            <v-switch
+              dense
+              v-model="huyen.vungDBKhoKhan"
+              class="ma-1"
+              label="Vùng đặc biệt khó khăn"
+            ></v-switch>
           </v-col>
-          <v-col class="d-flex" cols="12" sm="6" md="12">
-            <v-textarea v-model="huyen.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+          <v-col class="d-flex" cols="12">
+            <v-textarea dense v-model="huyen.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
-          <!-- <v-col class="d-flex" cols="12" sm="6" md="8">
-                <v-switch v-model="huyen.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="huyen.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>
@@ -109,6 +114,16 @@ export default {
       if (this.searchCapHanhChinhList.length > 0)
         return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
+    },
+    tinhObj() {
+      if (this.huyen.belongsToQCTinh) {
+        return this.huyen.belongsToQCTinh[0];
+      } else return {};
+    },
+    capHanhChinhObj() {
+      if (this.huyen.belongsToSysCapHanhChinh) {
+        return this.huyen.belongsToSysCapHanhChinh[0];
+      } else return {};
     }
   },
   methods: {

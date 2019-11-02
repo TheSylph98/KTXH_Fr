@@ -8,10 +8,16 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="chiTieu.ma" label="Kí Hiệu*" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field
+              dense
+              v-model="chiTieu.ma"
+              label="Kí Hiệu*"
+              prepend-inner-icon="mdi-codepen"
+            ></v-text-field>
           </v-col>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="chiTieu.ten"
               label="Tên Biểu Nhập Liệu*"
               prepend-inner-icon="mdi-drag"
@@ -22,7 +28,8 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="bieuNhapLieuList"
-              label="Biểu nhập liệu"
+              :itemObj="bieuNhapLieuObj"
+              label="Biểu nhập liệu*"
               icon="mdi-apps"
               @select="chiTieu.bieuNhapLieuId = $event.id"
               @search="getSearchBieuNhapLieuList($event)"
@@ -31,24 +38,22 @@
           <v-col cols="6">
             <SelectedWithSearch
               :items="ctList"
-              label="Chỉ Tiêu"
+              :itemObj="chiTieuObj"
+              label="Chỉ Tiêu*"
               icon="mdi-apps"
               @select="chiTieu.chiTieuId = $event.id"
               @search="getSearchChiTieuList($event)"
             />
           </v-col>
         </v-row>
-        <!-- <v-row>
-          <v-col cols="6">
-            <v-switch v-model="chiTieu.hieuLuc" class="ma-1" label="Hiệu Lực"></v-switch>
-          </v-col>
-           <v-col cols="6">
-            <v-switch v-model="chiTieu.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>
-        </v-row>-->
         <v-row>
           <v-col cols="12">
-            <v-textarea v-model="chiTieu.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+            <v-textarea
+              dense
+              v-model="chiTieu.ghiChu"
+              label="Ghi Chú"
+              prepend-inner-icon="mdi-note"
+            ></v-textarea>
           </v-col>
         </v-row>
       </v-container>
@@ -73,16 +78,7 @@ export default {
 
   props: {
     chiTieu: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 1,
-        chiTieuId: 1,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
 
     formTitle: {
@@ -98,13 +94,23 @@ export default {
     ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
     ...mapState("chitieu/chiTieu", ["chiTieuList", "searchChiTieuList"]),
     bieuNhapLieuList() {
-      //console.log(this.bnlList)
       if (this.searchBnlList.length > 0) return this.searchBnlList;
       else return this.bnlList;
     },
     ctList() {
       if (this.searchChiTieuList.length > 0) return this.searchChiTieuList;
       else return this.chiTieuList;
+    },
+    bieuNhapLieuObj() {
+      if (this.chiTieu.belongsToBieuNhapLieu) {
+        return this.chiTieu.belongsToBieuNhapLieu[0];
+      } else return {};
+    },
+
+    chiTieuObj() {
+      if (this.chiTieu.belongsToChiTieu) {
+        return this.chiTieu.belongsToChiTieu[0];
+      } else return {};
     }
   },
 

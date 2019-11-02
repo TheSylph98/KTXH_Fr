@@ -3,7 +3,7 @@ import {
   setPropertyNestedObject,
   add,
   update,
-  remove
+  removeByIds
 } from '@/util/actions'
 
 export const state = () => {
@@ -37,7 +37,7 @@ export const mutations = {
 
   UPDATE_TAC_NHAN_CHUC_NANG_PHAN_MEM: update('tacNhanChucNangPhanMemList'),
 
-  DELETE_TAC_NHAN_CHUC_NANG_PHAN_MEM: remove('tacNhanChucNangPhanMemList')
+  DELETE_TAC_NHAN_CHUC_NANG_PHAN_MEM: removeByIds('tacNhanChucNangPhanMemList')
 }
 
 export const actions = {
@@ -54,7 +54,6 @@ export const actions = {
 
       })
 
-      console.log("data", data.rows)
       commit('SET_TAC_NHAN_CHUC_NANG_PHAN_MEM_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,

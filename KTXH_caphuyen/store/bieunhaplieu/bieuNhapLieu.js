@@ -31,7 +31,7 @@ export const mutations = {
   SET_DELETED_BIEU_NHAP_LIEU: set('deletedbnlList'),
 
   SET_PAGINATION: set('pagination'),
-  
+
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_BIEU_NHAP_LIEU: set('bnl'),
@@ -57,7 +57,6 @@ export const actions = {
         pageSize: payload.pageSize
       })
 
-      console.log("data", data.rows)
       commit('SET_BIEU_NHAP_LIEU_LIST', data.rows)
       commit('SET_PAGINATION', {
         total: data.total,
@@ -157,7 +156,7 @@ export const actions = {
     const { bieuNhapLieu } = state.api
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieu}/delete`, {id: bnl})
+      const data = await this.$axios.$post(`${bieuNhapLieu}/delete`, { id: bnl })
 
       commit('DELETE_BIEU_NHAP_LIEU', data)
       commit('SET_PAGINATION_KEY', {

@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        checkbox: '2.25%',
+        index: '4.25%',
+        action: '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -58,23 +63,32 @@ export default {
           align: "center",
           sorttable: true,
           value: "ma",
-          type: "string"
+          type: "string",
+          width: "8.5%"
         },
         {
           text: "Nội dung",
           align: "center",
           sorttable: false,
           value: "ten",
-          type: "string"
+          type: "string",
+          width: "29.75%"
         },
         {
           text: "Ghi chú",
           align: "center",
           sorttable: false,
           value: "ghiChu",
-          type: "string"
+          type: "string",
+          width: "38.25%"
         },
-        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+        {
+          text: "Hiệu lực",
+          align: "center",
+          value: "hieuLuc",
+          type: "",
+          width: "8.5%"
+        }
       ],
       snackbar: false,
       notifiedType: "success",
@@ -119,17 +133,16 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm mới chỉ tiêu phân tổ chi tiết";
       this.chiTieuPhanToChiTiet = {
-        ma: "",
-        ten: "",
-        chiTieuPhanToId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ma: null,
+        ten: null,
+        chiTieuPhanToId: null,
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa chỉ tiêu phân tổ chi tiết";
       await this.getChiTieuPhanToChiTiet(Number(item.id));
       this.chiTieuPhanToChiTiet = Object.assign(
         {},
@@ -163,6 +176,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieuPhanToChiTiet = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

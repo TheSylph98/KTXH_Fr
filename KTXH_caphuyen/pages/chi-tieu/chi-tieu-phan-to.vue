@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        checkbox: '2.25%',
+        index: '4.25%',
+        action: '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -44,7 +49,7 @@ export default {
   },
   data() {
     return {
-      title: "Nhóm Chỉ Tiêu Phân Tổ",
+      title: "Chỉ Tiêu Phân Tổ",
       dialog: false,
       isUpdate: false,
       overlay: false,
@@ -56,28 +61,32 @@ export default {
           align: "center",
           sorttable: true,
           value: "ma",
-          type: "string"
+          type: "string",
+          width: "8.5%"
         },
         {
           text: "Nội Dung",
           align: "center",
           sorttable: false,
-          value: "noiDung",
-          type: "string"
+          value: "ten",
+          type: "string",
+          width: "29.75%"
         },
         {
           text: "Ghi chú",
           align: "center",
           sorttable: false,
           value: "ghiChu",
-          type: "string"
+          type: "string",
+          width: "38.25%"
         },
         {
           text: "Hiệu lực",
           align: "center",
           sorttable: true,
           value: "hieuLuc",
-          type: ""
+          type: "",
+          width: "8.5%"
         }
       ],
       snackbar: false,
@@ -122,14 +131,15 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm chỉ tiêu phân tổ mới";
       this.chiTieuPhanTo = {
-        ma: "",
-        ten: "",
+        ma: null,
+        ten: null,
         ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa chỉ tiêu phân tổ";
       await this.getChiTieuPhanTo(Number(item.id));
       this.chiTieuPhanTo = Object.assign({}, this.chi_tieu_phan_to);
       this.isUpdate = true;
@@ -160,6 +170,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieuPhanTo = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {
