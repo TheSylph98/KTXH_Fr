@@ -149,6 +149,7 @@ export default {
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa biểu nhập liệu trường nhập liệu";
       await this.getBieuNhapLieuTruongNhapLieu(Number(item.id));
       this.bnlTNL = Object.assign({}, this.bnlTruongNhapLieu);
       console.log("bnldsdhfd", this.bnlTNL);
@@ -180,6 +181,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.bnlTNL = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

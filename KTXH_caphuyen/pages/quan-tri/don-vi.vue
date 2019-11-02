@@ -136,17 +136,18 @@ export default {
       this.dv = {
         ma: null,
         ten: null,
-        diaChi: null,
-        soDienThoai: null,
-        donViChaId: null,
-        email: null,
-        ghiChu: null,
+        diaChi: "",
+        soDienThoai: "",
+        donViChaId: 0,
+        email: "",
+        ghiChu: "",
         laDonVi: false
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa đơn vị";
       await this.getQTDonVi(Number(item.id));
       this.dv = Object.assign({}, this.donVi);
       this.isUpdate = true;
@@ -175,6 +176,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.dv = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

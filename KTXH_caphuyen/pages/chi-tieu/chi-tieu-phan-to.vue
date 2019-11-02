@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      title: "Nhóm Chỉ Tiêu Phân Tổ",
+      title: "Chỉ Tiêu Phân Tổ",
       dialog: false,
       isUpdate: false,
       overlay: false,
@@ -133,12 +133,13 @@ export default {
       this.chiTieuPhanTo = {
         ma: null,
         ten: null,
-        ghiChu: null
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa chỉ tiêu phân tổ";
       await this.getChiTieuPhanTo(Number(item.id));
       this.chiTieuPhanTo = Object.assign({}, this.chi_tieu_phan_to);
       this.isUpdate = true;
@@ -169,6 +170,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieuPhanTo = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

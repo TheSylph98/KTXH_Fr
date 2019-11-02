@@ -5,6 +5,7 @@
       <v-menu v-model="menu" :close-on-content-click="false" transition="scale-transition" offset-y>
         <template v-slot:activator="{ on }">
           <v-text-field
+            dense
             v-model="date"
             prepend-icon="mdi-calendar-month"
             readonly
@@ -13,12 +14,13 @@
             @keydown="keyDownFunction"
           >
             <template slot="append-outer">
-              <v-menu :close-delay="3000" :close-on-content-click="false" offset-y dense>
+              <v-menu dense :close-delay="3000" :close-on-content-click="false" offset-y>
                 <template v-slot:activator="{ on }">
                   <v-icon size="16" dense v-on="on">mdi-filter</v-icon>
                 </template>
                 <v-list width="12em" dense>
                   <v-list-item
+                    dense
                     v-for="(item, index) in operators"
                     :key="index"
                     @click="changeChoosenOperator(item)"
@@ -42,7 +44,14 @@
             </template>
           </v-text-field>
         </template>
-        <v-date-picker v-model="date" type="month" no-title scrollable @click:month="saveMonth"></v-date-picker>
+        <v-date-picker
+          dense
+          v-model="date"
+          type="month"
+          no-title
+          scrollable
+          @click:month="saveMonth"
+        ></v-date-picker>
       </v-menu>
     </div>
 

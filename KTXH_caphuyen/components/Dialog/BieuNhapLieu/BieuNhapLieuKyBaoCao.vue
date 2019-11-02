@@ -8,12 +8,18 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="kyBaoCao.ma" label="Kí hiệu" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field
+              dense
+              v-model="kyBaoCao.ma"
+              label="Kí hiệu*"
+              prepend-inner-icon="mdi-codepen"
+            ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="8">
             <v-text-field
+              dense
               v-model="kyBaoCao.ten"
-              label="Tên biểu nhập liệu"
+              label="Tên biểu nhập liệu*"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
@@ -23,7 +29,7 @@
             <SelectedWithSearch
               :items="bieuNhapLieuList"
               :itemObj="bieuNhapLieuObj"
-              label="Biểu nhập liệu"
+              label="Biểu nhập liệu*"
               icon="mdi-apps"
               @select="kyBaoCao.bieuNhapLieuId = $event.id"
               @search="getSearchBieuNhapLieuList($event)"
@@ -33,7 +39,7 @@
             <SelectedWithSearch
               :items="kyBaoCaoList"
               :itemObj="kyBaoCaoObj"
-              label="Ky Bao Cao"
+              label="Kỳ Báo Cáo*"
               icon="mdi-apps"
               @select="kyBaoCao.qlKyBaoCaoId = $event.id"
               @search="getSearchKyBaoCaoList($event)"
@@ -42,14 +48,13 @@
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" md="8">
-            <v-textarea v-model="kyBaoCao.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+            <v-textarea
+              dense
+              v-model="kyBaoCao.ghiChu"
+              label="Ghi Chú"
+              prepend-inner-icon="mdi-note"
+            ></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-            <v-switch v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-          </v-col>
-          <v-col cols="12" sm="6" md="8">
-            <v-switch v-model="kyBaoCao.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>
@@ -72,16 +77,7 @@ export default {
   },
   props: {
     kyBaoCao: {
-      type: Object,
-      default: {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        qlKyBaoCaoId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
-      }
+      type: Object
     },
     formTitle: {
       type: String,
@@ -93,7 +89,6 @@ export default {
     ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList", "searchKyBaoCaoList"]),
 
     bieuNhapLieuList() {
-      //console.log(this.bnlList)
       if (this.searchBnlList.length > 0) return this.searchBnlList;
       else return this.bnlList;
     },

@@ -133,12 +133,13 @@ export default {
       this.ctNhom = {
         ma: null,
         ten: null,
-        ghiChu: null
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa chỉ tiêu nhóm";
       await this.getChiTieuNhom(Number(item.id));
       this.ctNhom = Object.assign({}, this.chi_tieu_nhom);
       this.isUpdate = true;
@@ -167,6 +168,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.ctNhom = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

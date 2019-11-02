@@ -131,7 +131,6 @@ export const actions = {
     const res = { isSuccess: false }
 
     const { bieuNhapLieuChiTieu } = state.api
-    // const uuidv1 = require('uuid/v1');
     bnlChiTieu.uid = uuidv1();
 
     bnlChiTieu.bieuNhapLieuId = bnlChiTieu.bieuNhapLieuId ? Number(bnlChiTieu.bieuNhapLieuId) : bnlChiTieu.bieuNhapLieuId

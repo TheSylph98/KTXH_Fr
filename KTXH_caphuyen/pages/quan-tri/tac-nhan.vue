@@ -129,12 +129,13 @@ export default {
         ma: null,
         ten: null,
         sysCapHanhChinhId: null,
-        ghiChu: null
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa tác nhân";
       await this.getQTTacNhan(Number(item.id));
       this.tN = Object.assign({}, this.tacNhan);
       this.isUpdate = true;
@@ -163,6 +164,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.tN = {};
+      this.titleDialog = "";
     },
 
     async saveTacNhanDialog() {

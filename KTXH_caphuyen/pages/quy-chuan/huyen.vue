@@ -137,17 +137,18 @@ export default {
         ten: null,
         qcTinhId: null,
         sysCapDonViHanhChinh: null,
-        loaiDonViHanhChinh: null,
+        loaiDonViHanhChinh: "",
         nongThon: false,
         bienGioi: false,
         haiDao: false,
         vungDBKhoKhan: false,
-        ghiChu: null
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa huyện";
       await this.getHuyen(Number(item.id));
       this.huyen_data = Object.assign({}, this.huyen);
       this.isUpdate = true;
@@ -176,6 +177,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.huyen_data = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

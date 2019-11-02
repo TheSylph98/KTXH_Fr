@@ -165,20 +165,21 @@ export default {
         capTongHopId: null,
         chiTieuNhomId: null,
         chiTieuPhanToId: null,
-        chiTieuChaId: null,
+        chiTieuChaId: 0,
         congDonTuDuoiLen: true,
         congTheoMa: false,
         congThucCong: null,
         coPhanToKhong: true,
         donViTinh: null,
-        tuSo: null,
-        mauSo: null,
-        ghiChu: null
+        tuSo: "",
+        mauSo: "",
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa chỉ tiêu";
       await this.getChiTieu(Number(item.id));
       this.chiTieu = Object.assign({}, this.chi_tieu);
       this.isUpdate = true;
@@ -207,6 +208,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieu = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

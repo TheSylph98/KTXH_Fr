@@ -134,12 +134,13 @@ export default {
         ten: null,
         bieuNhapLieuId: null,
         qlKyBaoCaoId: null,
-        ghiChu: null
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa biểu nhập liệu kỳ báo cáo";
       await this.getBieuNhapLieuKyBaoCao(Number(item.id));
       this.kyBaoCao = Object.assign({}, this.bnlKyBaoCao);
       this.isUpdate = true;
@@ -170,6 +171,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.kyBaoCao = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

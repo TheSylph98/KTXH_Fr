@@ -136,14 +136,15 @@ export default {
       this.chiTieu = {
         ma: null,
         ten: null,
-        bieuNhapLieuId: null,
-        chiTieuId: null,
-        ghiChu: null
+        bieuNhapLieuId: 0,
+        chiTieuId: 0,
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa biểu nhập liệu chỉ tiêu";
       await this.getBieuNhapLieuChiTieu(Number(item.id));
       this.chiTieu = Object.assign({}, this.bnlChiTieu);
       this.isUpdate = true;
@@ -174,6 +175,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieu = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

@@ -7,39 +7,40 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="tacNhan.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <v-text-field
+              dense
+              v-model="tacNhan.ma"
+              label="Mã tác nhân*"
+              prepend-inner-icon="mdi-codepen"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="6">
+            <v-text-field
+              dense
               v-model="tacNhan.ten"
-              label="Tên tác nhân"
+              label="Tên tác nhân*"
               prepend-inner-icon="mdi-account"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="12">
             <SelectedWithSearch
               :items="capHanhChinhList"
               :itemObj="capHanhchinhObj"
-              label="Cấp hành chính"
+              label="Cấp hành chính*"
               icon="mdi-apps"
               @select="tacNhan.sysCapHanhChinhId = $event.id"
               @search="getSearchCapHanhChinhList($event)"
             />
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="12">
             <v-textarea
+              dense
               v-model="tacNhan.ghiChu"
               label="Chức năng, Nhiệm vụ"
               prepend-inner-icon="mdi-star"
             ></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="tacNhan.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="tacNhan.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>

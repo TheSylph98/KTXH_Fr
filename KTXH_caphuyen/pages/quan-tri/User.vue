@@ -139,19 +139,21 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
-      this.titleDialog = "Thêm user mới";
+      this.titleDialog = "Thêm người dùng mới";
       this.user_data = {
         ma: null,
         ten: null,
         matKhau: null,
-        soDienThoai: null,
-        email: null,
-        qtDonViId: null
+        soDienThoai: "",
+        email: "",
+        qtDonViId: 0,
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa người dùng";
       await this.getQTUser(Number(item.id));
       this.user_data = Object.assign({}, this.user);
       this.isUpdate = true;
@@ -180,6 +182,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.user_data = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

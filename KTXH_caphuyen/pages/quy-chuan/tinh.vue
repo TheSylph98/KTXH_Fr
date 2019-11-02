@@ -10,7 +10,7 @@
       :notification="notification"
       :timeout="timeout"
       :tableWidth="{
-        checkbox: '50%',
+        checkbox: '2.25%',
         index: '4.25%',
         action: '8.5%'
       }"
@@ -130,17 +130,18 @@ export default {
         ma: null,
         ten: null,
         sysCapDonViHanhChinh: null,
-        loaiDonViHanhChinh: null,
+        loaiDonViHanhChinh: "",
         nongThon: false,
         bienGioi: false,
         haiDao: false,
         vungDBKhoKhan: false,
-        ghiChu: null
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa tỉnh";
       await this.getTinh(Number(item.id));
       this.tinh_data = Object.assign({}, this.tinh);
       this.isUpdate = true;
@@ -169,6 +170,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.tinh_data = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

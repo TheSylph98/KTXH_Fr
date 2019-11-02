@@ -9,6 +9,7 @@
         <v-row>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="chiTieuPhanToChiTiet.ma"
               label="Kí hiệu*"
               prepend-inner-icon="mdi-codepen"
@@ -16,6 +17,7 @@
           </v-col>
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="chiTieuPhanToChiTiet.ten"
               label="Tên chỉ tiêu phân tổ chi tiết*"
               prepend-inner-icon="mdi-drag"
@@ -33,17 +35,12 @@
           </v-col>
           <v-col cols="12">
             <v-textarea
+              dense
               v-model="chiTieuPhanToChiTiet.ghiChu"
               label="Ghi Chú"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="chiTieuPhanToChiTiet.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-                </v-col>
-                <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="chiTieuPhanToChiTiet.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>

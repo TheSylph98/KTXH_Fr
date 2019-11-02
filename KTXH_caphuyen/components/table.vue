@@ -51,37 +51,32 @@
           </td>
         </tr>
       </template>
-      <template slot="item" slot-scope="row">
-        <tr class="column-content">
-          <td v-for="(el, inx) in row.headers" :key="inx" class="text-center">
-            <span v-if="el.value === 'data-table-select'">
-              <v-checkbox v-model="row.isSelected" @change="changeSelectItem($event, row.item)"></v-checkbox>
-            </span>
 
-            <span
-              v-else-if="el.value === 'index'"
-            >{{row.index + 1 + pagination.page * pagination.pageSize}}</span>
-            <span v-else-if="el.value === 'action'">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
-                </template>
-                <span>Chỉnh sửa</span>
-              </v-tooltip>
+      <template slot="item.id" slot-scope="column">
+        <span>{{ indexObject[column.item.id] }}</span>
+      </template>
 
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
-                </template>
-                <span>Xóa</span>
-              </v-tooltip>
-            </span>
-            <span
-              v-else-if="getTableValue(row.item, el.value)"
-            >{{ getTableValue(row.item, el.value) }}</span>
-            <span v-else class="empty-content"></span>
-          </td>
-        </tr>
+      <template slot="item.hieuLuc" slot-scope="column">
+        <span v-if="column.item.hieuLuc">Có</span>
+        <span v-else>Không</span>
+      </template>
+
+      <template slot="item.action" slot-scope="row">
+        <span>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
+            </template>
+            <span>Chỉnh sửa</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
+            </template>
+            <span>Xóa</span>
+          </v-tooltip>
+        </span>
       </template>
 
       <template v-slot:no-data>
@@ -251,7 +246,7 @@ export default {
             text: "STT",
             align: "center",
             width: this.tableWidth.index,
-            value: "index"
+            value: "id"
           }
         ].concat(this.headers, [
           {
@@ -285,6 +280,17 @@ export default {
         pageSize: pageSize,
         page: Number(this.pagination.page) + 1
       };
+    },
+
+    indexObject() {
+      const indexObject = {};
+      Object.keys(this.items).forEach(el => {
+        const key = this.items[el].id;
+        if (key) {
+          indexObject[key] = Number(el) + 1;
+        }
+      });
+      return indexObject;
     }
   },
 
@@ -360,6 +366,10 @@ export default {
   }
 
   .v-data-table {
+    td.text-start {
+      text-align: center;
+    }
+
     .v-data-table-header {
       th {
         border-top: 1px solid rgba(0, 0, 0, 0.12);

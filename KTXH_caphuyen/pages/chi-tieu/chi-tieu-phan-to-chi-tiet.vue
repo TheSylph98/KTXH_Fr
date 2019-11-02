@@ -136,12 +136,13 @@ export default {
         ma: null,
         ten: null,
         chiTieuPhanToId: null,
-        ghiChu: null
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa chỉ tiêu phân tổ chi tiết";
       await this.getChiTieuPhanToChiTiet(Number(item.id));
       this.chiTieuPhanToChiTiet = Object.assign(
         {},
@@ -175,6 +176,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieuPhanToChiTiet = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

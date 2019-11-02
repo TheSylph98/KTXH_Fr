@@ -144,7 +144,7 @@ export default {
       this.kyBC = {
         nam: null,
         ma: null,
-        ten: null,
+        ten: "",
         //sysCapHanhChinhId: 0,
         ngayMo: null,
         ngayDong: null,
@@ -153,12 +153,13 @@ export default {
         ngayBaoCaoHuyen: null,
         ngayBaoCaoTinh: null,
         ngayBaoCaoTW: null,
-        trangThai: null
+        trangThai: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa kỳ báo cáo";
       await this.getKyBaoCao(Number(item.id));
       this.kyBC = Object.assign({}, this.kyBaoCao);
       this.isUpdate = true;

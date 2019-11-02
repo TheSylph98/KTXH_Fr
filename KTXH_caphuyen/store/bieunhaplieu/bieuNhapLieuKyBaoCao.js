@@ -129,7 +129,6 @@ export const actions = {
   async addBieuNhapLieuKyBaoCao({ state, commit }, bnlKyBaoCao) {
     const res = { isSuccess: false }
     const { bieuNhapLieuKyBaoCao } = state.api
-    // const uuidv1 = require('uuid/v1');
     bnlKyBaoCao.uid = uuidv1();
     bnlKyBaoCao.bieuNhapLieuId = bnlKyBaoCao.bieuNhapLieuId ? Number(bnlKyBaoCao.bieuNhapLieuId) : bnlKyBaoCao.bieuNhapLieuId
     bnlKyBaoCao.kyBaoCaoId = bnlKyBaoCao.kyBaoCaoId ? Number(bnlKyBaoCao.kyBaoCaoId) : bnlKyBaoCao.kyBaoCaoId
