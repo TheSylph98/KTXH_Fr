@@ -8,7 +8,7 @@
       show-select
       hide-default-footer
       dense
-      :items-per-page.sync="paginationValue.total"
+      :items-per-page="200"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
