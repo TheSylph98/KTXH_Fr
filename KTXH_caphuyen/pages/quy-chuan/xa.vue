@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -56,6 +61,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "ma",
+          width: "12.75%",
           type: "string"
         },
         {
@@ -63,6 +69,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ten",
+          width: "34%",
           type: "string"
         },
         {
@@ -70,6 +77,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ghiChu",
+          width: "29.75%",
           type: "string"
         },
         {
@@ -77,6 +85,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "hieuLuc",
+          width: "8.5%",
           type: ""
         }
       ],
@@ -122,18 +131,16 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm xã mới";
       this.xa_data = {
-        ma: "",
-        ten: "",
-        qcHuyenId: "",
-        sysCapDonViHanhChinh: 0,
-        loaiDonViHanhChinh: "",
-        nongThon: 1,
-        bienGioi: 0,
-        haiDao: 0,
-        vungDBKhoKhan: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ma: null,
+        ten: null,
+        qcHuyenId: null,
+        sysCapDonViHanhChinh: null,
+        loaiDonViHanhChinh: null,
+        nongThon: true,
+        bienGioi: false,
+        haiDao: false,
+        vungDBKhoKhan: false,
+        ghiChu: null
       };
     },
 
@@ -179,7 +186,7 @@ export default {
         this.closeDialog();
       }
 
-      if (isSuccess) {
+      if (res.isSuccess) {
         this.notifiedType = "success";
         this.notification = this.isUpdate
           ? "Cập nhật xã thành công!"

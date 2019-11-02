@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        checkbox: '50%',
+        index: '4.25%',
+        action: '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -56,6 +61,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "ma",
+          width: "12.75%",
           type: "string"
         },
         {
@@ -63,6 +69,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ten",
+          width: "34%",
           type: "string"
         },
         {
@@ -70,6 +77,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ghiChu",
+          width: "29.75%",
           type: "string"
         },
         {
@@ -77,6 +85,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "hieuLuc",
+          width: "8.5%",
           type: ""
         }
       ],
@@ -118,15 +127,15 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm tỉnh mới";
       this.tinh_data = {
-        ma: "",
-        ten: "",
-        sysCapDonViHanhChinh: 0,
-        loaiDonViHanhChinh: "",
+        ma: null,
+        ten: null,
+        sysCapDonViHanhChinh: null,
+        loaiDonViHanhChinh: null,
         nongThon: false,
         bienGioi: false,
         haiDao: false,
         vungDBKhoKhan: false,
-        ghiChu: ""
+        ghiChu: null
       };
     },
 

@@ -70,11 +70,6 @@ export default {
   components: {
     SelectedWithSearch
   },
-  data() {
-    return {
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
-    };
-  },
   props: {
     tinh: {
       type: Object

@@ -131,7 +131,7 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     xa.uid = uuidv1();
-    xa.qcHuyenId = Number(xa.qcHuyenId);
+    xa.qcHuyenId = xa.qcHuyenId ? Number(xa.qcHuyenId) : xa.qcHuyenId;
 
     try {
       const data = await this.$axios.$post(`${qcXa}/create`, xa)

@@ -131,7 +131,7 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     tacNhan.uid = uuidv1();
-    tacNhan.sysCaphanhChinhId = Number(tacNhan.sysCaphanhChinhId);
+    tacNhan.sysCaphanhChinhId = tacNhan.sysCaphanhChinhId ? Number(tacNhan.sysCaphanhChinhId) : tacNhan.sysCaphanhChinhId;
     try {
       const data = await this.$axios.$post(`${qtTacNhan}/create`, tacNhan)
 

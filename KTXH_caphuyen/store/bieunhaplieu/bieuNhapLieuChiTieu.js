@@ -5,6 +5,7 @@ import {
   update,
   removeByIds
 } from '@/util/actions'
+import uuidv1 from 'uuid/v1'
 
 export const state = () => {
   return {
@@ -130,15 +131,15 @@ export const actions = {
     const res = { isSuccess: false }
 
     const { bieuNhapLieuChiTieu } = state.api
-    const uuidv1 = require('uuid/v1');
+    // const uuidv1 = require('uuid/v1');
     bnlChiTieu.uid = uuidv1();
 
-    bnlChiTieu.bieuNhapLieuId = Number(bnlChiTieu.bieuNhapLieuId)
-    bnlChiTieu.chiTieuId = Number(bnlChiTieu.chiTieuId)
+    bnlChiTieu.bieuNhapLieuId = bnlChiTieu.bieuNhapLieuId ? Number(bnlChiTieu.bieuNhapLieuId) : bnlChiTieu.bieuNhapLieuId
+    bnlChiTieu.chiTieuId = bnlChiTieu.chiTieuId ? Number(bnlChiTieu.chiTieuId) : bnlChiTieu.chiTieuId = bnlChiTieu.chiTieuId
 
 
     try {
-      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/create`, { id: bnlChiTieu })
+      const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/create`, bnlChiTieu)
 
       commit('ADD_BIEU_NHAP_LIEU_CHI_TIEU', { newEl: data })
       commit('SET_PAGINATION_KEY', {

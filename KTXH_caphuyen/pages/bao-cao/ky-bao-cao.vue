@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        checkbox: '2.25%',
+        index: '4.25%',
+        action: '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -56,41 +61,47 @@ export default {
           align: "center",
           sorttable: true,
           value: "nam",
-          type: "number"
+          type: "number",
+          width: "8.5%"
         },
         {
           text: "Mã",
           align: "center",
           sorttable: true,
           value: "ma",
-          type: "string"
+          type: "string",
+          width: "21.25%"
         },
         {
           text: "Kỳ báo cáo",
           align: "center",
           sorttable: false,
           value: "ten",
-          type: "string"
+          type: "string",
+          width: "8.5%"
         },
         {
           text: "Ngày mở báo cáo",
           align: "center",
           sorttable: true,
           value: "ngayMo",
-          type: "date"
+          type: "date",
+          width: "8.5%"
         },
         {
           text: "Ngày đóng báo cáo",
           align: "center",
           sorttable: true,
           value: "ngayDong",
-          type: "date"
+          type: "date",
+          width: "8.5%"
         },
         {
           text: "Trạng Thái",
           align: "center",
           value: "trangThai",
-          type: "string"
+          type: "string",
+          width: "25.5%"
         }
       ],
       snackbar: false,
@@ -131,20 +142,18 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm kỳ báo cáo mới";
       this.kyBC = {
-        nam: "",
-        ma: "",
-        ten: "",
+        nam: null,
+        ma: null,
+        ten: null,
         //sysCapHanhChinhId: 0,
-        ngayMo: "",
-        ngayDong: "",
-        ngayBatDau: "",
-        ngayTongHop: "",
-        ngayBaoCaoHuyen: "",
-        ngayBaoCaoTinh: "",
-        ngayBaoCaoTW: "",
-        trangThai: "",
-        hieuLuc: 1,
-        xoa: 0
+        ngayMo: null,
+        ngayDong: null,
+        ngayBatDau: null,
+        ngayTongHop: null,
+        ngayBaoCaoHuyen: null,
+        ngayBaoCaoTinh: null,
+        ngayBaoCaoTW: null,
+        trangThai: null
       };
     },
 

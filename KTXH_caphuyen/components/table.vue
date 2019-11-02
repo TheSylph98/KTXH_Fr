@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-table">
+  <div class="custom-table" ::style="{ '--check-box-width': checkBoxWidth}">
     <v-data-table
       v-model="selectItems"
       :headers="headerTables"
@@ -25,13 +25,13 @@
       <template slot="body.prepend" class="search">
         <tr>
           <td>
-            <div class="empty-content"></div>
+            <span class="empty-content"></span>
           </td>
           <td v-for="(item, index) in headerTables" :key="index" :class="getClass(index)">
-            <div v-if="item.value === 'index'" class="empty-content"></div>
-            <div v-else-if="item.value === 'action'">
+            <span v-if="item.value === 'index'" class="empty-content"></span>
+            <span v-else-if="item.value === 'action'">
               <v-btn color="warning" dark rounded small @click="$emit('filter', search)">Lọc</v-btn>
-            </div>
+            </span>
             <StringFilter
               v-if="item.type === 'string'"
               @change="filterChange($event, item.value)"
@@ -47,14 +47,13 @@
               @change="filterChange($event, item.value)"
               @enter="$emit('filter', search)"
             />
-            <div v-else></div>
+            <span v-else></span>
           </td>
         </tr>
       </template>
-
       <template slot="item" slot-scope="row">
-        <tr>
-          <td v-for="(el, inx) in row.headers" :key="inx" class="column-content">
+        <tr class="column-content">
+          <td v-for="(el, inx) in row.headers" :key="inx" class="text-center">
             <span v-if="el.value === 'data-table-select'">
               <v-checkbox v-model="row.isSelected" @change="changeSelectItem($event, row.item)"></v-checkbox>
             </span>
@@ -80,7 +79,7 @@
             <span
               v-else-if="getTableValue(row.item, el.value)"
             >{{ getTableValue(row.item, el.value) }}</span>
-            <div v-else class="empty-content"></div>
+            <span v-else class="empty-content"></span>
           </td>
         </tr>
       </template>
@@ -217,6 +216,17 @@ export default {
     notifiedType: {
       type: String,
       default: "success"
+    },
+
+    tableWidth: {
+      type: Object,
+      default() {
+        return {
+          index: null,
+          checkbox: null,
+          action: null
+        };
+      }
     }
   },
 
@@ -230,15 +240,35 @@ export default {
   },
 
   computed: {
+    checkBoxWidth() {
+      return this.tableWidth.checkbox;
+    },
+
     headerTables() {
       if (this.showIndex) {
-        return [{ text: "STT", align: "center", value: "index" }].concat(
-          this.headers,
-          [{ text: "Thao tác", align: "center", value: "action" }]
-        );
+        return [
+          {
+            text: "STT",
+            align: "center",
+            width: this.tableWidth.index,
+            value: "index"
+          }
+        ].concat(this.headers, [
+          {
+            text: "Thao tác",
+            width: this.tableWidth.action,
+            align: "center",
+            value: "action"
+          }
+        ]);
       } else
         return this.headers.concat([
-          { text: "Thao tác", align: "center", value: "action" }
+          {
+            text: "Thao tác",
+            width: this.tableWidth.action,
+            align: "center",
+            value: "action"
+          }
         ]);
     },
 
@@ -338,6 +368,10 @@ export default {
 
       th:not(:last-child) {
         border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      th.text-start {
+        width: var(--check-box-width);
       }
     }
     tbody {

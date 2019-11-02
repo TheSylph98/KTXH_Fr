@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="handleDeleted($event)"
       @clickAdd="clickAddNew"
@@ -52,10 +57,34 @@ export default {
       overlay: false,
       titleDialog: "",
       headers: [
-        { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
-        { text: "Tên biểu", align: "center", value: "ten", type: "string" },
-        { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
-        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+        {
+          text: "Kí hiệu",
+          align: "center",
+          value: "ma",
+          type: "string",
+          width: "8.5%"
+        },
+        {
+          text: "Tên biểu",
+          align: "center",
+          value: "ten",
+          type: "string",
+          width: "29.75%"
+        },
+        {
+          text: "Ghi chú",
+          align: "center",
+          value: "ghiChu",
+          type: "string",
+          width: "38.25%"
+        },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          value: "hieuLuc",
+          type: "",
+          width: "8.5%"
+        }
       ],
       bnlTNL: {},
       snackbar: false,
@@ -110,11 +139,11 @@ export default {
       this.dialog = true;
       this.titleDialog = "Thêm mới biểu nhập liệu trường nhập liệu";
       this.bnlTNL = {
-        ma: "",
-        ten: "",
-        bieuNhapLieuId: 0,
-        truongNhapLieuId: 0,
-        ghiChu: ""
+        ma: null,
+        ten: null,
+        bieuNhapLieuId: null,
+        truongNhapLieuId: null,
+        ghiChu: null
       };
     },
 

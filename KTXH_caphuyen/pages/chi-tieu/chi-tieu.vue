@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        checkbox: '2.25%',
+        index: '4.25%',
+        action: '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -56,37 +61,56 @@ export default {
           align: "center",
           sorttable: false,
           value: "belongsToChiTieuNhom.ten",
-          type: "string"
+          type: "string",
+          width: "8.5%"
         },
         {
           text: "Mã",
           align: "center",
           sorttable: true,
           value: "ma",
-          type: "string"
+          type: "string",
+          width: "8.5%"
         },
         {
           text: "Tên chỉ tiêu",
           align: "center",
           sorttable: false,
           value: "ten",
-          type: "string"
+          type: "string",
+          width: "29.75%"
         },
         {
           text: "Đơn vị tính",
           align: "center",
           sorttable: false,
           value: "donViTinh",
-          type: "string"
+          type: "string",
+          width: "8.5%"
         },
         {
           text: "Phân tổ",
           align: "center",
           sorttable: false,
           value: "belongsToChiTieuPhanTo.ten",
-          type: ""
+          type: "",
+          width: "12.75%"
         },
-        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+        {
+          text: "Loại",
+          align: "center",
+          sorttable: false,
+          value: "",
+          type: "",
+          width: "8.5%"
+        },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          value: "hieuLuc",
+          type: "",
+          width: "8.5%"
+        }
       ],
       snackbar: false,
       notifiedType: "success",
@@ -135,21 +159,21 @@ export default {
       this.dialog = true;
       this.formTitle = "Thêm chỉ tiêu mới";
       this.chiTieu = {
-        ma: "",
-        ten: "",
-        capNhapLieuId: 0,
-        capTongHopId: 0,
-        chiTieuNhomId: 0,
-        chiTieuPhanToId: 0,
-        chiTieuChaId: 0,
+        ma: null,
+        ten: null,
+        capNhapLieuId: null,
+        capTongHopId: null,
+        chiTieuNhomId: null,
+        chiTieuPhanToId: null,
+        chiTieuChaId: null,
         congDonTuDuoiLen: true,
-        congTheoMa: 0,
-        congThucCong: "",
-        coPhanToKhong: 1,
-        donViTinh: "",
-        tuSo: "",
-        mauSo: "",
-        ghiChu: ""
+        congTheoMa: false,
+        congThucCong: null,
+        coPhanToKhong: true,
+        donViTinh: null,
+        tuSo: null,
+        mauSo: null,
+        ghiChu: null
       };
     },
 

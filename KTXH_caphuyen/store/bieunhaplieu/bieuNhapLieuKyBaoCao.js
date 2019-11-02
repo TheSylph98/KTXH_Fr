@@ -131,8 +131,8 @@ export const actions = {
     const { bieuNhapLieuKyBaoCao } = state.api
     // const uuidv1 = require('uuid/v1');
     bnlKyBaoCao.uid = uuidv1();
-    bnlKyBaoCao.bieuNhapLieuId = Number(bnlKyBaoCao.bieuNhapLieuId)
-    bnlKyBaoCao.kyBaoCaoId = Number(bnlKyBaoCao.kyBaoCaoId)
+    bnlKyBaoCao.bieuNhapLieuId = bnlKyBaoCao.bieuNhapLieuId ? Number(bnlKyBaoCao.bieuNhapLieuId) : bnlKyBaoCao.bieuNhapLieuId
+    bnlKyBaoCao.kyBaoCaoId = bnlKyBaoCao.kyBaoCaoId ? Number(bnlKyBaoCao.kyBaoCaoId) : bnlKyBaoCao.kyBaoCaoId
 
 
     try {

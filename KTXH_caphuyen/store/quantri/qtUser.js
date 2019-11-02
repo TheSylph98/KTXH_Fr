@@ -131,7 +131,7 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     user.uid = uuidv1();
-    user.qtDonViId = Number(user.qtDonViId);
+    user.qtDonViId = user.qtDonViId ? Number(user.qtDonViId) : user.qtDonViId;
     try {
       const data = await this.$axios.$post(`${qtUser}/create`, user)
 
