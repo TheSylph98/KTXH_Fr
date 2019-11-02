@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -52,10 +57,11 @@ export default {
       huyen_data: {},
       headers: [
         {
-          text: "Mã",
+          text: "Mã định danh",
           align: "center",
           sorttable: true,
           value: "ma",
+          width: "12.75%",
           type: "string"
         },
         {
@@ -63,6 +69,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ten",
+          width: "34%",
           type: "string"
         },
         {
@@ -70,6 +77,7 @@ export default {
           align: "center",
           sorttable: false,
           value: "ghiChu",
+          width: "29.75%",
           type: "string"
         },
         {
@@ -77,6 +85,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "hieuLuc",
+          width: "8.5%",
           type: ""
         }
       ],
@@ -124,22 +133,22 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm huyện mới";
       this.huyen_data = {
-        ma: "",
-        ten: "",
-        qcTinhId: "",
-        sysCapDonViHanhChinh: 0,
+        ma: null,
+        ten: null,
+        qcTinhId: null,
+        sysCapDonViHanhChinh: null,
         loaiDonViHanhChinh: "",
         nongThon: false,
         bienGioi: false,
         haiDao: false,
         vungDBKhoKhan: false,
-        ghiChu: "",
-        hieuLuc: true
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa huyện";
       await this.getHuyen(Number(item.id));
       this.huyen_data = Object.assign({}, this.huyen);
       this.isUpdate = true;
@@ -168,6 +177,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.huyen_data = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

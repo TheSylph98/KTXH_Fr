@@ -8,23 +8,30 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="kyBaoCao.nam" label="Năm" prepend-inner-icon="mdi-timetable"></v-text-field>
+            <v-text-field
+              dense
+              v-model="kyBaoCao.nam"
+              label="Năm*"
+              prepend-inner-icon="mdi-timetable"
+            ></v-text-field>
           </v-col>
 
           <v-col cols="6">
-            <v-text-field v-model="kyBaoCao.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field dense v-model="kyBaoCao.ma" label="Mã*" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
 
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="kyBaoCao.ten"
-              label="Kỳ báo cáo"
+              label="Kỳ báo cáo*"
               prepend-inner-icon="mdi-database"
             ></v-text-field>
           </v-col>
 
           <v-col cols="6">
             <v-text-field
+              dense
               v-model="kyBaoCao.trangThai"
               label="Trạng thái"
               prepend-inner-icon="mdi-eye"
@@ -33,6 +40,7 @@
 
           <v-col cols="6">
             <v-menu
+              dense
               v-model="menu.ngayMo"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -40,18 +48,20 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  dense
                   v-model="kyBaoCao.ngayMo"
-                  label="Ngày mở"
+                  label="Ngày mở*"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="kyBaoCao.ngayMo" no-title @input="menu.ngayMo = false"></v-date-picker>
+              <v-date-picker dense v-model="kyBaoCao.ngayMo" no-title @input="menu.ngayMo = false"></v-date-picker>
             </v-menu>
           </v-col>
 
           <v-col cols="6">
             <v-menu
+              dense
               v-model="menu.ngayDong"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -59,18 +69,25 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  dense
                   v-model="kyBaoCao.ngayDong"
-                  label="Ngày đóng"
+                  label="Ngày đóng*"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="kyBaoCao.ngayDong" no-title @input="menu.ngayDong = false"></v-date-picker>
+              <v-date-picker
+                dense
+                v-model="kyBaoCao.ngayDong"
+                no-title
+                @input="menu.ngayDong = false"
+              ></v-date-picker>
             </v-menu>
           </v-col>
 
           <v-col cols="6">
             <v-menu
+              dense
               v-model="menu.ngayBatDau"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -78,13 +95,15 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  dense
                   v-model="kyBaoCao.ngayBatDau"
-                  label="Ngày bắt đầu cập nhật"
+                  label="Ngày bắt đầu cập nhật*"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
               <v-date-picker
+                dense
                 v-model="kyBaoCao.ngayBatDau"
                 no-title
                 @input="menu.ngayBatDau = false"
@@ -94,6 +113,7 @@
 
           <v-col cols="6">
             <v-menu
+              dense
               v-model="menu.ngayTongHop"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -101,13 +121,15 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  dense
                   v-model="kyBaoCao.ngayTongHop"
-                  label="Ngày kết thúc tổng hợp"
+                  label="Ngày kết thúc tổng hợp*"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
               <v-date-picker
+                dense
                 v-model="kyBaoCao.ngayTongHop"
                 no-title
                 @input="menu.ngayTongHop = false"
@@ -117,6 +139,7 @@
 
           <v-col cols="6">
             <v-menu
+              dense
               v-model="menu.ngayBaoCaoHuyen"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -124,13 +147,15 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  dense
                   v-model="kyBaoCao.ngayBaoCaoHuyen"
-                  label="Ngày hoàn thành báo cáo cấp huyện"
+                  label="Ngày hoàn thành báo cáo cấp huyện*"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
               <v-date-picker
+                dense
                 v-model="kyBaoCao.ngayBaoCaoHuyen"
                 no-title
                 @input="menu.ngayBaoCaoHuyen = false"
@@ -140,6 +165,7 @@
 
           <v-col cols="6">
             <v-menu
+              dense
               v-model="menu.ngayBaoCaoTinh"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -147,13 +173,15 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  dense
                   v-model="kyBaoCao.ngayBaoCaoTinh"
-                  label="Ngày hoàn thành báo cáo cấp tỉnh"
+                  label="Ngày hoàn thành báo cáo cấp tỉnh*"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
               <v-date-picker
+                dense
                 v-model="kyBaoCao.ngayBaoCaoTinh"
                 no-title
                 @input="menu.ngayBaoCaoTinh = false"
@@ -161,8 +189,9 @@
             </v-menu>
           </v-col>
 
-          <v-col cols="7">
+          <v-col cols="12">
             <v-menu
+              dense
               v-model="menu.ngayBaoCaoTW"
               :close-on-content-click="false"
               transition="scale-transition"
@@ -170,13 +199,15 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  dense
                   v-model="kyBaoCao.ngayBaoCaoTW"
-                  label="Ngày hoàn thành báo cáo cấp Trung ương"
+                  label="Ngày hoàn thành báo cáo cấp Trung ương*"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
               <v-date-picker
+                dense
                 v-model="kyBaoCao.ngayBaoCaoTW"
                 no-title
                 @input="menu.ngayBaoCaoTW = false"

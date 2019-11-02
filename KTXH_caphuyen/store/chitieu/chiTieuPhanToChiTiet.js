@@ -130,7 +130,7 @@ export const actions = {
     const { chiTieuPhanToChiTiet } = state.api
     const uuidv1 = require('uuid/v1');
     chi_tieu_phan_to_chi_tiet.uid = uuidv1();
-    chi_tieu_phan_to_chi_tiet.chiTieuPhanToId = Number(chi_tieu_phan_to_chi_tiet.chiTieuPhanToId)
+    chi_tieu_phan_to_chi_tiet.chiTieuPhanToId = chi_tieu_phan_to_chi_tiet.chiTieuPhanToId ? Number(chi_tieu_phan_to_chi_tiet.chiTieuPhanToId) : chi_tieu_phan_to_chi_tiet.chiTieuPhanToId;
 
     try {
       const data = await this.$axios.$post(`${chiTieuPhanToChiTiet}/create`, chi_tieu_phan_to_chi_tiet)

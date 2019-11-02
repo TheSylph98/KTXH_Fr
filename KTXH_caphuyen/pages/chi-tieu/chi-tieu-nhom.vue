@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        checkbox: '2.25%',
+        index: '4.25%',
+        action: '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -56,28 +61,32 @@ export default {
           align: "center",
           sorttable: true,
           value: "ma",
-          type: "string"
+          type: "string",
+          width: "8.5%"
         },
         {
           text: "Tên nhóm chỉ tiêu",
           align: "center",
           sorttable: false,
           value: "ten",
-          type: "string"
+          type: "string",
+          width: "29.75%"
         },
         {
           text: "Ghi Chú",
           align: "center",
           sorttable: false,
           value: "ghiChu",
-          type: "string"
+          type: "string",
+          width: "38.25%"
         },
         {
           text: "Hiệu lực",
           align: "center",
           sorttable: true,
           value: "hieuLuc",
-          type: ""
+          type: "",
+          width: "8.5%"
         }
       ],
       ctNhom: {},
@@ -122,14 +131,15 @@ export default {
       this.dialog = true;
       this.titleDialog = "Thêm chỉ tiêu nhóm mới";
       this.ctNhom = {
-        ma: "",
-        ten: "",
+        ma: null,
+        ten: null,
         ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa chỉ tiêu nhóm";
       await this.getChiTieuNhom(Number(item.id));
       this.ctNhom = Object.assign({}, this.chi_tieu_nhom);
       this.isUpdate = true;
@@ -158,6 +168,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.ctNhom = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {

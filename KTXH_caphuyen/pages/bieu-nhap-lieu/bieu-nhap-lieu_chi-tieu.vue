@@ -9,6 +9,11 @@
       :notifiedType="notifiedType"
       :notification="notification"
       :timeout="timeout"
+      :tableWidth="{
+        'checkbox': '2.25%',
+        'index': '4.25%',
+        'action': '8.5%'
+      }"
       @edit="clickEdit($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
@@ -50,10 +55,34 @@ export default {
       overlay: false,
       titleDialog: "",
       headers: [
-        { text: "Kí hiệu", align: "center", value: "ma", type: "string" },
-        { text: "Tên biểu", align: "center", value: "ten", type: "string" },
-        { text: "Ghi chú", align: "center", value: "ghiChu", type: "string" },
-        { text: "Hiệu lực", align: "center", value: "hieuLuc", type: "" }
+        {
+          text: "Kí hiệu",
+          align: "center",
+          value: "ma",
+          type: "string",
+          width: "8.5%"
+        },
+        {
+          text: "Tên biểu",
+          align: "center",
+          value: "ten",
+          type: "string",
+          width: "29.75%"
+        },
+        {
+          text: "Ghi chú",
+          align: "center",
+          value: "ghiChu",
+          type: "string",
+          width: "38.25%"
+        },
+        {
+          text: "Hiệu lực",
+          align: "center",
+          value: "hieuLuc",
+          type: "",
+          width: "8.5%"
+        }
       ],
       chiTieu: {},
       snackbar: false,
@@ -105,18 +134,17 @@ export default {
       this.isUpdate = false;
       this.titleDialog = "Thêm biểu nhập liệu chi tiêu mới";
       this.chiTieu = {
-        ma: "",
-        ten: "",
+        ma: null,
+        ten: null,
         bieuNhapLieuId: 0,
         chiTieuId: 0,
-        ghiChu: "",
-        hieuLuc: 1,
-        xoa: 0
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
+      this.titleDialog = "Chỉnh sửa biểu nhập liệu chỉ tiêu";
       await this.getBieuNhapLieuChiTieu(Number(item.id));
       this.chiTieu = Object.assign({}, this.bnlChiTieu);
       this.isUpdate = true;
@@ -147,6 +175,7 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.chiTieu = {};
+      this.titleDialog = "";
     },
 
     async saveChiTieuDialog() {
@@ -180,36 +209,6 @@ export default {
       await this.getBieuNhapLieuChiTieuList(value);
       this.overlay = false;
     }
-
-    // edit(item) {
-    //   this.dialog = true;
-    //   this.isUpdate = true;
-    //   this.titleDialog = "Chỉnh Sửa Biểu Nhập Liệu Kỳ Báo Cáo";
-    //   this.kyBaoCao = this.bnlKyBaoCaoList.indexOf(item);
-    // },
-
-    // delete(tiem) {
-    //   const index = this.items.indexOf(item);
-    //   confirm("Xác nhận xóa?") && this.items.splice(index, 1);
-    //   this.deleteBieuNhapLieuChiTieu(this.editedItem);
-    // },
-
-    // save() {
-    //   if (this.editedIndex > -1) {
-    //     Object.assign(this.items[this.editedIndex], this.editedItem);
-    //   } else {
-    //     this.items.push(this.editedItem);
-    //   }
-    //   this.close();
-    // },
-
-    // close() {
-    //   this.dialog = false;
-    //   setTimeout(() => {
-    //     this.editedItem = Object.assign({}, this.defaultItem);
-    //     this.editedIndex = -1;
-    //   }, 300);
-    // }
   }
 };
 </script>

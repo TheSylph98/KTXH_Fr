@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-table">
+  <div class="custom-table" ::style="{ '--check-box-width': checkBoxWidth}">
     <v-data-table
       v-model="selectItems"
       :headers="headerTables"
@@ -8,7 +8,7 @@
       show-select
       hide-default-footer
       dense
-      :items-per-page="20"
+      :items-per-page="pagination.total"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -25,13 +25,13 @@
       <template slot="body.prepend" class="search">
         <tr>
           <td>
-            <div class="empty-content"></div>
+            <span class="empty-content"></span>
           </td>
           <td v-for="(item, index) in headerTables" :key="index" :class="getClass(index)">
-            <div v-if="item.value === 'index'" class="empty-content"></div>
-            <div v-else-if="item.value === 'action'">
+            <span v-if="item.value === 'index'" class="empty-content"></span>
+            <span v-else-if="item.value === 'action'">
               <v-btn color="warning" dark rounded small @click="$emit('filter', search)">Lọc</v-btn>
-            </div>
+            </span>
             <StringFilter
               v-if="item.type === 'string'"
               @change="filterChange($event, item.value)"
@@ -47,42 +47,36 @@
               @change="filterChange($event, item.value)"
               @enter="$emit('filter', search)"
             />
-            <div v-else></div>
+            <span v-else></span>
           </td>
         </tr>
       </template>
 
-      <template slot="item" slot-scope="row">
-        <tr>
-          <td v-for="(el, inx) in row.headers" :key="inx" class="column-content">
-            <span v-if="el.value === 'data-table-select'">
-              <v-checkbox v-model="row.isSelected" @change="changeSelectItem($event, row.item)"></v-checkbox>
-            </span>
+      <template slot="item.id" slot-scope="column">
+        <span>{{ indexObject[column.item.id] }}</span>
+      </template>
 
-            <span
-              v-else-if="el.value === 'index'"
-            >{{row.index + 1 + pagination.page * pagination.pageSize}}</span>
-            <span v-else-if="el.value === 'action'">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
-                </template>
-                <span>Chỉnh sửa</span>
-              </v-tooltip>
+      <template slot="item.hieuLuc" slot-scope="column">
+        <span v-if="column.item.hieuLuc">Có</span>
+        <span v-else>Không</span>
+      </template>
 
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
-                </template>
-                <span>Xóa</span>
-              </v-tooltip>
-            </span>
-            <span
-              v-else-if="getTableValue(row.item, el.value)"
-            >{{ getTableValue(row.item, el.value) }}</span>
-            <div v-else class="empty-content"></div>
-          </td>
-        </tr>
+      <template slot="item.action" slot-scope="row">
+        <span>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
+            </template>
+            <span>Chỉnh sửa</span>
+          </v-tooltip>
+
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
+            </template>
+            <span>Xóa</span>
+          </v-tooltip>
+        </span>
       </template>
 
       <template v-slot:no-data>
@@ -117,7 +111,7 @@
       </template>
     </v-data-table>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" @click:outside="closeDialog">
       <v-card>
         <v-card-title class="headline grey lighten-2" primary-title>{{ dialogTitle }}</v-card-title>
 
@@ -217,6 +211,17 @@ export default {
     notifiedType: {
       type: String,
       default: "success"
+    },
+
+    tableWidth: {
+      type: Object,
+      default() {
+        return {
+          index: null,
+          checkbox: null,
+          action: null
+        };
+      }
     }
   },
 
@@ -230,15 +235,35 @@ export default {
   },
 
   computed: {
+    checkBoxWidth() {
+      return this.tableWidth.checkbox;
+    },
+
     headerTables() {
       if (this.showIndex) {
-        return [{ text: "STT", align: "center", value: "index" }].concat(
-          this.headers,
-          [{ text: "Thao tác", align: "center", value: "action" }]
-        );
+        return [
+          {
+            text: "STT",
+            align: "center",
+            width: this.tableWidth.index,
+            value: "id"
+          }
+        ].concat(this.headers, [
+          {
+            text: "Thao tác",
+            width: this.tableWidth.action,
+            align: "center",
+            value: "action"
+          }
+        ]);
       } else
         return this.headers.concat([
-          { text: "Thao tác", align: "center", value: "action" }
+          {
+            text: "Thao tác",
+            width: this.tableWidth.action,
+            align: "center",
+            value: "action"
+          }
         ]);
     },
 
@@ -255,6 +280,18 @@ export default {
         pageSize: pageSize,
         page: Number(this.pagination.page) + 1
       };
+    },
+
+    indexObject() {
+      const indexObject = {};
+      Object.keys(this.items).forEach(el => {
+        const key = this.items[el].id;
+        if (key) {
+          indexObject[key] =
+            Number(el) + this.pagination.page * this.pagination.pageSize + 1;
+        }
+      });
+      return indexObject;
     }
   },
 
@@ -330,6 +367,10 @@ export default {
   }
 
   .v-data-table {
+    td.text-start {
+      text-align: center;
+    }
+
     .v-data-table-header {
       th {
         border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -338,6 +379,10 @@ export default {
 
       th:not(:last-child) {
         border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      th.text-start {
+        width: var(--check-box-width);
       }
     }
     tbody {

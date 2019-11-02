@@ -7,52 +7,49 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
+          <v-col cols="6">
+            <v-text-field dense v-model="user.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <v-text-field
+              dense
               v-model="user.ten"
               label="Họ và tên*"
               prepend-inner-icon="mdi-account-box"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <v-text-field
+              dense
               v-model="user.matKhau"
               label="Mật khẩu*"
               prepend-inner-icon="mdi-spellcheck"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <v-text-field
+              dense
               v-model="user.soDienThoai"
               label="Số điện thoại"
               prepend-inner-icon="mdi-phone"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
-            <v-text-field v-model="user.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
+          <v-col cols="6">
+            <v-text-field dense v-model="user.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="6">
             <SelectedWithSearch
               :items="dvList"
               :itemObj="qtDonViObj"
-              label="Đơn vị"
+              label="Đơn vị*"
               icon="mdi-apps"
               @select="user.qtDonViId = $event.id"
               @search="getSearchDonViList($event)"
             />
           </v-col>
-          <v-col cols="12" sm="6" md="8">
-            <v-textarea v-model="user.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+          <v-col cols="12">
+            <v-textarea dense v-model="user.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
-          <!-- <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="user.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
-              </v-col>
-              <v-col cols="12" sm="6" md="8">
-                <v-switch v-model="user.xoa" class="ma-1" label="Xóa"></v-switch>
-          </v-col>-->
         </v-row>
       </v-container>
     </v-card-text>

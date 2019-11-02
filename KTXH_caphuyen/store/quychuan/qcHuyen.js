@@ -131,9 +131,8 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     huyen.uid = uuidv1();
-    huyen.qcTinhId = Number(huyen.qcTinhId)
-    huyen.nongthon = Boolean(huyen.nongthon)
-    huyen.sysCapDonViHanhChinh = Number(huyen.sysCapDonViHanhChinh)
+    huyen.qcTinhId = huyen.qcTinhId ? Number(huyen.qcTinhId) : huyen.qcTinhId;
+    huyen.sysCapDonViHanhChinh = huyen.sysCapDonViHanhChinh ? Number(huyen.sysCapDonViHanhChinh) : huyen.sysCapDonViHanhChinh
     try {
       const data = await this.$axios.$post(`${qcHuyen}/create`, huyen)
 

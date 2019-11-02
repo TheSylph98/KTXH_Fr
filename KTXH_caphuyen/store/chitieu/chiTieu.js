@@ -131,14 +131,14 @@ export const actions = {
     const { chiTieu } = state.api
     // const uuidv1 = require('uuid/v1');
     chi_tieu.uid = uuidv1();
-    chi_tieu.capNhapLieuId = Number(chi_tieu.capNhapLieuId);
-    chi_tieu.capTongHopId = Number(chi_tieu.capTongHopId);
-    chi_tieu.chiTieuNhomId = Number(chi_tieu.chiTieuNhomId);
-    chi_tieu.chiTieuPhanTo = Number(chi_tieu.chiTieuPhanTo);
-    if (chi_tieu.chiTieuCha == 0) {
-      delete chi_tieu.chiTieuCha
+    chi_tieu.capNhapLieuId = chi_tieu.capNhapLieuId ? Number(chi_tieu.capNhapLieuId) : chi_tieu.capNhapLieuId;
+    chi_tieu.capTongHopId = chi_tieu.capTongHopId ? Number(chi_tieu.capTongHopId) : chi_tieu.capTongHopId;
+    chi_tieu.chiTieuNhomId = chi_tieu.chiTieuNhomId ? Number(chi_tieu.chiTieuNhomId) : chi_tieu.chiTieuNhomId;
+    chi_tieu.chiTieuPhanTo = chi_tieu.chiTieuPhanTo ? Number(chi_tieu.chiTieuPhanTo) : chi_tieu.chiTieuPhanTo;
+    if (chi_tieu.chiTieuChaId == 0) {
+      delete chi_tieu.chiTieuChaId
     } else {
-      chi_tieu.chiTieuCha = Number(chi_tieu.chiTieuCha)
+      chi_tieu.chiTieuChaId = Number(chi_tieu.chiTieuChaId)
     };
 
     try {
@@ -163,7 +163,6 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${chiTieu}/update`, chi_tieu)
-
       commit('UPDATE_CHI_TIEU', { value: data })
       res.isSuccess = true
     } catch (err) {
