@@ -1,7 +1,7 @@
 <template>
   <v-app class="ktxh">
-    <v-app-bar app clipped-left color="#B00020" dark>
-      <v-app-bar-nav-icon @click="miniVariant = !miniVariant"></v-app-bar-nav-icon>
+    <v-app-bar app :clipped-left="$vuetify.breakpoint.mdAndUp" color="#B00020" dark>
+      <v-app-bar-nav-icon @click.stop="clickMenuIcon"></v-app-bar-nav-icon>
       <span class="title ml-3 mr-5">
         VNQT&nbsp;
         <span class="font-weight-light">KTXH</span>
@@ -18,8 +18,7 @@
       <UserBar />
     </v-app-bar>
 
-    <SlideBar :miniVariant="miniVariant" />
-
+    <SlideBar :menuParams="{ miniVariant: miniVariant, drawer: drawer}" @closeMenu="changeDrawer" />
     <v-content>
       <v-container>
         <nuxt />
@@ -45,8 +44,25 @@ export default {
     return {
       miniVariant: false,
       extended: true,
-      right: true
+      right: true,
+      drawer: true
     };
+  },
+
+  methods: {
+    clickMenuIcon() {
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        this.miniVariant = !this.miniVariant;
+      } else {
+        this.miniVariant = false;
+      }
+
+      this.drawer = true;
+    },
+
+    changeDrawer(value) {
+      this.drawer = value;
+    }
   }
 };
 </script>
