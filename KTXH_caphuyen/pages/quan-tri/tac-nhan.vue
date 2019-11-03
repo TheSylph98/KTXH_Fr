@@ -27,6 +27,7 @@
           v-if="dialog"
           :tacNhan="tN"
           :formTitle="titleDialog"
+          :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveTacNhanDialog"
         />
@@ -69,7 +70,7 @@ export default {
           text: "Cấp hành chính",
           align: "center",
           sorttable: false,
-          value: "sysCapHanhChinhId",
+          value: "belongsToSysCapHanhChinh.ten",
           width: "12.75%",
           type: ""
         },
@@ -125,6 +126,8 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
+      this.isUpdate = false;
+      this.titleDialog = "Thêm tác nhân mới";
       this.tN = {
         ma: null,
         ten: null,

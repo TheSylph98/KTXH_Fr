@@ -26,6 +26,7 @@
           v-if="dialog"
           :chiTieu="chiTieu"
           :formTitle="titleDialog"
+          :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
         />
@@ -157,6 +158,7 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
+      this.isUpdate = false;
       this.formTitle = "Thêm chỉ tiêu mới";
       this.chiTieu = {
         ma: null,

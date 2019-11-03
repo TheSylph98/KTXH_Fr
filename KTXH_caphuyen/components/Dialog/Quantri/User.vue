@@ -50,6 +50,9 @@
           <v-col cols="12">
             <v-textarea dense v-model="user.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
+           <v-col v-if="isUpdate" class="d-flex" cols="4" >
+            <v-switch dense v-model="user.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -77,6 +80,10 @@ export default {
     formTitle: {
       type: String,
       default: "Thêm Mới"
+    },
+    isUpdate: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

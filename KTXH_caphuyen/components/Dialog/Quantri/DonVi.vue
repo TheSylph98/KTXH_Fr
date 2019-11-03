@@ -59,6 +59,9 @@
           <v-col cols="12" sm="6" md="8">
             <v-switch dense v-model="donVi.laDonVi" class="ma-1" label="Là đơn vị"></v-switch>
           </v-col>
+          <v-col v-if="isUpdate" class="d-flex" cols="4" >
+            <v-switch dense v-model="donVi.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -85,6 +88,10 @@ export default {
     formTitle: {
       type: String,
       default: "Thêm Mới"
+    },
+    isUpdate: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

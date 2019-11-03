@@ -1,7 +1,8 @@
 <template>
   <div>
-    <v-data-table dense :headers="headers" :items="desserts" item-key="name" class="elevation-1"></v-data-table>
-    <StringFilter />
+    <h1>Quản lý kinh tế - xã hội</h1>
+
+    <span>{{ new Date() | formatDate }}</span>
   </div>
 </template>
 

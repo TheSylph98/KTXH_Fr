@@ -4,11 +4,10 @@
       v-model="selectItems"
       :headers="headerTables"
       :items="items"
-      class="elevation-1"
       show-select
       hide-default-footer
       dense
-      :items-per-page="pagination.total"
+      :items-per-page="200"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -52,16 +51,20 @@
         </tr>
       </template>
 
-      <template slot="item.id" slot-scope="column">
+      <template v-slot:item.id="column">
         <span>{{ indexObject[column.item.id] }}</span>
       </template>
 
-      <template slot="item.hieuLuc" slot-scope="column">
+      <template v-for="el in dateColumn" :slot="`item.${el}`" slot-scope="column">
+        <span>{{column.item[el] | formatDate }}</span>
+      </template>
+
+      <template v-slot:item.hieuLuc="column">
         <span v-if="column.item.hieuLuc">Có</span>
         <span v-else>Không</span>
       </template>
 
-      <template slot="item.action" slot-scope="row">
+      <template v-slot:item.action="row">
         <span>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
@@ -102,7 +105,7 @@
             <v-pagination
               v-model="paginationValue.page"
               :total-visible="paginationValue.visiblePage"
-              :length="paginationValue.numberOfPage"
+              :length="paginationValue.numberOfPage.valueOf()"
               circle
               @input="$emit('changePage', $event - 1)"
             ></v-pagination>
@@ -235,6 +238,12 @@ export default {
   },
 
   computed: {
+    dateColumn() {
+      return this.headers
+        .filter(item => item.type === "date")
+        .map(item => item.value);
+    },
+
     checkBoxWidth() {
       return this.tableWidth.checkbox;
     },
@@ -275,6 +284,7 @@ export default {
       const visiblePage = numberOfPage < 6 ? numberOfPage : 6;
 
       return {
+        total: Number(total),
         numberOfPage: Number(numberOfPage),
         visiblePage: visiblePage,
         pageSize: pageSize,
