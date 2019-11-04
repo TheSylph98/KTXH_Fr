@@ -400,6 +400,10 @@ export default {
         border-right: 1px solid rgba(0, 0, 0, 0.12);
       }
     }
+
+    i.v-icon.notranslate.v-data-table-header__icon.mdi.mdi-arrow-up.theme--light {
+      position: absolute;
+    }
   }
 }
 </style>

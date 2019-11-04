@@ -61,7 +61,6 @@ export default {
         {
           text: "Họ và Tên",
           align: "center",
-          sorttable: false,
           value: "ten",
           width: "21.25%",
           type: "string"
@@ -69,7 +68,6 @@ export default {
         {
           text: "Số điện thoại",
           align: "center",
-          sorttable: false,
           value: "soDienThoai",
           width: "12.75%",
           type: "string"
@@ -77,7 +75,6 @@ export default {
         {
           text: "Email",
           align: "center",
-          sorttable: false,
           value: "email",
           width: "12.75%",
           type: "string"
@@ -85,7 +82,6 @@ export default {
         {
           text: "Đơn Vị",
           align: "center",
-          sorttable: false,
           value: "belongsToQTDonVi.ten",
           width: "29.75%",
           type: "string"
@@ -93,7 +89,6 @@ export default {
         {
           text: "Hiệu lực",
           align: "center",
-          sorttable: true,
           value: "hieuLuc",
           width: "8.5%",
           type: ""
@@ -213,6 +208,10 @@ export default {
     },
 
     async changeList(value) {
+      value.pageSize = value.pageSize
+        ? value.pageSize
+        : this.pagination.pageSize;
+      value.page = value.page ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getUserList(value);
       this.overlay = false;
