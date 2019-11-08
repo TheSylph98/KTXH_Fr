@@ -51,7 +51,10 @@ export const actions = {
     const { qtDonVi } = state.api
 
     try {
-      const whereData = {where: payload.queryData}
+      const whereData = {
+        where: payload.queryData,
+        order: "trace"
+      }
       const data = await this.$axios.$post(`${qtDonVi}/list`, {
         queryData: whereData,
         page: payload.page,
@@ -78,7 +81,12 @@ export const actions = {
 
     let queryData = {}
     if (text) {
-      queryData =  {where: { ten: { regexp: `^${text}` } } }
+      queryData = {
+        where: {
+          ten: { regexp: `^${text}` },
+        },
+        order: "trace"
+      }
     }
 
     try {
