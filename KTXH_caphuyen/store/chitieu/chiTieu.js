@@ -47,13 +47,14 @@ export const mutations = {
 export const actions = {
   async getChiTieuList(
     { state, commit },
-    payload = { page: 0, pageSize: 20 }
+    payload = { queryData: {}, page: 0, pageSize: 20 }
   ) {
     const { chiTieu } = state.api
 
     try {
+      const whereData = { where: payload.queryData}
       const data = await this.$axios.$post(`${chiTieu}/list`, {
-        queryData: payload.queryData,
+        queryData: whereData,
         page: payload.page,
         pageSize: payload.pageSize
 
@@ -78,7 +79,7 @@ export const actions = {
 
     let queryData = {}
     if (text) {
-      queryData = { ten: { regexp: `^${text}` } }
+      queryData = {where: { ten: { regexp: `^${text}` } } }
     }
 
     try {
