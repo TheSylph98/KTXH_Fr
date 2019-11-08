@@ -15,6 +15,7 @@
         action: '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getChiTieuList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :chiTieu="chiTieu"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +55,7 @@ export default {
       title: "Chỉ Tiêu Kinh Tế Xã Hội",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       chiTieu: {},
@@ -158,6 +161,7 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
+      this.isWatch = true;
       this.isUpdate = false;
       this.formTitle = "Thêm chỉ tiêu mới";
       this.chiTieu = {
@@ -179,13 +183,23 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem chỉ tiêu chỉ tiêu KTXH";
+      await this.getChiTieu(Number(item.id));
+      this.chiTieu = Object.assign({}, this.chi_tieu);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa chỉ tiêu";
       await this.getChiTieu(Number(item.id));
       this.chiTieu = Object.assign({}, this.chi_tieu);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -210,6 +224,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.chiTieu = {};
       this.titleDialog = "";
     },

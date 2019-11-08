@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="handleDeleted($event)"
       @clickAdd="clickAddNew"
       @filter="changeList({ queryData: $event })"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :truongNhapLieu="bnlTNL"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -55,6 +57,7 @@ export default {
       title: "Biểu Nhập Liệu Trường Nhập Liệu",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       headers: [
@@ -138,6 +141,8 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
+      this.isWatch = true;
+      this.isUpdate = false;
       this.titleDialog = "Thêm mới biểu nhập liệu trường nhập liệu";
       this.bnlTNL = {
         ma: null,
@@ -147,7 +152,16 @@ export default {
         ghiChu: null
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem biểu nhập liệu trường nhập liệu";
+      await this.getBieuNhapLieuTruongNhapLieu(Number(item.id));
+      this.bnlTNL = Object.assign({}, this.bnlTruongNhapLieu);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa biểu nhập liệu trường nhập liệu";
@@ -155,6 +169,7 @@ export default {
       this.bnlTNL = Object.assign({}, this.bnlTruongNhapLieu);
       console.log("bnldsdhfd", this.bnlTNL);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -181,6 +196,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.bnlTNL = {};
       this.titleDialog = "";
     },

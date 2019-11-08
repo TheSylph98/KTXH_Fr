@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getTacNhanList({queryData: $event})"
@@ -27,6 +28,7 @@
           v-if="dialog"
           :tacNhan="tN"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveTacNhanDialog"
@@ -54,6 +56,7 @@ export default {
       title: "Khai báo tác nhân",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       tN: {},
@@ -127,6 +130,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm tác nhân mới";
       this.tN = {
         ma: null,
@@ -135,13 +139,23 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem tác nhân";
+      await this.getQTTacNhan(Number(item.id));
+      this.tN = Object.assign({}, this.tacNhan);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa tác nhân";
       await this.getQTTacNhan(Number(item.id));
       this.tN = Object.assign({}, this.tacNhan);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -166,6 +180,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.tN = {};
       this.titleDialog = "";
     },

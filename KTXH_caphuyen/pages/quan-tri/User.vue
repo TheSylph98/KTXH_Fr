@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getUserList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :user="user_data"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -54,6 +56,7 @@ export default {
       title: "Khai Báo Người Dùng",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       user_data: {},
@@ -177,6 +180,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.user_data = {};
       this.titleDialog = "";
     },

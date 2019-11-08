@@ -26,6 +26,7 @@
           v-if="dialog"
           :xa="xa_data"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +54,7 @@ export default {
       title: "Khai Báo Từ Điển: Xã",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       xa_data: {},
@@ -175,6 +177,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.xa_data = {};
       this.titleDialog = "";
     },

@@ -55,7 +55,7 @@
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
-          <v-col v-if="isUpdate" class="d-flex" cols="4" >
+          <v-col v-if="isUpdate" class="d-flex" cols="4">
             <v-switch dense v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
@@ -65,7 +65,7 @@
     <v-card-actions>
       <div class="flex-grow-1"></div>
       <v-btn color="blue darken-1" text @click="$emit('close')">Đóng</v-btn>
-      <v-btn color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
+      <v-btn v-if="isWatch" color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -89,6 +89,10 @@ export default {
     isUpdate: {
       type: Boolean,
       default: false
+    },
+    isWatch: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {

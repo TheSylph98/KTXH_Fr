@@ -26,6 +26,7 @@
           v-if="dialog"
           :tinh="tinh_data"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +54,7 @@ export default {
       title: "Khai Báo Từ Điển: Tỉnh",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       tinh_data: {},
@@ -170,6 +172,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.tinh_data = {};
       this.titleDialog = "";
     },

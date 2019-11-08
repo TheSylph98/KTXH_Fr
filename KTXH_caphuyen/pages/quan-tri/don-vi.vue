@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getQTDonViList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :donVi="dv"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -54,6 +56,7 @@ export default {
       title: "Khai Báo Đơn Vị",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       dv: {},
       titleDialog: "",
@@ -133,6 +136,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm đơn vị mới";
       this.dv = {
         ma: null,
@@ -145,13 +149,23 @@ export default {
         laDonVi: false
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem đơn vị";
+      await this.getQTDonVi(Number(item.id));
+      this.dv = Object.assign({}, this.donVi);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa đơn vị";
       await this.getQTDonVi(Number(item.id));
       this.dv = Object.assign({}, this.donVi);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -176,6 +190,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.dv = {};
       this.titleDialog = "";
     },

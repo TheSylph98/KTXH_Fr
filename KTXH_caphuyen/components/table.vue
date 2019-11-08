@@ -60,26 +60,17 @@
       </template>
 
       <template v-slot:item.hieuLuc="column">
-        <span v-if="column.item.hieuLuc">Có</span>
-        <span v-else>Không</span>
+        <v-checkbox disabled dense v-model="column.item.hieuLuc"></v-checkbox>
       </template>
 
       <template v-slot:item.action="row">
-        <span>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-icon small v-on="on" class="mr-2" @click="$emit('edit', row.item)">mdi-pencil</v-icon>
-            </template>
-            <span>Chỉnh sửa</span>
-          </v-tooltip>
-
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-icon small v-on="on" @click="clickeDeleteItem(row.item)">mdi-delete</v-icon>
-            </template>
-            <span>Xóa</span>
-          </v-tooltip>
-        </span>
+        <slot name="action" :row="row">
+          <span>
+            <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="$emit('watch', row.item)" />
+            <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="$emit('edit', row.item)" />
+            <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickeDeleteItem(row.item)" />
+          </span>
+        </slot>
       </template>
 
       <template v-slot:no-data>
@@ -140,12 +131,14 @@
 import StringFilter from "./Filter/StringFilter";
 import NumberFilter from "./Filter/NumberFilter";
 import DateFilter from "./Filter/DateFilter";
+import Icon from "@/components/Icon";
 
 export default {
   components: {
     StringFilter: StringFilter,
     NumberFilter: NumberFilter,
-    DateFilter: DateFilter
+    DateFilter: DateFilter,
+    Icon: Icon
   },
 
   props: {
@@ -404,6 +397,13 @@ export default {
     i.v-icon.notranslate.v-data-table-header__icon.mdi.mdi-arrow-up.theme--light {
       position: absolute;
     }
+  }
+
+  .v-input.v-input--checkbox {
+    display: inline-block;
+    height: inherit;
+    padding: 0;
+    margin: 0;
   }
 }
 </style>

@@ -34,12 +34,14 @@
             />
           </v-col>
           <v-col cols="6">
-            <v-text-field
-              dense
-              v-model="donVi.diaChi"
-              label="Địa Chỉ"
-              prepend-inner-icon="mdi-map-marker"
-            ></v-text-field>
+            <SelectedWithSearch
+              :items="dvList"
+              :itemObj="qtDonViObj"
+              label="Đơn vị cha*"
+              icon="mdi-apps"
+              @select="donVi.donViChaId = $event.id"
+              @search="getSearchDonViList($event)"
+            />
           </v-col>
           <v-col cols="6">
             <v-text-field
@@ -53,13 +55,22 @@
             <v-text-field dense v-model="donVi.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
           </v-col>
 
+          <v-col cols="12">
+            <v-text-field
+              dense
+              v-model="donVi.diaChi"
+              label="Địa Chỉ"
+              prepend-inner-icon="mdi-map-marker"
+            ></v-text-field>
+          </v-col>
+
           <v-col class="d-flex" cols="12">
             <v-textarea dense v-model="donVi.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <v-col cols="12" sm="6" md="8">
             <v-switch dense v-model="donVi.laDonVi" class="ma-1" label="Là đơn vị"></v-switch>
           </v-col>
-          <v-col v-if="isUpdate" class="d-flex" cols="4" >
+          <v-col v-if="isUpdate" class="d-flex" cols="4">
             <v-switch dense v-model="donVi.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
@@ -69,7 +80,7 @@
     <v-card-actions>
       <div class="flex-grow-1"></div>
       <v-btn color="blue darken-1" text @click="$emit('close')">Đóng</v-btn>
-      <v-btn color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
+      <v-btn v-if="isWatch" color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -92,6 +103,10 @@ export default {
     isUpdate: {
       type: Boolean,
       default: false
+    },
+    isWatch: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {

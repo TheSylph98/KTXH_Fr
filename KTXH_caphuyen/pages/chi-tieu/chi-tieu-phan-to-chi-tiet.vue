@@ -15,6 +15,7 @@
         action: '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getChiTieuPhanToChiTietList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :chiTieuPhanToChiTiet="chiTieuPhanToChiTiet"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -54,6 +56,7 @@ export default {
       title: "Chỉ Tiêu Phân Tổ Chi Tiết",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       chiTieuPhanToChiTiet: {},
@@ -132,6 +135,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm mới chỉ tiêu phân tổ chi tiết";
       this.chiTieuPhanToChiTiet = {
         ma: null,
@@ -140,7 +144,19 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem chỉ tiêu phân tổ chi tiết";
+      await this.getChiTieuPhanToChiTiet(Number(item.id));
+      this.chiTieuPhanToChiTiet = Object.assign(
+        {},
+        this.chi_tieu_phan_to_chi_tiet
+      );
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa chỉ tiêu phân tổ chi tiết";
@@ -150,6 +166,7 @@ export default {
         this.chi_tieu_phan_to_chi_tiet
       );
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -176,6 +193,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.chiTieuPhanToChiTiet = {};
       this.titleDialog = "";
     },

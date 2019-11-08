@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getHuyenList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :huyen="huyen_data"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +55,7 @@ export default {
       title: "Khai Báo Quy Chuẩn: Huyện",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       huyen_data: {},
@@ -177,6 +180,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.huyen_data = {};
       this.titleDialog = "";
     },
