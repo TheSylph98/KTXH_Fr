@@ -50,12 +50,12 @@ export const actions = {
     payload = { queryData: {}, page: 0, pageSize: 20 }
   ) {
     const { bieuNhapLieuChiTieu } = state.api
-
-    console.log("querydata", payload.queryData)
+    const whereData = { where: payload.queryData }
+    //console.log("querydata", payload.queryData)
 
     try {
       const data = await this.$axios.$post(`${bieuNhapLieuChiTieu}/list`, {
-        queryData: payload.queryData,
+        queryData: whereData,
         page: payload.page,
         pageSize: payload.pageSize
       })
@@ -79,7 +79,7 @@ export const actions = {
 
     let queryData = {}
     if (text) {
-      queryData = { ten: { regexp: `^${text}` } }
+      queryData = {where: { ten: { regexp: `^${text}` } } }
     }
 
     try {

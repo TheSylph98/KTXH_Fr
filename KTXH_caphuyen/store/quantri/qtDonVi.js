@@ -46,13 +46,17 @@ export const mutations = {
 export const actions = {
   async getQTDonViList(
     { state, commit },
-    payload = { page: 0, pageSize: 20 }
+    payload = { queryData: {}, page: 0, pageSize: 20 }
   ) {
     const { qtDonVi } = state.api
 
     try {
+      const whereData = {
+        where: payload.queryData,
+        order: "trace"
+      }
       const data = await this.$axios.$post(`${qtDonVi}/list`, {
-        queryData: payload.queryData,
+        queryData: whereData,
         page: payload.page,
         pageSize: payload.pageSize
 
@@ -77,7 +81,12 @@ export const actions = {
 
     let queryData = {}
     if (text) {
-      queryData = { ten: { regexp: `^${text}` } }
+      queryData = {
+        where: {
+          ten: { regexp: `^${text}` },
+        },
+        order: "trace"
+      }
     }
 
     try {

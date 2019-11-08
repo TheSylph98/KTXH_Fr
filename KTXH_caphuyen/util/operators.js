@@ -3,13 +3,14 @@ export const stringOperators = [
     label: 'Bắt đầu bằng',
     filter: (text) => {
       return { regexp: `^${text}` }
-    },
+    },    
     operator: 'begins-with'
   },
   {
     label: 'Chứa',
     filter: (text) => {
       return { regexp: `/${text}/` }
+      //return { regexp: `^((?${text}).)*$` }
     },
     operator: 'contains'
   },

@@ -43,13 +43,14 @@ export const mutations = {
 export const actions = {
   async getDataStatusList(
     { state, commit },
-    payload = { page: 0, pageSize: 20 }
+    payload = { queryData: {}, page: 0, pageSize: 20 }
   ) {
     const { sysDataStatus } = state.api
 
     try {
+      const whereData = { where: payload.queryData }
       const data = await this.$axios.$post(`${sysDataStatus}/list`, {
-        queryData: payload.queryData,
+        queryData: whereData,
         page: payload.page,
         pageSize: payload.pageSize
 
