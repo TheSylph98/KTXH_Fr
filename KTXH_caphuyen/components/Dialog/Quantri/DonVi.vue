@@ -11,7 +11,7 @@
             <v-text-field
               dense
               v-model="donVi.ma"
-              label="Mã đơn vị*"
+              label="Mã đơn vị"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
@@ -19,25 +19,25 @@
             <v-text-field
               dense
               v-model="donVi.ten"
-              label="Tên Đơn Vị*"
+              label="Tên Đơn Vị"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
-              :items="dvList"
-              :itemObj="qtDonViObj"
-              label="Nhóm đơn vị*"
+              :items="nhomDVList"
+              :itemObj="nhomDVObj"
+              label="Nhóm đơn vị"
               icon="mdi-apps"
-              @select="donVi.donViChaId = $event.id"
-              @search="getSearchDonViList($event)"
+              @select="donVi.sysNhomDonViId = $event.id"
+              @search="getSearchNhomDonViList($event)"
             />
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
               :items="dvList"
               :itemObj="qtDonViObj"
-              label="Đơn vị cha*"
+              label="Đơn vị cha"
               icon="mdi-apps"
               @select="donVi.donViChaId = $event.id"
               @search="getSearchDonViList($event)"
@@ -67,7 +67,7 @@
           <v-col class="d-flex" cols="12">
             <v-textarea dense v-model="donVi.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
-          <v-col cols="12" sm="6" md="8">
+          <v-col cols="12" sm="6" md="4">
             <v-switch dense v-model="donVi.laDonVi" class="ma-1" label="Là đơn vị"></v-switch>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
@@ -111,6 +111,7 @@ export default {
   },
   computed: {
     ...mapState("quantri/qtDonVi", ["donViList", "searchDonVi"]),
+    ...mapState("sys/sysNhomDonVi", ["nhomDonViList", "searchNhomDonViList"]),
     dvList() {
       const qtDonVi = this.donVi.belongsToQTDonVi
         ? this.donVi.belongsToQTDonVi
@@ -123,10 +124,25 @@ export default {
       if (this.donVi.belongsToQTDonVi) {
         return this.donVi.belongsToQTDonVi[0];
       } else return {};
-    }
+    },
+
+    nhomDVList() {
+      const sysNhomDonVi = this.donVi.belongsToSysNhomDonVi
+        ? this.donVi.belongsToSysNhomDonVi
+        : [];
+      if (this.searchNhomDonViList.length > 0) return sysNhomDonVi.concat(this.searchNhomDonViList);
+      else return sysNhomDonVi.concat(this.nhomDonViList);
+    },
+
+    nhomDVObj() {
+      if (this.donVi.belongsToSysNhomDonVi) {
+        return this.donVi.belongsToSysNhomDonVi[0];
+      } else return {};
+    },
   },
   methods: {
-    ...mapActions("quantri/qtDonVi", ["getSearchDonViList"])
+    ...mapActions("quantri/qtDonVi", ["getSearchDonViList"]),
+    ...mapActions("sys/sysNhomDonVi", ["getSearchNhomDonViList"])
   }
 };
 </script>

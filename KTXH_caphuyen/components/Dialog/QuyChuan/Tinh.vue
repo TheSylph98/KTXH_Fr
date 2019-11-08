@@ -24,13 +24,14 @@
             />
           </v-col>
           <v-col class="d-flex" cols="6">
-            <v-select
-              dense
-              :items="loaidonViHanhChinh"
-              v-model="tinh.loaiDonViHanhChinh"
+            <SelectedWithSearch
+              :items="loaidvhcList"
+              :itemObj="loaidvhcObj"
               label="Loại đơn vị hành chính"
-              outlined
-            ></v-select>
+              icon="mdi-apps"
+              @select="tinh.sysLoaiDonViHanhChinhId  = $event.id"
+              @search="getSearchLoaiDonViHanhChinhList($event)"
+            />
           </v-col>
           <v-col class="d-flex" cols="3">
             <v-switch dense v-model="tinh.nongThon" class="ma-1" label="Nông thôn"></v-switch>
@@ -73,11 +74,6 @@ export default {
   components: {
     SelectedWithSearch
   },
-  data() {
-    return {
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
-    };
-  },
   props: {
     tinh: {
       type: Object
@@ -100,6 +96,7 @@ export default {
       "caphanhchinhList",
       "searchCapHanhChinhList"
     ]),
+    ...mapState("sys/sysLoaiDonViHanhChinh", ["loaiDonViHanhChinhList", "searchLoaiDonViHanhChinhList"]),
     caphcList() {
       if (this.searchCapHanhChinhList.length > 0)
         return this.searchCapHanhChinhList;
@@ -109,10 +106,22 @@ export default {
       if (this.tinh.belongsToSysCapHanhChinh) {
         return this.tinh.belongsToSysCapHanhChinh[0];
       } else return {};
-    }
+    },
+
+    loaidvhcList() {
+      if (this.searchLoaiDonViHanhChinhList.length > 0)
+        return this.searchLoaiDonViHanhChinhList;
+      else return this.loaiDonViHanhChinhList;
+    },
+    loaidvhcObj() {
+      if (this.tinh.belongsToSysLoaiDonViHanhChinh) {
+        return this.tinh.belongsToSysLoaiDonViHanhChinh[0];
+      } else return {};
+    },
   },
   methods: {
-    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"]),
+    ...mapActions("sys/sysLoaiDonViHanhChinh", ["getSearchLoaiDonViHanhChinhList"])
   }
 };
 </script>

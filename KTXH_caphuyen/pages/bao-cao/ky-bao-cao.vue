@@ -127,6 +127,7 @@ export default {
     if (!this.kyBaoCaoList.length) {
       this.overlay = true;
       await this.getKyBaoCaoList();
+      //await this.getLoaiBaoCaoList();
       this.overlay = false;
     }
   },
@@ -140,6 +141,8 @@ export default {
       "deleteKyBaoCao",
       "restoreKyBaoCao"
     ]),
+    ...mapActions("sys/sysLoaiBaoCao", ["getLoaiBaoCaoList"]),
+
     async clickWatch(item) {
       this.overlay = true;
       this.titleDialog = "Xem kỳ báo cáo";
@@ -159,6 +162,7 @@ export default {
         nam: null,
         ma: null,
         ten: "",
+        sysLoaiBaoCaoId: null,
         ngayMo: null,
         ngayDong: null,
         ngayBatDau: null,

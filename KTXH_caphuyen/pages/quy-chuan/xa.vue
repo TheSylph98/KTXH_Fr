@@ -132,19 +132,31 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm xã mới";
       this.xa_data = {
         ma: null,
         ten: null,
         qcHuyenId: null,
         sysCapDonViHanhChinh: null,
-        loaiDonViHanhChinh: "",
+        sysLoaiDonViHanhChinhId : null,
         nongThon: true,
         bienGioi: false,
         haiDao: false,
         vungDBKhoKhan: false,
         ghiChu: ""
       };
+    },
+    
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem xã";
+      await this.getXa(Number(item.id));
+      this.xa_data = Object.assign({}, this.xa);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
 
     async clickEdit(item) {
@@ -153,6 +165,7 @@ export default {
       await this.getXa(Number(item.id));
       this.xa_data = Object.assign({}, this.xa);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },

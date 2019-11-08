@@ -135,13 +135,14 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch =true;
       this.titleDialog = "Thêm huyện mới";
       this.huyen_data = {
         ma: null,
         ten: null,
         qcTinhId: null,
         sysCapDonViHanhChinh: null,
-        loaiDonViHanhChinh: "",
+        sysLoaiDonViHanhChinhId : null,
         nongThon: false,
         bienGioi: false,
         haiDao: false,
@@ -149,13 +150,23 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem huyện";
+      await this.getHuyen(Number(item.id));
+      this.huyen_data = Object.assign({}, this.huyen);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa huyện";
       await this.getHuyen(Number(item.id));
       this.huyen_data = Object.assign({}, this.huyen);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },

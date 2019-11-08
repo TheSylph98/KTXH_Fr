@@ -138,6 +138,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm người dùng mới";
       this.user_data = {
         ma: null,
@@ -149,13 +150,23 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem người dùng";
+      await this.getQTUser(Number(item.id));
+      this.user_data = Object.assign({}, this.user);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa người dùng";
       await this.getQTUser(Number(item.id));
       this.user_data = Object.assign({}, this.user);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },

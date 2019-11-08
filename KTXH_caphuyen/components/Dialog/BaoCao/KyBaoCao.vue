@@ -37,7 +37,16 @@
               prepend-inner-icon="mdi-eye"
             ></v-text-field>
           </v-col>
-
+          <v-col cols="6">
+            <SelectedWithSearch
+              :items="loaiBCList"
+              :itemObj="loaiBCObj"
+              label="Loại báo cáo"
+              icon="mdi-apps"
+              @select="kyBaoCao.sysLoaiBaoCaoId = $event.id"
+              @search="getSearchLoaiBaoCaoList($event)"
+            />
+          </v-col>
           <v-col cols="6">
             <v-menu
               dense
@@ -230,7 +239,13 @@
 </template>
 
 <script>
+import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
+import { mapState, mapActions } from "vuex";
+
 export default {
+  components: {
+    SelectedWithSearch
+  },
   props: {
     kyBaoCao: {
       type: Object
@@ -262,6 +277,27 @@ export default {
         ngayBaoCaoTW: false
       }
     };
+  },
+
+  computed: {
+    ...mapState("sys/sysLoaiBaoCao", ["loaiBaoCaoList", "searchLoaiBaoCaoList"]),
+
+    loaiBCList() {
+      const sysLoaiBaoCao = this.kyBaoCao.belongsToSysLoaiBaoCao
+        ? this.kyBaoCao.belongsToSysLoaiBaoCao
+        : [];
+      if (this.searchLoaiBaoCaoList.length > 0) return sysLoaiBaoCao.concat(this.searchLoaiBaoCaoList);
+      else return sysLoaiBaoCao.concat(this.loaiBaoCaoList);
+    },
+
+    loaiBCObj() {
+      if (this.kyBaoCao.belongsToSysLoaiBaoCao) {
+        return this.kyBaoCao.belongsToSysLoaiBaoCao[0];
+      } else return {};
+    },
+  },
+  methods: {
+    ...mapActions("sys/sysLoaiBaoCao", ["getSearchLoaiBaoCaoList"])
   }
 };
 </script>

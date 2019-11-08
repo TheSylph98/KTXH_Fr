@@ -34,13 +34,14 @@
             />
           </v-col>
           <v-col class="d-flex" cols="6">
-            <v-select
-              dense
-              :items="loaidonViHanhChinh"
-              v-model="xa.loaiDonViHanhChinh"
+            <SelectedWithSearch
+              :items="loaidvhcList"
+              :itemObj="loaidvhcObj"
               label="Loại đơn vị hành chính"
-              outlined
-            ></v-select>
+              icon="mdi-apps"
+              @select="xa.sysLoaiDonViHanhChinhId  = $event.id"
+              @search="getSearchLoaiDonViHanhChinhList($event)"
+            />
           </v-col>
           <v-col class="d-flex" cols="3">
             <v-switch dense v-model="xa.nongThon" class="ma-1" label="Nông thôn"></v-switch>
@@ -79,11 +80,6 @@ export default {
   components: {
     SelectedWithSearch
   },
-  data() {
-    return {
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
-    };
-  },
   props: {
     xa: {
       type: Object
@@ -107,6 +103,8 @@ export default {
       "caphanhchinhList",
       "searchCapHanhChinhList"
     ]),
+    ...mapState("sys/sysLoaiDonViHanhChinh", ["loaiDonViHanhChinhList", "searchLoaiDonViHanhChinhList"]),
+
     hList() {
       if (this.searchHuyenList.length > 0) return this.searchHuyenList;
       else return this.huyenList;
@@ -116,6 +114,7 @@ export default {
         return this.xa.belongsToQCHuyen[0];
       } else return {};
     },
+
     caphcList() {
       if (this.searchCapHanhChinhList.length > 0)
         return this.searchCapHanhChinhList;
@@ -125,11 +124,23 @@ export default {
       if (this.xa.belongsToSysCapHanhChinh) {
         return this.xa.belongsToSysCapHanhChinh[0];
       } else return {};
-    }
+    },
+
+    loaidvhcList() {
+      if (this.searchLoaiDonViHanhChinhList.length > 0)
+        return this.searchLoaiDonViHanhChinhList;
+      else return this.loaiDonViHanhChinhList;
+    },
+    loaidvhcObj() {
+      if (this.xa.belongsToSysLoaiDonViHanhChinh) {
+        return this.xa.belongsToSysLoaiDonViHanhChinh[0];
+      } else return {};
+    },
   },
   methods: {
     ...mapActions("quychuan/qcHuyen", ["getSearchHuyenList"]),
-    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"]),
+    ...mapActions("sys/sysLoaiDonViHanhChinh", ["getSearchLoaiDonViHanhChinhList"])
   }
 };
 </script>

@@ -87,7 +87,7 @@ export default {
         {
           text: "Nhóm đơn vị",
           align: "center",
-          value: "belongsToQTDonVi.ten",
+          value: "belongsToSysNhomDonVi.ten",
           type: "string",
           width: "25.5%",
           divider: true
@@ -119,6 +119,7 @@ export default {
     if (!this.donViList.length) {
       this.overlay = true;
       await this.getQTDonViList();
+      await this.getNhomDonViList();
       this.overlay = false;
     }
   },
@@ -132,6 +133,7 @@ export default {
       "deleteQTDonVi",
       "restoreQTDonVi"
     ]),
+    ...mapActions("sys/sysNhomDonVi", ["getNhomDonViList"]),
 
     clickAddNew() {
       this.dialog = true;
@@ -144,9 +146,10 @@ export default {
         diaChi: "",
         soDienThoai: "",
         donViChaId: 0,
+        sysNhomDonViId: 0,
         email: "",
         ghiChu: "",
-        laDonVi: false
+        laDonVi: true
       };
     },
     async clickWatch(item) {

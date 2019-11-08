@@ -39,13 +39,14 @@
             />
           </v-col>
           <v-col class="d-flex" cols="6">
-            <v-select
-              dense
-              :items="loaidonViHanhChinh"
-              v-model="huyen.loaiDonViHanhChinh"
+            <SelectedWithSearch
+              :items="loaidvhcList"
+              :itemObj="loaidvhcObj"
               label="Loại đơn vị hành chính"
-              outlined
-            ></v-select>
+              icon="mdi-apps"
+              @select="huyen.sysLoaiDonViHanhChinhId  = $event.id"
+              @search="getSearchLoaiDonViHanhChinhList($event)"
+            />
           </v-col>
           <v-col class="d-flex" cols="3">
             <v-switch dense v-model="huyen.nongThon" class="ma-1" label="Nông thôn"></v-switch>
@@ -89,11 +90,6 @@ export default {
   components: {
     SelectedWithSearch
   },
-  data() {
-    return {
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
-    };
-  },
   props: {
     huyen: {
       type: Object
@@ -117,6 +113,7 @@ export default {
       "caphanhchinhList",
       "searchCapHanhChinhList"
     ]),
+    ...mapState("sys/sysLoaiDonViHanhChinh", ["loaiDonViHanhChinhList", "searchLoaiDonViHanhChinhList"]),
     tList() {
       if (this.searchTinhList.length > 0) return this.searchTinhList;
       else return this.tinhList;
@@ -126,6 +123,18 @@ export default {
         return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
     },
+
+    loaidvhcList() {
+      if (this.searchLoaiDonViHanhChinhList.length > 0)
+        return this.searchLoaiDonViHanhChinhList;
+      else return this.loaiDonViHanhChinhList;
+    },
+    loaidvhcObj() {
+      if (this.huyen.belongsToSysLoaiDonViHanhChinh) {
+        return this.huyen.belongsToSysLoaiDonViHanhChinh[0];
+      } else return {};
+    },
+
     tinhObj() {
       if (this.huyen.belongsToQCTinh) {
         return this.huyen.belongsToQCTinh[0];
@@ -135,11 +144,12 @@ export default {
       if (this.huyen.belongsToSysCapHanhChinh) {
         return this.huyen.belongsToSysCapHanhChinh[0];
       } else return {};
-    }
+    },
   },
   methods: {
     ...mapActions("quychuan/qcTinh", ["getSearchTinhList"]),
-    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"]),
+    ...mapActions("sys/sysLoaiDonViHanhChinh", ["getSearchLoaiDonViHanhChinhList"])
   }
 };
 </script>
