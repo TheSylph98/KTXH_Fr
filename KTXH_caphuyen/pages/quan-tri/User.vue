@@ -33,6 +33,11 @@
           @save="saveChiTieuDialog"
         />
       </v-dialog>
+      <Icon
+        btnIcon="mdi-drag" 
+        btnTooltip="Chon tac nhan"
+        @click="chonTacNhan()"
+      ></Icon>
     </Table>
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -44,11 +49,12 @@
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 import User from "@/components/Dialog/Quantri/User";
-
+import Icon from "@/components/Icon"
 export default {
   components: {
     Table,
-    User
+    User,
+    Icon
   },
 
   data() {

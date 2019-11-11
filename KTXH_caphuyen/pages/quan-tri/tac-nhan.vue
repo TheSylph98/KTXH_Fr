@@ -34,6 +34,12 @@
           @save="saveTacNhanDialog"
         />
       </v-dialog>
+      <Icon
+        
+        btnIcon="mdi-drag" 
+        btnTooltip="Chọn chức năng phầm mềm"
+        @click="chonChucNangPM()"
+      ></Icon>
     </Table>
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -45,11 +51,12 @@
 import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 import TacNhan from "@/components/Dialog/Quantri/TacNhan";
-
+import Icon from "@/components/Icon";
 export default {
   components: {
     Table,
-    TacNhan
+    TacNhan,
+    Icon
   },
   data() {
     return {

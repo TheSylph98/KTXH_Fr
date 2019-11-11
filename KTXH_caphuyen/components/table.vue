@@ -69,6 +69,7 @@
             <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="$emit('watch', row.item)" />
             <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="$emit('edit', row.item)" />
             <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickeDeleteItem(row.item)" />
+            <slot></slot>
           </span>
         </slot>
       </template>

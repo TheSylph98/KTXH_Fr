@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      title: "Khai Báo Kỳ Báo Cáo",
+      title: "Chon tac nhan cho nguoi su dung",
       dialog: false,
       isUpdate: false,
       isWatch: true,
