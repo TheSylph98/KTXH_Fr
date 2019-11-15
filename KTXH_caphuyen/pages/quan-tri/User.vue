@@ -32,18 +32,13 @@
           @save="saveChiTieuDialog"
         />
       </v-dialog>
-      
+
       <template v-slot:action="{ row }">
         <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="clickWatch(row.item)" />
         <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="clickEdit(row.item)" />
         <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickDeleteItem(row.item)" />
-        <Icon
-          btnIcon="mdi-drag" 
-          btnTooltip="Chon tac nhan"
-          @click="chonTacNhan(row.item)"
-        ></Icon>
+        <Icon btnIcon="mdi-drag" btnTooltip="Chon tac nhan" @click="chonTacNhan(row.item)"></Icon>
       </template>
-      
     </Table>
 
     <v-dialog v-model="deletedDialog" width="500" @click:outside="closeDeleteDialog">
@@ -63,11 +58,7 @@
     </v-dialog>
 
     <v-dialog v-model="pickTacNhandialog" width="800">
-      <UserTacNhan
-        :title="nameUser"
-        :user="UserProfile"
-        @closeUTN="closeDialog"
-      ></UserTacNhan>
+      <UserTacNhan :title="nameUser" :user="UserProfile" @closeUTN="closeDialog"></UserTacNhan>
     </v-dialog>
 
     <v-overlay :value="overlay">
@@ -81,7 +72,7 @@ import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 import User from "@/components/Dialog/Quantri/User";
 import Icon from "@/components/Icon";
-import UserTacNhan from "@/components/Dialog/Quantri/UserTacNhan"
+import UserTacNhan from "@/components/Dialog/Quantri/UserTacNhan";
 export default {
   components: {
     Table,
@@ -217,13 +208,13 @@ export default {
     },
 
     clickDeleteItem(value) {
-      this.deleteItems = [value]
-      this.deletedDialog = true
+      this.deleteItems = [value];
+      this.deletedDialog = true;
     },
 
     closeDeleteDialog() {
-      this.deletedDialog = []
-      this.deletedDialog = false
+      this.deletedDialog = [];
+      this.deletedDialog = false;
     },
 
     async deleted(items) {
@@ -239,7 +230,7 @@ export default {
 
       this.deletedDialog = false;
       this.deleteItems = {};
-      
+
       this.snackbar = true;
       setTimeout(() => {
         this.snackbar = false;
@@ -288,10 +279,11 @@ export default {
     },
 
     async changeList(value) {
-      value.pageSize = value.pageSize
-        ? value.pageSize
-        : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.pageSize =
+        value.pageSize !== undefinedd
+          ? value.pageSize
+          : this.pagination.pageSize;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getUserList(value);
       this.overlay = false;
