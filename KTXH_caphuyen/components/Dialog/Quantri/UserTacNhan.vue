@@ -1,53 +1,141 @@
 <template>
-    <v-data-table
-      v-model="selectItems"
-      :headers="headers"
-      :items="items"
-      show-select
-      hide-default-footer
-      dense
-      :items-per-page="200"
-    >
+  <div>
+   <Table
+    :title="title"
+    :headers="headers"
+    :items="tacNhanList"
+    :pagination="pagination"
+    isInDialog 
+    :snackbar="snackbar"
+    :notifiedType="notifiedType"
+    :notification="notification"
+    :timeout="timeout"
+    :tableWidth="{
+      'checkbox': '2.25%',
+      'index': '4.25%',
+      'action': '8.5%'
+    }"
+    @pick="chonTacNhan($event)"
+    @filter="getTacNhanList({queryData: $event})"
+    @changePageSize="changeList({ pageSize: $event})"
+    @changePage="changeList({ page: $event})"
+   >
 
-      <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-toolbar-title>{{ title }}</v-toolbar-title>
-          <v-divider class="mx-3" inset vertical></v-divider>
+    <template v-slot:action="{ row }">
+      <p>{{ selItems }}</p>
+      <v-checkbox dense v-model="selItems" :value="row.item.id" > </v-checkbox>
+    </template>
 
-          <div class="flex-grow-1"></div>
-          <v-btn v-if="selectItems.length" class="mb-2" @click="dialog = true">Chọn</v-btn>
-          <slot></slot>
-        </v-toolbar>
-      </template>
+    
 
+   </Table>
 
-    </v-data-table>
+  </div>
 </template>
 
 <script>
+import Table from "@/components/table";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
-    
+    Table,
+  },
+  props: {
+    title: {
+      type: String,
+      default: ""
+    },
+    user: {
+      type: Object
+    }
   },
   data() {
     return {
-      title: "",
-      selectItems: [],
+      isSelect: false,
+      snackbar: false,
       dialog: false,
+      notifiedType: "success",
+      notification: "",
+      selItems : [],
+      overlay:false,
+      timeout: 1000,
       headers: [
         {
-          text: "Tác nhân",
+          text: "Tên tác nhân",
           align: "center",
-          sorttable: true,
-          value: "name",
-          type: "number",
-          width: "8.5%"
-        },
+          sorttable: false,
+          value: "ten",
+          width: "34%",
+          type: "string"
+        }
       ],
 
     }
   },
+  computed: {
+    ...mapState("quantri/qtTacNhan",["tacNhanList", "tacNhan", "pagination"]),
+    ...mapState("quantri/qtUser_TacNhan", ["userTacNhanList","userTacNhan","pagination"]),
+    
+  },
 
+  async created() {
+    if (!this.tacNhanList.length) {
+      this.overlay = true;
+      await this.getTacNhanList();
+      this.overlay = false;
+    }
+  },
+
+  methods: {
+    ...mapActions("quantri/qtTacNhan", [
+      "getTacNhanList",
+      "getQTTacNhan"
+    ]),
+    ...mapActions("quantri/qtUser_TacNhan", 
+      [
+        "getUserTacNhanList",
+        "getQTUserTacNhan",
+        "addQTUserTacNhan",
+        "updateQTUserTacNhan",
+        "deleteQTUserTacNhan",
+      ]),
+
+    async changeList(value) {
+      value.pageSize = value.pageSize
+        ? value.pageSize
+        : this.pagination.pageSize;
+      value.page = value.page ? value.page : this.pagination.page;
+      this.overlay = true;
+      await this.getTacNhanList(value);
+      this.overlay = false;
+    },
+
+    //
+    async chonTacNhan(item) {
+
+      this.notifiedType = "success";
+      this.notification = "Chọn thành công!";
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
+      
+      this.selItems = []; 
+    },
+    //
+    changeSelectItem(value, element) {
+      if (value) {
+        this.selItems.push(element);
+      } else {
+        const index = this.selItems.findIndex(
+          item => item.id === element.id
+        );
+        this.selItems.splice(index, 1);
+      }
+    },
+
+  }
 }
 </script>

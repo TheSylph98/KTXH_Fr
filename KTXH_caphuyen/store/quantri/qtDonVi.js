@@ -134,7 +134,7 @@ export const actions = {
     }
   },
 
-  async addQTDonVi({ state, commit }, donVi) {
+  async addQTDonVi({ state, commit, dispatch }, donVi) {
     const res = { isSuccess: false }
     const { qtDonVi } = state.api
     const uuidv1 = require('uuid/v1');
@@ -147,12 +147,11 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtDonVi}/create`, donVi)
 
-      commit('ADD_DON_VI', { newEl: data })
-      commit('SET_PAGINATION_KEY', {
-        property: 'total',
-        value: state.pagination.total + 1
-      })
-      res.isSuccess = true
+      if (data) {
+        dispatch('getQTDonViList');
+
+        res.isSuccess = true
+      }
     } catch (err) {
       console.log('addQTDonVi', err)
     }

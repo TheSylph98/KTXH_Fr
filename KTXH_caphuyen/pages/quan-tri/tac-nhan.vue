@@ -34,13 +34,44 @@
           @save="saveTacNhanDialog"
         />
       </v-dialog>
-      <Icon
-        
-        btnIcon="mdi-drag" 
-        btnTooltip="Chọn chức năng phầm mềm"
-        @click="chonChucNangPM()"
-      ></Icon>
+
+      <template v-slot:action="{ row }">
+        <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="clickWatch(row.item)" />
+        <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="clickEdit(row.item)" />
+        <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickDeleteItem(row.item)" />
+        <Icon
+          btnIcon="mdi-drag" 
+          btnTooltip="Chon chuc nang phan mem"
+          @click="chonChucNangPhanMem(row.item)"
+        ></Icon>
+      </template>
+    
     </Table>
+
+    <v-dialog v-model="pickDialog" width="800">
+      <TNCNPM
+        :title="tenTacNhan"
+        :tacnhan="TacNhanP"
+        @closeUTN="closeDialog"
+      ></TNCNPM>
+    </v-dialog>
+
+    <v-dialog v-model="deletedDialog" width="500" @click:outside="closeDeleteDialog">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>Xóa người dùng</v-card-title>
+
+        <v-card-text>Bạn có chắc chắn muốn xóa hay không?</v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="closeDeleteDialog">Huỷ</v-btn>
+          <v-btn color="primary" text @click="deleted(deleteItems)">Xóa</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -52,16 +83,23 @@ import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 import TacNhan from "@/components/Dialog/Quantri/TacNhan";
 import Icon from "@/components/Icon";
+import TNCNPM from "../../components/Dialog/Quantri/TacNhanChucNangPhanMem";
 export default {
   components: {
     Table,
     TacNhan,
-    Icon
+    Icon,
+    TNCNPM
   },
   data() {
     return {
       title: "Khai báo tác nhân",
       dialog: false,
+      tenTacNhan: "",
+      TacNhanP: {},
+      deletedDialog: false,
+      pickDialog: false,
+      deleteItems: [],
       isUpdate: false,
       isWatch: true,
       overlay: false,
@@ -111,9 +149,9 @@ export default {
     ...mapState("quantri/qtTacNhan", ["tacNhanList", "tacNhan", "pagination"])
   },
 
-  asyncData({ store }) {
-    store.dispatch("quantri/qtTacNhan/getTacNhanList");
-  },
+  // asyncData({ store }) {
+  //   store.dispatch("quantri/qtTacNhan/getTacNhanList");
+  // },
 
   async created() {
     if (!this.tacNhanList.length) {
@@ -156,6 +194,7 @@ export default {
       this.overlay = false;
       this.dialog = true;
     },
+
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa tác nhân";
@@ -165,6 +204,16 @@ export default {
       this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
+    },
+
+     clickDeleteItem(value) {
+      this.deleteItems = [value]
+      this.deletedDialog = true
+    },
+
+    closeDeleteDialog() {
+      this.deletedDialog = []
+      this.deletedDialog = false
     },
 
     async deleted(items) {
@@ -178,6 +227,9 @@ export default {
         this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
       }
 
+      this.deletedDialog = false;
+      this.deleteItems = {};
+      
       this.snackbar = true;
       setTimeout(() => {
         this.snackbar = false;
@@ -190,6 +242,7 @@ export default {
       this.isWatch = true;
       this.tN = {};
       this.titleDialog = "";
+      this.pickDialog = false;
     },
 
     async saveTacNhanDialog() {
@@ -226,7 +279,14 @@ export default {
       this.overlay = true;
       await this.getTacNhanList(value);
       this.overlay = false;
-    }
+    },
+
+    chonChucNangPhanMem(item) {
+      this.TacNhanP = item;
+      this.tenTacNhan = "Tác nhân: " + item.ten;
+      this.pickDialog = true;
+    },
+
   }
 };
 </script>

@@ -4,26 +4,27 @@
       v-model="selectItems"
       :headers="headerTables"
       :items="items"
-      show-select
+      :show-select="!isInDialog"
       hide-default-footer
       dense
       :items-per-page="200"
     >
-      <template v-slot:top>
+      <template v-slot:top >
         <v-toolbar flat color="white">
           <v-toolbar-title>{{ title }}</v-toolbar-title>
           <v-divider class="mx-3" inset vertical></v-divider>
 
           <div class="flex-grow-1"></div>
-          <v-btn color="primary" dark class="mb-2" @click="$emit('clickAdd')">Thêm mới</v-btn>
+          <v-btn v-if="!isInDialog" color="primary" dark class="mb-2" @click="$emit('clickAdd')">Thêm mới</v-btn>
           <v-btn v-if="selectItems.length" class="mb-2" @click="dialog = true">Xóa</v-btn>
+          <v-btn v-if="isInDialog" color="primary" dark class="mb-2" @click="$emit('pick')">Chọn</v-btn>
           <slot></slot>
         </v-toolbar>
       </template>
 
       <template slot="body.prepend" class="search">
         <tr>
-          <td>
+          <td  v-if="!isInDialog">
             <span class="empty-content"></span>
           </td>
           <td v-for="(item, index) in headerTables" :key="index" :class="getClass(index)">
@@ -55,8 +56,11 @@
         <span>{{ indexObject[column.item.id] }}</span>
       </template>
 
-      <template v-for="el in dateColumn" :slot="`item.${el}`" slot-scope="column">
-        <span>{{column.item[el] | formatDate }}</span>
+      <template v-for="(el, index) in headerType"  :slot="`item.${el}`" slot-scope="column">
+        <slot :name="el" :column="column">
+        <span :key="index" v-if="el === 'date'" >{{column.item[el] | formatDate }}</span>
+        <span :key="index">{{ column.item[el] }}</span>
+        </slot>
       </template>
 
       <template v-slot:item.hieuLuc="column">
@@ -69,7 +73,7 @@
             <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="$emit('watch', row.item)" />
             <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="$emit('edit', row.item)" />
             <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickeDeleteItem(row.item)" />
-            <slot></slot>
+        
           </span>
         </slot>
       </template>
@@ -143,6 +147,11 @@ export default {
   },
 
   props: {
+    isInDialog: {
+      type: Boolean,
+      default: false
+    },
+
     headers: {
       type: Array,
       require: true
@@ -232,10 +241,8 @@ export default {
   },
 
   computed: {
-    dateColumn() {
-      return this.headers
-        .filter(item => item.type === "date")
-        .map(item => item.value);
+    headerType() {
+      return this.headers.map(item => item.value);
     },
 
     checkBoxWidth() {
@@ -253,7 +260,7 @@ export default {
           }
         ].concat(this.headers, [
           {
-            text: "Thao tác",
+            text: this.isInDialog ? "Chọn" : "Thao tác",
             width: this.tableWidth.action,
             align: "center",
             value: "action"
@@ -262,7 +269,7 @@ export default {
       } else
         return this.headers.concat([
           {
-            text: "Thao tác",
+            text: this.isInDialog ? "Chọn" : "Thao tác",
             width: this.tableWidth.action,
             align: "center",
             value: "action"
@@ -296,7 +303,7 @@ export default {
         }
       });
       return indexObject;
-    }
+    },
   },
 
   methods: {

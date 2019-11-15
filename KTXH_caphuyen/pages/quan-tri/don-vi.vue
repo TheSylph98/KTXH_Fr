@@ -33,6 +33,10 @@
           @save="saveChiTieuDialog"
         />
       </v-dialog>
+
+      <template v-slot:ten="{ column }">
+        <span :style="{ marginLeft: `${column.item.level}em` }">{{ column.item.ten }}</span>
+      </template>
     </Table>
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -72,7 +76,7 @@ export default {
         {
           text: "Tên đơn vị",
           width: "29.75%",
-          align: "center",
+          align: "left",
           value: "ten",
           type: "string"
         },
@@ -111,9 +115,9 @@ export default {
     ...mapState("quantri/qtDonVi", ["donViList", "donVi", "pagination"])
   },
 
-  asyncData({ store }) {
-    store.dispatch("quantri/qtDonVi/getQTDonViList");
-  },
+  // asyncData({ store }) {
+  //   store.dispatch("quantri/qtDonVi/getQTDonViList");
+  // },
 
   async created() {
     if (!this.donViList.length) {
