@@ -23,7 +23,6 @@
    >
 
     <template v-slot:action="{ row }">
-      <p>{{ selItems }}</p>
       <v-checkbox dense v-model="selItems" :value="row.item.id" > </v-checkbox>
     </template>
 
