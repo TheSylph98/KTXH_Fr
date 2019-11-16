@@ -8,15 +8,16 @@
       :snackbar="snackbar"
       :notifiedType="notifiedType"
       :notification="notification"
-      :timeout="timeout"
       :selectItem="selectItem"
+      :timeout="timeout"
       :tableWidth="{
         'checkbox': '2.25%',
         'index': '4.25%',
         'action': '8.5%'
       }"
-      @clickAdd="clickAddNew"
+      
       @delete="deleted($event)"
+      @clickAdd="clickAddNew"
       @filter="getUserList({queryData: $event})"
       @changePageSize="changeList({ pageSize: $event})"
       @changePage="changeList({ page: $event})"
@@ -32,12 +33,15 @@
           @save="saveChiTieuDialog"
         />
       </v-dialog>
-
       <template v-slot:action="{ row }">
         <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="clickWatch(row.item)" />
         <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="clickEdit(row.item)" />
         <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickDeleteItem(row.item)" />
-        <Icon btnIcon="mdi-drag" btnTooltip="Chon tac nhan" @click="chonTacNhan(row.item)"></Icon>
+        <Icon
+          btnIcon="mdi-drag" 
+          btnTooltip="Chọn tác nhân"
+          @click="chonTacNhan(row.item)"
+        ></Icon>
       </template>
     </Table>
 
@@ -57,8 +61,13 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="pickTacNhandialog" width="800">
-      <UserTacNhan :title="nameUser" :user="UserProfile" @closeUTN="closeDialog"></UserTacNhan>
+    <v-dialog v-model="pickTacNhandialog" width="800" @click:outside="ClosePickDialog">
+      <UserTacNhan
+        v-if="pickTacNhandialog"
+        :title="nameUser"
+        :user="UserProfile"
+        @close="ClosePickDialog"
+      ></UserTacNhan>
     </v-dialog>
 
     <v-overlay :value="overlay">
@@ -73,11 +82,12 @@ import { mapState, mapActions } from "vuex";
 import User from "@/components/Dialog/Quantri/User";
 import Icon from "@/components/Icon";
 import UserTacNhan from "@/components/Dialog/Quantri/UserTacNhan";
+
 export default {
   components: {
     Table,
     User,
-    Icon,
+    Icon, 
     UserTacNhan
   },
 
@@ -85,14 +95,16 @@ export default {
     return {
       title: "Khai Báo Người Dùng",
       dialog: false,
-      deletedDialog: false,
-      pickTacNhandialog: false,
       isUpdate: false,
       isWatch: true,
       overlay: false,
       titleDialog: "",
+      deletedDialog: false,
+      pickTacNhandialog: false,
       user_data: {},
       UserProfile: {},
+      deleteItems: [],
+
       headers: [
         {
           text: "Họ và Tên",
@@ -130,13 +142,12 @@ export default {
           type: ""
         }
       ],
-      deleteItems: [],
       snackbar: false,
       notifiedType: "success",
       notification: "",
-      timeout: 1000,
       nameUser: "",
-      selectItem: {}
+      selectItem: {},
+      timeout: 1000
     };
   },
 
@@ -145,7 +156,7 @@ export default {
   },
 
   asyncData({ store }) {
-    store.dispatch("quantri/qtUser/getUserList");
+    store.dispatch("/quantri/qtUser/getUserList");
   },
 
   async created() {
@@ -208,13 +219,13 @@ export default {
     },
 
     clickDeleteItem(value) {
-      this.deleteItems = [value];
-      this.deletedDialog = true;
+      this.deleteItems = [value]
+      this.deletedDialog = true
     },
 
     closeDeleteDialog() {
-      this.deletedDialog = [];
-      this.deletedDialog = false;
+      this.deletedDialog = []
+      this.deletedDialog = false
     },
 
     async deleted(items) {
@@ -243,7 +254,11 @@ export default {
       this.isWatch = true;
       this.user_data = {};
       this.titleDialog = "";
+
       this.pickTacNhandialog = false;
+      this.UserProfile = {};
+      this.nameUser = "";
+
     },
 
     async saveChiTieuDialog() {
@@ -272,18 +287,25 @@ export default {
       }, this.timeout);
     },
 
+
     chonTacNhan(item) {
       this.UserProfile = item;
       this.nameUser = "Tên người sử dụng: " + item.ten;
       this.pickTacNhandialog = true;
+      
+    },
+
+    ClosePickDialog() {
+      this.pickTacNhandialog = false;
+      this.UserProfile = {};
+      this.nameUser = "";
     },
 
     async changeList(value) {
-      value.pageSize =
-        value.pageSize !== undefinedd
-          ? value.pageSize
-          : this.pagination.pageSize;
-      value.page = value.page !== undefined ? value.page : this.pagination.page;
+      value.pageSize = value.pageSize
+        ? value.pageSize
+        : this.pagination.pageSize;
+      value.page = value.page ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getUserList(value);
       this.overlay = false;

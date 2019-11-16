@@ -14,8 +14,6 @@
         'index': '4.25%',
         'action': '8.5%'
       }"
-      @edit="clickEdit($event)"
-      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getTacNhanList({queryData: $event})"
@@ -34,27 +32,17 @@
           @save="saveTacNhanDialog"
         />
       </v-dialog>
-
       <template v-slot:action="{ row }">
         <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="clickWatch(row.item)" />
         <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="clickEdit(row.item)" />
         <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickDeleteItem(row.item)" />
         <Icon
           btnIcon="mdi-drag" 
-          btnTooltip="Chon chuc nang phan mem"
+          btnTooltip="Chọn chức năng phần mềm"
           @click="chonChucNangPhanMem(row.item)"
         ></Icon>
       </template>
-    
     </Table>
-
-    <v-dialog v-model="pickDialog" width="800">
-      <TNCNPM
-        :title="tenTacNhan"
-        :tacnhan="TacNhanP"
-        @closeUTN="closeDialog"
-      ></TNCNPM>
-    </v-dialog>
 
     <v-dialog v-model="deletedDialog" width="500" @click:outside="closeDeleteDialog">
       <v-card>
@@ -70,6 +58,15 @@
           <v-btn color="primary" text @click="deleted(deleteItems)">Xóa</v-btn>
         </v-card-actions>
       </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="pickDialog" width="800" @click:outside="closeDialog">
+      <TNCNPM
+        v-if="pickDialog"
+        :title="tenTacNhan"
+        :tacnhan="TacNhanP"
+        @close="closeDialog"
+      ></TNCNPM>
     </v-dialog>
 
     <v-overlay :value="overlay">
@@ -149,9 +146,9 @@ export default {
     ...mapState("quantri/qtTacNhan", ["tacNhanList", "tacNhan", "pagination"])
   },
 
-  // asyncData({ store }) {
-  //   store.dispatch("quantri/qtTacNhan/getTacNhanList");
-  // },
+  asyncData({ store }) {
+    store.dispatch("quantri/qtTacNhan/getTacNhanList");
+  },
 
   async created() {
     if (!this.tacNhanList.length) {
@@ -194,7 +191,6 @@ export default {
       this.overlay = false;
       this.dialog = true;
     },
-
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa tác nhân";
@@ -204,16 +200,6 @@ export default {
       this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
-    },
-
-     clickDeleteItem(value) {
-      this.deleteItems = [value]
-      this.deletedDialog = true
-    },
-
-    closeDeleteDialog() {
-      this.deletedDialog = []
-      this.deletedDialog = false
     },
 
     async deleted(items) {
@@ -243,6 +229,18 @@ export default {
       this.tN = {};
       this.titleDialog = "";
       this.pickDialog = false;
+      this.TacNhanP = {};
+      this.tenTacNhan = "";
+    },
+
+    clickDeleteItem(value) {
+      this.deleteItems = [value]
+      this.deletedDialog = true
+    },
+
+    closeDeleteDialog() {
+      this.deletedDialog = []
+      this.deletedDialog = false
     },
 
     async saveTacNhanDialog() {
@@ -270,23 +268,22 @@ export default {
         this.snackbar = false;
       }, this.timeout);
     },
-
-    async changeList(value) {
-      value.pageSize = value.pageSize !== undefined
-        ? value.pageSize
-        : this.pagination.pageSize;
-      value.page = value.page !== undefined  ? value.page : this.pagination.page;
-      this.overlay = true;
-      await this.getTacNhanList(value);
-      this.overlay = false;
-    },
-
+    
     chonChucNangPhanMem(item) {
       this.TacNhanP = item;
       this.tenTacNhan = "Tác nhân: " + item.ten;
       this.pickDialog = true;
     },
 
+    async changeList(value) {
+      value.pageSize = value.pageSize
+        ? value.pageSize
+        : this.pagination.pageSize;
+      value.page = value.page ? value.page : this.pagination.page;
+      this.overlay = true;
+      await this.getTacNhanList(value);
+      this.overlay = false;
+    }
   }
 };
 </script>

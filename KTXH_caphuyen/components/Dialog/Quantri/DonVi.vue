@@ -113,24 +113,11 @@ export default {
     ...mapState("quantri/qtDonVi", ["donViList", "searchDonVi"]),
     ...mapState("sys/sysNhomDonVi", ["nhomDonViList", "searchNhomDonViList"]),
     dvList() {
-      let dvList = [];
       const qtDonVi = this.donVi.belongsToQTDonVi
         ? this.donVi.belongsToQTDonVi
         : [];
-
-      if (this.searchDonVi.length > 0) {
-        dvList = qtDonVi.concat(this.searchDonVi);
-      } else {
-        dvList = qtDonVi.concat(this.donViList);
-      }
-
-      const index = dvList.findIndex(item => item.id === this.donVi.id);
-
-      if (index >= 0) {
-        dvList.splice(index, 1);
-      }
-
-      return dvList;
+      if (this.searchDonVi.length > 0) return qtDonVi.concat(this.searchDonVi);
+      else return qtDonVi.concat(this.donViList);
     },
 
     qtDonViObj() {
@@ -143,8 +130,7 @@ export default {
       const sysNhomDonVi = this.donVi.belongsToSysNhomDonVi
         ? this.donVi.belongsToSysNhomDonVi
         : [];
-      if (this.searchNhomDonViList.length > 0)
-        return sysNhomDonVi.concat(this.searchNhomDonViList);
+      if (this.searchNhomDonViList.length > 0) return sysNhomDonVi.concat(this.searchNhomDonViList);
       else return sysNhomDonVi.concat(this.nhomDonViList);
     },
 
@@ -152,7 +138,7 @@ export default {
       if (this.donVi.belongsToSysNhomDonVi) {
         return this.donVi.belongsToSysNhomDonVi[0];
       } else return {};
-    }
+    },
   },
   methods: {
     ...mapActions("quantri/qtDonVi", ["getSearchDonViList"]),

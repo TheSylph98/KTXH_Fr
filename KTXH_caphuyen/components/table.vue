@@ -9,28 +9,23 @@
       dense
       :items-per-page="200"
     >
-      <template v-slot:top>
+      <template v-slot:top >
         <v-toolbar flat color="white">
           <v-toolbar-title>{{ title }}</v-toolbar-title>
           <v-divider class="mx-3" inset vertical></v-divider>
 
           <div class="flex-grow-1"></div>
-          <v-btn
-            v-if="!isInDialog"
-            color="primary"
-            dark
-            class="mb-2"
-            @click="$emit('clickAdd')"
-          >Thêm mới</v-btn>
+          <v-btn v-if="!isInDialog" color="primary" dark class="mb-2" @click="$emit('clickAdd')">Thêm mới</v-btn>
           <v-btn v-if="selectItems.length" class="mb-2" @click="dialog = true">Xóa</v-btn>
           <v-btn v-if="isInDialog" color="primary" dark class="mb-2" @click="$emit('pick')">Chọn</v-btn>
+          <v-btn v-if="isInDialog" color="primary" dark class="mb-2" @click="$emit('closeD')">Dong</v-btn>
           <slot></slot>
         </v-toolbar>
       </template>
 
       <template slot="body.prepend" class="search">
         <tr>
-          <td v-if="!isInDialog">
+          <td  v-if="!isInDialog">
             <span class="empty-content"></span>
           </td>
           <td v-for="(item, index) in headerTables" :key="index" :class="getClass(index)">
@@ -62,10 +57,10 @@
         <span>{{ indexObject[column.item.id] }}</span>
       </template>
 
-      <template v-for="(el, index) in headerType" :slot="`item.${el}`" slot-scope="column">
+      <template v-for="(el, index) in headerType"  :slot="`item.${el}`" slot-scope="column">
         <slot :name="el" :column="column">
-          <span :key="index" v-if="el === 'date'">{{column.item[el] | formatDate }}</span>
-          <span :key="index">{{ getTableValue(column.item, el) }}</span>
+        <span :key="index" v-if="el === 'date'" >{{column.item[el] | formatDate }}</span>
+        <span :key="index">{{ column.item[el] }}</span>
         </slot>
       </template>
 
@@ -79,6 +74,7 @@
             <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="$emit('watch', row.item)" />
             <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="$emit('edit', row.item)" />
             <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickeDeleteItem(row.item)" />
+        
           </span>
         </slot>
       </template>
@@ -308,7 +304,7 @@ export default {
         }
       });
       return indexObject;
-    }
+    },
   },
 
   methods: {
@@ -412,6 +408,55 @@ export default {
     }
   }
 
+  .v-input.v-input--checkbox {
+    display: inline-block;
+    height: inherit;
+    padding: 0;
+    margin: 0;
+  }
+}
+</style>
+.custom-table {
+  .v-snack__content {
+    margin: 0;
+    padding: 0;
+    .v-alert {
+      margin: 0;
+      width: inherit;
+    }
+  }
+  td {
+    padding: 0;
+    .empty-content {
+      background-color: rgba(0, 0, 0, 0.05);
+      height: 100%;
+    }
+  }
+  .v-data-table {
+    td.text-start {
+      text-align: center;
+    }
+    .v-data-table-header {
+      th {
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+      th:not(:last-child) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
+      th.text-start {
+        width: var(--check-box-width);
+      }
+    }
+    tbody {
+      td:not(:last-child) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
+    }
+    i.v-icon.notranslate.v-data-table-header__icon.mdi.mdi-arrow-up.theme--light {
+      position: absolute;
+    }
+  }
   .v-input.v-input--checkbox {
     display: inline-block;
     height: inherit;

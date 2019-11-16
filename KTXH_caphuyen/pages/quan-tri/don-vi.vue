@@ -33,10 +33,6 @@
           @save="saveChiTieuDialog"
         />
       </v-dialog>
-
-      <template v-slot:ten="{ column }">
-        <span :style="{ marginLeft: `${column.item.level}em` }">{{ column.item.ten }}</span>
-      </template>
     </Table>
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -76,7 +72,7 @@ export default {
         {
           text: "Tên đơn vị",
           width: "29.75%",
-          align: "left",
+          align: "center",
           value: "ten",
           type: "string"
         },
@@ -123,13 +119,9 @@ export default {
     if (!this.donViList.length) {
       this.overlay = true;
       await this.getQTDonViList();
-      // await this.getNhomDonViList();
+      await this.getNhomDonViList();
       this.overlay = false;
     }
-  },
-
-  async mounted() {
-    await Promise.all([this.getNhomDonViList(), this.getTinhList()]);
   },
 
   methods: {
@@ -142,7 +134,6 @@ export default {
       "restoreQTDonVi"
     ]),
     ...mapActions("sys/sysNhomDonVi", ["getNhomDonViList"]),
-    ...mapActions("quychuan", ["getTinhList"]),
 
     clickAddNew() {
       this.dialog = true;
@@ -234,11 +225,10 @@ export default {
     },
 
     async changeList(value) {
-      value.pageSize =
-        value.pageSize !== undefined
-          ? value.pageSize
-          : this.pagination.pageSize;
-      value.page = value.page !== undefined ? value.page : this.pagination.page;
+      value.pageSize = value.pageSize
+        ? value.pageSize
+        : this.pagination.pageSize;
+      value.page = value.page ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getQTDonViList(value);
       this.overlay = false;

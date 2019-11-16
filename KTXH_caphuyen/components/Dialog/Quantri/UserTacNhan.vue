@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-card>
    <Table
     :title="title"
     :headers="headers"
@@ -15,7 +15,8 @@
       'index': '4.25%',
       'action': '8.5%'
     }"
-    @pick="chonTacNhan($event)"
+    @closeD="$emit('close')"
+    @pick="chonTacNhan()"
     @filter="getTacNhanList({queryData: $event})"
     @changePageSize="changeList({ pageSize: $event})"
     @changePage="changeList({ page: $event})"
@@ -26,14 +27,14 @@
       <v-checkbox dense v-model="selItems" :value="row.item.id" > </v-checkbox>
     </template>
 
-    
-
    </Table>
 
-  </div>
+  </v-card>
 </template>
 
 <script>
+//@pick="$emit('pickTN', selItems)"
+
 import Table from "@/components/table";
 import { mapState, mapActions } from "vuex";
 
@@ -48,44 +49,53 @@ export default {
     },
     user: {
       type: Object
-    }
+    },
+
+
   },
   data() {
     return {
-      isSelect: false,
-      snackbar: false,
+      title: "",
+      selectItems: [],
       dialog: false,
+
       notifiedType: "success",
       notification: "",
-      selItems : [],
+      selItems: [],
+      userTacNhanList: {},
       overlay:false,
       timeout: 1000,
+
       headers: [
         {
-          text: "Tên tác nhân",
+          text: "Tác nhân",
           align: "center",
-          sorttable: false,
+          sorttable: true,
           value: "ten",
-          width: "34%",
-          type: "string"
-        }
+          type: "number",
+          width: "8.5%"
+        },
       ],
 
     }
   },
+
   computed: {
     ...mapState("quantri/qtTacNhan",["tacNhanList", "tacNhan", "pagination"]),
-    ...mapState("quantri/qtUser_TacNhan", ["userTacNhanList","userTacNhan","pagination"]),
+    ...mapState("quantri/qtUser_TacNhan", ["tacNhanUserList"]),
     
   },
 
   async created() {
     if (!this.tacNhanList.length) {
       this.overlay = true;
+      await this.getCheckListTacNhan(this.user.id);
       await this.getTacNhanList();
+      this.selItems = this.tacNhanUserList;
       this.overlay = false;
     }
   },
+  
 
   methods: {
     ...mapActions("quantri/qtTacNhan", [
@@ -94,18 +104,16 @@ export default {
     ]),
     ...mapActions("quantri/qtUser_TacNhan", 
       [
-        "getUserTacNhanList",
+        "updateTacNhanList",
         "getQTUserTacNhan",
-        "addQTUserTacNhan",
-        "updateQTUserTacNhan",
-        "deleteQTUserTacNhan",
+        "getCheckListTacNhan",
       ]),
 
     async changeList(value) {
-      value.pageSize = value.pageSize !== undefined
+      value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page !== undefined  ? value.page : this.pagination.page;
+      value.page = value.page ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getTacNhanList(value);
       this.overlay = false;
@@ -114,28 +122,24 @@ export default {
     //
     async chonTacNhan(item) {
 
-      this.notifiedType = "success";
-      this.notification = "Chọn thành công!";
+      this.userTacNhanList.qtUsersId = Number(this.user.id);
+      this.userTacNhanList.listTNid = this.selItems;
+      
+      const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
+      
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Chọn thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
 
       this.snackbar = true;
       setTimeout(() => {
         this.snackbar = false;
       }, this.timeout);
-      
-      this.selItems = []; 
     },
-    //
-    changeSelectItem(value, element) {
-      if (value) {
-        this.selItems.push(element);
-      } else {
-        const index = this.selItems.findIndex(
-          item => item.id === element.id
-        );
-        this.selItems.splice(index, 1);
-      }
-    },
-
   }
 }
 </script>

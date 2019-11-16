@@ -223,10 +223,10 @@ export default {
     },
 
     async changeList(value) {
-      value.pageSize = value.pageSize !== undefined
+      value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page !== undefined  ? value.page : this.pagination.page;
+      value.page = value.page ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getHuyenList(value);
       this.overlay = false;
