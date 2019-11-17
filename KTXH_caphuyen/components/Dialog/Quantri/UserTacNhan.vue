@@ -1,33 +1,30 @@
 <template>
   <v-card>
-   <Table
-    :title="title"
-    :headers="headers"
-    :items="tacNhanList"
-    :pagination="pagination"
-    isInDialog 
-    :snackbar="snackbar"
-    :notifiedType="notifiedType"
-    :notification="notification"
-    :timeout="timeout"
-    :tableWidth="{
+    <Table
+      :title="title"
+      :headers="headers"
+      :items="tacNhanList"
+      :pagination="pagination"
+      isInDialog
+      :snackbar="snackbar"
+      :notifiedType="notifiedType"
+      :notification="notification"
+      :timeout="timeout"
+      :tableWidth="{
       'checkbox': '2.25%',
       'index': '4.25%',
       'action': '8.5%'
     }"
-    @closeD="$emit('close')"
-    @pick="chonTacNhan()"
-    @filter="getTacNhanList({queryData: $event})"
-    @changePageSize="changeList({ pageSize: $event})"
-    @changePage="changeList({ page: $event})"
-   >
-
-    <template v-slot:action="{ row }">
-      <v-checkbox dense v-model="selItems" :value="row.item.id" > </v-checkbox>
-    </template>
-
-   </Table>
-
+      @closeD="$emit('close')"
+      @pick="chonTacNhan()"
+      @filter="getTacNhanList({queryData: $event})"
+      @changePageSize="changeList({ pageSize: $event})"
+      @changePage="changeList({ page: $event})"
+    >
+      <template v-slot:action="{ row }">
+        <v-checkbox dense v-model="selItems" :value="row.item.id"></v-checkbox>
+      </template>
+    </Table>
   </v-card>
 </template>
 
@@ -39,7 +36,7 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
-    Table,
+    Table
   },
   props: {
     title: {
@@ -48,9 +45,7 @@ export default {
     },
     user: {
       type: Object
-    },
-
-
+    }
   },
   data() {
     return {
@@ -62,7 +57,7 @@ export default {
       notification: "",
       selItems: [],
       userTacNhanList: {},
-      overlay:false,
+      overlay: false,
       timeout: 1000,
 
       headers: [
@@ -73,16 +68,14 @@ export default {
           value: "ten",
           type: "number",
           width: "8.5%"
-        },
-      ],
-
-    }
+        }
+      ]
+    };
   },
 
   computed: {
-    ...mapState("quantri/qtTacNhan",["tacNhanList", "tacNhan", "pagination"]),
-    ...mapState("quantri/qtUser_TacNhan", ["tacNhanUserList"]),
-    
+    ...mapState("quantri/qtTacNhan", ["tacNhanList", "tacNhan", "pagination"]),
+    ...mapState("quantri/qtUser_TacNhan", ["tacNhanUserList"])
   },
 
   async created() {
@@ -94,25 +87,21 @@ export default {
       this.overlay = false;
     }
   },
-  
 
   methods: {
-    ...mapActions("quantri/qtTacNhan", [
-      "getTacNhanList",
-      "getQTTacNhan"
+    ...mapActions("quantri/qtTacNhan", ["getTacNhanList", "getQTTacNhan"]),
+    ...mapActions("quantri/qtUser_TacNhan", [
+      "updateTacNhanList",
+      "getQTUserTacNhan",
+      "getCheckListTacNhan"
     ]),
-    ...mapActions("quantri/qtUser_TacNhan", 
-      [
-        "updateTacNhanList",
-        "getQTUserTacNhan",
-        "getCheckListTacNhan",
-      ]),
 
     async changeList(value) {
-      value.pageSize = value.pageSize
-        ? value.pageSize
-        : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.pageSize =
+        value.pageSize !== undefined
+          ? value.pageSize
+          : this.pagination.pageSize;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getTacNhanList(value);
       this.overlay = false;
@@ -120,12 +109,11 @@ export default {
 
     //
     async chonTacNhan(item) {
-
       this.userTacNhanList.qtUsersId = Number(this.user.id);
       this.userTacNhanList.listTNid = this.selItems;
-      
+
       const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
-      
+
       if (isSuccess) {
         this.notifiedType = "success";
         this.notification = "Chọn thành công!";
@@ -138,7 +126,7 @@ export default {
       setTimeout(() => {
         this.snackbar = false;
       }, this.timeout);
-    },
+    }
   }
-}
+};
 </script>

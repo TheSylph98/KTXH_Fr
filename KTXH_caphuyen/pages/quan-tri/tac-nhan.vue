@@ -37,7 +37,7 @@
         <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="clickEdit(row.item)" />
         <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickDeleteItem(row.item)" />
         <Icon
-          btnIcon="mdi-drag" 
+          btnIcon="mdi-drag"
           btnTooltip="Chọn chức năng phần mềm"
           @click="chonChucNangPhanMem(row.item)"
         ></Icon>
@@ -60,13 +60,8 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="pickDialog" width="800" @click:outside="closeDialog">
-      <TNCNPM
-        v-if="pickDialog"
-        :title="tenTacNhan"
-        :tacnhan="TacNhanP"
-        @close="closeDialog"
-      ></TNCNPM>
+    <v-dialog v-model="pickDialog" width="800" @click:outside="closeTNPMDialog">
+      <TNCNPM v-if="pickDialog" :title="tenTacNhan" :tacnhan="TacNhanP" @close="closeDialog"></TNCNPM>
     </v-dialog>
 
     <v-overlay :value="overlay">
@@ -215,7 +210,7 @@ export default {
 
       this.deletedDialog = false;
       this.deleteItems = {};
-      
+
       this.snackbar = true;
       setTimeout(() => {
         this.snackbar = false;
@@ -234,13 +229,13 @@ export default {
     },
 
     clickDeleteItem(value) {
-      this.deleteItems = [value]
-      this.deletedDialog = true
+      this.deleteItems = [value];
+      this.deletedDialog = true;
     },
 
     closeDeleteDialog() {
-      this.deletedDialog = []
-      this.deletedDialog = false
+      this.deletedDialog = [];
+      this.deletedDialog = false;
     },
 
     async saveTacNhanDialog() {
@@ -268,7 +263,7 @@ export default {
         this.snackbar = false;
       }, this.timeout);
     },
-    
+
     chonChucNangPhanMem(item) {
       this.TacNhanP = item;
       this.tenTacNhan = "Tác nhân: " + item.ten;

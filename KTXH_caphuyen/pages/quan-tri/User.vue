@@ -15,7 +15,6 @@
         'index': '4.25%',
         'action': '8.5%'
       }"
-      
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getUserList({queryData: $event})"
@@ -37,11 +36,7 @@
         <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="clickWatch(row.item)" />
         <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="clickEdit(row.item)" />
         <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickDeleteItem(row.item)" />
-        <Icon
-          btnIcon="mdi-drag" 
-          btnTooltip="Chọn tác nhân"
-          @click="chonTacNhan(row.item)"
-        ></Icon>
+        <Icon btnIcon="mdi-drag" btnTooltip="Chọn tác nhân" @click="chonTacNhan(row.item)"></Icon>
       </template>
     </Table>
 
@@ -87,7 +82,7 @@ export default {
   components: {
     Table,
     User,
-    Icon, 
+    Icon,
     UserTacNhan
   },
 
@@ -168,7 +163,7 @@ export default {
   },
 
   async mounted() {
-    await this.getDonViList();
+    await Promise.all([this.getDonViList(), this.getTacNhanList()]);
   },
 
   methods: {
@@ -181,6 +176,7 @@ export default {
       "restoreQTUser"
     ]),
     ...mapActions("quantri/qtDonVi", ["getDonViList"]),
+    ...mapActions("quantri/qtTacNhan", ["getTacNhanList"]),
 
     clickAddNew() {
       this.dialog = true;
@@ -219,13 +215,13 @@ export default {
     },
 
     clickDeleteItem(value) {
-      this.deleteItems = [value]
-      this.deletedDialog = true
+      this.deleteItems = [value];
+      this.deletedDialog = true;
     },
 
     closeDeleteDialog() {
-      this.deletedDialog = []
-      this.deletedDialog = false
+      this.deletedDialog = [];
+      this.deletedDialog = false;
     },
 
     async deleted(items) {
@@ -258,7 +254,6 @@ export default {
       this.pickTacNhandialog = false;
       this.UserProfile = {};
       this.nameUser = "";
-
     },
 
     async saveChiTieuDialog() {
@@ -287,18 +282,17 @@ export default {
       }, this.timeout);
     },
 
-
     chonTacNhan(item) {
       this.UserProfile = item;
       this.nameUser = "Tên người sử dụng: " + item.ten;
       this.pickTacNhandialog = true;
-      
     },
 
-    ClosePickDialog() {
+    async ClosePickDialog() {
       this.pickTacNhandialog = false;
       this.UserProfile = {};
       this.nameUser = "";
+      await this.getTacNhanList();
     },
 
     async changeList(value) {
