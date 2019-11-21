@@ -60,7 +60,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="pickDialog" width="800" @click:outside="closeTNPMDialog">
+    <v-dialog v-model="pickDialog" width="800" @click:outside="closeDialog">
       <TNCNPM v-if="pickDialog" :title="tenTacNhan" :tacnhan="TacNhanP" @close="closeDialog"></TNCNPM>
     </v-dialog>
 
@@ -271,10 +271,11 @@ export default {
     },
 
     async changeList(value) {
-      value.pageSize = value.pageSize
-        ? value.pageSize
-        : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.pageSize =
+        value.pageSize !== undefined
+          ? value.pageSize
+          : this.pagination.pageSize;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getTacNhanList(value);
       this.overlay = false;

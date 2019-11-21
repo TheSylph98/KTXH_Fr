@@ -135,14 +135,14 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
-      this.isWatch =true;
+      this.isWatch = true;
       this.titleDialog = "Thêm huyện mới";
       this.huyen_data = {
         ma: null,
         ten: null,
         qcTinhId: null,
         sysCapDonViHanhChinh: null,
-        sysLoaiDonViHanhChinhId : null,
+        sysLoaiDonViHanhChinhId: null,
         nongThon: false,
         bienGioi: false,
         haiDao: false,
@@ -226,7 +226,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getHuyenList(value);
       this.overlay = false;

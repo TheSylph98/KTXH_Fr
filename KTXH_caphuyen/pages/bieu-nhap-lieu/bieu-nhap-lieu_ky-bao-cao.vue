@@ -219,7 +219,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getBieuNhapLieuKyBaoCaoList(value);
       this.overlay = false;

@@ -51,7 +51,7 @@ export const actions = {
     const { qcHuyen } = state.api
 
     try {
-      const whereData =  { where: payload.queryData}
+      const whereData = { where: payload.queryData }
       const data = await this.$axios.$post(`${qcHuyen}/list`, {
         queryData: whereData,
         page: payload.page,
@@ -78,7 +78,7 @@ export const actions = {
 
     let queryData = {}
     if (text) {
-      queryData = {where: { ten: { regexp: `^${text}` } }}
+      queryData = { where: { ten: { regexp: `^${text}` } } }
     }
 
     try {
@@ -107,6 +107,31 @@ export const actions = {
     } catch (err) {
       console.log('getHuyenList', err)
     }
+  },
+
+  async getHuyenListByTinhId(
+    { state },
+    payload = { queryData: { getAllData: true }, id }
+  ) {
+    const { qcHuyen } = state.api
+    const huyenList = []
+
+    if (!payload.queryData) payload.queryData = { getAllData: true }
+    payload.queryData.qcTinhId = payload.id
+
+    try {
+      const whereData = { where: payload.queryData }
+      const data = await this.$axios.$post(`${qcHuyen}/list`, {
+        queryData: whereData
+      })
+
+      console.log("HuyenList", data.rows)
+      huyenList.push(...data.rows)
+    } catch (err) {
+      console.log('getHuyenList', err)
+    }
+
+    return huyenList
   },
 
   async getHuyen(

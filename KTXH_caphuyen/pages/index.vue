@@ -3,14 +3,22 @@
     <h1>Quản lý kinh tế - xã hội</h1>
 
     <span>{{ new Date() | formatDate }}</span>
+
+    <DVDB />
+    <DonViDiaBan />
   </div>
 </template>
 
 <script>
 import StringFilter from "@/components/Filter/StringFilter";
+import DVDB from "../components/Dialog/Quantri/DVDB";
+import DonViDiaBan from "../components/Dialog/Quantri/DonViDiaBan";
+
 export default {
   components: {
-    StringFilter
+    StringFilter,
+    DonViDiaBan,
+    DVDB
   },
 
   data: () => ({

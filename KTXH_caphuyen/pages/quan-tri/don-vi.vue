@@ -119,9 +119,13 @@ export default {
     if (!this.donViList.length) {
       this.overlay = true;
       await this.getQTDonViList();
-      await this.getNhomDonViList();
+      // await this.getNhomDonViList();
       this.overlay = false;
     }
+  },
+
+  async mounted() {
+    await Promise.all([this.getAllTinh(), this.getNhomDonViList()]);
   },
 
   methods: {
@@ -134,6 +138,7 @@ export default {
       "restoreQTDonVi"
     ]),
     ...mapActions("sys/sysNhomDonVi", ["getNhomDonViList"]),
+    ...mapActions("quychuan/qcTinh", ["getAllTinh"]),
 
     clickAddNew() {
       this.dialog = true;
