@@ -122,15 +122,15 @@ export default {
 
       for (var i=0; i< data.updateList.length; i++) {
         let userTN = {}
-        userTN.qtUsersId = this.user.id
-        userTN.qtTacNhanId = data.updateList[i]
+        userTN.qtUsersId = Number(this.user.id)
+        userTN.qtTacNhanId = Number(data.updateList[i])
         r0 = await this.addQTUserTacNhan(userTN)
         rD.push(r0)
       }
 
-      r1 =await this.deleteQTUserTacNhan(data.deleteList)
+      r1 = await this.deleteQTUserTacNhan(data.deleteList)
       rD.push(r1)
-      
+
       //const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
       const { isSuccess } = await Promise.all(rD)
       if (isSuccess) {
