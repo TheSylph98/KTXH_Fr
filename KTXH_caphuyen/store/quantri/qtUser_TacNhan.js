@@ -5,6 +5,7 @@ import {
   update,
   removeByIds
 } from '@/util/actions'
+let PickList = require('@/util/checkListPick')
 
 export const state = () => {
   return {
@@ -73,13 +74,9 @@ export const actions = {
   ) {
     const res = { isSuccess: false }
     const { qtUserTacNhan } = state.api
-    const uuidv1 = require('uuid/v1');
-
-    // listUserTacNhan.uid = uuidv1();
-    // listUserTacNhan.ma = uuidv1();
 
     try {
-      //console.log(2, listUserTacNhan)
+      
       //const data = 
       await this.$axios.$post(`${qtUserTacNhan}/newUpdate`, listUserTacNhan)
       // if (data) {
@@ -180,7 +177,7 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     userTacNhan.uid = uuidv1();
-    userTacNhan.qtDonViId = userTacNhan.qtDonViId ? Number(userTacNhan.qtDonViId) : userTacNhan.qtDonViId;
+    userTacNhan.ma = uuidv1();
     try {
       const data = await this.$axios.$post(`${qtUserTacNhan}/create`, userTacNhan)
 

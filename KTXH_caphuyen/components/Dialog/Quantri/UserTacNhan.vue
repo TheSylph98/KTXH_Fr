@@ -33,6 +33,8 @@
 
 import Table from "@/components/table";
 import { mapState, mapActions } from "vuex";
+let PickList = require('@/util/checkListPick')
+const Promise = require('bluebird')
 
 export default {
   components: {
@@ -79,19 +81,21 @@ export default {
   },
 
   async created() {
+    this.overlay = true;
     if (!this.tacNhanList.length) {
-      this.overlay = true;
-      await this.getCheckListTacNhan(this.user.id);
       await this.getTacNhanList();
-      this.selItems = this.tacNhanUserList;
-      this.overlay = false;
     }
+    await this.getCheckListTacNhan(this.user.id);
+    this.selItems = this.tacNhanUserList;
+    this.overlay = false;
   },
 
   methods: {
     ...mapActions("quantri/qtTacNhan", ["getTacNhanList", "getQTTacNhan"]),
     ...mapActions("quantri/qtUser_TacNhan", [
       "updateTacNhanList",
+      "addQTUserTacNhan",
+      "deleteQTUserTacNhan",
       "getQTUserTacNhan",
       "getCheckListTacNhan"
     ]),
@@ -112,8 +116,23 @@ export default {
       this.userTacNhanList.qtUsersId = Number(this.user.id);
       this.userTacNhanList.listTNid = this.selItems;
 
-      const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
+      const data = PickList.fillterList(this.tacNhanUserList,this.selItems);
 
+      var rD = [];
+
+      for (var i=0; i< data.updateList.length; i++) {
+        let userTN = {}
+        userTN.qtUsersId = this.user.id
+        userTN.qtTacNhanId = data.updateList[i]
+        r0 = await this.addQTUserTacNhan(userTN)
+        rD.push(r0)
+      }
+
+      r1 =await this.deleteQTUserTacNhan(data.deleteList)
+      rD.push(r1)
+      
+      //const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
+      const { isSuccess } = await Promise.all(rD)
       if (isSuccess) {
         this.notifiedType = "success";
         this.notification = "Chọn thành công!";
