@@ -61,7 +61,7 @@ export default {
       userTacNhanList: {},
       overlay: false,
       timeout: 1000,
-
+      snackbar: false,
       headers: [
         {
           text: "Tác nhân",
@@ -94,6 +94,7 @@ export default {
     ...mapActions("quantri/qtTacNhan", ["getTacNhanList", "getQTTacNhan"]),
     ...mapActions("quantri/qtUser_TacNhan", [
       "updateTacNhanList",
+      "updateTacNhanList1",
       "addQTUserTacNhan",
       "deleteQTUserTacNhan",
       "getQTUserTacNhan",
@@ -113,26 +114,13 @@ export default {
 
     //
     async chonTacNhan(item) {
+
       this.userTacNhanList.qtUsersId = Number(this.user.id);
       this.userTacNhanList.listTNid = this.selItems;
+      this.userTacNhanList.oldList = this.tacNhanUserList;
 
-      const data = PickList.fillterList(this.tacNhanUserList,this.selItems);
-
-      var rD = [];
-
-      for (var i=0; i< data.updateList.length; i++) {
-        let userTN = {}
-        userTN.qtUsersId = Number(this.user.id)
-        userTN.qtTacNhanId = Number(data.updateList[i])
-        r0 = await this.addQTUserTacNhan(userTN)
-        rD.push(r0)
-      }
-
-      r1 = await this.deleteQTUserTacNhan(data.deleteList)
-      rD.push(r1)
-
-      //const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
-      const { isSuccess } = await Promise.all(rD)
+      const { isSuccess } = await this.updateTacNhanList1(this.userTacNhanList);
+      
       if (isSuccess) {
         this.notifiedType = "success";
         this.notification = "Chọn thành công!";
@@ -142,6 +130,7 @@ export default {
       }
 
       this.snackbar = true;
+      
       setTimeout(() => {
         this.snackbar = false;
       }, this.timeout);

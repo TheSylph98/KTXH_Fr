@@ -18,7 +18,7 @@
           <v-btn v-if="!isInDialog" color="primary" dark class="mb-2" @click="$emit('clickAdd')">Thêm mới</v-btn>
           <v-btn v-if="selectItems.length" class="mb-2" @click="dialog = true">Xóa</v-btn>
           <v-btn v-if="isInDialog" color="primary" dark class="mb-2" @click="$emit('pick')">Chọn</v-btn>
-          <v-btn v-if="isInDialog" color="primary" dark class="mb-2" @click="$emit('closeD')">Dong</v-btn>
+          <v-btn v-if="isInDialog" color="mb-3" dark class="mb-2" @click="$emit('closeD')">Đóng</v-btn>
           <slot></slot>
         </v-toolbar>
       </template>

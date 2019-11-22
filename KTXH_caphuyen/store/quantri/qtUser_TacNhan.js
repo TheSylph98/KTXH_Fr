@@ -5,6 +5,7 @@ import {
   update,
   removeByIds
 } from '@/util/actions'
+
 let PickList = require('@/util/checkListPick')
 
 export const state = () => {
@@ -85,6 +86,53 @@ export const actions = {
       res.isSuccess = true
     } catch (err) {
       console.log("updateTacNhanList", err)
+    }
+    return res
+  },
+
+  async updateTacNhanList1(
+    { state, commit },
+    listTacNhan
+  ) {
+    const res = { isSuccess: false }
+    const { qtUserTacNhan } = state.api
+    const uuidv1 = require('uuid/v1');
+
+    try {
+      console.log(2, listTacNhan)
+      let oldList = listTacNhan.oldList;
+      let newList = listTacNhan.listTNid;
+
+      const data = PickList.fillterList(oldList, newList)
+      console.log(3,data)
+      let deleteList = data.deleteList;
+      let createList = data.updateList;
+
+      var rD = []
+      if(createList.length> 0){
+        for (var i=0; i< createList.length; i++){
+          let userTN = {}
+          userTN.qtUsersId = listTacNhan.qtUsersId;
+          userTN.qtTacNhanId = createList[i];
+          userTN.uid = uuidv1();
+          userTN.ma = uuidv1();
+          let  r1 =  await this.$axios.$post(`${qtUserTacNhan}/create`, userTN) 
+          rD.push(r1);
+        }
+      }
+
+      // if(deleteList.length > 0 ) {
+      //   for (var i=0; i< deleteList.length; i ++) {
+          
+      //   }
+      //   //let r2 = await this.$axios.$post(`${qtUserTacNhan}/delete`, { id: deleteList }) 
+      // }
+
+      await Promise.all(rD);
+
+      res.isSuccess = true
+    } catch (err) {
+      console.log("updateTacNhanList1", err)
     }
     return res
   },

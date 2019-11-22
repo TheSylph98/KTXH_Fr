@@ -5,4 +5,4 @@ var s2 = [ 4, 5, 10, 7, 67, 90]
 
 const t1 = PickList.fillterList(s1,s2)
 console.log(t1)
-return t1
+

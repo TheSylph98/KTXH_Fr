@@ -292,7 +292,7 @@ export default {
       this.pickTacNhandialog = false;
       this.UserProfile = {};
       this.nameUser = "";
-      await this.getTacNhanList();
+      //await this.getTacNhanList();
     },
 
     async changeList(value) {
