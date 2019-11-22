@@ -113,7 +113,8 @@ export default {
     async chonChucNangPhanMem(item) {
       this.tNCNPM.qtTacNhanId = Number(this.tacnhan.id);
       this.tNCNPM.listCNPMid = this.selItems;
-
+      this.tNCNPM.oldList = this.CNPMList;
+      
       const { isSuccess } = await this.updateChucNangPhanMemList(this.tNCNPM);
 
       if (isSuccess) {

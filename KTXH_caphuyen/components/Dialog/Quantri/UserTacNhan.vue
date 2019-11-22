@@ -94,7 +94,6 @@ export default {
     ...mapActions("quantri/qtTacNhan", ["getTacNhanList", "getQTTacNhan"]),
     ...mapActions("quantri/qtUser_TacNhan", [
       "updateTacNhanList",
-      "updateTacNhanList1",
       "addQTUserTacNhan",
       "deleteQTUserTacNhan",
       "getQTUserTacNhan",
@@ -112,14 +111,14 @@ export default {
       this.overlay = false;
     },
 
-    //
+    
     async chonTacNhan(item) {
 
       this.userTacNhanList.qtUsersId = Number(this.user.id);
       this.userTacNhanList.listTNid = this.selItems;
       this.userTacNhanList.oldList = this.tacNhanUserList;
 
-      const { isSuccess } = await this.updateTacNhanList1(this.userTacNhanList);
+      const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
       
       if (isSuccess) {
         this.notifiedType = "success";

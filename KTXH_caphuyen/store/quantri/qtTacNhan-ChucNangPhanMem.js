@@ -69,18 +69,40 @@ export const actions = {
   ) {
     const res = { isSuccess: false }
     const { qtTacNhanChucNangPhanMem } = state.api
-    //const uuidv1 = require('uuid/v1');
-
-    // TNCNPM.uid = uuidv1();
-    // TNCNPM.ma = uuidv1();
 
     try {
-      //console.log(2, TNCNPM)
-      //const data = 
-      await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/newUpdate`, TNCNPM)
-      // if (data) {
-      //   dispatch('getCheckListCNPM')
-      // }
+      let oldList = TNCNPM.oldList;
+      let newList = TNCNPM.listCNPMid;
+
+      const data = PickList.fillterList(oldList, newList)
+      
+      let deleteList = data.deleteList;
+      let createList = data.updateList;
+
+      let dataList = []
+
+      if(createList.length > 0){
+        for (var i=0; i < createList.length; i++){
+          let addTNCMPM = {};
+          addTNCMPM.action = "add";
+          addTNCMPM.qtTacNhanId = TNCNPM.qtTacNhanId;
+          addTNCMPM.qtChucNangPhanMemId = createList[i];
+          dataList.push(addTNCMPM);
+        }
+      }
+      
+      if(deleteList.length > 0){
+        for (var i=0; i < deleteList.length; i++){
+          let deleteTNCNPM = {};
+          deleteTNCNPM.action = "delete";
+          deleteTNCNPM.qtTacNhanId = listTacNhan.qtTacNhanId;
+          deleteTNCNPM.qtChucNangPhanMemId = deleteList[i];
+          dataList.push(deleteTNCNPM);
+        }
+      }
+
+      await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/newUpdate`, dataList)
+      
       res.isSuccess = true
     } catch (err) {
       console.log("updateChucNangPhanMemList", err)

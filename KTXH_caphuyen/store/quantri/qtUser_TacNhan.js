@@ -71,65 +71,44 @@ export const actions = {
 
   async updateTacNhanList(
     { state, commit },
-    listUserTacNhan
-  ) {
-    const res = { isSuccess: false }
-    const { qtUserTacNhan } = state.api
-
-    try {
-      
-      //const data = 
-      await this.$axios.$post(`${qtUserTacNhan}/newUpdate`, listUserTacNhan)
-      // if (data) {
-      //   dispatch('getCheckListTacNhan')
-      // }
-      res.isSuccess = true
-    } catch (err) {
-      console.log("updateTacNhanList", err)
-    }
-    return res
-  },
-
-  async updateTacNhanList1(
-    { state, commit },
     listTacNhan
   ) {
     const res = { isSuccess: false }
     const { qtUserTacNhan } = state.api
-    const uuidv1 = require('uuid/v1');
 
     try {
-      console.log(2, listTacNhan)
       let oldList = listTacNhan.oldList;
       let newList = listTacNhan.listTNid;
 
       const data = PickList.fillterList(oldList, newList)
-      console.log(3,data)
+      
       let deleteList = data.deleteList;
       let createList = data.updateList;
 
-      var rD = []
-      if(createList.length> 0){
-        for (var i=0; i< createList.length; i++){
-          let userTN = {}
-          userTN.qtUsersId = listTacNhan.qtUsersId;
-          userTN.qtTacNhanId = createList[i];
-          userTN.uid = uuidv1();
-          userTN.ma = uuidv1();
-          let  r1 =  await this.$axios.$post(`${qtUserTacNhan}/create`, userTN) 
-          rD.push(r1);
+      let dataList = []
+
+      if(createList.length > 0){
+        for (var i=0; i < createList.length; i++){
+          let addUserTacNhan = {};
+          addUserTacNhan.action = "add";
+          addUserTacNhan.qtUsersId = listTacNhan.qtUsersId;
+          addUserTacNhan.qtTacNhanId = createList[i];
+          dataList.push(addUserTacNhan);
         }
       }
 
-      // if(deleteList.length > 0 ) {
-      //   for (var i=0; i< deleteList.length; i ++) {
-          
-      //   }
-      //   //let r2 = await this.$axios.$post(`${qtUserTacNhan}/delete`, { id: deleteList }) 
-      // }
-
-      await Promise.all(rD);
-
+      if(deleteList.length > 0){
+        for (var i=0; i < deleteList.length; i++){
+          let deleteUserTacNhan = {};
+          deleteUserTacNhan.action = "delete";
+          deleteUserTacNhan.qtUsersId = listTacNhan.qtUsersId;
+          deleteUserTacNhan.qtTacNhanId = deleteList[i];
+          dataList.push(deleteUserTacNhan);
+        }
+      }
+      
+      await this.$axios.$post(`${qtUserTacNhan}/`, dataList)
+      
       res.isSuccess = true
     } catch (err) {
       console.log("updateTacNhanList1", err)
