@@ -14,9 +14,6 @@
         'index': '4.25%',
         'action': '8.5%'
       }"
-      @edit="clickEdit($event)"
-      @watch="clickWatch($event)"
-      @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getQTDonViList({queryData: $event})"
       @changePageSize="changeList({ pageSize: $event})"
@@ -33,7 +30,39 @@
           @save="saveChiTieuDialog"
         />
       </v-dialog>
+
+      <template v-slot:ten="{ column }">
+        <span :style="{marginLeft: `${1 * (Number(column.item.level) - 1)}em`}">{{ column.item.ten}}</span>
+      </template>
+
+      <template v-slot:action="{ row }">
+        <Icon btnIcon="mdi-eye" btnTooltip="Xem" @click="clickWatch(row.item)" />
+        <Icon btnIcon="mdi-pencil" btnTooltip="Chỉnh sửa" @click="clickEdit(row.item)" />
+        <Icon btnIcon="mdi-delete" btnTooltip="Xóa" @click="clickDeleteItem(row.item)" />
+        <Icon btnIcon="mdi-drag" btnTooltip="Chọn địa bàn" @click="chonDiaBan(row.item)"></Icon>
+      </template>
     </Table>
+
+    <v-dialog v-model="deletedDialog" width="500" @click:outside="closeDeleteDialog">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>Xóa đơn vị</v-card-title>
+
+        <v-card-text>Bạn có chắc chắn muốn xóa đơn vị hay không?</v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="closeDeleteDialog">Huỷ</v-btn>
+          <v-btn color="primary" text @click="deleted(deleteItems)">Xóa</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="clickLocationDialog" max-width="800px" @click:outside="closeDialog">
+      <DonViDiaBan :donVi="dv" />
+    </v-dialog>
+
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -42,13 +71,17 @@
 
 <script>
 import Table from "@/components/table.vue";
+import DonVi from "@/components/Dialog/Quantri/DonVi";
+import Icon from "@/components/Icon";
+import DonViDiaBan from "@/components/Dialog/Quantri/DonViDiaBan";
 import { mapState, mapActions } from "vuex";
-import DonVi from "../../components/Dialog/Quantri/DonVi";
 
 export default {
   components: {
     Table,
-    DonVi
+    DonVi,
+    Icon,
+    DonViDiaBan
   },
 
   data() {
@@ -72,7 +105,7 @@ export default {
         {
           text: "Tên đơn vị",
           width: "29.75%",
-          align: "center",
+          align: "left",
           value: "ten",
           type: "string"
         },
@@ -101,6 +134,11 @@ export default {
         }
       ],
       snackbar: false,
+      deletedDialog: false,
+      deleteItems: [],
+
+      clickLocationDialog: false,
+
       notifiedType: "success",
       notification: "",
       timeout: 1000
@@ -178,6 +216,16 @@ export default {
       this.dialog = true;
     },
 
+    clickDeleteItem(value) {
+      this.deleteItems = [value];
+      this.deletedDialog = true;
+    },
+
+    closeDeleteDialog() {
+      this.deletedItems = [];
+      this.deletedDialog = false;
+    },
+
     async deleted(items) {
       const { isSuccess } = await this.deleteQTDonVi(items.map(e => e.id));
 
@@ -189,10 +237,18 @@ export default {
         this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
       }
 
+      this.deletedDialog = false;
+      this.deleteItems = [];
+
       this.snackbar = true;
       setTimeout(() => {
         this.snackbar = false;
       }, this.timeout);
+    },
+
+    chonDiaBan(value) {
+      this.dv = value;
+      this.clickLocationDialog = true;
     },
 
     closeDialog() {
@@ -200,6 +256,7 @@ export default {
       this.isUpdate = false;
       this.isWatch = true;
       this.dv = {};
+      this.clickLocationDialog = false;
       this.titleDialog = "";
     },
 

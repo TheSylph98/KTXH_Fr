@@ -33,8 +33,6 @@
 
 import Table from "@/components/table";
 import { mapState, mapActions } from "vuex";
-let PickList = require('@/util/checkListPick')
-const Promise = require('bluebird')
 
 export default {
   components: {
@@ -111,15 +109,13 @@ export default {
       this.overlay = false;
     },
 
-    
     async chonTacNhan(item) {
-
       this.userTacNhanList.qtUsersId = Number(this.user.id);
       this.userTacNhanList.listTNid = this.selItems;
-      this.userTacNhanList.oldList = this.tacNhanUserList;
+      //this.userTacNhanList.oldList = this.tacNhanUserList;
 
       const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
-      
+
       if (isSuccess) {
         this.notifiedType = "success";
         this.notification = "Chọn thành công!";
@@ -129,7 +125,7 @@ export default {
       }
 
       this.snackbar = true;
-      
+
       setTimeout(() => {
         this.snackbar = false;
       }, this.timeout);

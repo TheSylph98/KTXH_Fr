@@ -52,11 +52,24 @@ export const actions = {
     const { qtTacNhanChucNangPhanMem } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/checkList`, {
-        qtTacNhanId: id
-      })
+      let queryData = {}
+      queryData = {
+        where: {
+          qtTacNhanId: id
+        },
+        getAllData: true
+      }
 
-      commit('CHECK_LIST_CHUC_NANG_PHAN_MEM', data)
+      const data = await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/list`, { queryData })
+      const listCNPM = data.rows
+
+      let listCNPMId = []
+      // lay mang qtChucNangPhanMemId tu listCNPM
+      for (var i = 0; i < listCNPM.length; i++) {
+        listCNPMId.push(listCNPM[i].qtChucNangPhanMemId)
+      }
+
+      commit('CHECK_LIST_TAC_NHAN', listCNPMId)
 
     } catch (err) {
       console.log('getCheckListCNPM', err)
@@ -71,38 +84,21 @@ export const actions = {
     const { qtTacNhanChucNangPhanMem } = state.api
 
     try {
-      let oldList = TNCNPM.oldList;
-      let newList = TNCNPM.listCNPMid;
+      let queryData = {}
+      queryData.qtTacNhanId = TNCNPM.qtTacNhanId
+      const listCNPM = TNCNPM.listCNPMid
+      let listCNPMId = []
 
-      const data = PickList.fillterList(oldList, newList)
-      
-      let deleteList = data.deleteList;
-      let createList = data.updateList;
-
-      let dataList = []
-
-      if(createList.length > 0){
-        for (var i=0; i < createList.length; i++){
-          let addTNCMPM = {};
-          addTNCMPM.action = "add";
-          addTNCMPM.qtTacNhanId = TNCNPM.qtTacNhanId;
-          addTNCMPM.qtChucNangPhanMemId = createList[i];
-          dataList.push(addTNCMPM);
-        }
-      }
-      
-      if(deleteList.length > 0){
-        for (var i=0; i < deleteList.length; i++){
-          let deleteTNCNPM = {};
-          deleteTNCNPM.action = "delete";
-          deleteTNCNPM.qtTacNhanId = listTacNhan.qtTacNhanId;
-          deleteTNCNPM.qtChucNangPhanMemId = deleteList[i];
-          dataList.push(deleteTNCNPM);
-        }
+      for (var i = 0; i < listCNPM.length; i++) {
+        let qtTNId = {}
+        qtTNId.qtTacNhanId = listCNPM[i]
+        listCNPMId.push(qtTNId)
       }
 
-      await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/newUpdate`, dataList)
-      
+      queryData.listId = listCNPMId
+
+      await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/newUpdate`, queryData)
+
       res.isSuccess = true
     } catch (err) {
       console.log("updateChucNangPhanMemList", err)

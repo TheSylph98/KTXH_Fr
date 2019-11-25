@@ -6,7 +6,7 @@ import {
   removeByIds
 } from '@/util/actions'
 
-let PickList = require('@/util/checkListPick')
+//let PickList = require('@/util/checkListPick')
 
 export const state = () => {
   return {
@@ -58,11 +58,24 @@ export const actions = {
     const { qtUserTacNhan } = state.api
 
     try {
-      const data = await this.$axios.$post(`${qtUserTacNhan}/checkList`, {
-        qtUsersId: id
-      })
+      let queryData = {}
+      queryData = {
+        where: {
+          qtUsersId: id
+        },
+        getAllData: true
+      }
 
-      commit('CHECK_LIST_TAC_NHAN', data)
+      const data = await this.$axios.$post(`${qtUserTacNhan}/list`, { queryData })
+      const listTN = data.rows
+
+      let listTNId = []
+      // lay mang qtTacNhanId tu listTN
+      for (var i = 0; i < listTN.length; i++) {
+        listTNId.push(listTN[i].qtTacNhanId)
+      }
+
+      commit('CHECK_LIST_TAC_NHAN', listTNId)
 
     } catch (err) {
       console.log('getCheckListTacNhan', err)
@@ -77,38 +90,51 @@ export const actions = {
     const { qtUserTacNhan } = state.api
 
     try {
-      let oldList = listTacNhan.oldList;
-      let newList = listTacNhan.listTNid;
+      // let oldList = listTacNhan.oldList;
+      // let newList = listTacNhan.listTNid;
 
-      const data = PickList.fillterList(oldList, newList)
-      
-      let deleteList = data.deleteList;
-      let createList = data.updateList;
+      // const data = PickList.fillterList(oldList, newList)
 
-      let dataList = []
+      // let deleteList = data.deleteList;
+      // let createList = data.updateList;
 
-      if(createList.length > 0){
-        for (var i=0; i < createList.length; i++){
-          let addUserTacNhan = {};
-          addUserTacNhan.action = "add";
-          addUserTacNhan.qtUsersId = listTacNhan.qtUsersId;
-          addUserTacNhan.qtTacNhanId = createList[i];
-          dataList.push(addUserTacNhan);
-        }
+      // let dataList = []
+
+      // if (createList.length > 0) {
+      //   for (var i = 0; i < createList.length; i++) {
+      //     let addUserTacNhan = {};
+      //     addUserTacNhan.action = "add";
+      //     addUserTacNhan.qtUsersId = listTacNhan.qtUsersId;
+      //     addUserTacNhan.qtTacNhanId = createList[i];
+      //     dataList.push(addUserTacNhan);
+      //   }
+      // }
+
+      // if (deleteList.length > 0) {
+      //   for (var i = 0; i < deleteList.length; i++) {
+      //     let deleteUserTacNhan = {};
+      //     deleteUserTacNhan.action = "delete";
+      //     deleteUserTacNhan.qtUsersId = listTacNhan.qtUsersId;
+      //     deleteUserTacNhan.qtTacNhanId = deleteList[i];
+      //     dataList.push(deleteUserTacNhan);
+      //   }
+      // }
+      let queryData = {}
+      queryData.qtUsersId = listTacNhan.qtUsersId
+
+      const listTN = listTacNhan.listTNid
+      let listTNId = []
+
+      for (var i = 0; i < listTN.length; i++) {
+        let qtTNId = {}
+        qtTNId.qtTacNhanId = listTN[i]
+        listTNId.push(qtTNId)
       }
 
-      if(deleteList.length > 0){
-        for (var i=0; i < deleteList.length; i++){
-          let deleteUserTacNhan = {};
-          deleteUserTacNhan.action = "delete";
-          deleteUserTacNhan.qtUsersId = listTacNhan.qtUsersId;
-          deleteUserTacNhan.qtTacNhanId = deleteList[i];
-          dataList.push(deleteUserTacNhan);
-        }
-      }
-      
-      await this.$axios.$post(`${qtUserTacNhan}/`, dataList)
-      
+      queryData.listId = listTNId
+      //console.log(1, queryData)
+      await this.$axios.$post(`${qtUserTacNhan}/newUpdate`, queryData)
+
       res.isSuccess = true
     } catch (err) {
       console.log("updateTacNhanList1", err)

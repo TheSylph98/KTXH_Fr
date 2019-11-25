@@ -22,7 +22,6 @@
       @changePage="changeList({ page: $event})"
     >
       <template v-slot:action="{ row }">
-        <p>{{ selItems }}</p>
         <v-checkbox dense v-model="selItems" :value="row.item.id"></v-checkbox>
       </template>
     </Table>
@@ -56,6 +55,7 @@ export default {
       selItems: [],
       tNCNPM: {},
       overlay: false,
+      snackbar: false,
       timeout: 1000,
       headers: [
         {
@@ -113,8 +113,8 @@ export default {
     async chonChucNangPhanMem(item) {
       this.tNCNPM.qtTacNhanId = Number(this.tacnhan.id);
       this.tNCNPM.listCNPMid = this.selItems;
-      this.tNCNPM.oldList = this.CNPMList;
-      
+      //this.tNCNPM.oldList = this.CNPMList;
+
       const { isSuccess } = await this.updateChucNangPhanMemList(this.tNCNPM);
 
       if (isSuccess) {

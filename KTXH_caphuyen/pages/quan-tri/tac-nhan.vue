@@ -209,7 +209,7 @@ export default {
       }
 
       this.deletedDialog = false;
-      this.deleteItems = {};
+      this.deleteItems = [];
 
       this.snackbar = true;
       setTimeout(() => {
@@ -234,7 +234,7 @@ export default {
     },
 
     closeDeleteDialog() {
-      this.deletedDialog = [];
+      this.deletedItems = [];
       this.deletedDialog = false;
     },
 
