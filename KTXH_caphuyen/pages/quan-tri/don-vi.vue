@@ -60,7 +60,12 @@
     </v-dialog>
 
     <v-dialog v-model="clickLocationDialog" max-width="800px" @click:outside="closeDialog">
-      <DonViDiaBan :donVi="dv" />
+      <DonViDiaBan
+        v-if="clickLocationDialog"
+        :donVi="dv"
+        @save="hanleChangeDonViDiaBan"
+        @close="closeDialog"
+      />
     </v-dialog>
 
     <v-overlay :value="overlay">
@@ -177,6 +182,10 @@ export default {
     ]),
     ...mapActions("sys/sysNhomDonVi", ["getNhomDonViList"]),
     ...mapActions("quychuan/qcTinh", ["getAllTinh"]),
+    ...mapActions("quantri/qtDonViDiaBan", [
+      "getDonViDiaBanListByDonViId",
+      "chooseQTDonViDiaBanList"
+    ]),
 
     clickAddNew() {
       this.dialog = true;
@@ -246,7 +255,10 @@ export default {
       }, this.timeout);
     },
 
-    chonDiaBan(value) {
+    async chonDiaBan(value) {
+      this.overlay = true;
+      await this.getDonViDiaBanListByDonViId(value.id);
+      this.overlay = false;
       this.dv = value;
       this.clickLocationDialog = true;
     },
@@ -294,6 +306,23 @@ export default {
       this.overlay = true;
       await this.getQTDonViList(value);
       this.overlay = false;
+    },
+
+    async hanleChangeDonViDiaBan(value) {
+      const { isSuccess } = await this.chooseQTDonViDiaBanList(value);
+
+      if (isSuccess) {
+        this.notifiedType = "success";
+        this.notification = "Cập nhật địa bàn thành công!";
+      } else {
+        this.notifiedType = "error";
+        this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
+      }
+
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, this.timeout);
     }
   }
 };
