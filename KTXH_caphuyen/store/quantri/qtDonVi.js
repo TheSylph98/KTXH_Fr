@@ -14,6 +14,7 @@ export const state = () => {
     donViList: [],
     searchDonVi: [],
     deletedDonViList: [],
+
     donVi: {},
     pagination: {
       page: '',
@@ -59,7 +60,6 @@ export const actions = {
         queryData: whereData,
         page: payload.page,
         pageSize: payload.pageSize
-
       })
 
       commit('SET_DON_VI_LIST', data.rows)

@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="changeList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :kyBaoCao="kyBaoCao"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +55,7 @@ export default {
       title: "Biểu Nhập Liệu Kỳ Báo Cáo",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       headers: [
@@ -129,6 +132,7 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm Mới Biểu Nhập Liệu Kỳ Báo Cáo";
       this.kyBaoCao = {
         ma: null,
@@ -138,12 +142,22 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem biểu nhập liệu kỳ báo cáo";
+      await this.getBieuNhapLieuKyBaoCao(Number(item.id));
+      this.kyBaoCao = Object.assign({}, this.bnlKyBaoCao);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa biểu nhập liệu kỳ báo cáo";
       await this.getBieuNhapLieuKyBaoCao(Number(item.id));
       this.kyBaoCao = Object.assign({}, this.bnlKyBaoCao);
+      this.isWatch = true;
       this.isUpdate = true;
       this.overlay = false;
       this.dialog = true;
@@ -171,6 +185,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.kyBaoCao = {};
       this.titleDialog = "";
     },
@@ -204,7 +219,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getBieuNhapLieuKyBaoCaoList(value);
       this.overlay = false;

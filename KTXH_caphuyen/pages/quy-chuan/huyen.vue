@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getHuyenList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :huyen="huyen_data"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +55,7 @@ export default {
       title: "Khai Báo Quy Chuẩn: Huyện",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       huyen_data: {},
@@ -132,13 +135,14 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm huyện mới";
       this.huyen_data = {
         ma: null,
         ten: null,
         qcTinhId: null,
         sysCapDonViHanhChinh: null,
-        loaiDonViHanhChinh: "",
+        sysLoaiDonViHanhChinhId: null,
         nongThon: false,
         bienGioi: false,
         haiDao: false,
@@ -146,13 +150,23 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem huyện";
+      await this.getHuyen(Number(item.id));
+      this.huyen_data = Object.assign({}, this.huyen);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa huyện";
       await this.getHuyen(Number(item.id));
       this.huyen_data = Object.assign({}, this.huyen);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -177,6 +191,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.huyen_data = {};
       this.titleDialog = "";
     },
@@ -211,7 +226,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getHuyenList(value);
       this.overlay = false;

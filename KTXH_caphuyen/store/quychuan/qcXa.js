@@ -109,6 +109,30 @@ export const actions = {
     }
   },
 
+  async getXaListByHuyenId(
+    { state },
+    payload = { queryData: { getAllData: true }, id }
+  ) {
+    const { qcXa } = state.api
+    const xaList = []
+
+    if (!payload.queryData) payload.queryData = { getAllData: true }
+    payload.queryData.qcHuyenId = payload.id
+
+    try {
+      const whereData = { where: payload.queryData }
+      const data = await this.$axios.$post(`${qcXa}/list`, {
+        queryData: whereData
+      })
+
+      xaList.push(...data.rows)
+    } catch (err) {
+      console.log('getHuyenList', err)
+    }
+
+    return xaList
+  },
+
   async getXa(
     { state, commit },
     id

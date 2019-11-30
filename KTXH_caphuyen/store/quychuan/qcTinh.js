@@ -14,6 +14,7 @@ export const state = () => {
     tinhList: [],
     searchTinhList: [],
     deletedTinhList: [],
+    tatCaTinh: [],
     tinh: {},
     pagination: {
       page: '',
@@ -35,6 +36,8 @@ export const mutations = {
   SET_PAGINATION_KEY: setPropertyNestedObject('pagination'),
 
   SET_TINH: set('tinh'),
+
+  SET_TAT_CA_TINH: set("tatCaTinh"),
 
   ADD_TINH: add('tinhList'),
 
@@ -106,6 +109,24 @@ export const actions = {
       commit('SET_DELETED_TINH', data.rows)
     } catch (err) {
       console.log('getTinhList', err)
+    }
+  },
+
+  async getAllTinh(
+    { state, commit },
+    payload = { queryData: { getAllData: true } }
+  ) {
+    const { qcTinh } = state.api
+
+    try {
+      const whereData = { where: payload.queryData }
+      const data = await this.$axios.$post(`${qcTinh}/list`, {
+        queryData: whereData
+      })
+
+      commit('SET_TAT_CA_TINH', data.rows)
+    } catch (err) {
+      console.log('getAllTinh', err)
     }
   },
 

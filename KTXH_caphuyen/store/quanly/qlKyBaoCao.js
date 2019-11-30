@@ -132,7 +132,7 @@ export const actions = {
     const uuidv1 = require('uuid/v1');
 
     kyBaoCao.uid = uuidv1();
-    kyBaoCao.donViCha = kyBaoCao.donViCha ? Number(kyBaoCao.donViCha) : kyBaoCao.donViCha;
+    
 
     try {
       const data = await this.$axios.$post(`${qlKyBaoCao}/create`, kyBaoCao)

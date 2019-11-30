@@ -51,13 +51,15 @@ export const actions = {
     const { qtTacNhan } = state.api
 
     try {
-      const whereData = { where: payload.queryData}
-      const data = await this.$axios.$post(`${qtTacNhan}/list`, {
-        queryData: whereData,
-        page: payload.page,
-        pageSize: payload.pageSize
+      const whereData = { where: payload.queryData }
+      const data = await this.$axios.$post(`${qtTacNhan}/list`,
+        {
+          queryData: whereData,
+          page: payload.page,
+          pageSize: payload.pageSize
 
-      })
+        }
+      )
 
       commit('SET_TAC_NHAN_LIST', data.rows)
       commit('SET_PAGINATION', {
@@ -78,7 +80,7 @@ export const actions = {
 
     let queryData = {}
     if (text) {
-      queryData = {where: { ten: { regexp: `^${text}` } } }
+      queryData = { where: { ten: { regexp: `^${text}` } } }
     }
 
     try {

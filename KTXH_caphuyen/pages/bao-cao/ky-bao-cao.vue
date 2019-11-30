@@ -15,6 +15,7 @@
         action: '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getKyBaoCaoList({queryData: $event})"
@@ -27,6 +28,7 @@
           :kyBaoCao="kyBC"
           :formTitle="titleDialog"
           :isUpdate="isUpdate"
+          :isWatch="isWatch"
           @close="closeDialog"
           @save="saveKyBaoCaoDialog"
         />
@@ -50,9 +52,10 @@ export default {
   },
   data() {
     return {
-      title: "Khai Báo Kỳ Báo Cáo",
+      title: "Chon tac nhan cho nguoi su dung",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       kyBC: {},
@@ -124,6 +127,7 @@ export default {
     if (!this.kyBaoCaoList.length) {
       this.overlay = true;
       await this.getKyBaoCaoList();
+      //await this.getLoaiBaoCaoList();
       this.overlay = false;
     }
   },
@@ -137,16 +141,28 @@ export default {
       "deleteKyBaoCao",
       "restoreKyBaoCao"
     ]),
+    ...mapActions("sys/sysLoaiBaoCao", ["getLoaiBaoCaoList"]),
 
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem kỳ báo cáo";
+      await this.getKyBaoCao(Number(item.id));
+      this.kyBC = Object.assign({}, this.kyBaoCao);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm kỳ báo cáo mới";
       this.kyBC = {
         nam: null,
         ma: null,
         ten: "",
-        //sysCapHanhChinhId: 0,
+        sysLoaiBaoCaoId: null,
         ngayMo: null,
         ngayDong: null,
         ngayBatDau: null,
@@ -164,6 +180,7 @@ export default {
       await this.getKyBaoCao(Number(item.id));
       this.kyBC = Object.assign({}, this.kyBaoCao);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -187,7 +204,9 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.kyBC = {};
+      this.titleDialog = "";
     },
 
     async saveKyBaoCaoDialog() {
@@ -220,7 +239,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getKyBaoCaoList(value);
       this.overlay = false;

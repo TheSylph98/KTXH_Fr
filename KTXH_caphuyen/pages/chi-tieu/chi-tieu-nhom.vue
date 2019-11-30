@@ -15,6 +15,7 @@
         action: '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getChiTieuNhomList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :chiTieuNhom="ctNhom"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -130,6 +132,8 @@ export default {
 
     clickAddNew() {
       this.dialog = true;
+      this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm chỉ tiêu nhóm mới";
       this.ctNhom = {
         ma: null,
@@ -137,13 +141,23 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem chỉ tiêu nhóm";
+      await this.getChiTieuNhom(Number(item.id));
+      this.ctNhom = Object.assign({}, this.chi_tieu_nhom);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa chỉ tiêu nhóm";
       await this.getChiTieuNhom(Number(item.id));
       this.ctNhom = Object.assign({}, this.chi_tieu_nhom);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -168,6 +182,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.ctNhom = {};
       this.titleDialog = "";
     },

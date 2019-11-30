@@ -15,6 +15,7 @@
         'action': '8.5%'
       }"
       @edit="clickEdit($event)"
+      @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getBieuNhapLieuChiTieuList({queryData: $event})"
@@ -26,6 +27,7 @@
           v-if="dialog"
           :chiTieu="chiTieu"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +55,7 @@ export default {
       title: "Biểu Nhập Liệu Chỉ Tiêu",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       headers: [
@@ -130,10 +133,21 @@ export default {
     ...mapActions("bieunhaplieu/bieuNhapLieu", ["getBieuNhapLieuList"]),
     ...mapActions("chitieu/chiTieu", ["getChiTieuList"]),
 
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem biểu nhập liệu chỉ tiêu";
+      await this.getBieuNhapLieuChiTieu(Number(item.id));
+      this.chiTieu = Object.assign({}, this.bnlChiTieu);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
-      this.titleDialog = "Thêm biểu nhập liệu chi tiêu mới";
+      this.isWatch = true;
+      this.titleDialog = "Thêm biểu nhập liệu chỉ tiêu mới";
       this.chiTieu = {
         ma: null,
         ten: null,
@@ -149,6 +163,7 @@ export default {
       await this.getBieuNhapLieuChiTieu(Number(item.id));
       this.chiTieu = Object.assign({}, this.bnlChiTieu);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -175,6 +190,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.chiTieu = {};
       this.titleDialog = "";
     },
@@ -209,7 +225,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getBieuNhapLieuChiTieuList(value);
       this.overlay = false;

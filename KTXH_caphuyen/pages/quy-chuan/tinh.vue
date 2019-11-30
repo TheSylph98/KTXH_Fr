@@ -26,6 +26,7 @@
           v-if="dialog"
           :tinh="tinh_data"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +54,7 @@ export default {
       title: "Khai Báo Từ Điển: Tỉnh",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       tinh_data: {},
@@ -126,12 +128,13 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm tỉnh mới";
       this.tinh_data = {
         ma: null,
         ten: null,
         sysCapDonViHanhChinh: null,
-        loaiDonViHanhChinh: "",
+        sysLoaiDonViHanhChinhId: null,
         nongThon: false,
         bienGioi: false,
         haiDao: false,
@@ -139,13 +142,23 @@ export default {
         ghiChu: ""
       };
     },
-
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem tỉnh";
+      await this.getTinh(Number(item.id));
+      this.tinh_data = Object.assign({}, this.tinh);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
+    },
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa tỉnh";
       await this.getTinh(Number(item.id));
       this.tinh_data = Object.assign({}, this.tinh);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -170,6 +183,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.tinh_data = {};
       this.titleDialog = "";
     },
@@ -204,7 +218,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getTinhList(value);
       this.overlay = false;

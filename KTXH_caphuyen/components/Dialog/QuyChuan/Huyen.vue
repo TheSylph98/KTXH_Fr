@@ -39,13 +39,14 @@
             />
           </v-col>
           <v-col class="d-flex" cols="6">
-            <v-select
-              dense
-              :items="loaidonViHanhChinh"
-              v-model="huyen.loaiDonViHanhChinh"
+            <SelectedWithSearch
+              :items="loaidvhcList"
+              :itemObj="loaidvhcObj"
               label="Loại đơn vị hành chính"
-              outlined
-            ></v-select>
+              icon="mdi-apps"
+              @select="huyen.sysLoaiDonViHanhChinhId  = $event.id"
+              @search="getSearchLoaiDonViHanhChinhList($event)"
+            />
           </v-col>
           <v-col class="d-flex" cols="3">
             <v-switch dense v-model="huyen.nongThon" class="ma-1" label="Nông thôn"></v-switch>
@@ -67,7 +68,7 @@
           <v-col class="d-flex" cols="12">
             <v-textarea dense v-model="huyen.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
-           <v-col v-if="isUpdate" class="d-flex" cols="4" >
+          <v-col v-if="isUpdate" class="d-flex" cols="4">
             <v-switch dense v-model="huyen.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
@@ -76,7 +77,7 @@
     <v-card-actions>
       <div class="flex-grow-1"></div>
       <v-btn color="blue darken-1" text @click="$emit('close')">Đóng</v-btn>
-      <v-btn color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
+      <v-btn v-if="isWatch" color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -89,11 +90,6 @@ export default {
   components: {
     SelectedWithSearch
   },
-  data() {
-    return {
-      loaidonViHanhChinh: ["Loại I", "Loại II", "Loại III"]
-    };
-  },
   props: {
     huyen: {
       type: Object
@@ -105,6 +101,10 @@ export default {
     isUpdate: {
       type: Boolean,
       default: false
+    },
+    isWatch: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -113,6 +113,7 @@ export default {
       "caphanhchinhList",
       "searchCapHanhChinhList"
     ]),
+    ...mapState("sys/sysLoaiDonViHanhChinh", ["loaiDonViHanhChinhList", "searchLoaiDonViHanhChinhList"]),
     tList() {
       if (this.searchTinhList.length > 0) return this.searchTinhList;
       else return this.tinhList;
@@ -122,6 +123,18 @@ export default {
         return this.searchCapHanhChinhList;
       else return this.caphanhchinhList;
     },
+
+    loaidvhcList() {
+      if (this.searchLoaiDonViHanhChinhList.length > 0)
+        return this.searchLoaiDonViHanhChinhList;
+      else return this.loaiDonViHanhChinhList;
+    },
+    loaidvhcObj() {
+      if (this.huyen.belongsToSysLoaiDonViHanhChinh) {
+        return this.huyen.belongsToSysLoaiDonViHanhChinh[0];
+      } else return {};
+    },
+
     tinhObj() {
       if (this.huyen.belongsToQCTinh) {
         return this.huyen.belongsToQCTinh[0];
@@ -131,11 +144,12 @@ export default {
       if (this.huyen.belongsToSysCapHanhChinh) {
         return this.huyen.belongsToSysCapHanhChinh[0];
       } else return {};
-    }
+    },
   },
   methods: {
     ...mapActions("quychuan/qcTinh", ["getSearchTinhList"]),
-    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
+    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"]),
+    ...mapActions("sys/sysLoaiDonViHanhChinh", ["getSearchLoaiDonViHanhChinhList"])
   }
 };
 </script>

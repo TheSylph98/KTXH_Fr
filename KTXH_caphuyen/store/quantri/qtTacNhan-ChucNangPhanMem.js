@@ -12,6 +12,8 @@ export const state = () => {
       qtTacNhanChucNangPhanMem: '/api/v2/crud/qttacnhanchucnangphanmem'
     },
     tacNhanChucNangPhanMemList: [],
+    CNPMList: [],
+    TNCNPM: {},
     deletedTacNhanChucNangPhanMemList: [],
     tacNhanChucNangPhanMem: {},
     pagination: {
@@ -33,7 +35,9 @@ export const mutations = {
 
   SET_TAC_NHAN_CHUC_NANG_PHAN_MEM: set('tacNhanChucNangPhanMemList'),
 
-  ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM: add('tacNhanChucNangPhanMemList'),
+  CHECK_LIST_CHUC_NANG_PHAN_MEM: set('CNPMList'),
+
+  ADD_TAC_NHAN_CHUC_NANG_PHAN_MEM: add('tacNhanChucNangPhanMem'),
 
   UPDATE_TAC_NHAN_CHUC_NANG_PHAN_MEM: update('tacNhanChucNangPhanMemList'),
 
@@ -41,6 +45,67 @@ export const mutations = {
 }
 
 export const actions = {
+  async getCheckListCNPM(
+    { state, commit },
+    id
+  ) {
+    const { qtTacNhanChucNangPhanMem } = state.api
+
+    try {
+      let queryData = {}
+      queryData = {
+        where: {
+          qtTacNhanId: id
+        },
+        getAllData: true
+      }
+
+      const data = await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/list`, { queryData })
+      const listCNPM = data.rows
+
+      let listCNPMId = []
+      // lay mang qtChucNangPhanMemId tu listCNPM
+      for (var i = 0; i < listCNPM.length; i++) {
+        listCNPMId.push(listCNPM[i].qtChucNangPhanMemId)
+      }
+
+      commit('CHECK_LIST_TAC_NHAN', listCNPMId)
+
+    } catch (err) {
+      console.log('getCheckListCNPM', err)
+    }
+  },
+
+  async updateChucNangPhanMemList(
+    { state, commit },
+    TNCNPM
+  ) {
+    const res = { isSuccess: false }
+    const { qtTacNhanChucNangPhanMem } = state.api
+
+    try {
+      let queryData = {}
+      queryData.qtTacNhanId = TNCNPM.qtTacNhanId
+      const listCNPM = TNCNPM.listCNPMid
+      let listCNPMId = []
+
+      for (var i = 0; i < listCNPM.length; i++) {
+        let qtTNId = {}
+        qtTNId.qtTacNhanId = listCNPM[i]
+        listCNPMId.push(qtTNId)
+      }
+
+      queryData.listId = listCNPMId
+
+      await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/newUpdate`, queryData)
+
+      res.isSuccess = true
+    } catch (err) {
+      console.log("updateChucNangPhanMemList", err)
+    }
+    return res
+  },
+
   async getTacNhanChucNangPhanMemList(
     { state, commit },
     payload = { queryData: {}, page: 0, pageSize: 20 }
@@ -49,7 +114,7 @@ export const actions = {
 
     try {
 
-      const whereData =  { where: payload.queryData}
+      const whereData = { where: payload.queryData }
       const data = await this.$axios.$post(`${qtTacNhanChucNangPhanMem}/list`, {
         queryData: whereData,
         page: payload.page,

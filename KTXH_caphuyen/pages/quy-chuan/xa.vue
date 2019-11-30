@@ -26,6 +26,7 @@
           v-if="dialog"
           :xa="xa_data"
           :formTitle="titleDialog"
+          :isWatch="isWatch"
           :isUpdate="isUpdate"
           @close="closeDialog"
           @save="saveChiTieuDialog"
@@ -53,6 +54,7 @@ export default {
       title: "Khai Báo Từ Điển: Xã",
       dialog: false,
       isUpdate: false,
+      isWatch: true,
       overlay: false,
       titleDialog: "",
       xa_data: {},
@@ -130,19 +132,31 @@ export default {
     clickAddNew() {
       this.dialog = true;
       this.isUpdate = false;
+      this.isWatch = true;
       this.titleDialog = "Thêm xã mới";
       this.xa_data = {
         ma: null,
         ten: null,
         qcHuyenId: null,
         sysCapDonViHanhChinh: null,
-        loaiDonViHanhChinh: "",
+        sysLoaiDonViHanhChinhId : null,
         nongThon: true,
         bienGioi: false,
         haiDao: false,
         vungDBKhoKhan: false,
         ghiChu: ""
       };
+    },
+    
+    async clickWatch(item) {
+      this.overlay = true;
+      this.titleDialog = "Xem xã";
+      await this.getXa(Number(item.id));
+      this.xa_data = Object.assign({}, this.xa);
+      this.isWatch = false;
+      this.isUpdate = true;
+      this.overlay = false;
+      this.dialog = true;
     },
 
     async clickEdit(item) {
@@ -151,6 +165,7 @@ export default {
       await this.getXa(Number(item.id));
       this.xa_data = Object.assign({}, this.xa);
       this.isUpdate = true;
+      this.isWatch = true;
       this.overlay = false;
       this.dialog = true;
     },
@@ -175,6 +190,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.isUpdate = false;
+      this.isWatch = true;
       this.xa_data = {};
       this.titleDialog = "";
     },
@@ -209,7 +225,7 @@ export default {
       value.pageSize = value.pageSize
         ? value.pageSize
         : this.pagination.pageSize;
-      value.page = value.page ? value.page : this.pagination.page;
+      value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
       await this.getXaList(value);
       this.overlay = false;
