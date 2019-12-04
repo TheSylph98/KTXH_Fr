@@ -14,6 +14,7 @@
         'index': '4.25%',
         'action': '8.5%'
       }"
+      @delete="deleted($event)"
       @clickAdd="clickAddNew"
       @filter="getQTDonViList({queryData: $event})"
       @changePageSize="changeList({ pageSize: $event})"
@@ -162,7 +163,7 @@ export default {
     if (!this.donViList.length) {
       this.overlay = true;
       await this.getQTDonViList();
-      // await this.getNhomDonViList();
+      await this.getNhomDonViList();
       this.overlay = false;
     }
   },
@@ -279,6 +280,7 @@ export default {
         res = await this.updateQTDonVi(this.dv);
       } else {
         res = await this.addQTDonVi(this.dv);
+        await this.getQTDonViList();
         this.closeDialog();
       }
 

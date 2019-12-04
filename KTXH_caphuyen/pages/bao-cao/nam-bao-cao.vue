@@ -3,7 +3,7 @@
     <Table
       :title="title"
       :headers="headers"
-      :items="kyBaoCaoList"
+      :items="namLamViecList"
       :pagination="pagination"
       :snackbar="snackbar"
       :notifiedType="notifiedType"
@@ -18,19 +18,19 @@
       @watch="clickWatch($event)"
       @delete="deleted($event)"
       @clickAdd="clickAddNew"
-      @filter="getKyBaoCaoList({queryData: $event})"
+      @filter="getNamLamViecList({queryData: $event})"
       @changePageSize="changeList({ pageSize: $event})"
       @changePage="changeList({ page: $event})"
     >
       <v-dialog v-model="dialog" max-width="800px">
-        <KyBaoCao
+        <NamBaoCao
           v-if="dialog"
-          :kyBaoCao="kyBC"
+          :namLamViec="namBC"
           :formTitle="titleDialog"
           :isUpdate="isUpdate"
           :isWatch="isWatch"
           @close="closeDialog"
-          @save="saveKyBaoCaoDialog"
+          @save="saveNamBaoCaoDialog"
         />
       </v-dialog>
     </Table>
@@ -42,24 +42,32 @@
 
 <script>
 import Table from "@/components/table.vue";
-import KyBaoCao from "@/components/Dialog/BaoCao/KyBaoCao";
+import NamBaoCao from "@/components/Dialog/BaoCao/NamBaoCao";
 import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
     Table,
-    KyBaoCao
+    NamBaoCao
   },
   data() {
     return {
-      title: "Kỳ Báo Cáo",
+      title: "Năm Báo Cáo",
       dialog: false,
       isUpdate: false,
       isWatch: true,
       overlay: false,
       titleDialog: "",
-      kyBC: {},
+      namBC: {},
       headers: [
+        {
+          text: "Mã",
+          align: "center",
+          sorttable: true,
+          value: "ma",
+          type: "number",
+          width: "8.5%"
+        },
         {
           text: "Năm",
           align: "center",
@@ -69,26 +77,18 @@ export default {
           width: "8.5%"
         },
         {
-          text: "Mã",
-          align: "center",
-          sorttable: true,
-          value: "ma",
-          type: "string",
-          width: "21.25%"
-        },
-        {
-          text: "Kỳ báo cáo",
+          text: "Tên báo cáo",
           align: "center",
           sorttable: false,
           value: "ten",
           type: "string",
-          width: "8.5%"
+          width: "21.25%"
         },
         {
           text: "Ngày mở báo cáo",
           align: "center",
           sorttable: true,
-          value: "ngayMo",
+          value: "ngayMoNam",
           type: "date",
           width: "8.5%"
         },
@@ -96,14 +96,14 @@ export default {
           text: "Ngày đóng báo cáo",
           align: "center",
           sorttable: true,
-          value: "ngayDong",
+          value: "ngayDongNam",
           type: "date",
           width: "8.5%"
         },
         {
-          text: "Trạng Thái",
+          text: "Ghi chú",
           align: "center",
-          value: "trangThai",
+          value: "ghiChu",
           type: "string",
           width: "25.5%"
         }
@@ -116,38 +116,38 @@ export default {
   },
 
   computed: {
-    ...mapState("quanly/qlKyBaoCao", ["kyBaoCaoList", "kyBaoCao", "pagination"])
+    ...mapState("quanly/qlNamLamViec", ["namLamViecList", "namLamViec", "pagination"])
   },
 
-  asyncData({ store }) {
-    store.dispatch("quanly/qlKyBaoCao/getKyBaoCaoList");
-  },
+//   asyncData({ store }) {
+//     store.dispatch("quanly/qlNamBaoCao/getNamLamViecList");
+//   },
 
   async created() {
-    if (!this.kyBaoCaoList.length) {
+    if (!this.namLamViecList.length) {
       this.overlay = true;
-      await this.getKyBaoCaoList();
+      await this.getNamLamViecList();
       //await this.getLoaiBaoCaoList();
       this.overlay = false;
     }
   },
 
   methods: {
-    ...mapActions("quanly/qlKyBaoCao", [
-      "getKyBaoCaoList",
-      "getKyBaoCao",
-      "addKyBaoCao",
-      "updateKyBaoCao",
-      "deleteKyBaoCao",
-      "restoreKyBaoCao"
+    ...mapActions("quanly/qlNamLamViec", [
+      "getNamLamViecList",
+      "getNamLamViec",
+      "addNamLamViec",
+      "updateNamLamViec",
+      "deleteNamLamViec",
+      "restoreNamLamViec"
     ]),
-    ...mapActions("sys/sysLoaiBaoCao", ["getLoaiBaoCaoList"]),
+    ...mapActions("sys/sysTrangThaiDongMo", ["getTrangThaiDongMoList"]),
 
     async clickWatch(item) {
       this.overlay = true;
-      this.titleDialog = "Xem kỳ báo cáo";
-      await this.getKyBaoCao(Number(item.id));
-      this.kyBC = Object.assign({}, this.kyBaoCao);
+      this.titleDialog = "Xem Năm báo cáo";
+      await this.getNamLamViec(Number(item.id));
+      this.namBC = Object.assign({}, this.namLamViec);
       this.isWatch = false;
       this.isUpdate = true;
       this.overlay = false;
@@ -157,28 +157,23 @@ export default {
       this.dialog = true;
       this.isUpdate = false;
       this.isWatch = true;
-      this.titleDialog = "Thêm kỳ báo cáo mới";
-      this.kyBC = {
-        nam: null,
+      this.titleDialog = "Thêm năm báo cáo mới";
+      this.namBC = {
         ma: null,
+        nam: null,
         ten: "",
-        sysLoaiBaoCaoId: null,
-        ngayMo: null,
-        ngayDong: null,
-        ngayBatDau: null,
-        ngayTongHop: null,
-        ngayBaoCaoHuyen: null,
-        ngayBaoCaoTinh: null,
-        ngayBaoCaoTW: null,
-        trangThai: ""
+        sysTrangThaiDongMoId: null,
+        ngayMoNam: null,
+        ngayDongNam: null,
+        ghiChu: ""
       };
     },
 
     async clickEdit(item) {
       this.overlay = true;
       this.titleDialog = "Chỉnh sửa kỳ báo cáo";
-      await this.getKyBaoCao(Number(item.id));
-      this.kyBC = Object.assign({}, this.kyBaoCao);
+      await this.getNamLamViec(Number(item.id));
+      this.namBC = Object.assign({}, this.namLamViec);
       this.isUpdate = true;
       this.isWatch = true;
       this.overlay = false;
@@ -186,7 +181,7 @@ export default {
     },
 
     async deleted(items) {
-      const res = await this.deleteKyBaoCao(items.map(e => e.id));
+      const res = await this.deleteNamLamViec(items.map(e => e.id));
       if (res.isSuccess) {
         this.notifiedType = "success";
         this.notification = "Xóa kỳ báo cáo thành công!";
@@ -205,24 +200,24 @@ export default {
       this.dialog = false;
       this.isUpdate = false;
       this.isWatch = true;
-      this.kyBC = {};
+      this.namBC = {};
       this.titleDialog = "";
     },
 
-    async saveKyBaoCaoDialog() {
+    async saveNamBaoCaoDialog() {
       let res;
       if (this.isUpdate) {
-        res = await this.updateKyBaoCao(this.kyBC);
+        res = await this.updateNamLamViec(this.namBC);
       } else {
-        res = await this.addKyBaoCao(this.kyBC);
+        res = await this.addNamLamViec(this.namBC);
         this.closeDialog();
       }
 
       if (res.isSuccess) {
         this.notifiedType = "success";
         this.notification = this.isUpdate
-          ? "Cập nhật kỳ báo cáo thành công!"
-          : "Thêm kỳ báo cáo thành công";
+          ? "Cập nhật năm báo cáo thành công!"
+          : "Thêm năm báo cáo thành công";
       } else {
         this.notifiedType = "error";
         this.notification = "Đã có lỗi xảy ra, vui lòng thử lại!";
@@ -241,7 +236,7 @@ export default {
         : this.pagination.pageSize;
       value.page = value.page !== undefined ? value.page : this.pagination.page;
       this.overlay = true;
-      await this.getKyBaoCaoList(value);
+      await this.getNamLamViecList(value);
       this.overlay = false;
     }
   }

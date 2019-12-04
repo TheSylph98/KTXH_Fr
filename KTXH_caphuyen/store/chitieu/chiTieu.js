@@ -130,7 +130,7 @@ export const actions = {
   async addChiTieu({ state, commit }, chi_tieu) {
     const res = { isSuccess: false }
     const { chiTieu } = state.api
-    // const uuidv1 = require('uuid/v1');
+   
     chi_tieu.uid = uuidv1();
     chi_tieu.capNhapLieuId = chi_tieu.capNhapLieuId ? Number(chi_tieu.capNhapLieuId) : chi_tieu.capNhapLieuId;
     chi_tieu.capTongHopId = chi_tieu.capTongHopId ? Number(chi_tieu.capTongHopId) : chi_tieu.capTongHopId;
@@ -180,12 +180,27 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${chiTieu}/delete`, { id: idList })
       if (data) {
-        commit('DELETE_CHI_TIEU', idList)
+        for (let index = 0; index < data.length; index++) {
+          
+          let isErr = data[index].Error;
+          if (isErr != null) {
+            idList[index] = -1
+          }
+        }
+        
+        var idListAccept = idList.filter(function(value, index, arr){
+          return value > 0;
+        });
+        
+        if ( idList.length === idListAccept.length) {
+          res.isSuccess = true
+        }
+        commit('DELETE_CHI_TIEU', idListAccept)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
-          value: state.pagination.total - idList.length
+          value: state.pagination.total - idListAccept.length
         })
-        res.isSuccess = true
+        
       }
     } catch (err) {
       console.log('deleteChiTieu', err)

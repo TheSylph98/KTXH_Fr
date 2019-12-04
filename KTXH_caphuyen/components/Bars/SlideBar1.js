@@ -72,10 +72,22 @@ export default [
             },
         ]
     },
-    {
-        icon: "mdi-timer",
-        title: "Khai Báo Kỳ Báo Cáo",
-        to: "/bao-cao/ky-bao-cao"
+    {   
+        icon: "mdi-chart-histogram",
+        title: "Quản lý",
+        children: [ 
+            {
+            icon: "mdi-timer",
+            title: "Khai Báo Kỳ Báo Cáo",
+            to: "/bao-cao/ky-bao-cao"
+            }
+            //,
+            // {
+            // icon: "mdi-calendar-text",
+            // title: "Năm Báo Cáo",
+            // to: "/bao-cao/nam-bao-cao"
+            // }
+        ]
     },
     {
         icon: "mdi-file-document-box-multiple-outline",

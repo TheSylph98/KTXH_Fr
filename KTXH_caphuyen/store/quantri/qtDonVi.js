@@ -147,6 +147,7 @@ export const actions = {
     try {
       const data = await this.$axios.$post(`${qtDonVi}/create`, donVi)
 
+      
       commit('ADD_DON_VI', { newEl: data })
       commit('SET_PAGINATION_KEY', {
         property: 'total',
@@ -182,14 +183,31 @@ export const actions = {
 
     try {
       const data = await this.$axios.$post(`${qtDonVi}/delete`, { id: idList })
-
+      
       if (data) {
-        commit('DELETE_DON_VI', idList)
+        for (let index = 0; index < data.length; index++) {
+          
+          let isErr = data[index].Error;
+          if (isErr != null) {
+            idList[index] = -1
+          }
+        }
+        
+        var idListAccept = idList.filter(function(value, index, arr){
+          return value > 0;
+        });
+        
+        if ( idList.length === idListAccept.length) {
+          res.isSuccess = true
+        }
+
+        commit('DELETE_DON_VI', idListAccept)
         commit('SET_PAGINATION_KEY', {
           property: 'total',
-          value: state.pagination.total - idList.length
+          value: state.pagination.total - idListAccept.length
         })
-        res.isSuccess = true
+        
+        
       }
     } catch (err) {
       console.log('deleteQTDonVi', err)
