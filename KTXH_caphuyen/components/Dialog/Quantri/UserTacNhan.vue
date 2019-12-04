@@ -112,7 +112,6 @@ export default {
     async chonTacNhan(item) {
       this.userTacNhanList.qtUsersId = Number(this.user.id);
       this.userTacNhanList.listTNid = this.selItems;
-      //this.userTacNhanList.oldList = this.tacNhanUserList;
 
       const { isSuccess } = await this.updateTacNhanList(this.userTacNhanList);
 
