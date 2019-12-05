@@ -63,10 +63,10 @@
         <span>{{ indexObject[column.item.id] }}</span>
       </template>
 
-      <template v-for="(el, index) in headerType" :slot="`item.${el}`" slot-scope="column">
-        <slot :name="el" :column="column">
-          <span :key="index" v-if="el === 'date'">{{column.item[el] | formatDate }}</span>
-          <span :key="index">{{ column.item[el] }}</span>
+      <template v-for="(el, index) in headerType" :slot="`item.${el.value}`" slot-scope="column">
+        <slot :name="el.value" :column="column">
+          <span :key="index" v-if="el.type === 'date'">{{column.item[el.value] | formatDate }}</span>
+          <span :key="index" v-else>{{ getTableValue(column.item, el.value) }}</span>
         </slot>
       </template>
 
@@ -248,7 +248,12 @@ export default {
 
   computed: {
     headerType() {
-      return this.headers.map(item => item.value);
+      return this.headers.map(item => { 
+        return {
+        value: item.value,
+        type: item.type
+        }
+      });
     },
 
     checkBoxWidth() {

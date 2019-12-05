@@ -121,12 +121,21 @@ export default {
   },
   props: {
     namBaoCao: {
-      type: Object
+      type: Object,
+      default: {
+        ma: null,
+        nam: null,
+        ten: "",
+        sysTrangThaiDongMoId: null,
+        ngayMoNam: null,
+        ngayDongNam: null,
+        ghiChu: ""
+      }
     },
 
     formTitle: {
       type: String,
-      default: "Thêm kỳ báo cáo mới"
+      default: "Thêm báo cáo mới"
     },
     isUpdate: {
       type: Boolean,

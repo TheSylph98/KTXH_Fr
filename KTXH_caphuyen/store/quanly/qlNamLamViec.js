@@ -132,7 +132,7 @@ import {
       const uuidv1 = require('uuid/v1');
   
       namLamViec.uid = uuidv1();
-      
+      namLamViec.nam = Number(namLamViec.nam)
   
       try {
         const data = await this.$axios.$post(`${qlNamLamViec}/create`, namLamViec)

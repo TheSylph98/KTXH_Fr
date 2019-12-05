@@ -81,12 +81,12 @@ export default [
             title: "Khai Báo Kỳ Báo Cáo",
             to: "/bao-cao/ky-bao-cao"
             }
-            //,
-            // {
-            // icon: "mdi-calendar-text",
-            // title: "Năm Báo Cáo",
-            // to: "/bao-cao/nam-bao-cao"
-            // }
+            ,
+            {
+            icon: "mdi-calendar-text",
+            title: "Năm Báo Cáo",
+            to: "/bao-cao/nam-bao-cao"
+            }
         ]
     },
     {

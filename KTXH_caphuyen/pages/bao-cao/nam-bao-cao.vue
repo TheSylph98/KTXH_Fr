@@ -25,7 +25,7 @@
       <v-dialog v-model="dialog" max-width="800px">
         <NamBaoCao
           v-if="dialog"
-          :namLamViec="namBC"
+          :namBaoCao="namBC"
           :formTitle="titleDialog"
           :isUpdate="isUpdate"
           :isWatch="isWatch"
@@ -65,15 +65,7 @@ export default {
           align: "center",
           sorttable: true,
           value: "ma",
-          type: "number",
-          width: "8.5%"
-        },
-        {
-          text: "Năm",
-          align: "center",
-          sorttable: true,
-          value: "nam",
-          type: "number",
+          type: "string",
           width: "8.5%"
         },
         {
@@ -84,6 +76,15 @@ export default {
           type: "string",
           width: "21.25%"
         },
+        {
+          text: "Năm",
+          align: "center",
+          sorttable: true,
+          value: "nam",
+          type: "number",
+          width: "8.5%"
+        },
+        
         {
           text: "Ngày mở báo cáo",
           align: "center",
@@ -119,15 +120,15 @@ export default {
     ...mapState("quanly/qlNamLamViec", ["namLamViecList", "namLamViec", "pagination"])
   },
 
-//   asyncData({ store }) {
-//     store.dispatch("quanly/qlNamBaoCao/getNamLamViecList");
-//   },
+  asyncData({ store }) {
+    store.dispatch("quanly/qlNamBaoCao/getNamLamViecList");
+  },
 
   async created() {
     if (!this.namLamViecList.length) {
       this.overlay = true;
       await this.getNamLamViecList();
-      //await this.getLoaiBaoCaoList();
+      await this.getTrangThaiDongMoList();
       this.overlay = false;
     }
   },
