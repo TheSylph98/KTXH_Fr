@@ -8,10 +8,14 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-text-field dense v-model="tinh.ma" label="Mã tỉnh*" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field dense v-model="tinh.ma" label="Mã tỉnh"
+             :rules="[v => !!v || 'Không được để trống']"
+             prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field dense v-model="tinh.ten" label="Tỉnh*" prepend-inner-icon="mdi-drag"></v-text-field>
+            <v-text-field dense v-model="tinh.ten" label="Tên Tỉnh" \
+            :rules="[v => !!v || 'Không được để trống']"
+            prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>
           <v-col class="d-flex" cols="6">
             <SelectedWithSearch
@@ -27,7 +31,7 @@
             <SelectedWithSearch
               :items="loaidvhcList"
               :itemObj="loaidvhcObj"
-              label="Loại đơn vị hành chính"
+              label="Loại đơn vị hành chính*"
               icon="mdi-apps"
               @select="tinh.sysLoaiDonViHanhChinhId  = $event.id"
               @search="getSearchLoaiDonViHanhChinhList($event)"

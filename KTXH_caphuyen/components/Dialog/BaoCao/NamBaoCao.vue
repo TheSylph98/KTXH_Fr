@@ -9,7 +9,9 @@
         <v-row>
 
           <v-col cols="6">
-            <v-text-field dense v-model="namBaoCao.ma" label="Mã" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field dense v-model="namBaoCao.ma" label="Mã"
+              :rules="[v => !!v || 'Không được để trống']"
+              prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
 
           <v-col cols="6">
@@ -17,6 +19,7 @@
               dense
               v-model="namBaoCao.ten"
               label="Tên báo cáo"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-database"
             ></v-text-field>
           </v-col>
@@ -26,6 +29,7 @@
               dense
               v-model="namBaoCao.nam"
               label="Năm"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-timetable"
             ></v-text-field>
           </v-col>

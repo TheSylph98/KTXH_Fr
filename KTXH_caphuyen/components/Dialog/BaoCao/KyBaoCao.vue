@@ -11,20 +11,24 @@
             <v-text-field
               dense
               v-model="kyBaoCao.nam"
-              label="Năm*"
+              label="Năm"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-timetable"
             ></v-text-field>
           </v-col>
 
           <v-col cols="6">
-            <v-text-field dense v-model="kyBaoCao.ma" label="Mã*" prepend-inner-icon="mdi-codepen"></v-text-field>
+            <v-text-field dense v-model="kyBaoCao.ma" label="Mã"
+             :rules="[v => !!v || 'Không được để trống']"            
+             prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
 
           <v-col cols="6">
             <v-text-field
               dense
               v-model="kyBaoCao.ten"
-              label="Kỳ báo cáo*"
+              label="Kỳ báo cáo"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-database"
             ></v-text-field>
           </v-col>

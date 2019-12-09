@@ -12,6 +12,7 @@
               dense
               v-model="donVi.ma"
               label="Mã đơn vị"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
@@ -20,6 +21,7 @@
               dense
               v-model="donVi.ten"
               label="Tên Đơn Vị"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
@@ -27,7 +29,8 @@
             <SelectedWithSearch
               :items="nhomDVList"
               :itemObj="nhomDVObj"
-              label="Nhóm đơn vị"
+              label="Nhóm đơn vị*"
+              :rules="[v => !!v || 'Không được để trống']"
               icon="mdi-apps"
               @select="donVi.sysNhomDonViId = $event.id"
               @search="getSearchNhomDonViList($event)"

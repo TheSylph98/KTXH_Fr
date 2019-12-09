@@ -11,7 +11,8 @@
             <v-text-field
               dense
               v-model="chiTieuPhanToChiTiet.ma"
-              label="Kí hiệu*"
+              label="Mã"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
@@ -19,7 +20,8 @@
             <v-text-field
               dense
               v-model="chiTieuPhanToChiTiet.ten"
-              label="Tên chỉ tiêu phân tổ chi tiết*"
+              label="Tên chỉ tiêu phân tổ chi tiết"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
@@ -27,7 +29,7 @@
             <SelectedWithSearch
               :items="ctPhanToList"
               :itemObj="ctPhanToObj"
-              label="Chỉ tiêu phân tổ"
+              label="Chỉ tiêu phân tổ*"
               icon="mdi-apps"
               @select="chiTieuPhanToChiTiet.chiTieuPhanToId = $event.id"
               @search="getSearchChiTieuPhanToList($event)"

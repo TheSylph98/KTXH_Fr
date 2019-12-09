@@ -11,7 +11,7 @@
             <v-text-field dense 
               v-model="user.ma" 
               label="Mã"
-              :rules="[v => !!v || 'Mã is required']" 
+              :rules="[v => !!v || 'Không được để trống']" 
               prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="6">
@@ -19,6 +19,7 @@
               dense
               v-model="user.ten"
               label="Họ và tên"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-account-box"
             ></v-text-field>
           </v-col>
@@ -28,6 +29,7 @@
               v-model="user.matKhau"
               label="Mật khẩu"
               type="password"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-spellcheck"
             ></v-text-field>
           </v-col>
@@ -40,7 +42,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field dense v-model="user.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
+            <v-text-field dense v-model="user.email" type="email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch

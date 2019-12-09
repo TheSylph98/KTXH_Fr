@@ -11,7 +11,8 @@
             <v-text-field
               dense
               v-model="chiTieuNhom.ma"
-              label="Mã*"
+              label="Mã"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
@@ -19,7 +20,8 @@
             <v-text-field
               dense
               v-model="chiTieuNhom.ten"
-              label="Tên chỉ tiêu nhóm*"
+              label="Tên chỉ tiêu nhóm"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>

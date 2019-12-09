@@ -11,7 +11,8 @@
             <SelectedWithSearch
               :items="tList"
               :itemObj="tinhObj"
-              label="Tỉnh*"
+              label="Tỉnh"
+              :rules="[v => !!v || 'Không được để trống']"
               icon="mdi-map-marker"
               @select="huyen.qcTinhId = $event.id"
               @search="getSearchTinhList($event)"
@@ -21,18 +22,21 @@
             <v-text-field
               dense
               v-model="huyen.ma"
-              label="Mã huyện*"
+              label="Mã huyện"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-text-field dense v-model="huyen.ten" label="Huyện*" prepend-inner-icon="mdi-drag"></v-text-field>
+            <v-text-field dense v-model="huyen.ten" label="Tên Huyện"
+             :rules="[v => !!v || 'Không được để trống']"
+             prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>
           <v-col class="d-flex" cols="6">
             <SelectedWithSearch
               :items="caphcList"
               :itemObj="capHanhChinhObj"
-              label="Cấp đơn vị hành chính"
+              label="Cấp đơn vị hành chính*"
               icon="mdi-apps"
               @select="huyen.sysCapDonViHanhChinh = $event.id"
               @search="getSearchCapHanhChinhList($event)"
@@ -42,7 +46,7 @@
             <SelectedWithSearch
               :items="loaidvhcList"
               :itemObj="loaidvhcObj"
-              label="Loại đơn vị hành chính"
+              label="Loại đơn vị hành chính*"
               icon="mdi-apps"
               @select="huyen.sysLoaiDonViHanhChinhId  = $event.id"
               @search="getSearchLoaiDonViHanhChinhList($event)"

@@ -12,7 +12,8 @@
               dense
               v-model="truongNhapLieu.ma"
               value="truongNhapLieu.ma"
-              label="Kí Hiệu*"
+              label="Kí hiệu"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
@@ -20,7 +21,8 @@
             <v-text-field
               dense
               v-model="truongNhapLieu.ten"
-              label="Tên Biểu Nhập Liệu*"
+              label="Tên biểu nhập liệu"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
@@ -30,7 +32,7 @@
             <SelectedWithSearch
               :items="bieuNhapLieuList"
               :itemObj="bieuNhapLieuObj"
-              label="Biểu nhập liệu"
+              label="Biểu nhập liệu*"
               icon="mdi-apps"
               @select="truongNhapLieu.bieuNhapLieuId = $event.id"
               @search="getSearchBieuNhapLieuList($event)"
@@ -40,7 +42,7 @@
             <SelectedWithSearch
               :items="tnlList"
               :itemObj="truongNhapLieuObj"
-              label="Trường nhập liệu"
+              label="Trường nhập liệu*"
               icon="mdi-apps"
               @select="truongNhapLieu.truongNhapLieuId = $event.id"
               @search="getSearchTruongNhaplieuList($event)"
