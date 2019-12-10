@@ -47,7 +47,7 @@ module.exports = {
 
   proxy: {
     '/api/': {
-      target: process.env.API_ENDPOINT || "http://vuongdx.ddns.net:3000/api",
+      target: process.env.API_ENDPOINT || "http://103.124.93.35:5000/api",
       pathRewrite: { '^/api/': '' }
     }
   },
