@@ -13,7 +13,7 @@
              prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field dense v-model="tinh.ten" label="Tên Tỉnh" \
+            <v-text-field dense v-model="tinh.ten" label="Tên Tỉnh" 
             :rules="[v => !!v || 'Không được để trống']"
             prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>

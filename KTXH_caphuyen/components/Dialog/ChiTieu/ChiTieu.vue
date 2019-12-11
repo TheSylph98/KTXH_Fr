@@ -11,7 +11,8 @@
             <v-text-field
               dense
               v-model="chiTieu.ma"
-              label="Mã chỉ tiêu*"
+              label="Mã chỉ tiêu"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
@@ -20,7 +21,8 @@
             <v-text-field
               dense
               v-model="chiTieu.ten"
-              label="Tên chỉ tiêu*"
+              label="Tên chỉ tiêu"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
@@ -78,7 +80,8 @@
             <v-text-field
               dense
               v-model="chiTieu.donViTinh"
-              label="Đơn vị tính*"
+              label="Đơn vị tính"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-resize-bottom-right"
             ></v-text-field>
           </v-col>
@@ -103,7 +106,8 @@
             <v-textarea
               dense
               v-model="chiTieu.congThucCong"
-              label="Cộng Công Thức*"
+              label="Cộng Công Thức"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-plus-circle"
             ></v-textarea>
           </v-col>

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Table from "../../components/table.vue";
+import Table from "@/components/table.vue";
 import { mapState, mapActions } from "vuex";
 import Tinh from "@/components/Dialog/QuyChuan/Tinh";
 export default {
