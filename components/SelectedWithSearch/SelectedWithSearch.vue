@@ -11,6 +11,7 @@
     :label="label"
     :placeholder="placeholder"
     :prepend-icon="icon"
+    :disabled="disabled"
     return-object
     @update:search-input="changeSearch"
     @input="$emit('select', $event)"
@@ -21,6 +22,9 @@
 import _ from "lodash";
 export default {
   props: {
+    disabled: {
+      type: Boolean
+    },
     itemObj: {
       type: Object,
       default() {

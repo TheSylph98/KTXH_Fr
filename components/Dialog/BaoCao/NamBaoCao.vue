@@ -9,7 +9,9 @@
         <v-row>
 
           <v-col cols="6">
-            <v-text-field dense v-model="namBaoCao.ma" label="Mã"
+            <v-text-field dense v-model="namBaoCao.ma" 
+              label="Mã"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
@@ -19,6 +21,7 @@
               dense
               v-model="namBaoCao.ten"
               label="Tên báo cáo"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-database"
             ></v-text-field>
@@ -29,6 +32,7 @@
               dense
               v-model="namBaoCao.nam"
               label="Năm"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-timetable"
             ></v-text-field>
@@ -38,6 +42,7 @@
               :items="loaiBCList"
               :itemObj="loaiBCObj"
               label="Trạng thái đóng mở"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="namBaoCao.sysTrangThaiDongMoId = $event.id"
               @search="getSearchTrangThaiDongMoList($event)"
@@ -56,11 +61,12 @@
                   dense
                   v-model="namBaoCao.ngayMoNam"
                   label="Ngày mở"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
-              <v-date-picker dense v-model="namBaoCao.ngayMoNam" no-title @input="menu.ngayMoNam = false"></v-date-picker>
+              <v-date-picker dense v-model="namBaoCao.ngayMoNam" no-title :disabled="!isWatch" @input="menu.ngayMoNam = false"></v-date-picker>
             </v-menu>
           </v-col>
 
@@ -77,6 +83,7 @@
                   dense
                   v-model="namBaoCao.ngayDongNam"
                   label="Ngày đóng"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
@@ -84,6 +91,7 @@
               <v-date-picker
                 dense
                 v-model="namBaoCao.ngayDongNam"
+                :disabled="!isWatch"
                 no-title
                 @input="menu.ngayDongNam = false"
               ></v-date-picker>
@@ -94,6 +102,7 @@
             <v-textarea
               dense
               v-model="namBaoCao.ghiChu"
+              :disabled="!isWatch"
               label="Ghi Chú"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
@@ -101,7 +110,7 @@
 
           
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="namBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="namBaoCao.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>

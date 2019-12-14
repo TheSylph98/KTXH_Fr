@@ -9,11 +9,13 @@
         <v-row>
           <v-col cols="6">
             <v-text-field dense v-model="tinh.ma" label="Mã tỉnh"
+             :disabled="!isWatch"
              :rules="[v => !!v || 'Không được để trống']"
              prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
           <v-col cols="6">
             <v-text-field dense v-model="tinh.ten" label="Tên Tỉnh" 
+            :disabled="!isWatch"
             :rules="[v => !!v || 'Không được để trống']"
             prepend-inner-icon="mdi-drag"></v-text-field>
           </v-col>
@@ -22,6 +24,7 @@
               :items="caphcList"
               :itemObj="capHanhChinhObj"
               label="Cấp đơn vị hành chính*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="tinh.sysCapDonViHanhChinh = $event.id"
               @search="getSearchCapHanhChinhList($event)"
@@ -32,33 +35,35 @@
               :items="loaidvhcList"
               :itemObj="loaidvhcObj"
               label="Loại đơn vị hành chính*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="tinh.sysLoaiDonViHanhChinhId  = $event.id"
               @search="getSearchLoaiDonViHanhChinhList($event)"
             />
           </v-col>
           <v-col class="d-flex" cols="3">
-            <v-switch dense v-model="tinh.nongThon" class="ma-1" label="Nông thôn"></v-switch>
+            <v-switch dense v-model="tinh.nongThon" :disabled="!isWatch" class="ma-1" label="Nông thôn"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="3">
-            <v-switch dense v-model="tinh.bienGioi" class="ma-1" label="Biên giới"></v-switch>
+            <v-switch dense v-model="tinh.bienGioi" :disabled="!isWatch" class="ma-1" label="Biên giới"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="3">
-            <v-switch dense v-model="tinh.haiDao" class="ma-1" label="Hải đảo"></v-switch>
+            <v-switch dense v-model="tinh.haiDao" :disabled="!isWatch" class="ma-1" label="Hải đảo"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="3">
             <v-switch
               dense
               v-model="tinh.vungDBKhoKhan"
               class="ma-1"
+              :disabled="!isWatch"
               label="Vùng đặc biệt khó khăn"
             ></v-switch>
           </v-col>
           <v-col class="d-flex" cols="12">
-            <v-textarea dense v-model="tinh.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+            <v-textarea dense v-model="tinh.ghiChu" :disabled="!isWatch" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="tinh.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="tinh.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>

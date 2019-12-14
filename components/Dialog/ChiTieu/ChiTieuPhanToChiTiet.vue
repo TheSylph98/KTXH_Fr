@@ -10,39 +10,45 @@
           <v-col cols="6">
             <v-text-field
               dense
-              v-model="tacNhan.ma"
-              label="Mã tác nhân*"
+              v-model="chiTieuPhanToChiTiet.ma"
+              label="Mã"
+              :disabled="!isWatch"
+              :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
           <v-col cols="6">
             <v-text-field
               dense
-              v-model="tacNhan.ten"
-              label="Tên tác nhân*"
-              prepend-inner-icon="mdi-account"
+              v-model="chiTieuPhanToChiTiet.ten"
+              label="Tên chỉ tiêu phân tổ chi tiết"
+              :disabled="!isWatch"
+              :rules="[v => !!v || 'Không được để trống']"
+              prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
           <v-col cols="12">
             <SelectedWithSearch
-              :items="capHanhChinhList"
-              :itemObj="capHanhchinhObj"
-              label="Cấp hành chính*"
+              :items="ctPhanToList"
+              :itemObj="ctPhanToObj"
+              label="Chỉ tiêu phân tổ*"
+              :disabled="!isWatch"
               icon="mdi-apps"
-              @select="tacNhan.sysCapHanhChinhId = $event.id"
-              @search="getSearchCapHanhChinhList($event)"
+              @select="chiTieuPhanToChiTiet.chiTieuPhanToId = $event.id"
+              @search="getSearchChiTieuPhanToList($event)"
             />
           </v-col>
           <v-col cols="12">
             <v-textarea
               dense
-              v-model="tacNhan.ghiChu"
-              label="Chức năng, Nhiệm vụ"
-              prepend-inner-icon="mdi-star"
+              v-model="chiTieuPhanToChiTiet.ghiChu"
+              label="Ghi Chú"
+              :disabled="!isWatch"
+              prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="tacNhan.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="chiTieuPhanToChiTiet.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>
@@ -55,7 +61,6 @@
     </v-card-actions>
   </v-card>
 </template>
-
 <script>
 import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
 import { mapState, mapActions } from "vuex";
@@ -65,7 +70,7 @@ export default {
     SelectedWithSearch
   },
   props: {
-    tacNhan: {
+    chiTieuPhanToChiTiet: {
       type: Object
     },
     formTitle: {
@@ -82,27 +87,23 @@ export default {
     }
   },
   computed: {
-    ...mapState("sys/sysCapHanhChinh", [
-      "caphanhchinhList",
-      "searchCapHanhChinhList"
+    ...mapState("chitieu/chiTieuPhanTo", [
+      "chiTieuPhanToList",
+      "searchChiTieuPhanToList"
     ]),
-    capHanhChinhList() {
-      const sysCapHanhChinh = this.tacNhan.belongsToSysCapHanhChinh
-        ? this.tacNhan.belongsToSysCapHanhChinh
-        : [];
-      if (this.searchCapHanhChinhList.length > 0)
-        return sysCapHanhChinh.concat(this.searchCapHanhChinhList);
-      else return sysCapHanhChinh.concat(this.caphanhchinhList);
+    ctPhanToList() {
+      if (this.searchChiTieuPhanToList.length > 0)
+        return this.searchChiTieuPhanToList;
+      else return this.chiTieuPhanToList;
     },
-
-    capHanhchinhObj() {
-      if (this.tacNhan.belongsToSysCapHanhChinh) {
-        return this.tacNhan.belongsToSysCapHanhChinh[0];
+    ctPhanToObj() {
+      if (this.chiTieuPhanToChiTiet.belongsToChiTieuPhanTo) {
+        return this.chiTieuPhanToChiTiet.belongsToChiTieuPhanTo[0];
       } else return {};
     }
   },
   methods: {
-    ...mapActions("sys/sysCapHanhChinh", ["getSearchCapHanhChinhList"])
+    ...mapActions("chitieu/chiTieuPhanTo", ["getSearchChiTieuPhanToList"])
   }
 };
 </script>

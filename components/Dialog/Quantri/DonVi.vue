@@ -12,6 +12,7 @@
               dense
               v-model="donVi.ma"
               label="Mã đơn vị"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
@@ -21,6 +22,7 @@
               dense
               v-model="donVi.ten"
               label="Tên Đơn Vị"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
@@ -29,6 +31,7 @@
             <SelectedWithSearch
               :items="nhomDVList"
               :itemObj="nhomDVObj"
+              :disabled="!isWatch"
               label="Nhóm đơn vị*"
               :rules="[v => !!v || 'Không được để trống']"
               icon="mdi-apps"
@@ -40,6 +43,7 @@
             <SelectedWithSearch
               :items="dvList"
               :itemObj="qtDonViObj"
+              :disabled="!isWatch"
               label="Đơn vị cha"
               icon="mdi-apps"
               @select="donVi.donViChaId = $event.id"
@@ -50,31 +54,37 @@
             <v-text-field
               dense
               v-model="donVi.soDienThoai"
+              :disabled="!isWatch"
               label="Số Điện Thoại"
               prepend-inner-icon="mdi-phone"
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field dense v-model="donVi.email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
+            <v-text-field dense v-model="donVi.email"
+             :disabled="!isWatch"
+             label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
           </v-col>
 
           <v-col cols="12">
             <v-text-field
               dense
               v-model="donVi.diaChi"
+              :disabled="!isWatch"
               label="Địa Chỉ"
               prepend-inner-icon="mdi-map-marker"
             ></v-text-field>
           </v-col>
 
           <v-col class="d-flex" cols="12">
-            <v-textarea dense v-model="donVi.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+            <v-textarea dense v-model="donVi.ghiChu" 
+            :disabled="!isWatch"
+            label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-switch dense v-model="donVi.laDonVi" class="ma-1" label="Là đơn vị"></v-switch>
+            <v-switch dense v-model="donVi.laDonVi" :disabled="!isWatch" class="ma-1" label="Là đơn vị"></v-switch>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="donVi.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="donVi.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>

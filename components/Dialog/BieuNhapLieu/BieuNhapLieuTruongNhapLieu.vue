@@ -10,8 +10,10 @@
           <v-col cols="6">
             <v-text-field
               dense
-              v-model="chiTieu.ma"
+              v-model="truongNhapLieu.ma"
+              value="truongNhapLieu.ma"
               label="Kí hiệu"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
@@ -19,8 +21,9 @@
           <v-col cols="6">
             <v-text-field
               dense
-              v-model="chiTieu.ten"
+              v-model="truongNhapLieu.ten"
               label="Tên biểu nhập liệu"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
@@ -32,19 +35,21 @@
               :items="bieuNhapLieuList"
               :itemObj="bieuNhapLieuObj"
               label="Biểu nhập liệu*"
+              :disabled="!isWatch"
               icon="mdi-apps"
-              @select="chiTieu.bieuNhapLieuId = $event.id"
+              @select="truongNhapLieu.bieuNhapLieuId = $event.id"
               @search="getSearchBieuNhapLieuList($event)"
             />
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
-              :items="ctList"
-              :itemObj="chiTieuObj"
-              label="Chỉ Tiêu*"
+              :items="tnlList"
+              :itemObj="truongNhapLieuObj"
+              label="Trường nhập liệu*"
+              :disabled="!isWatch"
               icon="mdi-apps"
-              @select="chiTieu.chiTieuId = $event.id"
-              @search="getSearchChiTieuList($event)"
+              @select="truongNhapLieu.truongNhapLieuId = $event.id"
+              @search="getSearchTruongNhaplieuList($event)"
             />
           </v-col>
         </v-row>
@@ -52,13 +57,14 @@
           <v-col cols="12">
             <v-textarea
               dense
-              v-model="chiTieu.ghiChu"
+              v-model="truongNhapLieu.ghiChu"
+              :disabled="!isWatch"
               label="Ghi Chú"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="kyBaoCao.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>
@@ -71,7 +77,6 @@
     </v-card-actions>
   </v-card>
 </template>
-
 <script>
 import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
 import { mapState, mapActions } from "vuex";
@@ -82,13 +87,13 @@ export default {
   },
 
   props: {
-    chiTieu: {
+    truongNhapLieu: {
       type: Object
     },
 
     formTitle: {
       type: String,
-      default: "Thêm Mới"
+      default: "Thêm mới biểu nhập liệu trường nhập liệu"
     },
     isUpdate: {
       type: Boolean,
@@ -99,37 +104,41 @@ export default {
       default: true
     }
   },
-  // mounted() {
-  //  console.log("bnl", this.bnlList)
-  // },
 
   computed: {
     ...mapState("bieunhaplieu/bieuNhapLieu", ["bnlList", "searchBnlList"]),
-    ...mapState("chitieu/chiTieu", ["chiTieuList", "searchChiTieuList"]),
+    ...mapState("truongNhapLieu", [
+      "truongnhaplieuList",
+      "searchTruongNhapLieuList"
+    ]),
     bieuNhapLieuList() {
+      //console.log(this.bnlList)
       if (this.searchBnlList.length > 0) return this.searchBnlList;
       else return this.bnlList;
     },
-    ctList() {
-      if (this.searchChiTieuList.length > 0) return this.searchChiTieuList;
-      else return this.chiTieuList;
+
+    tnlList() {
+      if (this.searchTruongNhapLieuList.length > 0)
+        return this.searchTruongNhapLieuList;
+      else return this.truongnhaplieuList;
     },
+
     bieuNhapLieuObj() {
-      if (this.chiTieu.belongsToBieuNhapLieu) {
-        return this.chiTieu.belongsToBieuNhapLieu[0];
+      if (this.truongNhapLieu.belongsToBieuNhapLieu) {
+        return this.truongNhapLieu.belongsToBieuNhapLieu[0];
       } else return {};
     },
 
-    chiTieuObj() {
-      if (this.chiTieu.belongsToChiTieu) {
-        return this.chiTieu.belongsToChiTieu[0];
+    truongNhapLieuObj() {
+      if (this.truongNhapLieu.belongsToTruongNhapLieu) {
+        return this.truongNhapLieu.belongsToTruongNhapLieu[0];
       } else return {};
     }
   },
 
   methods: {
     ...mapActions("bieunhaplieu/bieuNhapLieu", ["getSearchBieuNhapLieuList"]),
-    ...mapActions("chitieu/chiTieu", ["getSearchChiTieuList"])
+    ...mapActions("truongNhapLieu", ["getSearchTruongNhaplieuList"])
   }
 };
 </script>

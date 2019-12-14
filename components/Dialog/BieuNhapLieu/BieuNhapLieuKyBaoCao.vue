@@ -12,6 +12,7 @@
               dense
               v-model="kyBaoCao.ma"
               label="Kí hiệu"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
@@ -21,6 +22,7 @@
               dense
               v-model="kyBaoCao.ten"
               label="Tên biểu nhập liệu"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
@@ -32,6 +34,7 @@
               :items="bieuNhapLieuList"
               :itemObj="bieuNhapLieuObj"
               label="Biểu nhập liệu*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="kyBaoCao.bieuNhapLieuId = $event.id"
               @search="getSearchBieuNhapLieuList($event)"
@@ -42,6 +45,7 @@
               :items="kyBaoCaoDataList"
               :itemObj="kyBaoCaoObj"
               label="Kỳ Báo Cáo*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="kyBaoCao.qlKyBaoCaoId = $event.id"
               @search="getSearchKyBaoCaoList($event)"
@@ -53,12 +57,13 @@
             <v-textarea
               dense
               v-model="kyBaoCao.ghiChu"
+              :disabled="!isWatch"
               label="Ghi Chú"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="kyBaoCao.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>

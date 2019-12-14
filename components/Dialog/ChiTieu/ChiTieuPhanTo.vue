@@ -10,8 +10,9 @@
           <v-col cols="6">
             <v-text-field
               dense
-              v-model="chiTieuNhom.ma"
+              v-model="chiTieuPhanTo.ma"
               label="Mã"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
@@ -19,23 +20,24 @@
           <v-col cols="6">
             <v-text-field
               dense
-              v-model="chiTieuNhom.ten"
-              label="Tên chỉ tiêu nhóm"
+              v-model="chiTieuPhanTo.ten"
+              label="Tên chỉ tiêu phân tổ"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
           </v-col>
-
           <v-col cols="12">
             <v-textarea
               dense
-              v-model="chiTieuNhom.ghiChu"
+              v-model="chiTieuPhanTo.ghiChu"
               label="Ghi Chú"
+              :disabled="!isWatch"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="chiTieuNhom.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="chiTieuPhanTo.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>
@@ -51,7 +53,7 @@
 <script>
 export default {
   props: {
-    chiTieuNhom: {
+    chiTieuPhanTo: {
       type: Object,
       default: {
         ma: "",
@@ -61,7 +63,7 @@ export default {
     },
     formTitle: {
       type: String,
-      default: "Thêm mới chỉ tiêu nhóm"
+      default: "Thêm Mới"
     },
     isUpdate: {
       type: Boolean,

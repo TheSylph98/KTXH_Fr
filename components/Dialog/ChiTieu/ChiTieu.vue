@@ -13,6 +13,7 @@
               v-model="chiTieu.ma"
               label="Mã chỉ tiêu"
               :rules="[v => !!v || 'Không được để trống']"
+              :disabled="!isWatch"
               prepend-inner-icon="mdi-codepen"
             ></v-text-field>
           </v-col>
@@ -22,6 +23,7 @@
               dense
               v-model="chiTieu.ten"
               label="Tên chỉ tiêu"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-drag"
             ></v-text-field>
@@ -31,6 +33,7 @@
               :items="capNhapLieuList"
               :itemObj="capNhapLieuObj"
               label="Cấp nhập liệu*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="chiTieu.capNhapLieuId = $event.id"
               @search="getSearchCapHanhChinhList($event)"
@@ -41,6 +44,7 @@
               :items="capTongHopList"
               :itemObj="capTongHopObj"
               label="Cấp tổng hợp*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="chiTieu.capTongHopId = $event.id"
               @search="getSearchCapHanhChinhList($event)"
@@ -51,6 +55,7 @@
               :items="ctNhomList"
               :itemObj="ctNhomObj"
               label="Chỉ tiêu nhóm*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="chiTieu.chiTieuNhomId = $event.id"
               @search="getSearchChiTieuNhomList($event)"
@@ -61,6 +66,7 @@
               :items="ctPhanToList"
               :itemObj="ctPhanToObj"
               label="Chỉ tiêu phân tổ*"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="chiTieu.chiTieuPhanToId = $event.id"
               @search="getSearchChiTieuPhanToList($event)"
@@ -71,6 +77,7 @@
               :items="chiTieuChaList"
               :itemObj="ctChaObj"
               label="Chỉ tiêu cha"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="chiTieu.chiTieuChaId = $event.id"
               @search="getSearchChiTieuList($event)"
@@ -81,6 +88,7 @@
               dense
               v-model="chiTieu.donViTinh"
               label="Đơn vị tính"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-resize-bottom-right"
             ></v-text-field>
@@ -91,6 +99,7 @@
               v-model="chiTieu.congDonTuDuoiLen"
               class="ma-1"
               label="Cộng từ dưới lên"
+              :disabled="!isWatch"
             ></v-switch>
           </v-col>
           <v-col cols="6">
@@ -99,6 +108,7 @@
               v-model="chiTieu.congTheoMa"
               class="ma-1"
               label="Cộng theo mã"
+              :disabled="!isWatch"
               prepend-inner-icon="mdi-plus-box"
             ></v-switch>
           </v-col>
@@ -107,6 +117,7 @@
               dense
               v-model="chiTieu.congThucCong"
               label="Cộng Công Thức"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-plus-circle"
             ></v-textarea>
@@ -117,16 +128,18 @@
               v-model="chiTieu.coPhanToKhong"
               class="ma-1"
               label="Có phân tổ hay không?"
+              :disabled="!isWatch"
             ></v-switch>
           </v-col>
           <v-col class="d-flex" cols="4">
-            <v-switch dense v-model="chiTieu.tinhPhanTram" class="ma-1" label="Tính Phần Trăm"></v-switch>
+            <v-switch dense v-model="chiTieu.tinhPhanTram"  :disabled="!isWatch" class="ma-1" label="Tính Phần Trăm"></v-switch>
           </v-col>
           <v-col class="d-flex" cols="4">
             <v-text-field
               dense
               v-model="chiTieu.tuSo"
               label="Tử Số"
+              :disabled="!isWatch"
               prepend-inner-icon="mdi-percent"
             ></v-text-field>
           </v-col>
@@ -135,6 +148,7 @@
               dense
               v-model="chiTieu.mauSo"
               label="Mẫu Số"
+              :disabled="!isWatch"
               prepend-inner-icon="mdi-percent"
             ></v-text-field>
           </v-col>
@@ -143,11 +157,12 @@
               dense
               v-model="chiTieu.ghiChu"
               label="Ghi Chú"
+              :disabled="!isWatch"
               prepend-inner-icon="mdi-note"
             ></v-textarea>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="chiTieu.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="chiTieu.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>

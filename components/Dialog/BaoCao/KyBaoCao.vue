@@ -12,6 +12,7 @@
               dense
               v-model="kyBaoCao.nam"
               label="Năm"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-timetable"
             ></v-text-field>
@@ -19,6 +20,7 @@
 
           <v-col cols="6">
             <v-text-field dense v-model="kyBaoCao.ma" label="Mã"
+             :disabled="!isWatch"
              :rules="[v => !!v || 'Không được để trống']"            
              prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
@@ -28,6 +30,7 @@
               dense
               v-model="kyBaoCao.ten"
               label="Kỳ báo cáo"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-database"
             ></v-text-field>
@@ -37,6 +40,7 @@
             <v-text-field
               dense
               v-model="kyBaoCao.trangThai"
+              :disabled="!isWatch"
               label="Trạng thái"
               prepend-inner-icon="mdi-eye"
             ></v-text-field>
@@ -45,6 +49,7 @@
             <SelectedWithSearch
               :items="loaiBCList"
               :itemObj="loaiBCObj"
+              :disabled="!isWatch"
               label="Loại báo cáo"
               icon="mdi-apps"
               @select="kyBaoCao.sysLoaiBaoCaoId = $event.id"
@@ -55,6 +60,7 @@
             <v-menu
               dense
               v-model="menu.ngayMo"
+              :disabled="!isWatch"
               :close-on-content-click="false"
               transition="scale-transition"
               offset-y
@@ -64,11 +70,14 @@
                   dense
                   v-model="kyBaoCao.ngayMo"
                   label="Ngày mở*"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
               </template>
-              <v-date-picker dense v-model="kyBaoCao.ngayMo" no-title @input="menu.ngayMo = false"></v-date-picker>
+              <v-date-picker dense v-model="kyBaoCao.ngayMo"
+               :disabled="!isWatch"
+               no-title @input="menu.ngayMo = false"></v-date-picker>
             </v-menu>
           </v-col>
 
@@ -85,6 +94,7 @@
                   dense
                   v-model="kyBaoCao.ngayDong"
                   label="Ngày đóng*"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
@@ -93,6 +103,7 @@
                 dense
                 v-model="kyBaoCao.ngayDong"
                 no-title
+                :disabled="!isWatch"
                 @input="menu.ngayDong = false"
               ></v-date-picker>
             </v-menu>
@@ -111,6 +122,7 @@
                   dense
                   v-model="kyBaoCao.ngayBatDau"
                   label="Ngày bắt đầu cập nhật*"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
@@ -119,6 +131,7 @@
                 dense
                 v-model="kyBaoCao.ngayBatDau"
                 no-title
+                :disabled="!isWatch"
                 @input="menu.ngayBatDau = false"
               ></v-date-picker>
             </v-menu>
@@ -137,6 +150,7 @@
                   dense
                   v-model="kyBaoCao.ngayTongHop"
                   label="Ngày kết thúc tổng hợp*"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
@@ -145,6 +159,7 @@
                 dense
                 v-model="kyBaoCao.ngayTongHop"
                 no-title
+                :disabled="!isWatch"
                 @input="menu.ngayTongHop = false"
               ></v-date-picker>
             </v-menu>
@@ -163,6 +178,7 @@
                   dense
                   v-model="kyBaoCao.ngayBaoCaoHuyen"
                   label="Ngày hoàn thành báo cáo cấp huyện*"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
@@ -171,6 +187,7 @@
                 dense
                 v-model="kyBaoCao.ngayBaoCaoHuyen"
                 no-title
+                :disabled="!isWatch"
                 @input="menu.ngayBaoCaoHuyen = false"
               ></v-date-picker>
             </v-menu>
@@ -189,6 +206,7 @@
                   dense
                   v-model="kyBaoCao.ngayBaoCaoTinh"
                   label="Ngày hoàn thành báo cáo cấp tỉnh*"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
@@ -197,6 +215,7 @@
                 dense
                 v-model="kyBaoCao.ngayBaoCaoTinh"
                 no-title
+                :disabled="!isWatch"
                 @input="menu.ngayBaoCaoTinh = false"
               ></v-date-picker>
             </v-menu>
@@ -215,6 +234,7 @@
                   dense
                   v-model="kyBaoCao.ngayBaoCaoTW"
                   label="Ngày hoàn thành báo cáo cấp Trung ương*"
+                  :disabled="!isWatch"
                   prepend-icon="mdi-calendar"
                   v-on="on"
                 ></v-text-field>
@@ -223,12 +243,13 @@
                 dense
                 v-model="kyBaoCao.ngayBaoCaoTW"
                 no-title
+                :disabled="!isWatch"
                 @input="menu.ngayBaoCaoTW = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="kyBaoCao.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="kyBaoCao.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>

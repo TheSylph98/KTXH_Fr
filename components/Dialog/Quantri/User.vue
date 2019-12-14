@@ -11,6 +11,7 @@
             <v-text-field dense 
               v-model="user.ma" 
               label="Mã"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']" 
               prepend-inner-icon="mdi-codepen"></v-text-field>
           </v-col>
@@ -19,6 +20,7 @@
               dense
               v-model="user.ten"
               label="Họ và tên"
+              :disabled="!isWatch"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-account-box"
             ></v-text-field>
@@ -28,6 +30,7 @@
               dense
               v-model="user.matKhau"
               label="Mật khẩu"
+              :disabled="!isWatch"
               type="password"
               :rules="[v => !!v || 'Không được để trống']"
               prepend-inner-icon="mdi-spellcheck"
@@ -38,27 +41,29 @@
               dense
               v-model="user.soDienThoai"
               label="Số điện thoại"
+              :disabled="!isWatch"
               prepend-inner-icon="mdi-phone"
             ></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field dense v-model="user.email" type="email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
+            <v-text-field dense v-model="user.email" :disabled="!isWatch" type="email" label="Email" prepend-inner-icon="mdi-gmail"></v-text-field>
           </v-col>
           <v-col cols="6">
             <SelectedWithSearch
               :items="dvList"
               :itemObj="qtDonViObj"
               label="Đơn vị"
+              :disabled="!isWatch"
               icon="mdi-apps"
               @select="user.qtDonViId = $event.id"
               @search="getSearchDonViList($event)"
             />
           </v-col>
           <v-col cols="12">
-            <v-textarea dense v-model="user.ghiChu" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
+            <v-textarea dense v-model="user.ghiChu" :disabled="!isWatch" label="Ghi Chú" prepend-inner-icon="mdi-note"></v-textarea>
           </v-col>
           <v-col v-if="isUpdate" class="d-flex" cols="4">
-            <v-switch dense v-model="user.hieuLuc" class="ma-1" label="Hiệu lực"></v-switch>
+            <v-switch dense v-model="user.hieuLuc" :disabled="!isWatch" class="ma-1" label="Hiệu lực"></v-switch>
           </v-col>
         </v-row>
       </v-container>
