@@ -205,7 +205,7 @@ export default {
         res = await this.addXa(this.xa_data);
         this.closeDialog();
       }
-
+  //
       if (res.isSuccess) {
         this.notifiedType = "success";
         this.notification = this.isUpdate
