@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      title: "Kỳ Báo Cáo",
+      title: "Kỳ báo cáo",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -70,15 +70,15 @@ export default {
         },
         {
           text: "Mã",
-          align: "center",
+          align: "left",
           sorttable: true,
           value: "ma",
           type: "string",
-          width: "21.25%"
+          width: "18.5%"
         },
         {
           text: "Kỳ báo cáo",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           type: "string",
@@ -101,7 +101,7 @@ export default {
           width: "8.5%"
         },
         {
-          text: "Trạng Thái",
+          text: "Trạng thái",
           align: "center",
           value: "trangThai",
           type: "string",
@@ -213,6 +213,7 @@ export default {
       let res;
       if (this.isUpdate) {
         res = await this.updateKyBaoCao(this.kyBC);
+        this.closeDialog();
       } else {
         res = await this.addKyBaoCao(this.kyBC);
         this.closeDialog();

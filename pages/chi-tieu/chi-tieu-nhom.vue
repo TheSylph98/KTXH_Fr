@@ -53,7 +53,7 @@ export default {
 
   data() {
     return {
-      title: "Khai Báo Nhóm Chỉ Tiêu",
+      title: "Khai báo nhóm chỉ tiêu",
       dialog: false,
       overlay: false,
       isUpdate: false,
@@ -61,15 +61,15 @@ export default {
       headers: [
         {
           text: "Mã",
-          align: "center",
+          align: "left",
           sorttable: true,
           value: "ma",
           type: "string",
-          width: "8.5%"
+          width: "18.5%"
         },
         {
           text: "Tên nhóm chỉ tiêu",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           type: "string",
@@ -77,7 +77,7 @@ export default {
         },
         {
           text: "Ghi Chú",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ghiChu",
           type: "string",
@@ -191,6 +191,7 @@ export default {
       let res;
       if (this.isUpdate) {
         res = await this.updateChiTieuNhom(this.ctNhom);
+        this.closeDialog();
       } else {
         res = await this.addChiTieuNhom(this.ctNhom);
         this.closeDialog();

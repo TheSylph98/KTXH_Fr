@@ -53,7 +53,7 @@ export default {
 
   data() {
     return {
-      title: "Chỉ Tiêu Phân Tổ Chi Tiết",
+      title: "Chỉ tiêu phân tổ chi tiết",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -64,15 +64,15 @@ export default {
       headers: [
         {
           text: "Mã",
-          align: "center",
+          align: "left",
           sorttable: true,
           value: "ma",
           type: "string",
-          width: "8.5%"
+          width: "18.5%"
         },
         {
           text: "Nội dung",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           type: "string",
@@ -80,7 +80,7 @@ export default {
         },
         {
           text: "Ghi chú",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ghiChu",
           type: "string",
@@ -203,6 +203,7 @@ export default {
 
       if (this.isUpdate) {
         res = await this.updateChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
+        this.closeDialog();
       } else {
         res = await this.addChiTieuPhanToChiTiet(this.chiTieuPhanToChiTiet);
         this.closeDialog();

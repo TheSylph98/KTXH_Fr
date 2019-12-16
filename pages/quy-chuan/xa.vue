@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      title: "Khai Báo Từ Điển: Xã",
+      title: "Khai báo quy chuẩn: Xã",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -61,23 +61,23 @@ export default {
       headers: [
         {
           text: "Mã định danh",
-          align: "center",
+          align: "left",
           sorttable: true,
           value: "ma",
-          width: "12.75%",
+          width: "18.5%",
           type: "string"
         },
         {
           text: "Tên",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           width: "34%",
           type: "string"
         },
         {
-          text: "Ghi Chú",
-          align: "center",
+          text: "Ghi chú",
+          align: "left",
           sorttable: false,
           value: "ghiChu",
           width: "29.75%",
@@ -200,6 +200,7 @@ export default {
 
       if (this.isUpdate) {
         res = await this.updateXa(this.xa_data);
+        this.closeDialog();
       } else {
         res = await this.addXa(this.xa_data);
         this.closeDialog();

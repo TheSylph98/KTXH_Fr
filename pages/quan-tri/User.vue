@@ -88,7 +88,7 @@ export default {
 
   data() {
     return {
-      title: "Khai Báo Người Dùng",
+      title: "Khai báo người dùng",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -102,29 +102,29 @@ export default {
 
       headers: [
         {
-          text: "Họ và Tên",
-          align: "center",
+          text: "Họ và tên",
+          align: "left",
           value: "ten",
           width: "21.25%",
           type: "string"
         },
         {
           text: "Số điện thoại",
-          align: "center",
+          align: "left",
           value: "soDienThoai",
           width: "12.75%",
           type: "string"
         },
         {
           text: "Email",
-          align: "center",
+          align: "left",
           value: "email",
           width: "12.75%",
           type: "string"
         },
         {
-          text: "Đơn Vị",
-          align: "center",
+          text: "Đơn vị",
+          align: "left",
           value: "belongsToQTDonVi.ten",
           width: "29.75%",
           type: "string"
@@ -260,7 +260,7 @@ export default {
       let res;
       if (this.isUpdate) {
         res = await this.updateQTUser(this.user_data);
-        this.titleDialog = "";
+        this.closeDialog();
       } else {
         res = await this.addQTUser(this.user_data);
         this.closeDialog();

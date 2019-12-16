@@ -100,7 +100,7 @@ export default {
       headers: [
         {
           text: "Tên tác nhân",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           width: "34%",
@@ -108,7 +108,7 @@ export default {
         },
         {
           text: "Cấp hành chính",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "belongsToSysCapHanhChinh.ten",
           width: "12.75%",
@@ -116,7 +116,7 @@ export default {
         },
         {
           text: "Chức năng, nhiệm vụ",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ghiChu",
           width: "29.75%",
@@ -243,6 +243,7 @@ export default {
 
       if (this.isUpdate) {
         res = await this.updateQTTacNhan(this.tN);
+        this.closeDialog();
       } else {
         res = await this.addQTTacNhan(this.tN);
         this.closeDialog();

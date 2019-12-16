@@ -92,7 +92,7 @@ export default {
 
   data() {
     return {
-      title: "Khai Báo Đơn Vị",
+      title: "Khai báo đơn vị",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -102,10 +102,10 @@ export default {
       headers: [
         {
           text: "Mã đơn vị",
-          align: "center",
+          align: "left",
           value: "ma",
           type: "string",
-          width: "8.5%",
+          width: "18.5%",
           divider: false
         },
         {
@@ -117,7 +117,7 @@ export default {
         },
         {
           text: "Số điện thoại",
-          align: "center",
+          align: "left",
           value: "soDienThoai",
           type: "string",
           width: "12.75%",
@@ -125,26 +125,24 @@ export default {
         },
         {
           text: "Nhóm đơn vị",
-          align: "center",
+          align: "left",
           value: "belongsToSysNhomDonVi.ten",
           type: "string",
-          width: "25.5%",
+          width: "15%",
           divider: true
         },
         {
           text: "Hiệu lực",
           align: "center",
           value: "hieuLuc",
-          width: "8.5%",
+          width: "5.5%",
           type: ""
         }
       ],
       snackbar: false,
       deletedDialog: false,
       deleteItems: [],
-
       clickLocationDialog: false,
-
       notifiedType: "success",
       notification: "",
       timeout: 1000
@@ -278,6 +276,8 @@ export default {
 
       if (this.isUpdate) {
         res = await this.updateQTDonVi(this.dv);
+        await this.getQTDonViList();
+        this.closeDialog();
       } else {
         res = await this.addQTDonVi(this.dv);
         await this.getQTDonViList();

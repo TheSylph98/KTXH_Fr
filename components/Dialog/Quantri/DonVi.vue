@@ -1,8 +1,11 @@
 <template>
+<div>
   <v-card>
-    <v-card-title>
+    
+    <v-card-title class="head">
       <span class="headline">{{ formTitle }}</span>
     </v-card-title>
+
 
     <v-card-text>
       <v-container>
@@ -89,13 +92,17 @@
         </v-row>
       </v-container>
     </v-card-text>
-
-    <v-card-actions>
-      <div class="flex-grow-1"></div>
-      <v-btn color="blue darken-1" text @click="$emit('close')">Đóng</v-btn>
-      <v-btn v-if="isWatch" color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
-    </v-card-actions>
+    
+      <v-footer fixed inset dark> 
+        <v-card-actions >
+          <div class="flex-grow-1"></div>
+          <v-btn color="blue darken-1" text @click="$emit('close')">Đóng</v-btn>
+          <v-btn v-if="isWatch" color="blue darken-1" text @click="$emit('save')">Lưu</v-btn>
+        </v-card-actions>
+      </v-footer>
+    
   </v-card>
+  </div>
 </template>
 <script>
 import SelectedWithSearch from "@/components/SelectedWithSearch/SelectedWithSearch";
@@ -120,6 +127,11 @@ export default {
     isWatch: {
       type: Boolean,
       default: true
+    }
+  },
+  data(){
+    return {
+      isFixed : true
     }
   },
   computed: {
@@ -159,3 +171,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+ /* .head {
+   position: default;
+   overflow: auto;
+   background: aqua;
+ } */
+</style>

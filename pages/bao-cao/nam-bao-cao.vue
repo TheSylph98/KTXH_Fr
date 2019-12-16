@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      title: "Năm Báo Cáo",
+      title: "Năm báo cáo",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -62,15 +62,15 @@ export default {
       headers: [
         {
           text: "Mã",
-          align: "center",
+          align: "left",
           sorttable: true,
           value: "ma",
           type: "string",
-          width: "8.5%"
+          width: "18.5%"
         },
         {
           text: "Tên báo cáo",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           type: "string",
@@ -103,7 +103,7 @@ export default {
         },
         {
           text: "Ghi chú",
-          align: "center",
+          align: "left",
           value: "ghiChu",
           type: "string",
           width: "25.5%"
@@ -209,6 +209,7 @@ export default {
       let res;
       if (this.isUpdate) {
         res = await this.updateNamLamViec(this.namBC);
+        this.closeDialog();
       } else {
         res = await this.addNamLamViec(this.namBC);
         this.closeDialog();

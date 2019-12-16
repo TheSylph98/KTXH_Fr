@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      title: "Biểu Nhập Liệu Chỉ Tiêu",
+      title: "Biểu nhập liệu chỉ tiêu",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -61,21 +61,21 @@ export default {
       headers: [
         {
           text: "Kí hiệu",
-          align: "center",
+          align: "left",
           value: "ma",
           type: "string",
-          width: "8.5%"
+          width: "18.5%"
         },
         {
-          text: "Tên biểu",
-          align: "center",
+          text: "Tên",
+          align: "left",
           value: "ten",
           type: "string",
           width: "29.75%"
         },
         {
           text: "Ghi chú",
-          align: "center",
+          align: "left",
           value: "ghiChu",
           type: "string",
           width: "38.25%"
@@ -199,6 +199,7 @@ export default {
       let res;
       if (this.isUpdate) {
         res = await this.updateBieuNhapLieuChiTieu(this.chiTieu);
+        this.closeDialog();
       } else {
         res = await this.addBieuNhapLieuChiTieu(this.chiTieu);
         this.closeDialog();

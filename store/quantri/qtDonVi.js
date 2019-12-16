@@ -165,6 +165,9 @@ export const actions = {
     const res = { isSuccess: false }
     const { qtDonVi } = state.api
 
+    if(donVi.donViChaId == null){
+      delete donVi.donViChaId
+    }
     try {
       const data = await this.$axios.$post(`${qtDonVi}/update`, donVi)
 

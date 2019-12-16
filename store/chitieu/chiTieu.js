@@ -161,7 +161,10 @@ export const actions = {
   async updateChiTieu({ state, commit }, chi_tieu) {
     const res = { isSuccess: false }
     const { chiTieu } = state.api
-
+    
+    if (chi_tieu.chiTieuChaId == 0) {
+      delete chi_tieu.chiTieuChaId
+    }
     try {
       const data = await this.$axios.$post(`${chiTieu}/update`, chi_tieu)
       commit('UPDATE_CHI_TIEU', { value: data })

@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      title: "Chỉ Tiêu Kinh Tế Xã Hội",
+      title: "Chỉ tiêu kinh tế xã hội",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -61,8 +61,8 @@ export default {
       chiTieu: {},
       headers: [
         {
-          text: "Nhóm Chỉ Tiêu",
-          align: "center",
+          text: "Nhóm chỉ tiêu",
+          align: "left",
           sorttable: false,
           value: "belongsToChiTieuNhom.ten",
           type: "string",
@@ -70,15 +70,15 @@ export default {
         },
         {
           text: "Mã",
-          align: "center",
+          align: "left",
           sorttable: true,
           value: "ma",
           type: "string",
-          width: "8.5%"
+          width: "18.5%"
         },
         {
           text: "Tên chỉ tiêu",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           type: "string",
@@ -94,19 +94,11 @@ export default {
         },
         {
           text: "Phân tổ",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "belongsToChiTieuPhanTo.ten",
           type: "",
           width: "12.75%"
-        },
-        {
-          text: "Loại",
-          align: "center",
-          sorttable: false,
-          value: "",
-          type: "",
-          width: "8.5%"
         },
         {
           text: "Hiệu lực",
@@ -233,6 +225,7 @@ export default {
       let res;
       if (this.isUpdate) {
         res = await this.updateChiTieu(this.chiTieu);
+        this.closeDialog();
       } else {
         res = await this.addChiTieu(this.chiTieu);
         this.closeDialog();

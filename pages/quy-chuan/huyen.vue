@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      title: "Khai Báo Quy Chuẩn: Huyện",
+      title: "Khai báo quy chuẩn: Huyện",
       dialog: false,
       isUpdate: false,
       isWatch: true,
@@ -62,23 +62,23 @@ export default {
       headers: [
         {
           text: "Mã định danh",
-          align: "center",
+          align: "left",
           sorttable: true,
           value: "ma",
-          width: "12.75%",
+          width: "18.5%",
           type: "string"
         },
         {
           text: "Tên",
-          align: "center",
+          align: "left",
           sorttable: false,
           value: "ten",
           width: "34%",
           type: "string"
         },
         {
-          text: "Ghi Chú",
-          align: "center",
+          text: "Ghi chú",
+          align: "left",
           sorttable: false,
           value: "ghiChu",
           width: "29.75%",
@@ -201,6 +201,7 @@ export default {
 
       if (this.isUpdate) {
         res = await this.updateHuyen(this.huyen_data);
+        this.closeDialog();
       } else {
         res = await this.addHuyen(this.huyen_data);
         this.closeDialog();

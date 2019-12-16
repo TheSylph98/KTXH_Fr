@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      title: "Khai Báo Tác Nhân Chức Năng Phần Mềm",
+      title: "Khai báo tác nhân chức năng phần mềm",
       headers: [
         {
           text: "Chức năng phần mềm",
