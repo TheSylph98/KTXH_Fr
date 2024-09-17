@@ -1,4 +1,5 @@
 const colors = require('vuetify/es5/util/colors').default
+require('dotenv').config()
 
 module.exports = {
   mode: 'universal',
@@ -30,7 +31,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/formatDate.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -38,7 +39,7 @@ module.exports = {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/axios','@nuxtjs/vuetify'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/vuetify', '@nuxtjs/dotenv'],
 
   axios: {
     proxy: 'true'
@@ -46,7 +47,7 @@ module.exports = {
 
   proxy: {
     '/api/': {
-      target: process.env.API_ENDPOINT || 'http://localhost:5000/api',
+      target: process.env.API_ENDPOINT || "http://vuongdx.ddns.net:3000/api",
       pathRewrite: { '^/api/': '' }
     }
   },
@@ -72,6 +73,11 @@ module.exports = {
       }
     }
   },
+
+  dotenv: {
+    /* module options */
+  },
+
   /*
    ** Build configuration
    */
@@ -79,6 +85,10 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) { }
+    extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
+    }
   }
 }

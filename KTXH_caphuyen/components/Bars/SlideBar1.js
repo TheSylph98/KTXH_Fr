@@ -19,11 +19,6 @@ export default [
                 to: "/quan-tri/tac-nhan"
             },
             {
-                icon: "mdi-adjust",
-                title: "Chức năng phần mềm",
-                to: "/quan-tri/tac-nhan_chuc-nang-phan-mem"
-            },
-            {
                 icon: "mdi-account-box-multiple",
                 title: "Khai Báo Người dùng",
                 to: "/quan-tri/User"
@@ -31,7 +26,7 @@ export default [
         ]
     },
     {
-        icon: "mdi-map-marker",
+        icon: "mdi-map-marker-multiple",
         title: "Quy Chuẩn",
         children: [
             {
@@ -40,43 +35,38 @@ export default [
                 to: "/quy-chuan/tinh"
             },
             {
-                icon: "mdi-map-marker",
+                icon: "mdi-map-marker-circle",
                 title: "Huyện",
                 to: "/quy-chuan/huyen"
             },
             {
-                icon: "mdi-map-marker",
+                icon: "mdi-map-marker-radius",
                 title: "Xã",
                 to: "/quy-chuan/xa"
             }
         ]
     },
     {
-        icon: "mdi-map-marker",
+        icon: "mdi-group",
         title: "Chỉ Tiêu",
         children: [
             {
-                icon: "mdi-format-list-bulleted",
-                title: "Chỉ tiêu KTXH",
+                icon: "mdi-nature",
+                title: "Chỉ Tiêu",
                 to: "/chi-tieu/chi-tieu"
             },
             {
-                icon: "mdi-group",
-                title: "Chỉ Tiêu Phân Tổ",
-                to: "/chi-tieu/chi-tieu_phan-to"
-            },
-            {
-                icon: "mdi-group",
+                icon: "mdi-bulletin-board",
                 title: "Chỉ Tiêu Nhóm",
                 to: "/chi-tieu/chi-tieu-nhom"
             },
             {
-                icon: "mdi-select-group",
+                icon: "mdi-layers",
                 title: "Chỉ Tiêu Phân Tổ",
                 to: "/chi-tieu/chi-tieu-phan-to"
             },
             {
-                icon: "mdi-playlist-edit",
+                icon: "mdi-library-books",
                 title: "Chỉ Tiêu Phân Tổ Chi Tiết",
                 to: "/chi-tieu/chi-tieu-phan-to-chi-tiet"
             },
@@ -86,7 +76,7 @@ export default [
         icon: "mdi-timer",
         title: "Khai Báo Kỳ Báo Cáo",
         to: "/bao-cao/ky-bao-cao"
-    }, 
+    },
     {
         icon: "mdi-file-document-box-multiple-outline",
         title: "Biểu Nhập Liệu",
@@ -103,8 +93,8 @@ export default [
             },
             {
                 icon: "mdi-clipboard-list-outline",
-                title: "Trường Dữ Liệu",
-                to: "/bieu-nhap-lieu/bieu-nhap-lieu_truong-du-lieu"
+                title: "Trường Nhập Liệu",
+                to: "/bieu-nhap-lieu/bieu-nhap-lieu_truong-nhap-lieu"
             }
         ]
     }
